@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Warpweb.WebLayer.Data;
-using Warpweb.WebLayer.Models;
+using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Models;
 
 namespace Warpweb.WebLayer
 {

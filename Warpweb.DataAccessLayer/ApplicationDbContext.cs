@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Warpweb.WebLayer.Models;
+using Warpweb.DataAccessLayer.Models;
 
-namespace Warpweb.WebLayer.Data
+namespace Warpweb.DataAccessLayer
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {

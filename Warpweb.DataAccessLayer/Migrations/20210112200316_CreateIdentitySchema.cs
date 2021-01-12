@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Warpweb.WebLayer.Data.Migrations
+namespace Warpweb.DataAccessLayer.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

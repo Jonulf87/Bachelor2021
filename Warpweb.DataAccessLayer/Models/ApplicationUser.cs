@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Warpweb.WebLayer.Models
+namespace Warpweb.DataAccessLayer.Models
 {
     public class ApplicationUser : IdentityUser
     {
