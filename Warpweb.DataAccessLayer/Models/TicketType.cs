@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warpweb.DataAccessLayer.Models
 {
-    class TicketType
+    public class TicketType
     {
         public int TicketTypeId { get; set; }
         public string TicketDescriptionName { get; set; } //Kanskje gjøre noe med navnet

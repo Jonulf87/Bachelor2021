@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warpweb.DataAccessLayer.Models
 {
-    class Ticket
+    public class Ticket
     {
         public int TicketId { get; set; }
         public int TicketPrice { get; set; }
@@ -17,7 +17,7 @@ namespace Warpweb.DataAccessLayer.Models
        
         public virtual TicketType TicketType { get; set; }
         public virtual MainEvent MainEvent { get; set; }
-        public virtual User User { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 
  

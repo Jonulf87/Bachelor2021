@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Warpweb.DataAccessLayer.Models
 {
-    class Venue
+    public class Venue
     {
         public int VenueId { get; set; }
         public string VenueAddress { get; set; }
         public int? VenueAreaAvailable { get; set; }
         public int VenueCapacity { get; set; }
         [Display(Name ="Kontaktperson lokasjon")]
-        public virtual List<User> Users { get; set; } //Dette er kontaktpersonen(e) til lokalet hvor arrangementet pågår
+        public virtual List<ApplicationUser> Users { get; set; } //Dette er kontaktpersonen(e) til lokalet hvor arrangementet pågår
 
     }
 }

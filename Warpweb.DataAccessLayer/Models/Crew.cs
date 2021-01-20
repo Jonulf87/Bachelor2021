@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warpweb.DataAccessLayer.Models
 {
-    class Crew
+    public class Crew
     {
         public int CrewId { get; set; }
         public string CrewName { get; set; } //Eks. Logistikkcrew, HMScrew

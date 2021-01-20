@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warpweb.DataAccessLayer.Models
 {
-    class MainEvent //Arrangementet. Events under arrangementet heter SubEvents
+    public class MainEvent //Arrangementet. Events under arrangementet heter SubEvents
     {
         public int MainEventId { get; set; }
         public string MainEventName { get; set; }
