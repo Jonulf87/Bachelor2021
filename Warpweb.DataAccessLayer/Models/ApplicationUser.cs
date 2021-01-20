@@ -10,24 +10,24 @@ namespace Warpweb.DataAccessLayer.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [ProtectedPersonalData]
+        [PersonalData]
         public string FirstName { get; set; }
-        [ProtectedPersonalData]
-        public string? MiddleName { get; set; }
-        [ProtectedPersonalData]
+        [PersonalData]
+        public string MiddleName { get; set; }
+        [PersonalData]
         public string LastName { get; set; }
-        [ProtectedPersonalData]
+        [PersonalData]
         public string EMail { get; set; }
-        [ProtectedPersonalData]
+        [PersonalData]
         public string Address { get; set; }
         [Column(TypeName = "Date")]
-        [ProtectedPersonalData]
+        [PersonalData]
         public DateTime DateOfBirth { get; set; }
-        [ProtectedPersonalData]
+        [PersonalData]
         public bool IsAllergic { get; set; }
-        [ProtectedPersonalData]
+        [PersonalData]
         public string AllergyDescription { get; set; }
-        [ProtectedPersonalData]
+        [PersonalData]
         public string Comments { get; set; } //print 
 
         [Display(Name = "Samtykkeperson")]
