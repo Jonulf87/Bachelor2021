@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Warpweb.DataAccessLayer.Models
 {
-    class Organizer
+    public class Organizer
     {
         public int OrganizerId { get; set; }
         public string OrganizerName { get; set; }
         public string OrganizerCode { get; set; }
         public string OrganizerDescription { get; set; } // VAT/MVA code etc.
-        public ApplicationUser OrganizerContactPerson { get; set; }
+        public virtual ApplicationUser OrganizerContactPerson { get; set; }
         public virtual MainEvent MainEvent { get; set; }
 
     }
