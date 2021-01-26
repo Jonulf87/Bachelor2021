@@ -11,7 +11,7 @@ namespace Warpweb.DataAccessLayer.Models
         public int CrewRoleId { get; set; }
         public string Role { get; set; } //Hvilken rolle man har i crewet: bemanning eller leder.
         public Crew Crew { get; set; }
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
     }
 }

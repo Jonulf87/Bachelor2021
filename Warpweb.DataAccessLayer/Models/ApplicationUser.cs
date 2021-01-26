@@ -31,9 +31,11 @@ namespace Warpweb.DataAccessLayer.Models
         public string Comments { get; set; } //print 
 
         [Display(Name = "Samtykkeperson")]
-        public virtual Guardian Guardian { get; set; } // Verge / foresatt
+        public virtual ICollection<ApplicationUser> Guardian { get; set; } // Verge / foresatt 
+        public virtual ICollection<ApplicationUser> Minor { get; set; } // Den mindreårige i vergehierarkiet
         public virtual ICollection<CrewRole> CrewRoles { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
+
 
 
         public int? YearlyFee { get; set; } //Null angir ingen kontingent betalt
