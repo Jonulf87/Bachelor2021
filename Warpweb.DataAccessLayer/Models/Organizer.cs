@@ -13,6 +13,7 @@ namespace Warpweb.DataAccessLayer.Models
         public string OrganizerCode { get; set; }
         public string OrganizerDescription { get; set; } // VAT/MVA code etc.
         public ApplicationUser OrganizerContactPerson { get; set; }
+        public virtual MainEvent MainEvent { get; set; }
 
     }
 }
