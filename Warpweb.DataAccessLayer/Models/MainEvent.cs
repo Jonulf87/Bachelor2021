@@ -13,5 +13,6 @@ namespace Warpweb.DataAccessLayer.Models
         public DateTime MainEventStartTime { get; set; }
         public DateTime MainEventEndTime { get; set; }
         public virtual Venue Venue { get; set; }
+        public virtual Organizer Organizer { get; set; }
     }
 }
