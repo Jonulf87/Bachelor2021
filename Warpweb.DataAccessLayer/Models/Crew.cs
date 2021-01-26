@@ -10,7 +10,7 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int CrewId { get; set; }
         public string CrewName { get; set; } //Eks. Logistikkcrew, HMScrew
-        public List<CrewRole> CrewRoles { get; set; }
+        public ICollection<CrewRole> CrewRoles { get; set; }
         //public virtual List<User> Users { get; set; } Crew peker mot crewrolle i stedet.
     }
 }

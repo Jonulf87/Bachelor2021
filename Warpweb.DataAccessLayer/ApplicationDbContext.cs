@@ -17,5 +17,14 @@ namespace Warpweb.DataAccessLayer
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Organizer> Organizers { get; set; }
+        public DbSet<Crew> Crews { get; set; }
+        public DbSet<CrewRole> CrewRoles { get; set; }
+        public DbSet<MainEvent> MainEvents { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketType> TicketTypes { get; set; }
+        public DbSet<Venue> Venues { get; set; }
     }
 }
