@@ -10,10 +10,10 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int OrganizerId { get; set; }
         public string OrganizerName { get; set; }
-        public string OrganizerCode { get; set; }
-        public string OrganizerDescription { get; set; } // VAT/MVA code etc.
+        public string OrganizerCode { get; set; } // VAT/MVA code etc.
+        public string OrganizerDescription { get; set; } 
         public virtual ApplicationUser OrganizerContactPerson { get; set; }
-        public virtual MainEvent MainEvent { get; set; }
+        public virtual List<MainEvent> MainEvent { get; set; }
 
     }
 }
