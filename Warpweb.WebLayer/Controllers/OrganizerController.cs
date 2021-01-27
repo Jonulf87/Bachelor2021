@@ -51,5 +51,13 @@ namespace Warpweb.WebLayer.Controllers
 
             return Ok();
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateOrganizer(OrganizerVm organizerVm)
+        {
+            await _organizerService.UpdateOrganizerAsync(organizerVm);
+
+            return Ok();
+        }
     }
 }
