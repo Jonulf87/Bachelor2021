@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Services;
 
 namespace Warpweb.WebLayer
 {
@@ -29,6 +30,8 @@ namespace Warpweb.WebLayer
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<OrganizerService>(); //Trengs per service
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
