@@ -13,7 +13,7 @@ namespace Warpweb.DataAccessLayer.Models
         public string Name { get; set; }
         public string OrgNumber { get; set; } // VAT/MVA code etc. Org.nr.
         public string Description { get; set; }
-        public int ContactId { get; set; }
+        public string ContactId { get; set; }
 
         [ForeignKey(nameof(ContactId))]
         public virtual ApplicationUser Contact { get; set; } //Organizer contact person

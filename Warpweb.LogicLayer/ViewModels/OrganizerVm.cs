@@ -12,6 +12,6 @@ namespace Warpweb.LogicLayer.ViewModels
         public string Name { get; set; }
         public string OrgNumber { get; set; }
         public string Description { get; set; }
-        public int ContactId { get; set; }
+        public string ContactId { get; set; }
     }
 }
