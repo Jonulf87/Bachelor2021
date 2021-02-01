@@ -7,13 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Services;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[arrangement]")]
     [ApiController]
     public class MainEventController : ControllerBase
     {
-        
+        private readonly MainEventService _mainEventService;
+
+        public MainEventController(MainEventService mainEventService)
+        {
+            _mainEventService = mainEventService;
+        }
     }
 }
