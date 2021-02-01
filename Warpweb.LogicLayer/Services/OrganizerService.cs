@@ -18,7 +18,6 @@ namespace Warpweb.LogicLayer.Services
         {
             _dbContext = dbContext;
         }
-
         
         public async Task<List<OrganizerListVm>> GetOrganizersAsync()
         {
