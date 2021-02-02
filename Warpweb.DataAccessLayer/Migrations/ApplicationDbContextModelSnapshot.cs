@@ -19,6 +19,21 @@ namespace Warpweb.DataAccessLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
+            modelBuilder.Entity("ApplicationUserApplicationUser", b =>
+                {
+                    b.Property<string>("GuardianId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("MinorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("GuardianId", "MinorId");
+
+                    b.HasIndex("MinorId");
+
+                    b.ToTable("ApplicationUserApplicationUser");
+                });
+
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
                 {
                     b.Property<string>("UserCode")
@@ -265,9 +280,21 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AllergyDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("Date");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -276,11 +303,23 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAllergic")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -309,6 +348,12 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int?>("VenueId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("YearlyFee")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -319,7 +364,196 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("VenueId");
+
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Crew", b =>
+                {
+                    b.Property<int>("CrewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("CrewName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CrewId");
+
+                    b.ToTable("Crews");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.CrewRole", b =>
+                {
+                    b.Property<int>("CrewRoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("CrewId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CrewRoleId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("CrewId");
+
+                    b.ToTable("CrewRoles");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.MainEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrganizerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VenueId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizerId");
+
+                    b.HasIndex("VenueId");
+
+                    b.ToTable("MainEvents");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Organizer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("ContactId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrgNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("Organizers");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Ticket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("MainEventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Seat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TicketTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MainEventId");
+
+                    b.HasIndex("TicketTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.TicketType", b =>
+                {
+                    b.Property<int>("TicketTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("TicketAmountAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketBasePrice")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TicketDescriptionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TicketTypeId");
+
+                    b.ToTable("TicketTypes");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>
+                {
+                    b.Property<int>("VenueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("VenueAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("VenueAreaAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VenueCapacity")
+                        .HasColumnType("int");
+
+                    b.HasKey("VenueId");
+
+                    b.ToTable("Venues");
+                });
+
+            modelBuilder.Entity("ApplicationUserApplicationUser", b =>
+                {
+                    b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("GuardianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("MinorId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -371,6 +605,99 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Warpweb.DataAccessLayer.Models.Venue", null)
+                        .WithMany("Users")
+                        .HasForeignKey("VenueId");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.CrewRole", b =>
+                {
+                    b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("CrewRoles")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Warpweb.DataAccessLayer.Models.Crew", "Crew")
+                        .WithMany("CrewRoles")
+                        .HasForeignKey("CrewId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Crew");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.MainEvent", b =>
+                {
+                    b.HasOne("Warpweb.DataAccessLayer.Models.Organizer", "Organizer")
+                        .WithMany("MainEvent")
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Warpweb.DataAccessLayer.Models.Venue", "Venue")
+                        .WithMany()
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organizer");
+
+                    b.Navigation("Venue");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Organizer", b =>
+                {
+                    b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", "Contact")
+                        .WithMany()
+                        .HasForeignKey("ContactId");
+
+                    b.Navigation("Contact");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Ticket", b =>
+                {
+                    b.HasOne("Warpweb.DataAccessLayer.Models.MainEvent", "MainEvent")
+                        .WithMany()
+                        .HasForeignKey("MainEventId");
+
+                    b.HasOne("Warpweb.DataAccessLayer.Models.TicketType", "TicketType")
+                        .WithMany()
+                        .HasForeignKey("TicketTypeId");
+
+                    b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", "User")
+                        .WithMany("Tickets")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("MainEvent");
+
+                    b.Navigation("TicketType");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("CrewRoles");
+
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Crew", b =>
+                {
+                    b.Navigation("CrewRoles");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Organizer", b =>
+                {
+                    b.Navigation("MainEvent");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
@@ -49,7 +50,7 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
-        public async Task<ActionResult> CreateTicketAsync(TicketVm ticketVm)
+        public async Task<int> CreateTicketAsync(TicketVm ticketVm)
         {
             var existingTicket = _dbContext.Tickets
                 .Where(a => a.Id == ticketVm.Id || a.Seat == ticketVm.Seat)
@@ -57,7 +58,8 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingTicket != null)
             {
-                throw new NotImplementedException();
+                throw new TicketAlreadyExistException();
+
             }
 
             var ticket = new Ticket

@@ -15,7 +15,8 @@ namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/arrangement")]
     [ApiController]
-
+    [Authorize(Roles = "Admins")]
+    [Authorize(Roles = "CrewLeader")]
     public class MainEventController : ControllerBase
     {
         private readonly MainEventService _mainEventService;
@@ -26,6 +27,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpGet]
+        
         public async Task<List<MainEventListVm>> GetMainEvents()
         {
             return await _mainEventService.GetMainEventsAsync();
@@ -47,6 +49,12 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateMainEvent(MainEventVm maineventVm)
         {
+            var organizers = _securityService.GetOrganizers(User.Identity.Name);
+            if (!organizers.Any(a => a.Id == maineventVm.OrganizerId))
+            {
+                return Forbid();
+            }
+
             await _mainEventService.CreateMainEventAsync(maineventVm);
 
             return Ok();

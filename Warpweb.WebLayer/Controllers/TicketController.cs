@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -39,11 +40,19 @@ namespace Warpweb.WebLayer.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Users")]
-        public async Task<ActionResult> CreateTicket(TicketVm ticketVm)
+        public async Task<ActionResult<TicketVm>> CreateTicket(TicketVm ticketVm)
         {
-            await _ticketService.CreateTicketAsync(ticketVm);
 
-            return Ok();
+            try
+            {
+                await _ticketService.CreateTicketAsync(ticketVm);
+            }
+            catch (TicketAlreadyExistException)
+            {
+                return BadRequest(); 
+            }
+
+            return Ok(ticketVm);
         }
 
     }

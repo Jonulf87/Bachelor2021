@@ -17,8 +17,6 @@ namespace Warpweb.DataAccessLayer.Models
         [PersonalData]
         public string LastName { get; set; }
         [PersonalData]
-        public string EMail { get; set; }
-        [PersonalData]
         public string Address { get; set; }
         [Column(TypeName = "Date")]
         [PersonalData]
