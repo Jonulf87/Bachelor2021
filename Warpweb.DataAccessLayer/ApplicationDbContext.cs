@@ -26,6 +26,5 @@ namespace Warpweb.DataAccessLayer
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
         public DbSet<Venue> Venues { get; set; }
-        //public DbSet<Guardian> Guardians { get; set; }
     }
 }

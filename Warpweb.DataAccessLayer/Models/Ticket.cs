@@ -8,12 +8,12 @@ namespace Warpweb.DataAccessLayer.Models
 {
     public class Ticket
     {
-        public int TicketId { get; set; }
-        public int TicketPrice { get; set; }
+        public int Id { get; set; }
+        public int Price { get; set; }
        
         
         
-        public int Seat { get; set; } //Seteplassering. Må opprette klasse for bordkart
+        public string Seat { get; set; } //Seteplassering. Må opprette klasse for bordkart
        
         public virtual TicketType TicketType { get; set; }
         public virtual MainEvent MainEvent { get; set; }
