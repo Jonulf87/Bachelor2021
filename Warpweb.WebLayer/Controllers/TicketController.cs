@@ -15,6 +15,7 @@ namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admins")]
     public class TicketController : ControllerBase
     {
         private readonly TicketService _ticketService;
@@ -25,10 +26,25 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admins")]
         public async Task<List<TicketListVm>> GetTickets()
         {
-
+            return await _ticketService.GetTicketsAsync();
         }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TicketVm>> GetTicket(int id)
+        {
+            return await _ticketService.GetTicketAsync(id);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Users")]
+        public async Task<ActionResult> CreateTicket(TicketVm ticketVm)
+        {
+            await _ticketService.CreateTicketAsync(ticketVm);
+
+            return Ok();
+        }
+
     }
 }
