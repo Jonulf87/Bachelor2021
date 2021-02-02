@@ -13,7 +13,7 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    [Route("api/[arrangement]")]
+    [Route("api/arrangement")]
     [ApiController]
 
     public class MainEventController : ControllerBase
