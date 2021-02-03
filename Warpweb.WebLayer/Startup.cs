@@ -36,6 +36,7 @@ namespace Warpweb.WebLayer
             services.AddScoped<MainEventService>();
             services.AddScoped<TicketService>();
             services.AddScoped<VenueService>();
+            services.AddScoped<CrewService>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
