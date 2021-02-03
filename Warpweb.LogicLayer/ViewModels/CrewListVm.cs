@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Warpweb.LogicLayer.ViewModels
 {
-    public class VenueListVm
+    public class CrewListVm
     {
-        public int VenueId { get; set; }
-        public string VenueName { get; set; }
+        public int CrewId { get; set; }
+
+        public string CrewName { get; set; }
     }
 }

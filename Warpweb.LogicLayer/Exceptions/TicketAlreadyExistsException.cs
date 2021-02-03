@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warpweb.LogicLayer.Exceptions
 {
-    public class TicketAlreadyExistException : Exception
+    public class TicketAlreadyExistsException : Exception
     {
         
     }

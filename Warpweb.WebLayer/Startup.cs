@@ -31,7 +31,7 @@ namespace Warpweb.WebLayer
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<OrganizerService>(); //Trengs per service
+            services.AddScoped<OrganizerService>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 

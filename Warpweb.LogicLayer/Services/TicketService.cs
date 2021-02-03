@@ -58,7 +58,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingTicket != null)
             {
-                throw new TicketAlreadyExistException();
+                throw new TicketAlreadyExistsException();
 
             }
 

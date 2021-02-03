@@ -46,6 +46,7 @@ namespace Warpweb.WebLayer.Controllers
             return mainevent;
         }
 
+        /*
         [HttpPost]
         public async Task<ActionResult> CreateMainEvent(MainEventVm maineventVm)
         {
@@ -58,7 +59,7 @@ namespace Warpweb.WebLayer.Controllers
             await _mainEventService.CreateMainEventAsync(maineventVm);
 
             return Ok();
-        }
+        } */
 
         [HttpPut]
         public async Task<ActionResult> UpdateMainEvent (MainEventVm maineventVm)

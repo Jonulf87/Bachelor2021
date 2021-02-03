@@ -47,7 +47,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _ticketService.CreateTicketAsync(ticketVm);
             }
-            catch (TicketAlreadyExistException)
+            catch (TicketAlreadyExistsException)
             {
                 return BadRequest(); 
             }

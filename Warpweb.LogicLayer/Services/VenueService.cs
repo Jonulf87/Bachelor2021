@@ -12,6 +12,9 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
 {
+    // Standard CRUD functionality for Venue class
+    // TODO: Verify View Models for this service
+
     public class VenueService
     {
         private readonly ApplicationDbContext _dbContext;
@@ -27,9 +30,7 @@ namespace Warpweb.LogicLayer.Services
                 .Select(a => new VenueListVm
                 {
                     VenueId = a.VenueId,
-                    VenueAddress = a.VenueAddress,
-                    VenueAreaAvailable = a.VenueAreaAvailable,
-                    VenueCapacity = a.VenueCapacity
+                    VenueName = a.VenueName
                 }).ToListAsync();
         }
 
@@ -40,6 +41,7 @@ namespace Warpweb.LogicLayer.Services
                 .Select(a => new VenueVm
                 {
                     VenueId = a.VenueId,
+                    VenueName = a.VenueName,
                     VenueAddress = a.VenueAddress,
                     VenueAreaAvailable = a.VenueAreaAvailable,
                     VenueCapacity = a.VenueCapacity,
@@ -55,7 +57,6 @@ namespace Warpweb.LogicLayer.Services
             if (existingVenue != null)
             {
                 throw new VenueAlreadyExistsException();
-
             }
 
             var venue = new Venue
@@ -71,8 +72,27 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
 
             return venue.VenueId;
+        }
 
+        public async Task<int> UpdateVenueAsync(VenueVm venueVm)
+        {
+            var existingVenue = _dbContext.Venues.Where(a => a.VenueId == venueVm.VenueId).FirstOrDefault();
 
+            if(existingVenue == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            existingVenue.VenueId = venueVm.VenueId;
+            existingVenue.VenueName = venueVm.VenueName;
+            existingVenue.VenueAddress = venueVm.VenueAddress;
+            existingVenue.VenueAreaAvailable = venueVm.VenueAreaAvailable;
+            existingVenue.VenueCapacity = venueVm.VenueCapacity;
+
+            _dbContext.Update<Venue>(existingVenue);
+            await _dbContext.SaveChangesAsync();
+
+            return existingVenue.VenueId;
         }
     }
 }

@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Warpweb.DataAccessLayer/Migrations/20210203140046_warpweb.cs
+/Warpweb.DataAccessLayer/Migrations/20210203140046_warpweb.Designer.cs
