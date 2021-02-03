@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,10 +21,12 @@ namespace Warpweb.WebLayer.Controllers
     public class MainEventController : ControllerBase
     {
         private readonly MainEventService _mainEventService;
+        private readonly SecurityService _securityService;
 
-        public MainEventController(MainEventService mainEventService)
+        public MainEventController(MainEventService mainEventService, SecurityService securityService)
         {
             _mainEventService = mainEventService;
+            _securityService = securityService;
         }
 
         [HttpGet]
@@ -47,15 +50,16 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateMainEvent(MainEventVm maineventVm)
+        public async Task<ActionResult> CreateMainEvent(MainEventVm mainEventVm)
         {
-            var organizers = _securityService.GetOrganizers(User.Identity.Name);
-            if (!organizers.Any(a => a.Id == maineventVm.OrganizerId))
+            var organizers = _securityService.GetOrganizers(User.FindFirstValue(ClaimTypes.NameIdentifier)); //Sjekker hvilken arrangør brukeren er affiliert med.
+
+            if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) //What is this shit!!??!! Why the squiggly line??!!??! Sjekke at navnet på arrangementet ikke allerede er tatt?
             {
                 return Forbid();
             }
 
-            await _mainEventService.CreateMainEventAsync(maineventVm);
+            await _mainEventService.CreateMainEventAsync(mainEventVm);
 
             return Ok();
         }

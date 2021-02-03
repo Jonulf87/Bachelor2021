@@ -32,6 +32,10 @@ namespace Warpweb.WebLayer
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<OrganizerService>(); //Trengs per service
+            services.AddScoped<SecurityService>();
+            services.AddScoped<MainEventService>();
+            services.AddScoped<TicketService>();
+            services.AddScoped<VenueService>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
