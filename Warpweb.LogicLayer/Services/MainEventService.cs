@@ -10,6 +10,9 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
 {
+    // Creation and maintenance of events.
+    // Deletion of events should be restricted to SuperAdmin
+
     public class MainEventService
     {
         private readonly ApplicationDbContext _dbContext;
@@ -89,6 +92,24 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
 
             return existingMainEvent.Id;
+        }
+
+        // Restrict to SuperAdmin
+        public async Task<int> RemoveMainEventAsync(MainEventVm mainEventVm)
+        {
+
+            var mainEventToBeDeleted = _dbContext.MainEvents.Where(a => a.Id == mainEventVm.Id).FirstOrDefault();
+
+            if (mainEventToBeDeleted == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            _dbContext.Remove<MainEvent>(mainEventToBeDeleted);
+            await _dbContext.SaveChangesAsync();
+
+            return mainEventToBeDeleted.Id;
+
         }
     }
 }
