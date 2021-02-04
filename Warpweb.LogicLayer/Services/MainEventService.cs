@@ -57,7 +57,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingMainEvent != null)
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException(); //Må endres
             }
 
             var mainevent = new MainEvent
