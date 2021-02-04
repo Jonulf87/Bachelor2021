@@ -14,6 +14,4 @@ namespace Warpweb.DataAccessLayer.Models
         public virtual ApplicationUser ApplicationUser { get; set; }
 
     }
-
-   
 }

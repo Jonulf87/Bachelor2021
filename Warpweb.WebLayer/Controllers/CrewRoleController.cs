@@ -18,47 +18,47 @@ namespace Warpweb.WebLayer.Controllers
     [ApiController]
     [Authorize(Roles = "Admins")]
 
-    public class CrewController : ControllerBase
+    public class CrewRoleController : ControllerBase
     {
-        private readonly CrewService _crewService;
+        private readonly CrewRoleService _crewroleService;
 
-        public CrewController (CrewService crewService)
+        public CrewRoleController(CrewRoleService crewroleService)
         {
-            _crewService = crewService;
+            _crewroleService = crewroleService;
         }
 
         [HttpGet]
-        public async Task<List<CrewListVm>> GetCrews()
+        public async Task<List<CrewRoleListVm>> GetCrewRoles()
         {
-            return await _crewService.GetCrewsAsync();
+            return await _crewroleService.GetCrewRolesAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CrewVm>> GetCrew(int id)
+        public async Task<ActionResult<CrewRoleVm>> GetCrewRole(int id)
         {
-            return await _crewService.GetCrewAsync(id);
+            return await _crewroleService.GetCrewRoleAsync(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CrewVm>> CreateCrew(CrewVm crewVm)
+        public async Task<ActionResult<CrewRoleVm>> CreateCrewRole(CrewRoleVm crewroleVm)
         {
 
             try
             {
-                await _crewService.CreateCrewAsync(crewVm);
+                await _crewroleService.CreateCrewRoleAsync(crewroleVm);
             }
-            catch (CrewAlreadyExistsException)
+            catch (CrewRoleAlreadyExistsException)
             {
                 return BadRequest();
             }
-          
-            return Ok(crewVm);
+
+            return Ok(crewroleVm);
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateCrew(CrewVm crewVm)
+        public async Task<ActionResult> UpdateCrewRole(CrewRoleVm crewroleVm)
         {
-            await _crewService.UpdateCrewAsync(crewVm);
+            await _crewroleService.UpdateCrewRoleAsync(crewroleVm);
 
             return Ok();
         }
