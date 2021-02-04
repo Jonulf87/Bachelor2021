@@ -13,6 +13,7 @@ using Warpweb.LogicLayer.ViewModels;
 namespace Warpweb.LogicLayer.Services
 {
     // Standard CRUD functionality for Venue class
+    // Restrict removal of Venues to SuperAdmin/Admin?
     // TODO: Verify View Models for this service
 
     public class VenueService
@@ -78,7 +79,7 @@ namespace Warpweb.LogicLayer.Services
         {
             var existingVenue = _dbContext.Venues.Where(a => a.VenueId == venueVm.VenueId).FirstOrDefault();
 
-            if(existingVenue == null)
+            if (existingVenue == null)
             {
                 throw new NotImplementedException();
             }
@@ -95,5 +96,22 @@ namespace Warpweb.LogicLayer.Services
             return existingVenue.VenueId;
         }
 
+        // Restrict to SuperAdmin
+        public async Task<int> RemoveVenueAsync(VenueVm venueVm)
+        {
+
+            var venueToBeDeleted = _dbContext.Venues.Where(a => a.VenueId == venueVm.VenueId).FirstOrDefault();
+
+            if (venueToBeDeleted == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            _dbContext.Remove<Venue>(venueToBeDeleted);
+            await _dbContext.SaveChangesAsync();
+
+            return venueToBeDeleted.VenueId;
+
+        }
     }
 }
