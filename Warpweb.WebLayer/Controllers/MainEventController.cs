@@ -29,7 +29,8 @@ namespace Warpweb.WebLayer.Controllers
             _securityService = securityService;
         }
 
-        [HttpGet]        
+        [HttpGet]
+        
         public async Task<List<MainEventListVm>> GetMainEvents()
         {
             return await _mainEventService.GetMainEventsAsync();
@@ -69,6 +70,14 @@ namespace Warpweb.WebLayer.Controllers
         {
             await _mainEventService.UpdateMainEventAsync(maineventVm);
 
+            return Ok();
+        }
+
+        // TODO: Restrict to SuperAdmin ?
+        [HttpDelete]
+        public async Task<ActionResult> DeleteMainEvent (MainEventVm maineventVm)
+        {
+            await _mainEventService.RemoveMainEventAsync(maineventVm);
             return Ok();
         }
     }
