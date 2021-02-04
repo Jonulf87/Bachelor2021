@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -54,6 +55,19 @@ namespace Warpweb.LogicLayer.Services
             {
                 throw new TicketTypeAlreadyExistsException();
             }
+
+            var ticketType = new TicketType
+            {
+                Id = ticketTypeVm.Id,
+                DescriptionName = ticketTypeVm.DescriptionName,
+                BasePrice = ticketTypeVm.BasePrice,
+                AmountAvailable = ticketTypeVm.AmountAvailable
+            };
+
+            _dbContext.TicketTypes.Add(ticketType);
+            await _dbContext.SaveChangesAsync();
+
+            return ticketType.Id;
         }
     }
 }
