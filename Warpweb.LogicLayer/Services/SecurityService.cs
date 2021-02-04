@@ -16,11 +16,12 @@ namespace Warpweb.LogicLayer.Services
             _dbContext = dbContext;
         }
 
-        /*public object GetOrganizers(string name)
+        /*
+        public object GetOrganizers(string name)
         {
             return _dbContext.Organizers
                 .Where()
             throw new NotImplementedException();
-        }*/
+        } */
     }
 }
