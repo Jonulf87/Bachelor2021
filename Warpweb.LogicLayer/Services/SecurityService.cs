@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Warpweb.DataAccessLayer;
+using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
 {
@@ -16,11 +18,17 @@ namespace Warpweb.LogicLayer.Services
             _dbContext = dbContext;
         }
 
-        /*public object GetOrganizers(string name)
+        public async Task<List<OrganizerListVm>> GetOrganizersAsync(string name)
         {
-            return _dbContext.Organizers
-                .Where()
-            throw new NotImplementedException();
-        }*/
+            return await _dbContext.Organizers
+                .Where(a => a.Contact.FirstName == name)
+                .Select(a => new OrganizerListVm
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    OrgNumber = a.OrgNumber
+                }).ToListAsync();
+
+        }
     }
 }

@@ -18,10 +18,10 @@ namespace Warpweb.WebLayer.Controllers
     [ApiController]
     [Authorize(Roles = "Admins")]
     [Authorize(Roles = "CrewLeader")]
-    public class MainEventController : ControllerBase
+    public class MainEventController : ControllerBase //CRUD til main events. Arrangement er kalt MainEvent i koden.
     {
-        private readonly MainEventService _mainEventService;
-        private readonly SecurityService _securityService;
+        private readonly MainEventService _mainEventService; //BLLService DI
+        private readonly SecurityService _securityService; //SecurityService DI
 
         public MainEventController(MainEventService mainEventService, SecurityService securityService)
         {
@@ -29,8 +29,7 @@ namespace Warpweb.WebLayer.Controllers
             _securityService = securityService;
         }
 
-        [HttpGet]
-        
+        [HttpGet]        
         public async Task<List<MainEventListVm>> GetMainEvents()
         {
             return await _mainEventService.GetMainEventsAsync();
@@ -49,13 +48,13 @@ namespace Warpweb.WebLayer.Controllers
             return mainevent;
         }
 
-        /*
+        
         [HttpPost]
         public async Task<ActionResult> CreateMainEvent(MainEventVm mainEventVm)
         {
-            var organizers = _securityService.GetOrganizers(User.FindFirstValue(ClaimTypes.NameIdentifier)); //Sjekker hvilken arrangør brukeren er affiliert med.
+            var organizers = await _securityService.GetOrganizersAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)); //Sjekker hvilken arrangør brukeren er affiliert med. ClaimTypes.NameIdentifier er brukernavn til pålogget bruker.
 
-            if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) //What is this shit!!??!! Why the squiggly line??!!??! Sjekke at navnet på arrangementet ikke allerede er tatt?
+            if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) //Sjekke at navnet på arrangementet ikke allerede er tatt?
             {
                 return Forbid();
             }
@@ -63,7 +62,7 @@ namespace Warpweb.WebLayer.Controllers
             await _mainEventService.CreateMainEventAsync(mainEventVm);
 
             return Ok();
-        } */
+        } 
 
         [HttpPut]
         public async Task<ActionResult> UpdateMainEvent (MainEventVm maineventVm)

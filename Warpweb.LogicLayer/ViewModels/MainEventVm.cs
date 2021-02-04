@@ -12,7 +12,7 @@ namespace Warpweb.LogicLayer.ViewModels
         public string Name { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public string VenueId { get; set; }
-        public string OrganizerId { get; set; }
+        public int VenueId { get; set; }
+        public int OrganizerId { get; set; }
     }
 }
