@@ -19,7 +19,7 @@ namespace Warpweb.LogicLayer.Services
 
         public CrewRoleService(ApplicationDbContext dbContext)
         {
-        _dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public async Task<List<CrewRoleListVm>> GetCrewRolesAsync()

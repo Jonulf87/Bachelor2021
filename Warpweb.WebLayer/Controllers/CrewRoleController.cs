@@ -20,7 +20,7 @@ namespace Warpweb.WebLayer.Controllers
 
     public class CrewRoleController : ControllerBase
     {
-        public readonly CrewRoleService _crewroleService;
+        private readonly CrewRoleService _crewroleService;
 
         public CrewRoleController(CrewRoleService crewroleService)
         {
