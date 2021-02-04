@@ -53,5 +53,20 @@ namespace Warpweb.WebLayer.Controllers
 
             return Ok(ticketTypeVm);
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateTicketType(TicketTypeVm ticketTypeVm)
+        {
+            try
+            {
+                await _ticketTypeService.UpdateTicketTypeAsync(ticketTypeVm);
+            }
+            catch (TicketTypeDoesNotExistException)
+            {
+                return BadRequest();
+            }
+
+            return Ok(ticketTypeVm);
+        }
     }
 }
