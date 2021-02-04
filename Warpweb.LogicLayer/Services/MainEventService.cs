@@ -76,7 +76,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<int> UpdateMainEventAsync(MainEventVm maineventVm)
         {
 
-            var existingMainEvent = _dbContext.MainEvents.Where(a => a.Id == maineventVm.Id).FirstOrDefault();
+            var existingMainEvent = _dbContext.MainEvents.Find(maineventVm.Id);
 
             if (existingMainEvent == null)
             {
