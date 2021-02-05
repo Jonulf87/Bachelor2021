@@ -74,9 +74,47 @@ namespace Warpweb.LogicLayer.Services
             _dbContext.Tickets.Add(ticket);
             await _dbContext.SaveChangesAsync();
 
-            return ticket.Id;
-            
-            
+            return ticket.Id;      
+        }
+        public async Task<int> UpdateTicketAsync(TicketVm ticketVm)
+        {
+
+            var existingTicket = _dbContext.Tickets.Where(a => a.Id == ticketVm.Id).FirstOrDefault();
+
+            if (existingTicket == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            existingTicket.Id = ticketVm.Id;
+            existingTicket.Seat = ticketVm.Seat;
+            existingTicket.MainEvent = ticketVm.MainEvent;
+            existingTicket.Price = ticketVm.Price;
+            existingTicket.TicketType = ticketVm.Type;
+            existingTicket.User = ticketVm.User;
+
+            _dbContext.Update<Ticket>(existingTicket);
+            await _dbContext.SaveChangesAsync();
+
+            return existingTicket.Id;
+        }
+
+        // Restrict to SuperAdmin
+        public async Task<int> DeleteTicketAsync(TicketVm ticketVm)
+        {
+
+            var ticketToBeDeleted = _dbContext.Tickets.Where(a => a.Id == ticketVm.Id).FirstOrDefault();
+
+            if (ticketToBeDeleted == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            _dbContext.Remove<Ticket>(ticketToBeDeleted);
+            await _dbContext.SaveChangesAsync();
+
+            return ticketToBeDeleted.Id;
+
         }
     }
 }

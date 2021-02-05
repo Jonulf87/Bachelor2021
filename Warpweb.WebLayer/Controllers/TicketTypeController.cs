@@ -68,5 +68,20 @@ namespace Warpweb.WebLayer.Controllers
 
             return Ok(ticketTypeVm);
         }
+
+        // TODO: Restrict to SuperAdmin
+        [HttpDelete]
+        public async Task<ActionResult> DeleteTicketType(TicketTypeVm ticketTypeVm)
+        {
+            try
+            {
+                await _ticketTypeService.DeleteTicketTypeAsync(ticketTypeVm);
+            }
+            catch (TicketDoesNotExistException)
+            {
+                return BadRequest();
+            }
+            return Ok(ticketTypeVm);
+        }
     }
 }

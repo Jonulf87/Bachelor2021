@@ -87,5 +87,23 @@ namespace Warpweb.LogicLayer.Services
 
             return existingTicketType.Id;
         }
+
+        // Restrict to SuperAdmin
+        public async Task<int> DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
+        {
+
+            var ticketTypeToBeDeleted = _dbContext.TicketTypes.Where(a => a.Id == ticketTypeVm.Id).FirstOrDefault();
+
+            if (ticketTypeToBeDeleted == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            _dbContext.Remove<TicketType>(ticketTypeToBeDeleted);
+            await _dbContext.SaveChangesAsync();
+
+            return ticketTypeToBeDeleted.Id;
+
+        }
     }
 }

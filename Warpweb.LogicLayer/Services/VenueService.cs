@@ -97,7 +97,7 @@ namespace Warpweb.LogicLayer.Services
         }
 
         // Restrict to SuperAdmin
-        public async Task<int> RemoveVenueAsync(VenueVm venueVm)
+        public async Task<int> DeleteVenueAsync(VenueVm venueVm)
         {
 
             var venueToBeDeleted = _dbContext.Venues.Where(a => a.VenueId == venueVm.VenueId).FirstOrDefault();

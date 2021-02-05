@@ -41,12 +41,26 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPost]
         public async Task<ActionResult<VenueVm>> CreateVenue(VenueVm venueVm)
         {
-
             try
             {
                 await _venueService.CreateVenueAsync(venueVm);
             }
             catch (VenueAlreadyExistsException)
+            {
+                return BadRequest();
+            }
+
+            return Ok(venueVm);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateVenue(VenueVm venueVm)
+        {
+            try
+            {
+                await _venueService.UpdateVenueAsync(venueVm);
+            }
+            catch (VenueDoesNotExistException)
             {
                 return BadRequest();
             }

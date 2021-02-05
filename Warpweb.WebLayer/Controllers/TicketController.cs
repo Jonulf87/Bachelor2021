@@ -42,7 +42,6 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Users")]
         public async Task<ActionResult<TicketVm>> CreateTicket(TicketVm ticketVm)
         {
-
             try
             {
                 await _ticketService.CreateTicketAsync(ticketVm);
@@ -55,5 +54,36 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(ticketVm);
         }
 
+        [HttpPut]
+        [Authorize(Roles = "Admins")]
+        public async Task<ActionResult> UpdateTicket(TicketVm ticketVm)
+        {
+            try
+            {
+                await _ticketService.UpdateTicketAsync(ticketVm);
+            }
+
+            catch (TicketDoesNotExistException)
+            {
+                return BadRequest();
+            }
+            return Ok(ticketVm);
+        }
+
+        // TODO: Restrict to SuperAdmin
+        [HttpDelete]
+        public async Task<ActionResult> DeleteTicket(TicketVm ticketVm)
+        {
+            try
+            {
+                await _ticketService.DeleteTicketAsync(ticketVm);
+            }
+            catch (TicketDoesNotExistException)
+            {
+                return BadRequest();
+            }
+
+            return Ok(ticketVm);
+        }
     }
 }

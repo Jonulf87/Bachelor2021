@@ -83,5 +83,23 @@ namespace Warpweb.LogicLayer.Services
 
             return existingCrew.CrewId;
         }
+
+        // Restrict to SuperAdmin
+        public async Task<int> DeleteCrewAsync(CrewVm crewVm)
+        {
+
+            var crewToBeDeleted = _dbContext.Crews.Where(a => a.CrewId == crewVm.CrewId).FirstOrDefault();
+
+            if (crewToBeDeleted == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            _dbContext.Remove<Crew>(crewToBeDeleted);
+            await _dbContext.SaveChangesAsync();
+
+            return crewToBeDeleted.CrewId;
+
+        }
     }
 }

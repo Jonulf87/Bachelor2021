@@ -11,7 +11,6 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
 {
-
     public class CrewRoleService 
     {
 
@@ -86,6 +85,24 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
 
             return existingCrewRole.CrewRoleId;
+        }
+
+        // Restrict to SuperAdmin
+        public async Task<int> DeleteCrewRoleAsync(CrewRoleVm crewroleVm)
+        {
+
+            var crewroleToBeDeleted = _dbContext.CrewRoles.Where(a => a.CrewRoleId == crewroleVm.CrewRoleId).FirstOrDefault();
+
+            if (crewroleToBeDeleted == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            _dbContext.Remove<CrewRole>(crewroleToBeDeleted);
+            await _dbContext.SaveChangesAsync();
+
+            return crewroleToBeDeleted.CrewRoleId;
+
         }
     }
 }

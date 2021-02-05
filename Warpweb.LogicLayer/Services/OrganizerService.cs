@@ -90,5 +90,23 @@ namespace Warpweb.LogicLayer.Services
 
             return existingOrganizer.Id;
         }
+
+        // Restrict to SuperAdmin
+        public async Task<int> DeleteOrganizerAsync(OrganizerVm organizerVm)
+        {
+
+            var organizerToBeDeleted = _dbContext.Organizers.Where(a => a.Id == organizerVm.Id).FirstOrDefault();
+
+            if (organizerToBeDeleted == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            _dbContext.Remove<Organizer>(organizerToBeDeleted);
+            await _dbContext.SaveChangesAsync();
+
+            return organizerToBeDeleted.Id;
+
+        }
     }
 }

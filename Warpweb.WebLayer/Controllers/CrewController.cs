@@ -18,6 +18,9 @@ namespace Warpweb.WebLayer.Controllers
     [ApiController]
     [Authorize(Roles = "Admins")]
 
+    // CRUD functionality for crew
+    // TODO : Crew deletion
+
     public class CrewController : ControllerBase
     {
         private readonly CrewService _crewService;
@@ -39,10 +42,11 @@ namespace Warpweb.WebLayer.Controllers
             return await _crewService.GetCrewAsync(id);
         }
 
+
         [HttpPost]
+        [Authorize(Roles = "Admins")]
         public async Task<ActionResult<CrewVm>> CreateCrew(CrewVm crewVm)
         {
-
             try
             {
                 await _crewService.CreateCrewAsync(crewVm);
@@ -56,11 +60,35 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admins")]
         public async Task<ActionResult> UpdateCrew(CrewVm crewVm)
         {
-            await _crewService.UpdateCrewAsync(crewVm);
+            try
+            {
+                await _crewService.UpdateCrewAsync(crewVm);
+            }
+     
+            catch (CrewDoesNotExistException)
+            {
+                return BadRequest();
+            }
+            return Ok(crewVm);
+        }
 
-            return Ok();
+        // TODO: Restrict to SuperAdmin
+        [HttpDelete]
+        public async Task<ActionResult> DeleteCrew(CrewVm crewVm)
+        {
+            try
+            {
+                await _crewService.DeleteCrewAsync(crewVm);
+            }
+            catch (CrewDoesNotExistException)
+            {
+                return BadRequest();
+            }
+
+            return Ok(crewVm);
         }
     }
 }

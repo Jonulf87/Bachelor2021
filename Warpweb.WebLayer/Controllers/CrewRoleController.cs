@@ -18,6 +18,8 @@ namespace Warpweb.WebLayer.Controllers
     [ApiController]
     [Authorize(Roles = "Admins")]
 
+    // CRUD functionality for Crew Roles
+
     public class CrewRoleController : ControllerBase
     {
         private readonly CrewRoleService _crewroleService;
@@ -58,9 +60,32 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateCrewRole(CrewRoleVm crewroleVm)
         {
-            await _crewroleService.UpdateCrewRoleAsync(crewroleVm);
+            try
+            {
+                await _crewroleService.UpdateCrewRoleAsync(crewroleVm);
+            }
+            catch (CrewRoleDoesNotExistException)
+            {
+                return BadRequest();
+            }
 
-            return Ok();
+            return Ok(crewroleVm);
+        }
+
+        // TODO: Restrict to SuperAdmin
+        [HttpDelete]
+        public async Task<ActionResult> DeleteCrewRole(CrewRoleVm crewroleVm)
+        {
+            try
+            {
+                await _crewroleService.DeleteCrewRoleAsync(crewroleVm);
+            }
+            catch (MainEventDoesNotExistException)
+            {
+                return BadRequest();
+            }
+
+            return Ok(crewroleVm);
         }
     }
 }

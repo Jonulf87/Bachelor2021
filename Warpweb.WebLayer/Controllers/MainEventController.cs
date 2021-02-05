@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -18,10 +19,14 @@ namespace Warpweb.WebLayer.Controllers
     [ApiController]
     [Authorize(Roles = "Admins")]
     [Authorize(Roles = "CrewLeader")]
-    public class MainEventController : ControllerBase //CRUD til main events. Arrangement er kalt MainEvent i koden.
+
+    // CRUD functionality for events
+    // Note Dependency Injection for SecurityService and MainEventService
+
+    public class MainEventController : ControllerBase 
     {
-        private readonly MainEventService _mainEventService; //BLLService DI
-        private readonly SecurityService _securityService; //SecurityService DI
+        private readonly MainEventService _mainEventService;
+        private readonly SecurityService _securityService;
 
         public MainEventController(MainEventService mainEventService, SecurityService securityService)
         {
@@ -48,37 +53,51 @@ namespace Warpweb.WebLayer.Controllers
 
             return mainevent;
         }
-
         
         [HttpPost]
         public async Task<ActionResult> CreateMainEvent(MainEventVm mainEventVm)
         {
-            var organizers = await _securityService.GetOrganizersAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)); //Sjekker hvilken arrangør brukeren er affiliert med. ClaimTypes.NameIdentifier er brukernavn til pålogget bruker.
+            // Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.
+            var organizers = await _securityService.GetOrganizersAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) //Sjekke at navnet på arrangementet ikke allerede er tatt?
+            // Check for availability of event name
+            if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) 
             {
                 return Forbid();
             }
-
-            await _mainEventService.CreateMainEventAsync(mainEventVm);
-
-            return Ok();
+            
+            return Ok(mainEventVm);
         } 
 
         [HttpPut]
         public async Task<ActionResult> UpdateMainEvent (MainEventVm maineventVm)
         {
-            await _mainEventService.UpdateMainEventAsync(maineventVm);
+            try
+            {
+                await _mainEventService.UpdateMainEventAsync(maineventVm);
+            }
+            catch (MainEventDoesNotExistException)
+            {
+                return BadRequest();
+            }
 
-            return Ok();
+            return Ok(maineventVm);
         }
 
-        // TODO: Restrict to SuperAdmin ?
+        // TODO: Restrict to SuperAdmin
         [HttpDelete]
         public async Task<ActionResult> DeleteMainEvent (MainEventVm maineventVm)
         {
-            await _mainEventService.RemoveMainEventAsync(maineventVm);
-            return Ok();
+            try
+            {
+                await _mainEventService.RemoveMainEventAsync(maineventVm);
+            }
+            catch (MainEventDoesNotExistException)
+            {
+                return BadRequest();
+            }
+            
+            return Ok(maineventVm);
         }
     }
 }
