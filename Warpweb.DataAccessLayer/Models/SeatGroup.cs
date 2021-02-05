@@ -7,6 +7,7 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int Id { get; set; }
         public virtual ICollection<Row> Rows { get; set; }
+        // public string LocationOnPage { get; set; } Send inn objekt fra js functino med lokasjon på side
 
     }
 }
