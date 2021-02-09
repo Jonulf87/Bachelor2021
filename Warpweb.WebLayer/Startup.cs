@@ -10,7 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.DataAccessLayer.Repositories;
 using Warpweb.LogicLayer.Services;
 
 namespace Warpweb.WebLayer
@@ -31,12 +33,16 @@ namespace Warpweb.WebLayer
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<OrganizerService>(); //Trengs per service
+            // Needed per service
+            services.AddScoped<OrganizerService>(); 
             services.AddScoped<SecurityService>();
             services.AddScoped<MainEventService>();
             services.AddScoped<TicketService>();
             services.AddScoped<VenueService>();
             services.AddScoped<CrewService>();
+
+            // Needed per interface/repository
+            services.AddScoped<IVenueRepository, VenueRepository>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
