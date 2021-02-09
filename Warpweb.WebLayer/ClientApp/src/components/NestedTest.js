@@ -1,9 +1,9 @@
 ﻿import React from 'react';
 
-export default function NestedTest(){
+export default function NestedTest({ user }){
     return (
         <div className = "nestedTest">
-            <p>Dette er en nested test</p>
+            <p>{user}</p>
 
         </div>
     );

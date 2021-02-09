@@ -13,6 +13,9 @@ function App() {
         <div className="container">
             <Test />
         </div>
+              //<Layout>
+      //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+      //</Layout>
     );
     
 }
