@@ -22,8 +22,10 @@ export default class App extends Component {
                 <Router>
                     <div>
                         <Switch>
-                            <Route path="" component={MainPage} />
+                            
                             <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+
+                            <Route path="/" component={MainPage} />
                         </Switch>
                     </div>
                 </Router>
