@@ -22,6 +22,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" />
   </ItemGroup>
 
@@ -33,12 +37,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\components\SeatMapBackdrop.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Warpweb.DataAccessLayer\Warpweb.DataAccessLayer.csproj" />
     <ProjectReference Include="..\Warpweb.LogicLayer\Warpweb.LogicLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\components\SeatMapBackdrop.tsx" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
