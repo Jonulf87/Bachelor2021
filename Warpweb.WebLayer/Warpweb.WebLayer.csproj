@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\components\SeatMapBackdrop.tsx" />
+    <None Remove="ClientApp\src\components\SeatMapRow.tsx" />
   </ItemGroup>
 
   <ItemGroup>
