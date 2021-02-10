@@ -37,8 +37,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\components\SeatMapAdminMenu.tsx" />
     <None Remove="ClientApp\src\components\SeatMapBackdrop.tsx" />
+    <None Remove="ClientApp\src\components\SeatMapFloor.tsx" />
     <None Remove="ClientApp\src\components\SeatMapRow.tsx" />
+    <None Remove="ClientApp\src\components\SeatMapSeat.tsx" />
   </ItemGroup>
 
   <ItemGroup>
