@@ -5,16 +5,15 @@ export default function SeatMapAdminMenu(props) {
 
     let [seatNumber, setSeatNumber] = useState(0);
 
-
     return (
         <div className="addingMenu">
 
-            <form onSubmit={ }>
+            <form>
                 <label>
                     Antall seter på rad:
-                    <input type="text" id="numberOfSeats" onChange={() => setSeatRow())} />
+                    <input type="text" id="numberOfSeats" onChange={() => setSeatNumber(this.value)} />
                 </label>
-                <input type="submit" onClick={() => setSeatRow(seatNumber) }/>
+                <input type="submit" />
             </form>
 
 

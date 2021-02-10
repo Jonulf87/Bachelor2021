@@ -37,24 +37,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\src\components\SeatMapAdminMenu.tsx" />
-    <None Remove="ClientApp\src\components\SeatMapBackdrop.tsx" />
-    <None Remove="ClientApp\src\components\SeatMapFloor.tsx" />
-    <None Remove="ClientApp\src\components\SeatMapRow.tsx" />
-    <None Remove="ClientApp\src\components\SeatMapSeat.tsx" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Warpweb.DataAccessLayer\Warpweb.DataAccessLayer.csproj" />
     <ProjectReference Include="..\Warpweb.LogicLayer\Warpweb.LogicLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ViewModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\components\SeatMapBackdrop.tsx" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
