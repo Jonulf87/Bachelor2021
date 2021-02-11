@@ -1,23 +1,38 @@
-import React from 'react';
-import { Route } from 'react-router'; //Behov for denne med funksoner?
+import React, { Component } from 'react';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route
+} from "react-router-dom";
+
 import './custom.css'
+import Layout from './components/Layout/Layout';
+import MainPage from './components/MainPage/MainPage';
 import Test from './components/Test';
 
-function App() {
-    //static displayName = App.name;
+export default class App extends Component {
+    static displayName = App.name;
 
-    return (
-        <div className="container">
-            <Test />
-        </div>
-              //<Layout>
-      //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-      //</Layout>
-    );
-    
+    render() {
+        return (
+            <Layout>
+                <Router>
+                    <div>
+                        <Switch>
+                            
+                            <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+
+                            <Route path="/" component={MainPage} />
+                        </Switch>
+                    </div>
+                </Router>
+                <div className="container">
+                    <Test />
+                </div>
+            </Layout>
+        );
+    }
 }
-
-export default App;
