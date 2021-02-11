@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Warpweb.LogicLayer.Services
     public class CrewService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger<CrewService> _log;
 
         public CrewService(ApplicationDbContext dbContext)
         {
@@ -42,31 +44,31 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
-
+        // TODO: Try - catch w/logging
         public async Task<int> CreateCrewAsync(CrewVm crewVm)
         {
-            // Kaster exception - koden sjekker om at crew finnes i DB og hvis ikke - gir feil. Men ny crew kan ikke finnes i DB - den er jo ny
-            /*
-            var existingCrew = _dbContext.Crews
+
+                var existingCrew = _dbContext.Crews
                 .Where(a => a.CrewId == crewVm.CrewId || a.CrewName == crewVm.CrewName)
                 .FirstOrDefault();
 
-            if(existingCrew == null)
-            {
-                throw new NotImplementedException();
-            }
-            */
+                var crew = new Crew();
 
-            var crew = new Crew
-            {
-                CrewName = crewVm.CrewName,
-                CrewRoles = crewVm.CrewRoles
-            };
+                if (existingCrew == null)
+                {
+                    crew.CrewName = crewVm.CrewName;
+                    crew.CrewRoles = crewVm.CrewRoles;
+                }
+                else
+                {
+                    crew.CrewName = existingCrew.CrewName;
+                    crew.CrewRoles = existingCrew.CrewRoles;
+                }
 
-            _dbContext.Crews.Add(crew);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.Crews.Add(crew);
+                await _dbContext.SaveChangesAsync();
 
-            return crew.CrewId;
+                return crew.CrewId;
         }
 
         public async Task<int> UpdateCrewAsync(CrewVm crewVm)
