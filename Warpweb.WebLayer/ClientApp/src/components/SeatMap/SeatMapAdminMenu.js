@@ -6,7 +6,7 @@ export default function SeatMapAdminMenu(props) {
     let [seatNumber, setSeatNumber] = useState(0);
 
     return (
-        <div className="addingMenu">
+        <div className="addingMenu" onSubmit={() => console.log(seatNumber)}>
 
             <form>
                 <label>

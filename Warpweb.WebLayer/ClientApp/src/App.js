@@ -5,6 +5,7 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import './custom.css'
 import Test from './components/Test';
+import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
 
 function App() {
     //static displayName = App.name;
@@ -12,6 +13,7 @@ function App() {
     return (
         <div className="container">
             <Test />
+            <SeatMapBackdrop />
         </div>
               //<Layout>
       //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
