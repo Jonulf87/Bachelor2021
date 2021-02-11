@@ -42,8 +42,10 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+
         public async Task<int> CreateCrewAsync(CrewVm crewVm)
         {
+            // Kaster exception - koden sjekker om at crew finnes i DB og hvis ikke - gir feil. Men ny crew kan ikke finnes i DB - den er jo ny
             /*
             var existingCrew = _dbContext.Crews
                 .Where(a => a.CrewId == crewVm.CrewId || a.CrewName == crewVm.CrewName)
