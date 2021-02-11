@@ -1,19 +1,23 @@
 ﻿import React, { useState } from 'react';
 import SeatMapRow from './SeatMapRow';
 
-export default function SeatMapAdminMenu(props) {
+export default function SeatMapAdminMenu({ setSeatNumber }) {
 
-    let [seatNumber, setSeatNumber] = useState(0);
+    let [numberOfSeats, setNumberOfSeats] = useState("");
 
     return (
-        <div className="addingMenu" onSubmit={() => console.log(seatNumber)}>
+        <div className="addingMenu" >
 
-            <form>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                setSeatNumber(numberOfSeats);
+                setNumberOfSeats("");
+            }}>
                 <label>
                     Antall seter på rad:
-                    <input type="text" id="numberOfSeats" onChange={() => setSeatNumber(this.value)} />
+                    <input type="text" id="numberOfSeats" value={numberOfSeats} onChange={(e) => setNumberOfSeats(e.target.value)} />
                 </label>
-                <input type="submit" />
+                <input type="submit"  />
             </form>
 
 

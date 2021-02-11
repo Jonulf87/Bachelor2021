@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
@@ -47,7 +48,7 @@ namespace Warpweb.WebLayer
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<ApplicationUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
@@ -59,11 +60,46 @@ namespace Warpweb.WebLayer
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                //password settings. Må oppdateres
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredUniqueChars = 0;
+                //lockout settings
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                //User settings
+                options.User.RequireUniqueEmail = true;
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ-_.@+-"; //Husk å teste for æøå og + - i brukernavn
+                options.SignIn.RequireConfirmedAccount = true; //Bør kanskje ikke være true?
+            });
+
+            services.ConfigureApplicationCookie(options => //Cookie settings
+            {
+                //cookies
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                //login
+                //options.LoginPath = "/Identity/Account/Login";
+                //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                //Usikker hvor de to over skal peke per nå.
+                options.SlidingExpiration = true;
+
+            });
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddHostedService<DbSeed>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
