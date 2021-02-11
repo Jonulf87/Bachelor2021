@@ -25,9 +25,13 @@ namespace Warpweb.WebLayer.Controllers
     {
         private readonly CrewService _crewService;
 
-        public CrewController (CrewService crewService)
+        public CrewController(CrewService crewService)
         {
             _crewService = crewService;
+        }
+
+        public CrewController()
+        {
         }
 
         [HttpGet]
@@ -47,15 +51,18 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Admins")]
         public async Task<ActionResult<CrewVm>> CreateCrew(CrewVm crewVm)
         {
+            int crewId;
+
             try
             {
-                await _crewService.CreateCrewAsync(crewVm);
+                crewId = await _crewService.CreateCrewAsync(crewVm);
             }
             catch (CrewAlreadyExistsException)
             {
                 return BadRequest();
             }
-          
+
+            crewVm.CrewId = crewId;
             return Ok(crewVm);
         }
 
@@ -67,7 +74,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _crewService.UpdateCrewAsync(crewVm);
             }
-     
+
             catch (CrewDoesNotExistException)
             {
                 return BadRequest();
