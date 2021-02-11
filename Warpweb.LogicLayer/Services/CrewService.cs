@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
@@ -47,23 +48,21 @@ namespace Warpweb.LogicLayer.Services
         // TODO: Try - catch w/logging
         public async Task<int> CreateCrewAsync(CrewVm crewVm)
         {
-
-                var existingCrew = _dbContext.Crews
+            var existingCrew = _dbContext.Crews
                 .Where(a => a.CrewId == crewVm.CrewId || a.CrewName == crewVm.CrewName)
                 .FirstOrDefault();
 
-                var crew = new Crew();
+                if (existingCrew != null)
+                {
+                    throw new CrewAlreadyExistsException();
+                }
 
-                if (existingCrew == null)
+                var crew = new Crew
                 {
-                    crew.CrewName = crewVm.CrewName;
-                    crew.CrewRoles = crewVm.CrewRoles;
-                }
-                else
-                {
-                    crew.CrewName = existingCrew.CrewName;
-                    crew.CrewRoles = existingCrew.CrewRoles;
-                }
+                    CrewName = crewVm.CrewName,
+                    CrewRoles = crewVm.CrewRoles
+
+                };
 
                 _dbContext.Crews.Add(crew);
                 await _dbContext.SaveChangesAsync();
