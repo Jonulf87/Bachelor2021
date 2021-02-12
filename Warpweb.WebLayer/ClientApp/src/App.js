@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 
 import './custom.css'
-import Layout from './components/Layout/Layout';
+//import Layout from './components/Layout/Layout';
 import MainPage from './components/MainPage/MainPage';
 import Test from './components/Test';
 import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
