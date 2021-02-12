@@ -25,8 +25,8 @@ export default function App() {
             <MainPageNavBar />
             <SeatMapBackdrop />
         </div>
-              //<Layout>
-      //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-      //</Layout>
-    );    
+        //<Layout>
+        //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+        //</Layout>
+    );
 }

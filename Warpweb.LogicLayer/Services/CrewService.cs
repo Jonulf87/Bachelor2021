@@ -82,6 +82,20 @@ namespace Warpweb.LogicLayer.Services
                 throw new CrewDoesNotExistException("Det finnes ingen crew med denne IDen.");
             }
 
+            // If we get null in any field of incoming object, we assume that we don't need to update this field.
+            // But at the same time we have to have some value in this field in order not to delete data from the DB.
+            // Therefore we save existing data into the null-fields of the incoming object
+
+            if (crewVm.CrewName == null)
+            {
+                crewVm.CrewName = existingCrew.CrewName;
+            }
+
+            if (crewVm.CrewRoles == null)
+            {
+                crewVm.CrewRoles = existingCrew.CrewRoles;
+            }
+
             existingCrew.CrewId = crewVm.CrewId;
             existingCrew.CrewName = crewVm.CrewName;
             existingCrew.CrewRoles = crewVm.CrewRoles;
