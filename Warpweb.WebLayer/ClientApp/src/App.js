@@ -13,6 +13,7 @@ import Layout from './components/Layout/Layout';
 import MainPage from './components/MainPage/MainPage';
 import Test from './components/Test';
 import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
+import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 
 
 
@@ -21,6 +22,7 @@ export default function App() {
 
     return (
         <div className="container">
+            <MainPageNavBar />
             <SeatMapBackdrop />
         </div>
               //<Layout>
