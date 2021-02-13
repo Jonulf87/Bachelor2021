@@ -1,13 +1,7 @@
-﻿using IdentityServer4.EntityFramework.Options;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Threading.Tasks;
-using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
@@ -15,26 +9,10 @@ using Warpweb.WebLayer.Controllers;
 
 namespace WarpTest.WebLayer.Controllers
 {
-    public class Tests
+    public class CrewControllerTest : BaseTest
     {
         private const string _crewName1 = "Test Crew 1";
         private const string _crewName2 = "Test Crew 2";
-
-        private DbConnection _connection;
-        private DbContextOptions _options;
-        ApplicationDbContext _dbContext;
-
-        [SetUp]
-        public void Setup()
-        {
-            CreateInMemoryDatabase();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _connection.Dispose();
-        }
 
         [Test]
         public async Task ShouldGetCrews()
@@ -262,25 +240,6 @@ namespace WarpTest.WebLayer.Controllers
 
 
         // Helper methods
-        private void CreateInMemoryDatabase()
-        {
-            _connection = new SqliteConnection("Filename=:memory:");
-
-            _connection.Open();
-
-            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlite(_connection)
-                .Options;
-
-            _dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()));
-            _dbContext.Database.EnsureDeleted();
-            _dbContext.Database.EnsureCreated();
-
-            _dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 1, Description = "Test Rolle 1" });
-            _dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 2, Description = "Test Rolle 2" });
-            _dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 3, Description = "Test Rolle 3" });
-        }
-
         private async Task<ActionResult<CrewVm>> CreateCrew(List<CrewRole> crewRoles)
         {
             return await CreateCrew(crewRoles, _crewName1);
