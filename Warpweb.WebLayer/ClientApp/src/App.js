@@ -1,23 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
+import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
+import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
+import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import {
-    BrowserRouter,
+    BrowserRouter as Router,
     Switch,
     Route
 } from "react-router-dom";
 
 import './custom.css'
+//import Layout from './components/Layout/Layout';
 import MainPage from './components/MainPage/MainPage';
+import Test from './components/Test';
+import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
+import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 
-export default class App extends Component {
-    static displayName = App.name;
 
-    render() {
-        return (
-            <BrowserRouter>
-                <div className="App">
-                    <MainPage />
-                </div>
-            </BrowserRouter>
-        );
-    }
+
+export default function App() {
+    //static displayName = App.name;
+
+    return (
+        <div className="container">
+            <MainPageNavBar />
+            <SeatMapBackdrop />
+        </div>
+        //<Layout>
+        //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+        //</Layout>
+    );
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
@@ -13,6 +15,7 @@ namespace Warpweb.LogicLayer.Services
     public class CrewService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger<CrewService> _log;
 
         public CrewService(ApplicationDbContext dbContext)
         {
@@ -42,29 +45,32 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+        // TODO: Try - catch w/logging
         public async Task<int> CreateCrewAsync(CrewVm crewVm)
         {
-            /*
-            var existingCrew = _dbContext.Crews
+            try
+            {
+                var existingCrew = _dbContext.Crews
                 .Where(a => a.CrewId == crewVm.CrewId || a.CrewName == crewVm.CrewName)
                 .FirstOrDefault();
 
-            if(existingCrew == null)
-            {
-                throw new NotImplementedException();
+                var crew = new Crew
+                {
+                    CrewName = crewVm.CrewName,
+                    CrewRoles = crewVm.CrewRoles
+
+                };
+
+                _dbContext.Crews.Add(crew);
+                await _dbContext.SaveChangesAsync();
+
+                return crew.CrewId;
             }
-            */
-
-            var crew = new Crew
+            catch (CrewDoesNotExistException e)
             {
-                CrewName = crewVm.CrewName,
-                CrewRoles = crewVm.CrewRoles
-            };
-
-            _dbContext.Crews.Add(crew);
-            await _dbContext.SaveChangesAsync();
-
-            return crew.CrewId;
+                _log.LogInformation(e.Message);
+                return 0;
+            }        
         }
 
         public async Task<int> UpdateCrewAsync(CrewVm crewVm)
@@ -73,7 +79,7 @@ namespace Warpweb.LogicLayer.Services
 
             if(existingCrew == null)
             {
-                throw new NotImplementedException();
+                throw new CrewDoesNotExistException("Det finnes ingen crew med denne IDen.");
             }
 
             // If we get null in any field of incoming object, we assume that we don't need to update this field.
@@ -108,7 +114,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crewToBeDeleted == null)
             {
-                throw new NotImplementedException();
+                throw new CrewDoesNotExistException();
             }
 
             _dbContext.Remove<Crew>(crewToBeDeleted);
