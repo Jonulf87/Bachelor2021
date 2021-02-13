@@ -47,6 +47,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<int> CreateCrewRoleAsync(CrewRoleVm crewroleVm)
         {
+            /*
             var existingCrewRole = _dbContext.CrewRoles
                 .Where(a => a.CrewRoleId == crewroleVm.CrewRoleId)
                 .FirstOrDefault();
@@ -55,6 +56,7 @@ namespace Warpweb.LogicLayer.Services
             {
                 throw new NotImplementedException();
             }
+            */
 
             var crewrole = new CrewRole
             {
