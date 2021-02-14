@@ -31,11 +31,11 @@ namespace WarpTest.WebLayer.Controllers
 
             List<CrewListVm> result = await crewController.GetCrews();
 
-            Assert.AreEqual(result.Count, 2);
-            Assert.AreEqual(result[0].CrewId, 1);
-            Assert.AreEqual(result[0].CrewName, _crewName1);
-            Assert.AreEqual(result[1].CrewId, 2);
-            Assert.AreEqual(result[1].CrewName, _crewName2);
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(1, result[0].CrewId);
+            Assert.AreEqual(_crewName1, result[0].CrewName);
+            Assert.AreEqual(2, result[1].CrewId);
+            Assert.AreEqual(_crewName2, result[1].CrewName);
         }
 
         [Test]
@@ -60,15 +60,15 @@ namespace WarpTest.WebLayer.Controllers
 
             ActionResult<CrewVm> result1 = await crewController.GetCrew(1);
             CrewVm returnedCrew1 = result1.Value;
-            Assert.AreEqual(returnedCrew1.CrewId, 1);
-            Assert.AreEqual(returnedCrew1.CrewName, _crewName1);
-            Assert.AreEqual(returnedCrew1.CrewRoles.Count, 0);
+            Assert.AreEqual(1, returnedCrew1.CrewId);
+            Assert.AreEqual(_crewName1, returnedCrew1.CrewName);
+            Assert.AreEqual(0, returnedCrew1.CrewRoles.Count);
 
             ActionResult<CrewVm> result2 = await crewController.GetCrew(2);
             CrewVm returnedCrew2 = result2.Value;
-            Assert.AreEqual(returnedCrew2.CrewId, 2);
-            Assert.AreEqual(returnedCrew2.CrewName, _crewName2);
-            Assert.AreEqual(returnedCrew2.CrewRoles.Count, 1);
+            Assert.AreEqual(2, returnedCrew2.CrewId);
+            Assert.AreEqual(_crewName2, returnedCrew2.CrewName);
+            Assert.AreEqual(1, returnedCrew2.CrewRoles.Count);
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace WarpTest.WebLayer.Controllers
             CollectionAssert.AreEquivalent(crewRoles1, crew1.CrewRoles);
 
             Crew crew2 = _dbContext.Crews.Find(2);
-            Assert.AreEqual(_crewName2, crew2.CrewName);
+            Assert.AreEqual(crew2.CrewName, _crewName2);
             CollectionAssert.AreEquivalent(crewRoles2, crew2.CrewRoles);
         }
 

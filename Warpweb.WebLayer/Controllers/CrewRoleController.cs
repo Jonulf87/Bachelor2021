@@ -44,16 +44,18 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPost]
         public async Task<ActionResult<CrewRoleVm>> CreateCrewRole(CrewRoleVm crewroleVm)
         {
+            int crewRoleId;
 
             try
             {
-                await _crewroleService.CreateCrewRoleAsync(crewroleVm);
+                crewRoleId = await _crewroleService.CreateCrewRoleAsync(crewroleVm);
             }
             catch (CrewRoleAlreadyExistsException)
             {
                 return BadRequest();
             }
 
+            crewroleVm.CrewRoleId = crewRoleId;
             return Ok(crewroleVm);
         }
 
