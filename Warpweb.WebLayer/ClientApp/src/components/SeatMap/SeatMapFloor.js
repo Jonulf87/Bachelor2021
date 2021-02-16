@@ -13,7 +13,7 @@ export default function SeatMapFloor({ rows, deleteRow }) {
     
     return (
         <div style={{
-            width: "500px",
+            width: "100%",
             height: "500px",
             position: "relative"
         }}>

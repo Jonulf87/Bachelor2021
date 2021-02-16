@@ -14,6 +14,7 @@ import MainPage from './components/MainPage/MainPage';
 import Test from './components/Test';
 import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
+import Drawer from '@material-ui/core/Drawer';
 
 
 
@@ -21,10 +22,14 @@ export default function App() {
     //static displayName = App.name;
 
     return (
-        <div className="container">
-            <MainPageNavBar />
-            <SeatMapBackdrop />
-        </div>
+
+        <Drawer>
+
+        </Drawer>
+        //<div className="container">
+        //    <MainPageNavBar />
+        //    <SeatMapBackdrop />
+        //</div>
         //<Layout>
         //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         //</Layout>
