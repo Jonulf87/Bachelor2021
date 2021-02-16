@@ -11,7 +11,7 @@ namespace WarpTest.WebLayer.Controllers
 {
     class CrewRoleControllerTest : BaseTest
     {
-        string descr = "New description";
+        private const string _descr = "New description";
 
         [Test]
         public async Task ShouldGetCrewRoles()
@@ -64,20 +64,19 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public async Task ShouldCreateCrewRole()
         {
-            
-            ActionResult<CrewRoleVm> result = await CreateCrewRole(descr);
+            ActionResult<CrewRoleVm> result = await CreateCrewRole(_descr);
 
             CrewRoleVm createdCrewRole = (CrewRoleVm)((OkObjectResult)result.Result).Value;
 
             // Check object that is returned from the controller
             Assert.AreEqual(4, createdCrewRole.CrewRoleId);
-            Assert.AreEqual(descr, createdCrewRole.Description);
+            Assert.AreEqual(_descr, createdCrewRole.Description);
             Assert.IsNull(createdCrewRole.Crews);
 
             // Check what we really have in the DB
             CrewRole crewRole1 = _dbContext.CrewRoles.Find(4);
             Assert.AreEqual(4, crewRole1.CrewRoleId);
-            Assert.AreEqual(descr, crewRole1.Description);
+            Assert.AreEqual(_descr, crewRole1.Description);
             Assert.IsNull(crewRole1.Crews);
         }
 
@@ -90,14 +89,14 @@ namespace WarpTest.WebLayer.Controllers
             CrewRoleVm newCrewRole1 = new CrewRoleVm
             {
                 CrewRoleId = 1,
-                Description = descr
+                Description = _descr
             };
 
             await crewRoleController.UpdateCrewRole(newCrewRole1);
 
             // Check that only one has been changed
             CrewRole crewRole1 = _dbContext.CrewRoles.Find(1);
-            Assert.AreEqual(descr, crewRole1.Description);
+            Assert.AreEqual(_descr, crewRole1.Description);
 
             CrewRole crewRole2 = _dbContext.CrewRoles.Find(2);
             Assert.AreEqual("Test Rolle 2", crewRole2.Description);
