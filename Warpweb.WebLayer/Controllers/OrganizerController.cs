@@ -52,15 +52,18 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrganizer(OrganizerVm organizerVm)
         {
+            int orgId;
+
             try
             {
-                await _organizerService.CreateOrganizerAsync(organizerVm);
+                orgId = await _organizerService.CreateOrganizerAsync(organizerVm);
             }
             catch (OrganizerAlreadyExistsException)
             {
                 return BadRequest();
-            }      
+            }
 
+            organizerVm.Id = orgId;
             return Ok(organizerVm);
         }
 

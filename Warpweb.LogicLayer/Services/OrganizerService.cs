@@ -39,7 +39,9 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    OrgNumber = a.OrgNumber
+                    OrgNumber = a.OrgNumber,
+                    Description = a.Description,
+                    ContactId = a.ContactId
                 })
                 .SingleOrDefaultAsync();
         }

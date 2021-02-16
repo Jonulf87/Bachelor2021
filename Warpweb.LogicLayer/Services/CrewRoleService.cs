@@ -28,7 +28,7 @@ namespace Warpweb.LogicLayer.Services
                 {
                     CrewRoleId = a.CrewRoleId,
                     Description = a.Description,
-                    Crew = a.Crew
+                    Crews = a.Crews
                 })
                 .ToListAsync();
         }
@@ -41,7 +41,7 @@ namespace Warpweb.LogicLayer.Services
                 {
                     CrewRoleId = a.CrewRoleId,
                     Description = a.Description,
-                    Crew = a.Crew
+                    Crews = a.Crews
                 }).SingleOrDefaultAsync();
         }
 
@@ -60,8 +60,7 @@ namespace Warpweb.LogicLayer.Services
 
             var crewrole = new CrewRole
             {
-                Description = crewroleVm.Description,
-                Crew = crewroleVm.Crew
+                Description = crewroleVm.Description
             };
 
             _dbContext.CrewRoles.Add(crewrole);
@@ -81,7 +80,6 @@ namespace Warpweb.LogicLayer.Services
 
             existingCrewRole.CrewRoleId = crewroleVm.CrewRoleId;
             existingCrewRole.Description = crewroleVm.Description;
-            existingCrewRole.Crew = crewroleVm.Crew;
 
             _dbContext.Update<CrewRole>(existingCrewRole);
             await _dbContext.SaveChangesAsync();

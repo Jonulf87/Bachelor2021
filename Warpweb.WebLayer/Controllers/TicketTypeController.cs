@@ -41,16 +41,17 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Admins")]
         public async Task<ActionResult<TicketTypeVm>> CreateTicketType(TicketTypeVm ticketTypeVm)
         {
-
+            int ticketTypeId;
             try
             {
-                await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
+                ticketTypeId = await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
             }
             catch (TicketTypeAlreadyExistsException)
             {
                 return BadRequest();
             }
 
+            ticketTypeVm.Id = ticketTypeId;
             return Ok(ticketTypeVm);
         }
 
