@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Services;
@@ -22,7 +19,6 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public async Task ShouldGetTickets()
         {
-            
             CreateTickets();
 
             TicketService ticketService = new TicketService(_dbContext);

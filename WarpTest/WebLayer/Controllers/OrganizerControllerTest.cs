@@ -82,7 +82,7 @@ namespace WarpTest.WebLayer.Controllers
                     FirstName = "Test",
                     MiddleName = "",
                     LastName = "Testesen",
-                    Address = "Blabla gate 123",
+                    Address = "Testing gate 123",
                     DateOfBirth = DateTime.Now,
                     IsAllergic = false
                 }
@@ -128,7 +128,7 @@ namespace WarpTest.WebLayer.Controllers
                     FirstName = "Test",
                     MiddleName = "",
                     LastName = "Testesen",
-                    Address = "Blabla gate 123",
+                    Address = "Testing gate 123",
                     DateOfBirth = DateTime.Now,
                     IsAllergic = false
                 }
@@ -191,7 +191,7 @@ namespace WarpTest.WebLayer.Controllers
                     FirstName = "Test",
                     MiddleName = "",
                     LastName = "Testesen",
-                    Address = "Blabla gate 123",
+                    Address = "Testing gate 123",
                     DateOfBirth = DateTime.Now,
                     IsAllergic = false
                 }
@@ -203,7 +203,7 @@ namespace WarpTest.WebLayer.Controllers
                     FirstName = "Tester",
                     MiddleName = "",
                     LastName = "Testesen",
-                    Address = "Blabla gate 321",
+                    Address = "Testing gate 321",
                     DateOfBirth = DateTime.Now,
                     IsAllergic = false
                 }
