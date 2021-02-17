@@ -32,15 +32,11 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Compile Remove="ClientApp\src\components\NewFolder1\**" />
-    <Compile Remove="ClientApp\src\components\NewFolder\**" />
     <Content Remove="$(SpaRoot)**" />
     <Content Remove="ClientApp\src\components\NewFolder1\**" />
-    <Content Remove="ClientApp\src\components\NewFolder\**" />
     <EmbeddedResource Remove="ClientApp\src\components\NewFolder1\**" />
-    <EmbeddedResource Remove="ClientApp\src\components\NewFolder\**" />
     <None Remove="$(SpaRoot)**" />
     <None Remove="ClientApp\src\components\NewFolder1\**" />
-    <None Remove="ClientApp\src\components\NewFolder\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -72,7 +68,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
