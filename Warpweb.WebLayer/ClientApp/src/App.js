@@ -212,7 +212,8 @@ export default function App() {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <UserMain theme/>
+                <UserMain theme={theme} />
+                <SeatMapBackdrop />
             </main>
         </div>
         //<div className="container">
