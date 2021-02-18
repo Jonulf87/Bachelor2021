@@ -17,11 +17,11 @@ import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 import UserMain from './components/User/UserMain';
+import NameCard from './components/User/NameCard';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -29,18 +29,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import clsx from 'clsx';
-import PersonIcon from '@material-ui/icons/Person';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import HomeWorkIcon from '@material-ui/icons/HomeWork';
-import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
-import EventIcon from '@material-ui/icons/Event';
-import GroupIcon from '@material-ui/icons/Group';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 
 
 
@@ -179,7 +168,7 @@ export default function App() {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <UserMain theme={theme} />
+                <NameCard />
                 <SeatMapBackdrop />
             </main>
         </div>

@@ -2,6 +2,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { TextareaAutosize } from '@material-ui/core';
 
 export default function PaperSheet({ theme }) {
 
@@ -12,8 +13,8 @@ export default function PaperSheet({ theme }) {
             flexWrap: 'wrap',
             '& > *': {
                 margin: theme.spacing(1),
-                width: theme.spacing(16),
-                height: theme.spacing(16),
+                width: theme.spacing(TextareaAutosize),
+                height: theme.spacing(TextareaAutosize),
             },
         },
     }));
