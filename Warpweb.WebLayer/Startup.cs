@@ -76,7 +76,7 @@ namespace Warpweb.WebLayer
                 //User settings
                 options.User.RequireUniqueEmail = true;
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ-_.@+-"; //Husk å teste for æøå og + - i brukernavn
-                options.SignIn.RequireConfirmedAccount = true; //Bør kanskje ikke være true?
+                options.SignIn.RequireConfirmedAccount = false; //Bør kanskje ikke være true?
             });
 
             services.ConfigureApplicationCookie(options => //Cookie settings
