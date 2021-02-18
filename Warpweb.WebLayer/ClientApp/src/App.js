@@ -16,9 +16,9 @@ import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
-import UserMain from './components/User/UserMain';
-import NameCard from './components/User/NameCard';
+import UserDataCard from './components/User/UserDataCard';
 import UserCrewCard from './components/User/UserCrewCard';
+import UserTicketCard from './components/User/UserTicketCard';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -169,8 +169,9 @@ export default function App() {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <NameCard />
+                <UserDataCard />
                 <UserCrewCard />
+                <UserTicketCard />
                 <SeatMapBackdrop />
             </main>
         </div>

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function PersonDataCard() {
+export default function UserDataCard() {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 

@@ -32,18 +32,18 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-function createData(id, date, description, role) {
-    return { id, date, description, role };
+function createData(date, description, type, seat) {
+    return { date, description, type, seat };
 }
 
 const rows = [
-    createData(1, '08.08.2021', 'WarpZone', 'Logistikk'),
-    createData(2, '01.10.2021', 'WrapZone', 'Teknikk'),
-    createData(3, '15.10.2021', 'WarPonez', 'Sikkerhet'),
-    createData(4, '11.11.2021', 'ZapWrones', 'Administrasjon'),
+    createData('08.08.2021', 'WarpZone', 'Standard', 124),
+    createData('01.10.2021', 'WrapZone', 'Standard', 52),
+    createData('15.10.2021', 'WarPonez', 'VIP', 12),
+    createData('11.11.2021', 'ZapWrones', 'Gull', 34),
 ];
 
-export default function UserCrewCard() {
+export default function UserTicketCard() {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
@@ -61,7 +61,7 @@ export default function UserCrewCard() {
             >
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        Arrangementer og roller
+                       Billetter
                     </Typography>
                 </CardContent>
 
@@ -71,19 +71,19 @@ export default function UserCrewCard() {
                                 <Table className={classes.table} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="left">Id</TableCell>
                                             <TableCell align="left">Dato</TableCell>
                                             <TableCell align="left">Arrangement</TableCell>
-                                            <TableCell align="left">Rolle</TableCell>
+                                            <TableCell align="left">Type</TableCell>
+                                            <TableCell align="left">Plassnr.</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {rows.map((row) => (
                                             <TableRow key={row.name}>
-                                                <TableCell align="left">{row.id}</TableCell>
                                                 <TableCell align="left">{row.date}</TableCell>
                                                 <TableCell align="left">{row.description}</TableCell>
-                                                <TableCell align="left">{row.role}</TableCell>
+                                                <TableCell align="left">{row.type}</TableCell>
+                                                <TableCell align="left">{row.seat}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
