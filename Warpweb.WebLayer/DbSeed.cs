@@ -37,11 +37,10 @@ namespace Warpweb.WebLayer
                     LastName = "Man",
                     Email = "postmanwarpweb@gmail.com",
                     EmailConfirmed = true,
-                    Id = "1",
                     PhoneNumber = "+111111111111",
                     PhoneNumberConfirmed = true,
                     LockoutEnabled = false,
-                    UserName = "PostMan"
+                    UserName = "postmanwarpweb@gmail.com"
                 };
 
                 string[] roles = new string[]
@@ -63,7 +62,6 @@ namespace Warpweb.WebLayer
                 }
 
                 var userExist = await userManager.FindByEmailAsync(user.Email);
-
                 if (userExist == null)
                 {
                     await userManager.CreateAsync(user, "SuperHemmelig");

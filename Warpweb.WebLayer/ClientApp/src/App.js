@@ -1,5 +1,6 @@
 import React from 'react';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
+import { LoginMenu } from './components/api-authorization/LoginMenu';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import {
@@ -170,6 +171,8 @@ export default function App() {
                 <div className={classes.toolbar} />
                 <NameCard />
                 <SeatMapBackdrop />
+                <LoginMenu />
+                <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
             </main>
         </div>
         //<div className="container">
@@ -177,7 +180,7 @@ export default function App() {
         //    <SeatMapBackdrop />
         //</div>
         //<Layout>
-        //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+        //<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         //</Layout>
     );
 }
