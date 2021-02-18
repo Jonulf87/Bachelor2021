@@ -5,6 +5,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 
 export default function UserMainMenu() {
 
@@ -17,9 +23,11 @@ export default function UserMainMenu() {
                 <ListItemIcon><PersonIcon /></ListItemIcon>
                 <ListItemText primary='Min side' />
             </ListItem>
-            <ListItem button>
+                <ListItem button>
+                    <Link to="/">
                 <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                <ListItemText primary='Logg ut' />
+                        <ListItemText primary='Logg ut' />
+                    </Link>
             </ListItem>
 
             </List>

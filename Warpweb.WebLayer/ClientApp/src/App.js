@@ -1,11 +1,12 @@
 import React from 'react';
-import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
+/*import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
+import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';*/
 import {
     BrowserRouter as Router,
     Switch,
-    Route
+    Route,
+    Link
 } from "react-router-dom";
 
 import './custom.css'
@@ -19,6 +20,7 @@ import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 import UserMain from './components/User/UserMain';
 import NameCard from './components/User/NameCard';
 import UserApp from './components/UserApp';
+import HomePage from './components/HomePage';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -37,13 +39,19 @@ import Tabs from '@material-ui/core/Tabs';
 
 export default function App() {
     return (
-        <UserApp />
-        //<div className="container">
-        //    <MainPageNavBar />
-        //    <SeatMapBackdrop />
-        //</div>
-        //<Layout>
-        //  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-        //</Layout>*/
+        <Router>
+            <div>
+                
+            </div>
+
+            <Switch>
+                <Route exact path="/">
+                    <HomePage />
+                </Route>
+                <Route path="/dashboard">
+                    <UserApp />
+                </Route>
+            </Switch>
+        </Router>
     );
 }
