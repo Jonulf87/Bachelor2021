@@ -6,7 +6,8 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 import {
     BrowserRouter as Router,
     Switch,
-    Route
+    Route,
+    Link
 } from "react-router-dom";
 
 import './custom.css'

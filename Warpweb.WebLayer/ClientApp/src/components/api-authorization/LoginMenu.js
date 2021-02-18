@@ -74,10 +74,10 @@ export class LoginMenu extends Component {
 
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
-            <ListItemLink button href={registerPath}>
+            <ListItem button>
                 <ListItemIcon><PersonIcon /></ListItemIcon>
                 <ListItemText tag={Link} to={registerPath} primary='Register' />
-            </ListItemLink>
+            </ListItem>
             <ListItem button>
                 <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                 <ListItemText tag={Link} to={loginPath} primary='Logg inn' />

@@ -6,6 +6,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
 import authService from '../api-authorization/AuthorizeService';
+import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants';
+import { Link } from 'react-router-dom';
 
 export default function UserMainMenu() {
     let [isReady, setIsReady] = useState(false);
@@ -34,25 +36,34 @@ export default function UserMainMenu() {
         <List>
             {isAuthenticated && (
                 <>
+                    <Link to={ApplicationPaths.Profile}>
                     <ListItem button>
                         <ListItemIcon><PersonIcon /></ListItemIcon>
                         <ListItemText primary='Min side' />
-                    </ListItem>
+                        </ListItem>
+                    </Link>
+                    <Link to={ApplicationPaths.LogOut}>
                     <ListItem button>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg ut' />
-                    </ListItem>
+                        </ListItem>
+                    </Link>
                 </>)}
             {!isAuthenticated && (
                 <>
+                    <Link to={ApplicationPaths.Register}>
                     <ListItem button>
                         <ListItemIcon><PersonIcon /></ListItemIcon>
                         <ListItemText primary='Register' />
-                    </ListItem>
+                        </ListItem>
+                    </Link>
+                    <Link to={ApplicationPaths.Login}>
                     <ListItem button>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg inn' />
-                    </ListItem>
+                        </ListItem>
+                    </Link>
+
                 </>
             )}
         </List>
