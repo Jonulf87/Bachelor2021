@@ -13,6 +13,8 @@ import './custom.css'
 import MainPage from './components/MainPage/MainPage';
 import Test from './components/Test';
 import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
+import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
+import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 import UserMain from './components/User/UserMain';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -167,48 +169,13 @@ export default function App() {
                     </IconButton>
                 </div>
                 <Divider />
- 
-                <List> 
-                    <ListItem button>
-                        <ListItemIcon><PersonIcon /></ListItemIcon>
-                        <ListItemText primary='Min side' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                        <ListItemText primary='Logg ut' />
-                    </ListItem>
-                    
-                </List>
-                <Divider />
- 
-                <List>
-                    <ListItem button>
-                        <ListItemIcon><HomeWorkIcon /></ListItemIcon>
-                        <ListItemText primary='Lokale' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
-                        <ListItemText primary='Billetter' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><EventIcon /></ListItemIcon>
-                        <ListItemText primary='Arrangement' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><GroupIcon /></ListItemIcon>
-                        <ListItemText primary='Crew' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
-                        <ListItemText primary='Deltagere' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><AssignmentIcon /></ListItemIcon>
-                        <ListItemText primary='Rapporter' />
-                    </ListItem>
 
-                    
-                </List>
+                <UserMainMenu />
+                
+                <Divider />
+
+                <AdminMainMenu />
+                
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
