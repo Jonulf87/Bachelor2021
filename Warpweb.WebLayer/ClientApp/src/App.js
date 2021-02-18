@@ -18,6 +18,7 @@ import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 import UserMain from './components/User/UserMain';
 import NameCard from './components/User/NameCard';
+import UserCrewCard from './components/User/UserCrewCard';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -135,7 +136,7 @@ export default function App() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Mini variant drawer
+                        Warpweb
           </Typography>
                 </Toolbar>
             </AppBar>
@@ -169,6 +170,7 @@ export default function App() {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <NameCard />
+                <UserCrewCard />
                 <SeatMapBackdrop />
             </main>
         </div>
