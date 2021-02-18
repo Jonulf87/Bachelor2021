@@ -3,6 +3,12 @@ import { NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import PersonIcon from '@material-ui/icons/Person';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import List from '@material-ui/core/List';
 
 export class LoginMenu extends Component {
     constructor(props) {
@@ -46,6 +52,16 @@ export class LoginMenu extends Component {
 
     authenticatedView(userName, profilePath, logoutPath) {
         return (<Fragment>
+            <ListItem button>
+                <ListItemIcon><PersonIcon /></ListItemIcon>
+                <ListItemText tag={Link} to={profilePath} primary='Min side' />
+            </ListItem>
+            <ListItem button>
+                <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                <ListItemText tag={Link} to={logoutPath} primary='Logg ut' />
+            </ListItem>
+
+            
             <NavItem>
                 <NavLink tag={Link} className="text-dark" to={profilePath}>Hello {userName}</NavLink>
             </NavItem>
@@ -58,6 +74,17 @@ export class LoginMenu extends Component {
 
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
+            <ListItemLink button href={registerPath}>
+                <ListItemIcon><PersonIcon /></ListItemIcon>
+                <ListItemText tag={Link} to={registerPath} primary='Register' />
+            </ListItemLink>
+            <ListItem button>
+                <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                <ListItemText tag={Link} to={loginPath} primary='Logg inn' />
+            </ListItem>
+
+
+
             <NavItem>
                 <NavLink tag={Link} className="text-dark" to={registerPath}>Register</NavLink>
             </NavItem>
