@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 
 export default function AdminMainMenu() {
     return (
-        <React.Fragment>
+        <>
             <List>
                 <ListItem button component={Link} to='/venue'>
                     <ListItemIcon><HomeWorkIcon /></ListItemIcon>
@@ -43,6 +43,6 @@ export default function AdminMainMenu() {
                     <ListItemText primary='Rapporter' />
                 </ListItem>
             </List>
-        </React.Fragment>
+        </>
     );
 }

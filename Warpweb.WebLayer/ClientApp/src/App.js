@@ -139,7 +139,7 @@ export default function App() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Warpweb
+                        Warpweb 
                     </Typography>
                 </Toolbar>
             </AppBar>
