@@ -1,10 +1,8 @@
 ﻿import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import { TextareaAutosize } from '@material-ui/core';
 import UserDataCard from './UserDataCard';
-import UserTickeTable from './UserTicketTable';
+import UserTicketTable from './UserTicketTable';
 import UserCrewTable from './UserCrewTable';
 
 export default function PaperSheet({ theme }) {
@@ -27,8 +25,8 @@ export default function PaperSheet({ theme }) {
     return (
         <>
             <UserDataCard />
-            <UserTicketCard />
-            <UserCrewCard />
+            <UserTicketTable />
+            <UserCrewTable />
         </>
 
 
