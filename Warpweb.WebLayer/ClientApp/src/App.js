@@ -6,9 +6,9 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
+import { useState } from 'react';
 
 import './custom.css'
 //import Layout from './components/Layout/Layout';
@@ -17,10 +17,9 @@ import Test from './components/Test';
 import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
+import VenueMain from './components/Venue/VenueMain';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
-import UserDataCard from './components/User/UserDataCard';
-import UserCrewCard from './components/User/UserCrewCard';
-import UserTicketCard from './components/User/UserTicketCard';
+import UserMain from './components/User/UserMain';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -38,6 +37,8 @@ import clsx from 'clsx';
 
 export default function App() {
     //static displayName = App.name;
+
+    
 
     const drawerWidth = 240;
 
@@ -139,7 +140,7 @@ export default function App() {
                     </IconButton>
                     <Typography variant="h6" noWrap>
                         Warpweb
-          </Typography>
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -163,19 +164,23 @@ export default function App() {
                 <Divider />
 
                 <UserMainMenu />
-                
+
                 <Divider />
 
                 <AdminMainMenu />
                 
             </Drawer>
+
+
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <UserDataCard />
-                <UserCrewCard />
-                <UserTicketCard />
-                <SeatMapBackdrop />
-                <LoginMenu />
+                <Switch>
+                    <Route path='/venue' component={VenueMain} />
+                    <Route path='/seat' component={SeatMapBackdrop} />
+                </Switch>
+                <UserMain />
+
+                
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
             </main>
         </div>

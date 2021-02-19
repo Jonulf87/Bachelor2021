@@ -10,6 +10,7 @@ import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants
 import { Link } from 'react-router-dom';
 
 export default function UserMainMenu() {
+
     let [isReady, setIsReady] = useState(false);
     let [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -36,33 +37,34 @@ export default function UserMainMenu() {
         <List>
             {isAuthenticated && (
                 <>
-                    <Link to={ApplicationPaths.Profile}>
-                    <ListItem button>
+
+                    <ListItem button component={Link} to={ApplicationPaths.Profile}>
                         <ListItemIcon><PersonIcon /></ListItemIcon>
                         <ListItemText primary='Min side' />
-                        </ListItem>
-                    </Link>
-                    <Link to={ApplicationPaths.LogOut}>
-                    <ListItem button>
+                    </ListItem>
+
+                    <ListItem button component={Link} to={ApplicationPaths.LogOut}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg ut' />
-                        </ListItem>
-                    </Link>
+                    </ListItem>
+
+
                 </>)}
             {!isAuthenticated && (
                 <>
-                    <Link to={ApplicationPaths.Register}>
-                    <ListItem button>
+                    
+                    <ListItem button component={Link} to={ApplicationPaths.Register}>
                         <ListItemIcon><PersonIcon /></ListItemIcon>
                         <ListItemText primary='Register' />
-                        </ListItem>
-                    </Link>
-                    <Link to={ApplicationPaths.Login}>
-                    <ListItem button>
+                    </ListItem>
+
+
+                    <ListItem button component={Link} to={ApplicationPaths.Login}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg inn' />
-                        </ListItem>
-                    </Link>
+                    </ListItem>
+
+
 
                 </>
             )}

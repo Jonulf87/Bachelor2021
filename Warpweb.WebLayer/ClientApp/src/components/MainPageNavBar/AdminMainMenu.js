@@ -12,38 +12,37 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import clsx from 'clsx';
 import List from '@material-ui/core/List';
+import { Link } from 'react-router-dom';
 
 export default function AdminMainMenu() {
     return (
         <React.Fragment>
-        <List>
-            <ListItem button>
-                <ListItemIcon><HomeWorkIcon /></ListItemIcon>
-                <ListItemText primary='Lokale' />
-            </ListItem>
-            <ListItem button>
-                <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
-                <ListItemText primary='Billetter' />
-            </ListItem>
-            <ListItem button>
-                <ListItemIcon><EventIcon /></ListItemIcon>
-                <ListItemText primary='Arrangement' />
-            </ListItem>
-            <ListItem button>
-                <ListItemIcon><GroupIcon /></ListItemIcon>
-                <ListItemText primary='Crew' />
-            </ListItem>
-            <ListItem button>
-                <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
-                <ListItemText primary='Deltagere' />
-            </ListItem>
-            <ListItem button>
-                <ListItemIcon><AssignmentIcon /></ListItemIcon>
-                <ListItemText primary='Rapporter' />
-            </ListItem>
-
-
+            <List>
+                <ListItem button component={Link} to='/venue'>
+                    <ListItemIcon><HomeWorkIcon /></ListItemIcon>
+                    <ListItemText primary='Lokale' />
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
+                    <ListItemText primary='Billetter' />
+                </ListItem>
+                    <ListItem button component={Link} to='/seat'>
+                    <ListItemIcon><EventIcon /></ListItemIcon>
+                    <ListItemText primary='Arrangement' />
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon><GroupIcon /></ListItemIcon>
+                    <ListItemText primary='Crew' />
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
+                    <ListItemText primary='Deltagere' />
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                    <ListItemText primary='Rapporter' />
+                </ListItem>
             </List>
-            </React.Fragment>
+        </React.Fragment>
     );
 }
