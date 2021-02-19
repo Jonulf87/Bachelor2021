@@ -18,6 +18,11 @@ import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import VenueMain from './components/Venue/VenueMain';
+import EventMain from './components/Event/EventMain';
+import ParticipantMain from './components/Participant/ParticipantMain';
+import ReportMain from './components/Report/ReportMain';
+import TicketMain from './components/Ticket/TicketMain';
+import CrewMain from './components/Crew/CrewMain';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 import UserMain from './components/User/UserMain';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -176,7 +181,13 @@ export default function App() {
                 <div className={classes.toolbar} />
                 <Switch>
                     <Route path='/venue' component={VenueMain} />
+                    <Route path='/crew' component={CrewMain} />
                     <Route path='/seat' component={SeatMapBackdrop} />
+                    <Route path='/report' component={ReportMain} />
+                    <Route path='/event' component={EventMain} />
+                    <Route path='/participant' component={ParticipantMain} />
+                    <Route path='/ticket' component={TicketMain} />
+
                 </Switch>
                 <UserMain />
 
