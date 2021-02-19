@@ -1,11 +1,39 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextareaAutosize } from '@material-ui/core';
 import UserDataCard from './UserDataCard';
 import UserTicketTable from './UserTicketTable';
 import UserCrewTable from './UserCrewTable';
+import authService from '../api-authorization/AuthorizeService';
 
 export default function PaperSheet({ theme }) {
+
+    let [isReady, setIsReady] = useState(false);
+    let [isAuthenticated, setIsAuthenticated] = useState(false);
+    let [user, setUser] = useState(null);
+    let [isLoaded, setIsLoaded] = useState(false);
+
+
+    useEffect(() => {
+        const getUser = async () => {
+
+            const authenticationResult = await authService.isAuthenticated();
+            const userResult = await authService.getUser();
+
+            setIsAuthenticated(authenticationResult);
+            setIsReady(true);
+
+            if (isReady && isAuthenticated) {
+                fetch()                
+            }
+        }
+    }, []);
+
+
+
+
+
+
 
 
     const useStyles = makeStyles((theme) => ({

@@ -19,8 +19,6 @@ export default function UserMainMenu() {
             const authenticationResult = await authService.isAuthenticated();
             const user = await authService.getUser();
 
-            console.log(user);
-
             setIsAuthenticated(authenticationResult);
             setIsReady(true);
         }
