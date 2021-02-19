@@ -4,8 +4,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { TextareaAutosize } from '@material-ui/core';
 import UserDataCard from './UserDataCard';
-import UserTicketCard from './UserTicketCard';
-import UserCrewCard from './UserCrewCard';
+import UserTickeTable from './UserTicketTable';
+import UserCrewTable from './UserCrewTable';
 
 export default function PaperSheet({ theme }) {
 
