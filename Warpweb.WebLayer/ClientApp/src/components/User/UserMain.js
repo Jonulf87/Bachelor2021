@@ -7,7 +7,6 @@ import UserCrewTable from './UserCrewTable';
 import authService from '../api-authorization/AuthorizeService';
 
 export default function PaperSheet({ theme }) {
-
     let [isReady, setIsReady] = useState(false);
     let [isAuthenticated, setIsAuthenticated] = useState(false);
     let [user, setUser] = useState(null);

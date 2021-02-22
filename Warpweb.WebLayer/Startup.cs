@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
@@ -136,7 +137,7 @@ namespace Warpweb.WebLayer
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = Path.Join(env.ContentRootPath, "ClientApp");
 
                 if (env.IsDevelopment())
                 {

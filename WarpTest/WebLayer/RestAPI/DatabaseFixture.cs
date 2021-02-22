@@ -2,34 +2,26 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
 
-namespace WarpTest.WebLayer.Controllers
+namespace WarpTest.WebLayer.RestAPI
 {
-    public class BaseTest
+    class DatabaseFixture : IDisposable
     {
         protected DbConnection _connection;
         protected DbContextOptions _options;
         protected ApplicationDbContext _dbContext;
 
-        [SetUp]
-        public void Setup()
+        public DatabaseFixture()
         {
-            CreateInMemoryDatabase();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _connection.Dispose();
-        }
-
-        private void CreateInMemoryDatabase()
-        {
-            _connection = new SqliteConnection("DataSource=:memory:");
+            _connection = new SqliteConnection("Data Source=:memory:");
 
             _connection.Open();
 
@@ -46,6 +38,11 @@ namespace WarpTest.WebLayer.Controllers
             _dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 3, Description = "Test Rolle 3" });
 
             _dbContext.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            _connection.Dispose();
         }
     }
 }
