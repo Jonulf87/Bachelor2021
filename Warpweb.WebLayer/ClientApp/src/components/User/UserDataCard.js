@@ -16,7 +16,8 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            maxWidth: 450,
+            maxWidth: 500,
+            marginBottom: 20,
         },
     }),
 );
