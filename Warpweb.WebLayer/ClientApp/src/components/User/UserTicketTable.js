@@ -12,7 +12,9 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            maxWidth: 450,
+            maxWidth: 500,
+            padding: 10,
+            marginBottom: 10,
         },
     }),
 );
@@ -32,7 +34,7 @@ export default function UserTicketCard() {
     const classes = useStyles();
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer className={classes.root} component={Paper}>
             <Typography gutterBottom variant="h5" component="h2">
                 Billetter
                     </Typography>

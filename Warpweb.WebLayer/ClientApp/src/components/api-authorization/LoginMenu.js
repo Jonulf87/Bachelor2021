@@ -50,6 +50,7 @@ export class LoginMenu extends Component {
         }
     }
 
+    // The menu presented to authenticated user
     authenticatedView(userName, profilePath, logoutPath) {
         return (<Fragment>
             <ListItem button>
@@ -72,11 +73,12 @@ export class LoginMenu extends Component {
 
     }
 
+    // The menu presented to anonymous/non-authenticated user
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
             <ListItem button>
                 <ListItemIcon><PersonIcon /></ListItemIcon>
-                <ListItemText tag={Link} to={registerPath} primary='Register' />
+                <ListItemText tag={Link} to={registerPath} primary='Registrer' />
             </ListItem>
             <ListItem button>
                 <ListItemIcon><ExitToAppIcon /></ListItemIcon>

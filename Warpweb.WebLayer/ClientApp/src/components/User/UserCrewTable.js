@@ -1,11 +1,6 @@
 ﻿import React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
-import { CardActionArea } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -18,7 +13,9 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            maxWidth: 450,
+            maxWidth: 500,
+            padding: 10,
+            marginBottom: 10,
         },
     }),
 );
@@ -38,7 +35,7 @@ export default function UserCrewTable() {
     const classes = useStyles();
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer className={classes.root} component={Paper}>
             <Typography gutterBottom variant="h5" component="h2">
                 Arrangement/Crewtilhørighet
                     </Typography>
