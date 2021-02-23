@@ -16,7 +16,9 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            maxWidth: 500,
+            display: 'flex',
+            flexWrap: 'wrap',
+            //maxWidth: 500,
             marginBottom: 20,
         },
     }),
@@ -30,7 +32,7 @@ export default function UserDataCard() {
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
                     Fornavn Etternavn
-                    </Typography>
+                </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
                     <List>
                         <ListItem>
