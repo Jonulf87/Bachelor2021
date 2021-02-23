@@ -5,6 +5,7 @@ import UserDataCard from './UserDataCard';
 import UserTicketTable from './UserTicketTable';
 import UserCrewTable from './UserCrewTable';
 import authService from '../api-authorization/AuthorizeService';
+import Grid from '@material-ui/core/Grid';
 
 export default function PaperSheet({ theme }) {
 
@@ -51,11 +52,17 @@ export default function PaperSheet({ theme }) {
     const classes = useStyles();
 
     return (
-        <>
-            <UserDataCard />
-            <UserTicketTable />
-            <UserCrewTable />
-        </>
+        <Grid container spacing={3}>
+            <Grid item xs>
+                <UserDataCard />
+            </Grid>
+            <Grid item xs>
+                <UserTicketTable />
+            </Grid>
+            <Grid item xs>
+                <UserCrewTable />
+            </Grid>
+        </Grid>
 
 
     );
