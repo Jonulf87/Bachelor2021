@@ -11,7 +11,7 @@ export default function PaperSheet({ theme }) {
     let [isReady, setIsReady] = useState(false);
     let [isAuthenticated, setIsAuthenticated] = useState(false);
     let [user, setUser] = useState(null);
-    let [isLoaded, setIsLoaded] = useState(false);
+    let [userAccessToken, setUserAccessToken] = useState(null);
 
 
     useEffect(() => {
@@ -20,11 +20,23 @@ export default function PaperSheet({ theme }) {
             const authenticationResult = await authService.isAuthenticated();
             const userResult = await authService.getUser();
 
-            setIsAuthenticated(authenticationResult);
-            setIsReady(true);
+            if (!!userResult != null) {
+                setIsAuthenticated(authenticationResult);
+                setIsReady(true);
+                setUser(userResult);
+                const accessToken = await authService.getAccessToken();
+                setUserAccessToken(accessToken);
+            }
+            
 
             if (isReady && isAuthenticated) {
-                fetch()                
+                fetch('localhost', {
+                    headers: {
+                        Authorization: 'token ${userAccessToken}'
+                    }
+                })
+                    .then(result => result.json)
+                    .then(json => console.log(json));
             }
         }
     }, []);
