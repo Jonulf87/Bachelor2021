@@ -1,9 +1,9 @@
 ﻿import React from 'react';
-
+import CreateCrew from './CreateCrew'
 export default function CrewAdmin() {
     return (
         <div>
-            Her er crew administrasjon.
+            <CreateCrew />
         </div>
 
     );
