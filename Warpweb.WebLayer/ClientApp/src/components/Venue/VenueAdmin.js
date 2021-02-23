@@ -1,9 +1,10 @@
 ﻿import React from 'react';
+import CreateVenue from './CreateVenue'
 
 export default function VenueAdmin() {
     return (
         <div>
-            Her er adming funksjonalitet.
+            <CreateVenue />
         </div>
     );
 }
