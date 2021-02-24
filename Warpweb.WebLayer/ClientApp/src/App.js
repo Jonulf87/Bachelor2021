@@ -11,7 +11,6 @@ import {
 import { useState } from 'react';
 
 import './custom.css'
-//import Layout from './components/Layout/Layout';
 import MainPage from './components/MainPage/MainPage';
 import Test from './components/Test';
 import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';

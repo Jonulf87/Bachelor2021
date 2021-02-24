@@ -13,15 +13,87 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import clsx from 'clsx';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import MuiAccordion from '@material-ui/core/Accordion';
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
+
+const Accordion = withStyles({
+    root: {
+        border: '1px solid rgba(0, 0, 0, .125)',
+        boxShadow: 'none',
+        '&:not(:last-child)': {
+            borderBottom: 0,
+            borderLeft: 0,
+            borderTop: 0,
+        },
+        '&:before': {
+            display: 'none',
+        },
+        '&$expanded': {
+            margin: 'auto',
+        },
+    },
+    expanded: {},
+})(MuiAccordion);
+
+const AccordionSummary = withStyles({
+    root: {
+        
+        borderBottom: '0px solid rgba(0, 0, 0, .125)',
+        marginBottom: -1,
+        marginTop: 0,
+        minHeight: 56,
+        '&$expanded': {
+            minHeight: 56,
+        },
+    },
+    content: {
+        '&$expanded': {
+            margin: '0px 0',
+        },
+    },
+    expanded: {},
+})(MuiAccordionSummary);
+
+const AccordionDetails = withStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+}))(MuiAccordionDetails);
 
 export default function AdminMainMenu() {
+    const [expanded, setExpanded] = React.useState('panel1');
+
+    const handleChange = (panel) => (event, newExpanded) => {
+        setExpanded(newExpanded ? panel : false);
+    };
+
     return (
         <>
             <List>
+                <Accordion square expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                 <ListItem button component={Link} to='/venue'>
-                    <ListItemIcon><HomeWorkIcon /></ListItemIcon>
-                    <ListItemText primary='Lokale' />
-                </ListItem>
+                    
+                        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                            <ListItemIcon><HomeWorkIcon /></ListItemIcon>
+                            <ListItemText primary='Lokale' />
+                        </AccordionSummary>
+                    </ListItem>
+                        <AccordionDetails>
+                            <Typography>
+                                <List>
+                                    <ListItem>
+                                        <ListItemText primary='Legg til' />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText primary='se over' />
+                                    </ListItem>
+                                </List>
+                            </Typography>
+                        </AccordionDetails>
+                </Accordion>
                 <ListItem button button component={Link} to='/ticket'>
                     <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
                     <ListItemText primary='Billetter' />
