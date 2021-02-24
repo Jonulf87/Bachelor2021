@@ -17,13 +17,13 @@ export default function PaperSheet({ theme }) {
             flexWrap: 'wrap',
             '& > *': {
                 margin: theme.spacing(1),
-                width: theme.spacing(TextareaAutosize),
-                height: theme.spacing(TextareaAutosize),
+                width: theme.spacing(16),
+                height: theme.spacing(16),
             },
         },
     }));
 
-    //const classes = useStyles(); Denne gir masse feilkoder
+    const classes = useStyles(); //Denne gir masse feilkoder
 
     return (
         <Grid container spacing={3}>

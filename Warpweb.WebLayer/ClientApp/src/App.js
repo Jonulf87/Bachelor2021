@@ -7,6 +7,10 @@ import {
 } from "react-router-dom";
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
+import './custom.css'
+import MainPage from './components/MainPage/MainPage';
+import Test from './components/Test';
+import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import AppBar from '@material-ui/core/AppBar';
@@ -36,34 +40,7 @@ import UserMain from './components/User/UserMain';
 import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import VenueMain from './components/Venue/VenueMain';
 import clsx from 'clsx';
-import { useState } from 'react';
-
-//import Layout from './components/Layout/Layout';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { ThemeProvider } from '@material-ui/core/styles'
 
 
 
