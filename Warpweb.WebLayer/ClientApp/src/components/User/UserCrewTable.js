@@ -51,7 +51,7 @@ export default function UserCrewTable() {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <TableRow key={row.name}>
+                        <TableRow key={row.id}>
                             <TableCell align="left">{row.id}</TableCell>
                             <TableCell align="left">{row.date}</TableCell>
                             <TableCell align="left">{row.description}</TableCell>

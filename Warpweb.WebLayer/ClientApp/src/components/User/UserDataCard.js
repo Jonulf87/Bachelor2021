@@ -33,7 +33,7 @@ export default function UserDataCard() {
                 <Typography gutterBottom variant="h5" component="h2">
                     Fornavn Etternavn
                 </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
+               
                     <List>
                         <ListItem>
                             <ListItemIcon><BusinessIcon /></ListItemIcon>
@@ -56,7 +56,7 @@ export default function UserDataCard() {
                             <ListItemText primary='Nickname' />
                         </ListItem>
                     </List>
-                </Typography>
+        
             </CardContent>
         </Card>
     );
