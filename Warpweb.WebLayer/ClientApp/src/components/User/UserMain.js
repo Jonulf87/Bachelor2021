@@ -70,7 +70,7 @@ export default function PaperSheet({ theme }) {
         },
     }));
 
-    //const classes = useStyles(); Denne gir masse feilkoder
+    const classes = useStyles(); //Denne gir masse feilkoder
 
     return (
         <Grid container spacing={3}>

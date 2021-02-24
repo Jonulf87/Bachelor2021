@@ -79,7 +79,7 @@ export default function CreateEvent() {
                             />
                         </div>
 
-                        <form className={classes.container} noValidate>
+                        <div className={classes.container} noValidate>
                             <TextField
                                 id="datetime-local"
                                 label="Startdato / tidspunkt"
@@ -103,7 +103,7 @@ export default function CreateEvent() {
                                 }}
                                 variant="outlined"
                             />
-                        </form>
+                        </div>
 
                         <TextField
                             id="outlined-select-organizer-native"
