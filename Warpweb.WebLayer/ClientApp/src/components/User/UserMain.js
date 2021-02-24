@@ -13,6 +13,7 @@ export default function PaperSheet({ theme }) {
     let [isAuthenticated, setIsAuthenticated] = useState(false);
     let [user, setUser] = useState(null);
     let [userAccessToken, setUserAccessToken] = useState(null);
+    let [userInfo, setUserInfo] = useState(null);
 
 
     useEffect(() => {
@@ -21,26 +22,34 @@ export default function PaperSheet({ theme }) {
             const authenticationResult = await authService.isAuthenticated();
             const userResult = await authService.getUser();
 
+
             if (!!userResult != null) {
                 setIsAuthenticated(authenticationResult);
                 setIsReady(true);
                 setUser(userResult);
                 const accessToken = await authService.getAccessToken();
                 setUserAccessToken(accessToken);
+
+                //console.log("isAuthenticated = " + isAuthenticated);
+                //console.log("isReady = " + isReady);
+                //console.log("user = " + user);
+                //console.log("userAccessToken = " + userAccessToken);
             }
             
 
-            if (isReady && isAuthenticated) {
-                fetch('localhost', {
-                    headers: {
-                        Authorization: 'token ${userAccessToken}'
-                    }
-                })
-                    .then(result => result.json)
-                    .then(json => console.log(json));
-            }
+            //if (isReady && isAuthenticated) {
+            //    const response = await fetch('https://localhost:44308/api/users', {
+            //        headers: {
+            //            Authorization: 'token ${userAccessToken}'
+            //        }
+            //    });
+            //    const result = await response.json();
+            //    setUserInfo(result);
+            //}
         }
-    }, []);
+
+        getUser();
+    }, [isAuthenticated]);
 
 
 
@@ -61,7 +70,7 @@ export default function PaperSheet({ theme }) {
         },
     }));
 
-    const classes = useStyles();
+    //const classes = useStyles(); Denne gir masse feilkoder
 
     return (
         <Grid container spacing={3}>
