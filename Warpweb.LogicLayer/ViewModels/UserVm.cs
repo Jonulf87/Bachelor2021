@@ -16,6 +16,7 @@ namespace Warpweb.LogicLayer.ViewModels
         public string Address { get; set; }
         public string EMail { get; set; }
         public string UserName { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
     }
 }

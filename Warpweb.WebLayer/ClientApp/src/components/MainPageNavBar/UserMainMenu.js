@@ -17,7 +17,6 @@ export default function UserMainMenu() {
     useEffect(() => {
         const getAuthenticationState = async () => {
             const authenticationResult = await authService.isAuthenticated();
-            const user = await authService.getUser();
 
             setIsAuthenticated(authenticationResult);
             setIsReady(true);
@@ -36,7 +35,7 @@ export default function UserMainMenu() {
             {isAuthenticated && (
                 <>
 
-                    <ListItem button component={Link} to={ApplicationPaths.Profile}>
+                    <ListItem button component={Link} to='/user'>
                         <ListItemIcon><PersonIcon /></ListItemIcon>
                         <ListItemText primary='Min side' />
                     </ListItem>

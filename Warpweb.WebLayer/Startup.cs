@@ -41,6 +41,7 @@ namespace Warpweb.WebLayer
             services.AddScoped<TicketService>();
             services.AddScoped<VenueService>();
             services.AddScoped<CrewService>();
+            services.AddScoped<UserService>();
 
             // Needed per interface/repository
             services.AddScoped<IVenueRepository, VenueRepository>();

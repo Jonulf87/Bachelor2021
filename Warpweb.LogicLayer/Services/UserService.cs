@@ -44,7 +44,8 @@ namespace Warpweb.LogicLayer.Services
                     Address = a.Address,
                     EMail = a.Email,
                     PhoneNumber = a.PhoneNumber,
-                    UserName = a.UserName
+                    UserName = a.UserName,
+                    DateOfBirth = a.DateOfBirth
                 }).SingleOrDefaultAsync();
         }
     }

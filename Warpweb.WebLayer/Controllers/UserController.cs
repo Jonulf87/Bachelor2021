@@ -11,7 +11,8 @@ namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    //[Authorize(Roles = "Users")]
+    [Authorize]
+    
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -22,15 +23,18 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpGet]
+        [Route("UsersList")]
         public async Task<List<UserListVm>> GetUsersAsync()
         {
             return await _userService.GetUsersAsync();
         }
 
-        [HttpGet("${id}")]
-        public async Task<UserVm> GetUserAsync(string id)
+        [HttpGet]
+        public async Task<UserVm> GetUserAsync()
         {
-            return await _userService.GetUserAsync(id);
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            return await _userService.GetUserAsync(userId.Value);
         }
     }
 }

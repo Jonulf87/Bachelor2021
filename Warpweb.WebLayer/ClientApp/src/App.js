@@ -1,42 +1,69 @@
-import React from 'react';
-import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
-import { LoginMenu } from './components/api-authorization/LoginMenu';
-import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route
-} from "react-router-dom";
-import { useState } from 'react';
-
 import './custom.css'
-//import Layout from './components/Layout/Layout';
-import MainPage from './components/MainPage/MainPage';
-import Test from './components/Test';
-import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
-import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
-import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
-import VenueMain from './components/Venue/VenueMain';
-import EventMain from './components/Event/EventMain';
-import ParticipantMain from './components/Participant/ParticipantMain';
-import ReportMain from './components/Report/ReportMain';
-import TicketMain from './components/Ticket/TicketMain';
-import CrewMain from './components/Crew/CrewMain';
-import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
-import UserMain from './components/User/UserMain';
+
+import {
+    Route,
+    BrowserRouter as Router,
+    Switch
+} from "react-router-dom";
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+
+import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
+import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
+import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import CrewMain from './components/Crew/CrewMain';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import EventMain from './components/Event/EventMain';
+import IconButton from '@material-ui/core/IconButton';
+import { LoginMenu } from './components/api-authorization/LoginMenu';
+import MainPage from './components/MainPage/MainPage';
+import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
+import MenuIcon from '@material-ui/icons/Menu';
+import ParticipantMain from './components/Participant/ParticipantMain';
+import React from 'react';
+import ReportMain from './components/Report/ReportMain';
+import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
+import Test from './components/Test';
+import TicketMain from './components/Ticket/TicketMain';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import UserMain from './components/User/UserMain';
+import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
+import VenueMain from './components/Venue/VenueMain';
 import clsx from 'clsx';
+import { useState } from 'react';
+
+//import Layout from './components/Layout/Layout';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -171,7 +198,6 @@ export default function App() {
                 <UserMainMenu />
 
                 <Divider />
-
                 <AdminMainMenu />
                 
             </Drawer>
@@ -180,6 +206,7 @@ export default function App() {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <Switch>
+                    <Route path='/user' component={UserMain} />
                     <Route path='/venue' component={VenueMain} />
                     <Route path='/crew' component={CrewMain} />
                     <Route path='/seat' component={SeatMapBackdrop} />
@@ -187,10 +214,9 @@ export default function App() {
                     <Route path='/event' component={EventMain} />
                     <Route path='/participant' component={ParticipantMain} />
                     <Route path='/ticket' component={TicketMain} />
-
                 </Switch>
-                <UserMain />
-
+                
+                <SeatMapBackdrop />
                 
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
             </main>
