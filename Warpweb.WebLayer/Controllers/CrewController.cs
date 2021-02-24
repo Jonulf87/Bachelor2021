@@ -30,9 +30,6 @@ namespace Warpweb.WebLayer.Controllers
             _crewService = crewService;
         }
 
-        public CrewController()
-        {
-        }
 
         [HttpGet]
         public async Task<List<CrewListVm>> GetCrews()
