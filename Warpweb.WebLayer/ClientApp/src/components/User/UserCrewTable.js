@@ -13,7 +13,9 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            maxWidth: 500,
+            display: 'flex',
+            flexWrap: 'wrap',
+            //maxWidth: 500,
             padding: 10,
             marginBottom: 10,
         },
@@ -50,7 +52,7 @@ export default function UserCrewTable() {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <TableRow key={row.name}>
+                        <TableRow key={row.id}>
                             <TableCell align="left">{row.id}</TableCell>
                             <TableCell align="left">{row.date}</TableCell>
                             <TableCell align="left">{row.description}</TableCell>

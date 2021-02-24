@@ -12,22 +12,24 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            maxWidth: 500,
+            display: 'flex',
+            flexWrap: 'wrap',
+            //maxWidth: 500,
             padding: 10,
             marginBottom: 10,
         },
     }),
 );
 
-function createData(date, description, type, seat) {
-    return { date, description, type, seat };
+function createData(id, date, description, type, seat) {
+    return {id, date, description, type, seat };
 }
 
 const rows = [
-    createData('08.08.2021', 'WarpZone', 'Standard', 124),
-    createData('01.10.2021', 'WrapZone', 'Standard', 52),
-    createData('15.10.2021', 'WarPonez', 'VIP', 12),
-    createData('11.11.2021', 'ZapWrones', 'Gull', 34),
+    createData(1, '08.08.2021', 'WarpZone', 'Standard', 124),
+    createData(2, '01.10.2021', 'WrapZone', 'Standard', 52),
+    createData(3, '15.10.2021', 'WarPonez', 'VIP', 12),
+    createData(4, '11.11.2021', 'ZapWrones', 'Gull', 34),
 ];
 
 export default function UserTicketCard() {
@@ -41,6 +43,7 @@ export default function UserTicketCard() {
             <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                     <TableRow>
+                        <TableCell align="left">Id</TableCell>
                         <TableCell align="left">Dato</TableCell>
                         <TableCell align="left">Arrangement</TableCell>
                         <TableCell align="left">Type</TableCell>
@@ -49,7 +52,8 @@ export default function UserTicketCard() {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <TableRow key={row.name}>
+                        <TableRow key={row.id}>
+                            <TableCell align="left">{row.id}</TableCell>
                             <TableCell align="left">{row.date}</TableCell>
                             <TableCell align="left">{row.description}</TableCell>
                             <TableCell align="left">{row.type}</TableCell>

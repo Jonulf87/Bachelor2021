@@ -11,7 +11,6 @@ import {
 import { useState } from 'react';
 
 import './custom.css'
-//import Layout from './components/Layout/Layout';
 import MainPage from './components/MainPage/MainPage';
 import Test from './components/Test';
 import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
@@ -37,6 +36,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import clsx from 'clsx';
+import { ThemeProvider } from '@material-ui/core/styles'
 
 
 

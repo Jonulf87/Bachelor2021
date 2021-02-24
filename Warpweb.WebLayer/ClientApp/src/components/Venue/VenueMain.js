@@ -4,9 +4,7 @@ import VenueAdmin from './VenueAdmin';
 
 export default function VenueMain() {
     return (
-        <>
-
-            
+        <>  
             <VenueInfo />
             <VenueAdmin />
         </>
