@@ -41,13 +41,9 @@ const Accordion = withStyles({
 const AccordionSummary = withStyles({
     root: {
         
-        borderBottom: '0px solid rgba(0, 0, 0, .125)',
-        marginBottom: -1,
-        marginTop: 0,
-        minHeight: 56,
-        '&$expanded': {
-            minHeight: 56,
-        },
+        borderBottom: 0,
+        padding: 0,
+
     },
     content: {
         '&$expanded': {
@@ -64,21 +60,20 @@ const AccordionDetails = withStyles((theme) => ({
 }))(MuiAccordionDetails);
 
 export default function AdminMainMenu() {
-    const [expanded, setExpanded] = React.useState('panel1');
+    const [expanded, setExpanded] = React.useState('');
 
     const handleChange = (panel) => (event, newExpanded) => {
-        setExpanded(newExpanded ? panel : false);
+        setExpanded(newExpanded ? panel : true);
     };
 
     return (
         <>
             <List>
                 <Accordion square expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                <ListItem button component={Link} to='/venue'>
-                    
+                    <ListItem button component={Link} to='/venue' disabled=''>                  
                         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                            <ListItemIcon><HomeWorkIcon /></ListItemIcon>
-                            <ListItemText primary='Lokale' />
+                        <ListItemIcon><HomeWorkIcon /></ListItemIcon>
+                        <ListItemText primary='Lokale' />
                         </AccordionSummary>
                     </ListItem>
                         <AccordionDetails>
