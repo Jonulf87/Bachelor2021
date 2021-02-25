@@ -36,11 +36,5 @@ namespace Warpweb.WebLayer.Controllers
 
             return await _userService.GetUserAsync(userId.Value);
         }
-
-        // Added to cancel out error message from UserControllerTests
-        public Task<ActionResult<UserVm>> GetUserAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
