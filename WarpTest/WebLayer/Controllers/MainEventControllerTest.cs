@@ -201,6 +201,7 @@ namespace WarpTest.WebLayer.Controllers
         private void CreateMainEvents()
         {
             CreateUser();
+            CreateOrganizers();
 
             // Create 2 main events with necessary linked data
             _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 1", VenueAddress = "Venueveien 1", VenueAreaAvailable = 1, VenueCapacity = 1 });
