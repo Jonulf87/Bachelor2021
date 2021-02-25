@@ -42,6 +42,7 @@ namespace Warpweb.WebLayer
                     LockoutEnabled = false,
                     UserName = "postmanwarpweb@gmail.com"
                 };
+
                 var user2 = new ApplicationUser
                 {
                     FirstName = "Jan",
@@ -52,9 +53,21 @@ namespace Warpweb.WebLayer
                     PhoneNumber = "45454545",
                     PhoneNumberConfirmed = true,
                     LockoutEnabled = false,
-                    UserName = "Testman",
+                    UserName = "Hansen69@mail.com",
                     Address = "Hjemme"
 
+                };
+
+                var user3 = new ApplicationUser
+                {
+                    FirstName = "Ole",
+                    LastName = "Brum",
+                    Email = "olebole247@gmail.com",
+                    EmailConfirmed = true,
+                    PhoneNumber = "+111111111111",
+                    PhoneNumberConfirmed = true,
+                    LockoutEnabled = false,
+                    UserName = "olebole247@gmail.com"
                 };
 
                 string[] roles = new string[]
@@ -78,13 +91,35 @@ namespace Warpweb.WebLayer
                 var userExist = await userManager.FindByEmailAsync(user.Email);
                 if (userExist == null)
                 {
-                    await userManager.CreateAsync(user, "SuperHemmelig");
+                    try {
+                        await userManager.CreateAsync(user, "SuperHemmelig");
+                    } catch (Exception e) {
+                        Console.WriteLine($"User1 oppretta seg ikke {e.Message}");
+                    }
+                    
                 };
 
                 var user2Exist = await userManager.FindByEmailAsync(user2.Email);
                 if (user2Exist == null)
                 {
-                    await userManager.CreateAsync(user2, "SuperHemmelig");
+                    try {
+                        var result = await userManager.CreateAsync(user2, "SuperHemmelig");
+                        Console.WriteLine("User2");
+                    } catch (Exception e) {
+                        Console.WriteLine($"User2 oppretta seg ikke {e.Message}");
+                    }
+                   
+                };
+
+                var user3Exist = await userManager.FindByEmailAsync(user3.Email);
+                if (user3Exist == null)
+                {
+                    try {
+                        var result = await userManager.CreateAsync(user3, "IkkeHemmelig");
+                        Console.WriteLine("User2");
+                    } catch (Exception e) {
+                        Console.WriteLine($"User3 oppretta seg ikke {e.Message}");
+                    }
                 };
             }
         }
