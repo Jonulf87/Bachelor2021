@@ -4,11 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Warpweb.DataAccessLayer;
-using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
@@ -60,12 +56,23 @@ namespace Warpweb.WebLayer.Controllers
             // Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.
             var organizers = await _securityService.GetOrganizersAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            // Check for availability of event name
             if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) 
             {
                 return Forbid();
             }
-            
+
+            int mainEventId;
+
+            try
+            {
+                mainEventId = await _mainEventService.CreateMainEventAsync(mainEventVm);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+            mainEventVm.Id = mainEventId;
             return Ok(mainEventVm);
         } 
 

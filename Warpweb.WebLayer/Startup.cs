@@ -1,16 +1,14 @@
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
@@ -42,6 +40,7 @@ namespace Warpweb.WebLayer
             services.AddScoped<TicketService>();
             services.AddScoped<VenueService>();
             services.AddScoped<CrewService>();
+            services.AddScoped<UserService>();
 
             // Needed per interface/repository
             services.AddScoped<IVenueRepository, VenueRepository>();
@@ -63,7 +62,7 @@ namespace Warpweb.WebLayer
 
             services.Configure<IdentityOptions>(options =>
             {
-                //password settings. Må oppdateres
+                //password settings. M? oppdateres
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = false;
@@ -76,8 +75,8 @@ namespace Warpweb.WebLayer
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 //User settings
                 options.User.RequireUniqueEmail = true;
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ-_.@+-"; //Husk å teste for æøå og + - i brukernavn
-                options.SignIn.RequireConfirmedAccount = false; //Bør kanskje ikke være true?
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz???ABCDEFGHIJKLMNOPQRSTUVWXYZ???-_.@+-"; //Husk ? teste for ??? og + - i brukernavn
+                options.SignIn.RequireConfirmedAccount = false; //B?r kanskje ikke v?re true?
             });
 
             services.ConfigureApplicationCookie(options => //Cookie settings
@@ -89,7 +88,7 @@ namespace Warpweb.WebLayer
                 //login
                 //options.LoginPath = "/Identity/Account/Login";
                 //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                //Usikker hvor de to over skal peke per nå.
+                //Usikker hvor de to over skal peke per n?.
                 options.SlidingExpiration = true;
 
             });

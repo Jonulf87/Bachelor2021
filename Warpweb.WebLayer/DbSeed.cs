@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
 
 namespace Warpweb.WebLayer
@@ -42,6 +40,20 @@ namespace Warpweb.WebLayer
                     LockoutEnabled = false,
                     UserName = "postmanwarpweb@gmail.com"
                 };
+                var user2 = new ApplicationUser
+                {
+                    FirstName = "Jan",
+                    MiddleName = "Petter",
+                    LastName = "Hansen",
+                    Email = "Hansen69@mail.com",
+                    EmailConfirmed = true,
+                    PhoneNumber = "45454545",
+                    PhoneNumberConfirmed = true,
+                    LockoutEnabled = false,
+                    UserName = "Testman",
+                    Address = "Hjemme"
+
+                };
 
                 string[] roles = new string[]
                 {
@@ -65,6 +77,12 @@ namespace Warpweb.WebLayer
                 if (userExist == null)
                 {
                     await userManager.CreateAsync(user, "SuperHemmelig");
+                };
+
+                var user2Exist = await userManager.FindByEmailAsync(user2.Email);
+                if (user2Exist == null)
+                {
+                    await userManager.CreateAsync(user2, "SuperHemmelig");
                 };
             }
         }

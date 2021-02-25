@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -18,10 +16,10 @@ namespace Warpweb.LogicLayer.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<OrganizerListVm>> GetOrganizersAsync(string name)
+        public async Task<List<OrganizerListVm>> GetOrganizersAsync(string userId)
         {
             return await _dbContext.Organizers
-                .Where(a => a.Contact.FirstName == name)
+                .Where(a => a.Contact.Id == userId)
                 .Select(a => new OrganizerListVm
                 {
                     Id = a.Id,

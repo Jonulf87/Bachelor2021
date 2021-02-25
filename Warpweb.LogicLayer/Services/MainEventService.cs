@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.ViewModels;
@@ -64,7 +63,9 @@ namespace Warpweb.LogicLayer.Services
             {
                 Name = maineventVm.Name,
                 StartTime = maineventVm.StartTime,
-                EndTime = maineventVm.EndTime
+                EndTime = maineventVm.EndTime,
+                VenueId = maineventVm.VenueId,
+                OrganizerId = maineventVm.OrganizerId
             };
 
             _dbContext.MainEvents.Add(mainevent);
