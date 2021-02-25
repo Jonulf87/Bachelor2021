@@ -60,12 +60,23 @@ namespace Warpweb.WebLayer.Controllers
             // Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.
             var organizers = await _securityService.GetOrganizersAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            // Check for availability of event name
             if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) 
             {
                 return Forbid();
             }
-            
+
+            int mainEventId;
+
+            try
+            {
+                mainEventId = await _mainEventService.CreateMainEventAsync(mainEventVm);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+            mainEventVm.Id = mainEventId;
             return Ok(mainEventVm);
         } 
 

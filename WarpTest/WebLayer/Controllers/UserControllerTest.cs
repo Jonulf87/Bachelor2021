@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -61,7 +60,8 @@ namespace WarpTest.WebLayer.Controllers
             UserService userService = new UserService(_dbContext);
             UserController userController = new UserController(userService);
 
-            ActionResult<UserVm> result1 = await userController.GetUserAsync(_user1.Entity.Id);
+            SetUser(userController, _user1.Entity.Id);
+            ActionResult<UserVm> result1 = await userController.GetUserAsync();
 
             UserVm returnedUser1 = result1.Value;
             Assert.AreEqual(_user1.Entity.Id, returnedUser1.Id);
@@ -73,7 +73,8 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_email1, returnedUser1.EMail);
             Assert.AreEqual(_userName1, returnedUser1.UserName);
 
-            ActionResult<UserVm> result2 = await userController.GetUserAsync(_user2.Entity.Id);
+            SetUser(userController, _user2.Entity.Id);
+            ActionResult<UserVm> result2 = await userController.GetUserAsync();
 
             UserVm returnedUser2 = result2.Value;
             Assert.AreEqual(_user2.Entity.Id, returnedUser2.Id);
@@ -93,3 +94,6 @@ namespace WarpTest.WebLayer.Controllers
             _dbContext.SaveChanges();
             _user2 = _dbContext.ApplicationUsers.Add(new ApplicationUser { FirstName = _firstName2, MiddleName = _middleName2, LastName = _lastName2, PhoneNumber = _phoneNumber2, Address = _address2, Email = _email2, UserName = _userName2 });
             _dbContext.SaveChanges();
+        }
+    }
+}

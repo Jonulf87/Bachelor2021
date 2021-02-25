@@ -64,7 +64,9 @@ namespace Warpweb.LogicLayer.Services
             {
                 Name = maineventVm.Name,
                 StartTime = maineventVm.StartTime,
-                EndTime = maineventVm.EndTime
+                EndTime = maineventVm.EndTime,
+                VenueId = maineventVm.VenueId,
+                OrganizerId = maineventVm.OrganizerId
             };
 
             _dbContext.MainEvents.Add(mainevent);

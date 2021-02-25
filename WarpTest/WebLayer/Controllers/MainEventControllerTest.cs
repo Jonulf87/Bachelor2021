@@ -22,6 +22,8 @@ namespace WarpTest.WebLayer.Controllers
         private readonly DateTime _startTime2 = DateTime.Now.AddDays(7);
         private readonly DateTime _endTime2 = DateTime.Now.AddDays(9);
 
+        private EntityEntry<ApplicationUser> _createdUser;
+
         [Test]
         public async Task ShouldGetMainEvents()
         {
@@ -79,20 +81,13 @@ namespace WarpTest.WebLayer.Controllers
             DateTime startTime = DateTime.Now.AddDays(4);
             DateTime endTime = DateTime.Now.AddDays(8);
 
-            var user = new ClaimsPrincipal(
-                new ClaimsIdentity(
-                    new Claim[] {
-                        new Claim(ClaimTypes.NameIdentifier, "Org 1")
-                    },
-                    "TestAuthentication"
-                )
-            );
-
             MainEventService mainEventService = new MainEventService(_dbContext);
             SecurityService securityService = new SecurityService(_dbContext);
             MainEventController mainEventController = new MainEventController(mainEventService, securityService);
-            mainEventController.ControllerContext = new ControllerContext();
-            mainEventController.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+            CreateUser();
+            SetUser(mainEventController, _createdUser.Entity.Id);
+            CreateOrganizers();
 
             MainEventVm mainEventVm = new MainEventVm { Name = name, StartTime = startTime, EndTime = endTime, VenueId = 2, OrganizerId = 1 };
 
@@ -181,13 +176,9 @@ namespace WarpTest.WebLayer.Controllers
         }
 
         // Helper methods
-        private void CreateMainEvents()
+        private void CreateUser()
         {
-            // Create 2 main events with necessary linked data
-            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 1", VenueAddress = "Venueveien 1", VenueAreaAvailable = 1, VenueCapacity = 1 });
-            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 2", VenueAddress = "Venueveien 2", VenueAreaAvailable = 2, VenueCapacity = 2 });
-
-            EntityEntry<ApplicationUser> user = _dbContext.ApplicationUsers.Add(
+            _createdUser = _dbContext.ApplicationUsers.Add(
                 new ApplicationUser
                 {
                     FirstName = "Test",
@@ -198,10 +189,22 @@ namespace WarpTest.WebLayer.Controllers
                     IsAllergic = false
                 }
             );
+        }
 
-            _dbContext.Organizers.Add(new Organizer { Name = "Org 1", OrgNumber = "1", Description = "Org Descr 1", ContactId = user.Entity.Id });
-            _dbContext.Organizers.Add(new Organizer { Name = "Org 2", OrgNumber = "2", Description = "Org Descr 2", ContactId = user.Entity.Id });
+        private void CreateOrganizers()
+        {
+            _dbContext.Organizers.Add(new Organizer { Name = "Org 1", OrgNumber = "1", Description = "Org Descr 1", ContactId = _createdUser.Entity.Id });
+            _dbContext.Organizers.Add(new Organizer { Name = "Org 2", OrgNumber = "2", Description = "Org Descr 2", ContactId = _createdUser.Entity.Id });
+            _dbContext.SaveChanges();
+        }
 
+        private void CreateMainEvents()
+        {
+            CreateUser();
+
+            // Create 2 main events with necessary linked data
+            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 1", VenueAddress = "Venueveien 1", VenueAreaAvailable = 1, VenueCapacity = 1 });
+            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 2", VenueAddress = "Venueveien 2", VenueAreaAvailable = 2, VenueCapacity = 2 });         
             _dbContext.SaveChanges();
 
             _dbContext.MainEvents.Add(new MainEvent { Name = _eventName1, StartTime = _startTime1, EndTime = _endTime1, VenueId = 1, OrganizerId = 1 });
