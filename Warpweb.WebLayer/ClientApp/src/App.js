@@ -25,14 +25,11 @@ import Drawer from '@material-ui/core/Drawer';
 import EventMain from './components/Event/EventMain';
 import IconButton from '@material-ui/core/IconButton';
 import { LoginMenu } from './components/api-authorization/LoginMenu';
-import MainPage from './components/MainPage/MainPage';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 import MenuIcon from '@material-ui/icons/Menu';
 import ParticipantMain from './components/Participant/ParticipantMain';
 import React from 'react';
 import ReportMain from './components/Report/ReportMain';
-import SeatMapBackdrop from './components/SeatMap/SeatMapBackdrop';
-import Test from './components/Test';
 import TicketMain from './components/Ticket/TicketMain';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -175,6 +172,7 @@ export default function App() {
                 <UserMainMenu />
 
                 <Divider />
+
                 <AdminMainMenu />
                 
             </Drawer>
@@ -193,7 +191,7 @@ export default function App() {
                     <Route path='/ticket' component={TicketMain} />
                 </Switch>
                 
-                <SeatMapBackdrop />
+
                 
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
             </main>

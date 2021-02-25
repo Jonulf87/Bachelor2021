@@ -7,12 +7,13 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
 import authService from '../api-authorization/AuthorizeService';
 import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function UserMainMenu() {
 
     let [isReady, setIsReady] = useState(false);
     let [isAuthenticated, setIsAuthenticated] = useState(false);
+    let history = useHistory();
 
     useEffect(() => {
         const getAuthenticationState = async () => {
@@ -40,7 +41,7 @@ export default function UserMainMenu() {
                         <ListItemText primary='Min side' />
                     </ListItem>
 
-                    <ListItem button component={Link} to={ApplicationPaths.LogOut}>
+                    <ListItem button component={Link} to={ApplicationPaths.LogOut} history={history}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg ut' />
                     </ListItem>
