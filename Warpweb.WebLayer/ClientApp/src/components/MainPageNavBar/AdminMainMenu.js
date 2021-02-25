@@ -21,28 +21,33 @@ export default function AdminMainMenu() {
     };
 
     return (
-            <List>
+        <List>
 
-                <ListItem button button component={Link} to='/ticket'>
-                    <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
-                    <ListItemText primary='Billetter' />
-                </ListItem>
-                    <ListItem button component={Link} to='/event'>
-                    <ListItemIcon><EventIcon /></ListItemIcon>
-                    <ListItemText primary='Arrangement' />
-                </ListItem>
-                <ListItem button button component={Link} to='/crew'>
-                    <ListItemIcon><GroupIcon /></ListItemIcon>
-                    <ListItemText primary='Crew' />
-                </ListItem>
-                <ListItem button button component={Link} to='/participant'>
-                    <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
-                    <ListItemText primary='Deltagere' />
-                </ListItem>
-                <ListItem button button component={Link} to='/report'>
-                    <ListItemIcon><AssignmentIcon /></ListItemIcon>
-                    <ListItemText primary='Rapporter' />
-                </ListItem>
-            </List>
+            <ListItem button button component={Link} to='/ticket'>
+                <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
+                <ListItemText primary='Billetter' />
+            </ListItem>
+
+                <ListItem button component={Link} to='/event'>
+                <ListItemIcon><EventIcon /></ListItemIcon>
+                <ListItemText primary='Arrangement' />
+            </ListItem>
+
+            <ListItem button button component={Link} to='/crew'>
+                <ListItemIcon><GroupIcon /></ListItemIcon>
+                <ListItemText primary='Crew' />
+            </ListItem>
+
+            <ListItem button button component={Link} to='/participant'>
+                <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
+                <ListItemText primary='Deltagere' />
+            </ListItem>
+
+            <ListItem button button component={Link} to='/report'>
+                <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                <ListItemText primary='Rapporter' />
+            </ListItem>
+
+        </List>
     );
 }
