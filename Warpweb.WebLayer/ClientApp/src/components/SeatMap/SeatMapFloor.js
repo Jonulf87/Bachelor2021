@@ -8,13 +8,13 @@ export default function SeatMapFloor({ rows, deleteRow }) {
     };
 
     if (rows.length <= 0) {
-        return <p>There is no spoon</p>
+        return <p>No rows of seats created yet.</p>
     }
     
     return (
         <div style={{
-            width: "100%",
-            height: "500px",
+            width: "100vh",
+            height: "10vh",
             position: "relative"
         }}>
             {getRows()}
