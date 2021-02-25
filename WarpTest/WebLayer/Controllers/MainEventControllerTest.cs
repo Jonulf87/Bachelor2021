@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
@@ -77,7 +75,7 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public async Task ShouldCreateMainEvent()
         {
-            string name = "Test name 3";
+            string name = "Test Event 3";
             DateTime startTime = DateTime.Now.AddDays(4);
             DateTime endTime = DateTime.Now.AddDays(8);
 
@@ -88,6 +86,7 @@ namespace WarpTest.WebLayer.Controllers
             CreateUser();
             SetUser(mainEventController, _createdUser.Entity.Id);
             CreateOrganizers();
+            CreateVenues();
 
             MainEventVm mainEventVm = new MainEventVm { Name = name, StartTime = startTime, EndTime = endTime, VenueId = 2, OrganizerId = 1 };
 
@@ -96,7 +95,7 @@ namespace WarpTest.WebLayer.Controllers
             MainEventVm createdMainEvent = (MainEventVm)((OkObjectResult)result.Result).Value;
 
             // Check object that is returned from the controller
-            Assert.AreEqual(3, createdMainEvent.Id);
+            Assert.AreEqual(1, createdMainEvent.Id);
             Assert.AreEqual(name, createdMainEvent.Name);
             Assert.AreEqual(startTime, createdMainEvent.StartTime);
             Assert.AreEqual(endTime, createdMainEvent.EndTime);
@@ -104,8 +103,8 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(1, createdMainEvent.OrganizerId);
 
             // Check what we really have in the DB
-            MainEvent mainEvent1 = _dbContext.MainEvents.Find(3);
-            Assert.AreEqual(3, mainEvent1.Id);
+            MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
+            Assert.AreEqual(1, mainEvent1.Id);
             Assert.AreEqual(name, mainEvent1.Name);
             Assert.AreEqual(startTime, mainEvent1.StartTime);
             Assert.AreEqual(endTime, mainEvent1.EndTime);
@@ -194,18 +193,24 @@ namespace WarpTest.WebLayer.Controllers
         private void CreateOrganizers()
         {
             _dbContext.Organizers.Add(new Organizer { Name = "Org 1", OrgNumber = "1", Description = "Org Descr 1", ContactId = _createdUser.Entity.Id });
+            _dbContext.SaveChanges();
             _dbContext.Organizers.Add(new Organizer { Name = "Org 2", OrgNumber = "2", Description = "Org Descr 2", ContactId = _createdUser.Entity.Id });
+            _dbContext.SaveChanges();
+        }
+
+        private void CreateVenues()
+        {
+            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 1", VenueAddress = "Venueveien 1", VenueAreaAvailable = 1, VenueCapacity = 1 });
+            _dbContext.SaveChanges();
+            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 2", VenueAddress = "Venueveien 2", VenueAreaAvailable = 2, VenueCapacity = 2 });
             _dbContext.SaveChanges();
         }
 
         private void CreateMainEvents()
         {
             CreateUser();
-
-            // Create 2 main events with necessary linked data
-            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 1", VenueAddress = "Venueveien 1", VenueAreaAvailable = 1, VenueCapacity = 1 });
-            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 2", VenueAddress = "Venueveien 2", VenueAreaAvailable = 2, VenueCapacity = 2 });         
-            _dbContext.SaveChanges();
+            CreateOrganizers();
+            CreateVenues();            
 
             _dbContext.MainEvents.Add(new MainEvent { Name = _eventName1, StartTime = _startTime1, EndTime = _endTime1, VenueId = 1, OrganizerId = 1 });
             _dbContext.SaveChanges();

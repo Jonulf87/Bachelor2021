@@ -1,15 +1,13 @@
+using System;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
@@ -63,7 +61,7 @@ namespace Warpweb.WebLayer
 
             services.Configure<IdentityOptions>(options =>
             {
-                //password settings. Må oppdateres
+                //password settings. M? oppdateres
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = false;
@@ -89,7 +87,7 @@ namespace Warpweb.WebLayer
                 //login
                 //options.LoginPath = "/Identity/Account/Login";
                 //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                //Usikker hvor de to over skal peke per nå.
+                //Usikker hvor de to over skal peke per n?.
                 options.SlidingExpiration = true;
 
             });
