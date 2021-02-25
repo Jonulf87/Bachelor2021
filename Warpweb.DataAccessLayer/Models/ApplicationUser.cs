@@ -27,9 +27,13 @@ namespace Warpweb.DataAccessLayer.Models
         public string Comments { get; set; } //print 
 
         [Display(Name = "Samtykkeperson")]
+        [PersonalData]
         public virtual ICollection<ApplicationUser> Guardian { get; set; } // Verge / foresatt 
+        [PersonalData]
         public virtual ICollection<ApplicationUser> Minor { get; set; } // Den mindreårige i vergehierarkiet
+        [PersonalData]
         public virtual ICollection<CrewRole> CrewRoles { get; set; }
+        [PersonalData]
         public virtual ICollection<Ticket> Tickets { get; set; }
 
 

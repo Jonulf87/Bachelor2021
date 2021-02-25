@@ -7,9 +7,7 @@ import UserCrewTable from './UserCrewTable';
 import authService from '../api-authorization/AuthorizeService';
 import Grid from '@material-ui/core/Grid';
 
-export default function PaperSheet({ theme }) {
-
-
+export default function PaperSheet() {
 
     const useStyles = makeStyles((theme) => ({
         paper: {
@@ -22,6 +20,7 @@ export default function PaperSheet({ theme }) {
             },
         },
     }));
+
 
     const classes = useStyles(); //Denne gir masse feilkoder
 

@@ -4,7 +4,7 @@ import SeatMapRow from './SeatMapRow';
 
 export default function SeatMapAdminMenu({ addRow }) {
 
-    let [numberOfSeats, setNumberOfSeats] = useState(1);
+    let [numberOfSeats, setNumberOfSeats] = useState("1");
 
     const submit = (e) => {
         e.preventDefault();
@@ -20,23 +20,4 @@ export default function SeatMapAdminMenu({ addRow }) {
         </div>
     )
 
-    // return (
-    //     <div className="addingMenu" >
-
-    //         <form onSubmit={(e) => {
-    //             e.preventDefault();
-    //             setSeatNumber(numberOfSeats);
-    //             setNumberOfSeats("");
-    //         }}>
-    //             <label>
-    //                 Antall seter på rad:
-    //                 <input type="text" id="numberOfSeatsPerRow" value={numberOfSeats} onChange={(e) => setNumberOfSeats(e.target.value)} />
-    //             </label>
-    //             <input type="submit"  />
-    //         </form>
-
-
-    //     </div>
-
-    // );
 }

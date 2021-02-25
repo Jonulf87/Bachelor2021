@@ -41,7 +41,7 @@ export default function UserMainMenu() {
                         <ListItemText primary='Min side' />
                     </ListItem>
 
-                    <ListItem button component={Link} to={ApplicationPaths.LogOut} history={history}>
+                    <ListItem button component={Link} to={{pathname: ApplicationPaths.LogOut, state: {local: true}}} history={history}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg ut' />
                     </ListItem>

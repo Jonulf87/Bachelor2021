@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ namespace Warpweb.WebLayer
             {
                 var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                 var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                
 
                 var user = new ApplicationUser
                 {
@@ -68,6 +70,23 @@ namespace Warpweb.WebLayer
                     UserName = "olebole247@gmail.com"
                 };
 
+                //var ticketType = new TicketType
+                //{
+                //    BasePrice = 350,
+                //    DescriptionName = "Platinum"
+                //};
+                
+                
+
+                //var ticket = new Ticket
+                //{
+                //    Price = 350,
+                //    Seat = "14D",
+                //    TicketType = new TicketType { DescriptionName = "Platinum", BasePrice = 350 }
+                //};
+
+
+
                 string[] roles = new string[]
                 {
                     "Tenant",
@@ -89,10 +108,9 @@ namespace Warpweb.WebLayer
                 var userExist = await userManager.FindByEmailAsync(user.Email);
                 if (userExist == null)
                 {
-                    try {
-                        await userManager.CreateAsync(user, "SuperHemmelig");
-                    } catch (Exception e) {
-                        Console.WriteLine($"User1 oppretta seg ikke {e.Message}");
+                    var result = await userManager.CreateAsync(user, "SuperHemmelig");
+                    if (!result.Succeeded) {
+                        Console.WriteLine("Failed to create user #1");
                     }
                     
                 };
@@ -100,11 +118,9 @@ namespace Warpweb.WebLayer
                 var user2Exist = await userManager.FindByEmailAsync(user2.Email);
                 if (user2Exist == null)
                 {
-                    try {
-                        var result = await userManager.CreateAsync(user2, "SuperHemmelig");
-                        Console.WriteLine("User2");
-                    } catch (Exception e) {
-                        Console.WriteLine($"User2 oppretta seg ikke {e.Message}");
+                    var result = await userManager.CreateAsync(user2, "SuperHemmelig");
+                    if (!result.Succeeded) {
+                        Console.WriteLine("Failed to create user #2");
                     }
                    
                 };
@@ -112,13 +128,14 @@ namespace Warpweb.WebLayer
                 var user3Exist = await userManager.FindByEmailAsync(user3.Email);
                 if (user3Exist == null)
                 {
-                    try {
-                        var result = await userManager.CreateAsync(user3, "IkkeHemmelig");
-                        Console.WriteLine("User2");
-                    } catch (Exception e) {
-                        Console.WriteLine($"User3 oppretta seg ikke {e.Message}");
+                    var result = await userManager.CreateAsync(user3, "IkkeHemmelig");
+                    if (!result.Succeeded) {
+                        Console.WriteLine("Failed to create user #3");
                     }
                 };
+                
+                //user3Exist.Tickets.Add(ticket); 
+                //userManager.save(user3Exist);
             }
         }
     }
