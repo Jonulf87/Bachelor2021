@@ -18,10 +18,10 @@ namespace Warpweb.LogicLayer.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<OrganizerListVm>> GetOrganizersAsync(string name)
+        public async Task<List<OrganizerListVm>> GetOrganizersAsync(string userId)
         {
             return await _dbContext.Organizers
-                .Where(a => a.Contact.FirstName == name)
+                .Where(a => a.Contact.Id == userId)
                 .Select(a => new OrganizerListVm
                 {
                     Id = a.Id,

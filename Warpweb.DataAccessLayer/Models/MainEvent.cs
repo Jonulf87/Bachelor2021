@@ -14,10 +14,10 @@ namespace Warpweb.DataAccessLayer.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int VenueId { get; set; }
+        public int OrganizerId { get; set; }
 
         [ForeignKey(nameof(VenueId))]
         public virtual Venue Venue { get; set; }
-        public int OrganizerId { get; set; }
 
         [ForeignKey(nameof(OrganizerId))]
         public virtual Organizer Organizer { get; set; }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
@@ -29,10 +26,6 @@ namespace WarpTest.WebLayer.Controllers
         private const string _address2 = "Test gate 321";
         private const string _email2 = "kari@test.com";
         private const string _userName2 = "user2";
-
-        private ClaimsIdentity _identity;
-        private ClaimsPrincipal _user;
-        private ControllerContext _controllerContext;
 
         EntityEntry<ApplicationUser> _user1;
         EntityEntry<ApplicationUser> _user2;
@@ -67,7 +60,7 @@ namespace WarpTest.WebLayer.Controllers
             UserService userService = new UserService(_dbContext);
             UserController userController = new UserController(userService);
 
-            setUser(userController, _user1.Entity.Id);
+            SetUser(userController, _user1.Entity.Id);
             ActionResult<UserVm> result1 = await userController.GetUserAsync();
 
             UserVm returnedUser1 = result1.Value;
@@ -80,7 +73,7 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_email1, returnedUser1.EMail);
             Assert.AreEqual(_userName1, returnedUser1.UserName);
 
-            setUser(userController, _user2.Entity.Id);
+            SetUser(userController, _user2.Entity.Id);
             ActionResult<UserVm> result2 = await userController.GetUserAsync();
 
             UserVm returnedUser2 = result2.Value;
@@ -101,19 +94,6 @@ namespace WarpTest.WebLayer.Controllers
             _dbContext.SaveChanges();
             _user2 = _dbContext.ApplicationUsers.Add(new ApplicationUser { FirstName = _firstName2, MiddleName = _middleName2, LastName = _lastName2, PhoneNumber = _phoneNumber2, Address = _address2, Email = _email2, UserName = _userName2 });
             _dbContext.SaveChanges();
-        }
-
-        private void setUser(UserController userController, String userId)
-        {
-            _identity = new ClaimsIdentity();
-            _identity.AddClaims(new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId)
-            });
-            _user = new ClaimsPrincipal(_identity);
-            _controllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = _user } };
-
-            userController.ControllerContext = _controllerContext;
         }
     }
 }
