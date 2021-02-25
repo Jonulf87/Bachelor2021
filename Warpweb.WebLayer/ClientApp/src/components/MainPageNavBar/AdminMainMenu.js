@@ -69,26 +69,7 @@ export default function AdminMainMenu() {
     return (
         <>
             <List>
-                <Accordion square expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                    <ListItem button component={Link} to='/venue' disabled=''>                  
-                        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                        <ListItemIcon><HomeWorkIcon /></ListItemIcon>
-                        <ListItemText primary='Lokale' />
-                        </AccordionSummary>
-                    </ListItem>
-                        <AccordionDetails>
-                            <Typography>
-                                <List>
-                                    <ListItem>
-                                        <ListItemText primary='Legg til' />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemText primary='se over' />
-                                    </ListItem>
-                                </List>
-                            </Typography>
-                        </AccordionDetails>
-                </Accordion>
+
                 <ListItem button button component={Link} to='/ticket'>
                     <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
                     <ListItemText primary='Billetter' />

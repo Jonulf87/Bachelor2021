@@ -188,8 +188,7 @@ export class AuthorizeService {
         settings.automaticSilentRenew = true;
         settings.includeIdTokenInSilentRenew = true;
         settings.userStore = new WebStorageStateStore({
-            prefix: ApplicationName,
-            store: window.sessionStorage
+            prefix: ApplicationName
         });
 
         this.userManager = new UserManager(settings);
