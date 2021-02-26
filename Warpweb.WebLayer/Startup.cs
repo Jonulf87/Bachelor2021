@@ -72,11 +72,11 @@ namespace Warpweb.WebLayer
                 //lockout settings
                 options.Lockout.AllowedForNewUsers = true;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.MaxFailedAccessAttempts = 5000;
                 //User settings
                 options.User.RequireUniqueEmail = true;
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz???ABCDEFGHIJKLMNOPQRSTUVWXYZ???-_.@+-"; //Husk ? teste for ??? og + - i brukernavn
-                options.SignIn.RequireConfirmedAccount = false; //B?r kanskje ikke v?re true?
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ1234567890-_.@+-"; //Husk å teste for æøå og + - i brukernavn
+                options.SignIn.RequireConfirmedAccount = false; //Bør kanskje ikke være true?
             });
 
             services.ConfigureApplicationCookie(options => //Cookie settings

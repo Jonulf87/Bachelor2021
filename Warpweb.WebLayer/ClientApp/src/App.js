@@ -47,9 +47,11 @@ export default function App() {
 
     const drawerWidth = 240;
 
+
+
     const useStyles = makeStyles((theme) => ({
         root: {
-            display: 'flex',
+            display: 'flex'
         },
         appBar: {
             zIndex: theme.zIndex.drawer + 1,
@@ -122,7 +124,6 @@ export default function App() {
         };
 
     return (
-
         <div className={classes.root}>
             <CssBaseline />
             <AppBar

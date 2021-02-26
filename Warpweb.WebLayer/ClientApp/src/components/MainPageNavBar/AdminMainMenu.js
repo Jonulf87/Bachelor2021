@@ -23,12 +23,17 @@ export default function AdminMainMenu() {
     return (
         <List>
 
+            <ListItem button button component={Link} to='/venue'>
+                <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
+                <ListItemText primary='Lokasjon' />
+            </ListItem>
+
             <ListItem button button component={Link} to='/ticket'>
                 <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
                 <ListItemText primary='Billetter' />
             </ListItem>
 
-                <ListItem button component={Link} to='/event'>
+            <ListItem button component={Link} to='/event'>
                 <ListItemIcon><EventIcon /></ListItemIcon>
                 <ListItemText primary='Arrangement' />
             </ListItem>
