@@ -33,43 +33,42 @@ const rows = [
     createData(4, 'P35', 'Pilestredet', '10000', '0'),
 ];
 
-
 export default function VenueTable() {
+
     const classes = useStyles();
 
-
-
     return (
-    <TableContainer className={classes.root} component={Paper}>
-        <Typography gutterBottom variant="h5" component="h2">
-            Lokaleoversikt
-                    </Typography>
-        <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-                <TableRow>
-                    <TableCell align="left">Id</TableCell>
-                    <TableCell align="left">Navn</TableCell>
-                    <TableCell align="left">Sted</TableCell>
-                    <TableCell align="left">Kvadratmeter</TableCell>
-                    <TableCell align="left">Maks kapasitet</TableCell>
-                    <TableCell align="left"></TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {rows.map((row) => (
-                    <TableRow key={row.id}>
-                        <TableCell align="left">{row.id}</TableCell>
-                        <TableCell align="left">{row.name}</TableCell>
-                        <TableCell align="left">{row.location}</TableCell>
-                        <TableCell align="left">{row.sqMeters}</TableCell>
-                        <TableCell align="left">{row.maxCapacity}</TableCell>
-                        <TableCell align="left">
-                            <Button variant="contained">Mer info</Button>
-                        </TableCell>
+
+        <TableContainer className={classes.root} component={Paper}>
+            <Typography gutterBottom variant="h5" component="h2">
+                Lokaleoversikt
+            </Typography>
+            <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell align="left">Id</TableCell>
+                        <TableCell align="left">Navn</TableCell>
+                        <TableCell align="left">Sted</TableCell>
+                        <TableCell align="left">Kvadratmeter</TableCell>
+                        <TableCell align="left">Maks kapasitet</TableCell>
+                        <TableCell align="left"></TableCell>
                     </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+                </TableHead>
+                <TableBody>
+                    {rows.map((row) => (
+                        <TableRow key={row.id}>
+                            <TableCell align="left">{row.id}</TableCell>
+                            <TableCell align="left">{row.name}</TableCell>
+                            <TableCell align="left">{row.location}</TableCell>
+                            <TableCell align="left">{row.sqMeters}</TableCell>
+                            <TableCell align="left">{row.maxCapacity}</TableCell>
+                            <TableCell align="left">
+                                <Button variant="contained">Mer info</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
         </TableContainer>
-        )
+    )
 }
