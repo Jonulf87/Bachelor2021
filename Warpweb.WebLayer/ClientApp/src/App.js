@@ -9,7 +9,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import './custom.css'
 import MainPage from './components/MainPage/MainPage';
-import Test from './components/Test';
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import AppBar from '@material-ui/core/AppBar';
