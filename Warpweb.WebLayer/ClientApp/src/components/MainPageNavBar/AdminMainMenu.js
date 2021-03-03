@@ -48,6 +48,11 @@ export default function AdminMainMenu() {
                 <ListItemText primary='Deltagere' />
             </ListItem>
 
+            <ListItem button button component={Link} to='/useradmin'>
+                <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                <ListItemText primary='Brukeradmin' />
+            </ListItem>
+
             <ListItem button button component={Link} to='/report'>
                 <ListItemIcon><AssignmentIcon /></ListItemIcon>
                 <ListItemText primary='Rapporter' />

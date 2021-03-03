@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) =>
         root: {
             display: 'flex',
             flexWrap: 'wrap',
-            //maxWidth: 500,
+            maxWidth: 500,
             marginBottom: 20,
         },
     }),

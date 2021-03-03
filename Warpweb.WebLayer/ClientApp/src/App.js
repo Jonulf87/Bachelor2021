@@ -11,6 +11,7 @@ import './custom.css'
 import MainPage from './components/MainPage/MainPage';
 import Test from './components/Test';
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
+import UserAdminMain from './components/UserAdmin/UserAdminMain';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import AppBar from '@material-ui/core/AppBar';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -184,7 +185,7 @@ export default function App() {
                     <Route path='/user' component={UserMain} />
                     <Route path='/venue' component={VenueMain} />
                     <Route path='/crew' component={CrewMain} />
-                   
+                    <Route path='/useradmin' component={UserAdminMain} />
                     <Route path='/report' component={ReportMain} />
                     <Route path='/event' component={EventMain} />
                     <Route path='/participant' component={ParticipantMain} />
@@ -205,5 +206,7 @@ export default function App() {
         //<Layout>
         //<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         //</Layout>
+
+        //<Route path='/useradmin' component={} />
     );
 }

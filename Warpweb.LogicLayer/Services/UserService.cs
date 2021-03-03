@@ -24,7 +24,10 @@ namespace Warpweb.LogicLayer.Services
                     Id = a.Id,
                     FirstName = a.FirstName,
                     MiddleName = a.MiddleName,
-                    LastName = a.LastName
+                    LastName = a.LastName,
+                    EMail = a.Email,
+                    PhoneNumber = a.PhoneNumber,
+                    UserName = a.UserName
                 })
                 .ToListAsync();
         }
