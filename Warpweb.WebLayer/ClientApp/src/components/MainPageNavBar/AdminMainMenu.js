@@ -14,6 +14,7 @@ import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom';
 
 export default function AdminMainMenu() {
+
     const [expanded, setExpanded] = React.useState('');
 
     const handleChange = (panel) => (event, newExpanded) => {
@@ -24,7 +25,7 @@ export default function AdminMainMenu() {
         <List>
 
             <ListItem button button component={Link} to='/venue'>
-                <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
+                <ListItemIcon><HomeWorkIcon /></ListItemIcon>
                 <ListItemText primary='Lokasjon' />
             </ListItem>
 
@@ -46,6 +47,11 @@ export default function AdminMainMenu() {
             <ListItem button button component={Link} to='/participant'>
                 <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
                 <ListItemText primary='Deltagere' />
+            </ListItem>
+
+            <ListItem button button component={Link} to='/useradmin'>
+                <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                <ListItemText primary='Brukeradmin' />
             </ListItem>
 
             <ListItem button button component={Link} to='/report'>

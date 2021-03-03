@@ -10,9 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Warpweb.DataAccessLayer;
-using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
-using Warpweb.DataAccessLayer.Repositories;
 using Warpweb.LogicLayer.Services;
 
 namespace Warpweb.WebLayer
@@ -41,9 +39,6 @@ namespace Warpweb.WebLayer
             services.AddScoped<VenueService>();
             services.AddScoped<CrewService>();
             services.AddScoped<UserService>();
-
-            // Needed per interface/repository
-            services.AddScoped<IVenueRepository, VenueRepository>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 

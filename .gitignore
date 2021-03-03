@@ -340,3 +340,5 @@ ASALocalRun/
 healthchecksdb
 /Warpweb.DataAccessLayer/Migrations/20210203140046_warpweb.cs
 /Warpweb.DataAccessLayer/Migrations/20210203140046_warpweb.Designer.cs
+/Warpweb.DataAccessLayer/Migrations/20210226111519_warpweb.cs
+/Warpweb.DataAccessLayer/Migrations/20210226111519_warpweb.Designer.cs
