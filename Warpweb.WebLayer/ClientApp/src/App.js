@@ -9,7 +9,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import './custom.css'
 import MainPage from './components/MainPage/MainPage';
-import Test from './components/Test';
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -38,6 +37,7 @@ import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import VenueMain from './components/Venue/VenueMain';
 import clsx from 'clsx';
 import { ThemeProvider } from '@material-ui/core/styles'
+import theme from './theme'
 
 
 
@@ -99,6 +99,7 @@ export default function App() {
             },
         },
         toolbar: {
+            background: theme.background,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-end',
@@ -113,7 +114,7 @@ export default function App() {
     }));
 
         const classes = useStyles();
-        const theme = useTheme();
+        //const theme = useTheme();
         const [open, setOpen] = React.useState(false);
 
         function handleDrawerOpen() {
@@ -125,58 +126,59 @@ export default function App() {
         };
 
     return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
+        <ThemeProvider theme={theme}>
+            <div className={classes.root}>
+                <CssBaseline />
+                    <AppBar
+                        position="fixed"
+                        className={clsx(classes.appBar, {
+                            [classes.appBarShift]: open,
                         })}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Warpweb 
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                })}
-                classes={{
-                    paper: clsx({
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                className={clsx(classes.menuButton, {
+                                    [classes.hide]: open,
+                                })}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6" noWrap>
+                                Warpweb 
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                <Drawer
+                    variant="permanent"
+                    className={clsx(classes.drawer, {
                         [classes.drawerOpen]: open,
                         [classes.drawerClose]: !open,
-                    }),
-                }}
-            >
-                <div className={classes.toolbar}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
-                </div>
-                <Divider />
+                    })}
+                    classes={{
+                        paper: clsx({
+                            [classes.drawerOpen]: open,
+                            [classes.drawerClose]: !open,
+                        }),
+                    }}
+                >
+                    <div className={classes.toolbar}>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </div>
+                    <Divider />
 
-                <UserMainMenu />
+                    <UserMainMenu />
 
-                <Divider />
+                    <Divider />
 
-                <AdminMainMenu />
+                    <AdminMainMenu />
                 
-            </Drawer>
+                </Drawer>
 
 
             <main className={classes.content}>
@@ -194,9 +196,10 @@ export default function App() {
                 
 
                 
-                <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-            </main>
-        </div>
+                    <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+                </main>
+            </div>
+        </ThemeProvider>
 
         // <Route path='/seat' component={SeatMapBackdrop} />
         //<div className="container">
