@@ -2,8 +2,10 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
 import authService from '../api-authorization/AuthorizeService';
-
-
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -45,41 +47,58 @@ export default function UserList() {
         getUsers();
     }, []);
 
+    //function handleClick(value) {
+    //    setUserOpen(value);
+    //};
 
+    //const classes = useStyles();
 
+    //function mapUsers() {
+    //    return userList.map((user) =>
+    //        <>
+    //            <ListItem button onCLick={handleClick(user.id)}>
+    //                <ListItemText primary={user.firstName} />
+    //                <ListItemText primary={user.lastName} />
+    //                <ListItemText primary={user.phoneNumber} />
+    //                <ListItemText primary={user.userName} />
+    //                <ListItemText primary={user.eMail} />
+    //            </ListItem>
+    //            <Collapse component={Paper} in={userOpen} timeout="auto" unmountOnExit>
+                    
+    //                    <Grid container direction="row" justify="space-evenly" alignItems="center">
+    //                    </Grid>
+                    
+    //            </Collapse>
+    //        </>
 
-
-    function handleClick(value) {
-        setUserOpen(value);
-    };
-
-
-
-
-    const classes = useStyles();
+    //    )
+    //};
 
     function mapUsers() {
-        return userList.map((user) =>
-            <>
-                <ListItem button onCLick={handleClick(user.id)}>
-                    <ListItemText primary={user.firstName} />
-                    <ListItemText primary={user.lastName} />
-                    <ListItemText primary={user.phoneNumber} />
-                    <ListItemText primary={user.userName} />
-                    <ListItemText primary={user.eMail} />
-                </ListItem>
-                <Collapse component={Paper} in={userOpen} timeout="auto" unmountOnExit>
-                    
-                        <Grid container direction="row" justify="space-evenly" alignItems="center">
-                        </Grid>
-                    
-                </Collapse>
-            </>
 
+        return (
+            <div className={classes.root}>
+                {userList.map((user) => (
+                    <Accordion key={user.id}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography className={classes.heading}>{user.firstName} {user.lastName}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                {user.email} {user.userName} {user.phone}
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                ))}
+            </div>
         )
     };
 
-
+    const classes = useStyles();
 
     return (
         <Card>
@@ -100,6 +119,4 @@ export default function UserList() {
         </Card>
 
     );
-
-
 }
