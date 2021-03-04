@@ -1,4 +1,4 @@
-﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper } from '@material-ui/core';
+﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper, Divider } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
 import authService from '../api-authorization/AuthorizeService';
@@ -6,6 +6,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -22,6 +23,11 @@ export default function UserList() {
 
     let [isReady, setIsReady] = useState(false);
     let [userList, setUserList] = useState([]);
+    let [expanded, setExpanded] = useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false)
+    }
     let [userOpen, setUserOpen] = useState(false);
     let [rolesList, setRolesList] = useState([]);
 
@@ -47,39 +53,19 @@ export default function UserList() {
         getUsers();
     }, []);
 
-    //function handleClick(value) {
-    //    setUserOpen(value);
-    //};
-
-    //const classes = useStyles();
-
-    //function mapUsers() {
-    //    return userList.map((user) =>
-    //        <>
-    //            <ListItem button onCLick={handleClick(user.id)}>
-    //                <ListItemText primary={user.firstName} />
-    //                <ListItemText primary={user.lastName} />
-    //                <ListItemText primary={user.phoneNumber} />
-    //                <ListItemText primary={user.userName} />
-    //                <ListItemText primary={user.eMail} />
-    //            </ListItem>
-    //            <Collapse component={Paper} in={userOpen} timeout="auto" unmountOnExit>
-                    
-    //                    <Grid container direction="row" justify="space-evenly" alignItems="center">
-    //                    </Grid>
-                    
-    //            </Collapse>
-    //        </>
-
-    //    )
-    //};
+    // Personalia er låst
+    // Viser alt av brukerdata
+    // Funksjonalitet:
+    // Trenger knapp for passord reset
+    // Sette rettigheter for bruker
+    // Må finne en løsning for tekst i mobilversjon. ALternativet er å brekke det nedm men blir ikke optimalt.
 
     function mapUsers() {
 
         return (
             <div className={classes.root}>
                 {userList.map((user) => (
-                    <Accordion key={user.id}>
+                    <Accordion key={user.id} expanded={expanded === user.id} onChange={handleChange(user.id)}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -87,10 +73,115 @@ export default function UserList() {
                         >
                             <Typography className={classes.heading}>{user.firstName} {user.lastName}</Typography>
                         </AccordionSummary>
+                        <Divider />
                         <AccordionDetails>
-                            <Typography>
-                                {user.email} {user.userName} {user.phone}
-                            </Typography>
+                            <Grid container>
+                                <Grid container xs={12} sm={6}>
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Fornavn</strong></Typography>                                 
+                                    </Grid>
+
+                                    <Grid item xs={9}>
+                                        <Typography>{user.firstName}</Typography>
+                                    </Grid>
+
+
+                                    {user.middleName && <>
+                                        <Grid item xs={2}>
+                                            <Typography><strong>Mellomnavn</strong></Typography>
+                                        </Grid>
+
+                                        <Grid item xs={10}>
+                                            <Typography>{user.middleName}</Typography>
+                                        </Grid>
+                                    </>}
+                                
+
+                                    <Grid item xs={12} sm={2}>
+                                        <Typography><strong>Etternavn</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={10}>
+                                        <Typography>{user.lastName}</Typography>
+                                    </Grid>
+
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Brukernavn</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography>{user.userName}</Typography>
+                                    </Grid>
+
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Telefon</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography>{user.phoneNumber}</Typography>
+                                    </Grid>
+
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Epost</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography>{user.eMail}</Typography>
+                                    </Grid>
+
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Fødselsdag</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography>-</Typography>
+                                    </Grid>
+
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Allergisk</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography>{user.allergy ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier' }</Typography> 
+                                    </Grid>
+
+                                    {user.allergy && <>
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Allergiinformasjon</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                            <Typography>{ user.allergyInfo }</Typography> 
+                                    </Grid>
+                                    </>
+                                    } 
+
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Verge</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography>{user.guardian ? 'Voksen voksenperson' : 'N/A'}</Typography>
+                                    </Grid>
+
+                                    {user.guardian && <>
+                                        <Grid item xs={2}>
+                                            <Typography><strong>Voksen voksenperson</strong></Typography>
+                                        </Grid>
+                                        <Grid item xs={10}>
+                                            <Typography>{user.guardian}</Typography>
+                                        </Grid>
+                                    </>
+                                    } 
+
+
+
+                                    <Grid item xs={2}>
+                                        <Typography><strong>Kommentar</strong></Typography> 
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography>-</Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid container xs={12} sm={6}>
+                                    <Grid>
+                                        <Typography>Test</Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            
                         </AccordionDetails>
                     </Accordion>
                 ))}
@@ -101,22 +192,20 @@ export default function UserList() {
     const classes = useStyles();
 
     return (
-        <Card>
-            <CardContent>
+            <>
                 {isReady && (<>
                     <Typography>
-                        Brukerliste
+                        <strong>Brukerliste</strong>
                     </Typography>
 
-                    <List>
+
                         {mapUsers()}
-                    </List>
                 </>
                 )}
 
                 {!isReady && (<p>Laster brukerliste...</p>)}
-            </CardContent>
-        </Card>
+            
+        </>
 
     );
 }
