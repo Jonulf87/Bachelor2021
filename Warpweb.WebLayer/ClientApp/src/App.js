@@ -45,12 +45,7 @@ import theme from './theme'
 export default function App(props) {
     //static displayName = App.name;
 
-    
-
     const drawerWidth = 240;
-
-
-
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -86,15 +81,15 @@ export default function App(props) {
         },
     }));
 
-    const { window } = props;    
+    const { window } = props;
     const classes = useStyles();
-        //const theme = useTheme();
+    //const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
-        const handleDrawerToggle = () => {
-            setMobileOpen(!mobileOpen);
-          };
-        
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
+
     //    function handleDrawerOpen() {
     //        setOpen(true);
     //    };
@@ -192,21 +187,19 @@ export default function App(props) {
                 //</Drawer>*/}
 
 
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <Switch>
-                    <Route path='/user' component={UserMain} />
-                    <Route path='/venue' component={VenueMain} />
-                    <Route path='/crew' component={CrewMain} />
-                    <Route path='/useradmin' component={UserAdminMain} />
-                    <Route path='/report' component={ReportMain} />
-                    <Route path='/event' component={EventMain} />
-                    <Route path='/participant' component={ParticipantMain} />
-                    <Route path='/ticket' component={TicketMain} />
-                </Switch>
-                
+                <main className={classes.content}>
+                    <div className={classes.toolbar} />
+                    <Switch>
+                        <Route path='/user' component={UserMain} />
+                        <Route path='/venue' component={VenueMain} />
+                        <Route path='/crew' component={CrewMain} />
+                        <Route path='/useradmin' component={UserAdminMain} />
+                        <Route path='/report' component={ReportMain} />
+                        <Route path='/event' component={EventMain} />
+                        <Route path='/participant' component={ParticipantMain} />
+                        <Route path='/ticket' component={TicketMain} />
+                    </Switch>
 
-                
                     <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
                 </main>
             </div>

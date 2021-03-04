@@ -78,7 +78,7 @@ namespace Warpweb.WebLayer
             {
                 //cookies
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 
                 //login
                 //options.LoginPath = "/Identity/Account/Login";
