@@ -13,7 +13,7 @@ namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/arrangement")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "admin")]
 
     // CRUD functionality for events
     // Note Dependency Injection for SecurityService and MainEventService

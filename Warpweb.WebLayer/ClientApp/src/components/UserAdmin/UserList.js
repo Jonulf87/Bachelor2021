@@ -29,6 +29,7 @@ export default function UserList() {
     let [isReady, setIsReady] = useState(false);
     let [userList, setUserList] = useState([]);
     let [expanded, setExpanded] = useState(false);
+    let [userRoles, setUserRoles] = useState([]);
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false)
@@ -52,11 +53,31 @@ export default function UserList() {
 
                 const result = await response.json();
                 setUserList(result);
+
+                //const rolesResponse = await fetch('/api/users/UserRoles', {
+                //    header: {
+                //        'Authorization': `Bearer ${accessToken}`
+                //    }
+                //});
+
+                
+                //const rolesResult = await rolesResponse.json();
+                //setUserRoles(rolesResult);
+
+
                 setIsReady(true);
             }
         }
+
+
+
+
+
         getUsers();
     }, []);
+
+    
+
 
     // Personalia er låst
     // Viser alt av brukerdata
@@ -82,99 +103,99 @@ export default function UserList() {
                         <AccordionDetails>
                             <Grid container>
                                 {/*Personalia container*/}
-                                <Grid container>
+                                <Grid container xs={6}>
 
-                                    <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                    <Grid item xs={3}>
                                         <Typography><strong>Fornavn</strong></Typography>
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                    <Grid item xs={9}>
                                         <Typography>{user.firstName}</Typography>
                                     </Grid>
 
                                     {user.middleName && <>
-                                        <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                        <Grid item xs={3}>
                                             <Typography><strong>Mellomnavn</strong></Typography>
                                         </Grid>
 
-                                        <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                        <Grid item xs={9}>
                                             <Typography>{user.middleName}</Typography>
                                         </Grid>
                                     </>}
 
-                                    <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                    <Grid item xs={3}>
                                         <Typography><strong>Etternavn</strong></Typography>
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                    <Grid item xs={9}>
                                         <Typography>{user.lastName}</Typography>
                                     </Grid>
 
-                                    <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                    <Grid item xs={3}>
                                         <Typography><strong>Brukernavn</strong></Typography>
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                    <Grid item xs={9}>
                                         <Typography>{user.userName}</Typography>
                                     </Grid>
 
-                                    <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                    <Grid item xs={3}>
                                         <Typography><strong>Telefon</strong></Typography>
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                    <Grid item xs={9}>
                                         <Typography>{user.phoneNumber}</Typography>
                                     </Grid>
 
-                                    <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                    <Grid item xs={3}>
                                         <Typography><strong>Epost</strong></Typography>
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                    <Grid item xs={9}>
                                         <Typography>{user.eMail}</Typography>
                                     </Grid>
 
-                                    <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                    <Grid item xs={3}>
                                         <Typography><strong>Fødselsdag</strong></Typography>
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                    <Grid item xs={9}>
                                         <Typography>-</Typography>
                                     </Grid>
 
-                                    <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                    <Grid item xs={3}>
                                         <Typography><strong>Allergisk</strong></Typography>
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                    <Grid item xs={9}>
                                         <Typography>{user.allergy ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'}</Typography>
                                     </Grid>
 
                                     {user.allergy && <>
-                                        <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                        <Grid item xs={3}>
                                             <Typography><strong>Allergiinformasjon</strong></Typography>
                                         </Grid>
-                                        <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                        <Grid item xs={9}>
                                             <Typography>{user.allergyInfo}</Typography>
                                         </Grid>
                                     </>
                                     }
 
                                     {user.guardian && <>
-                                        <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                        <Grid item xs={3}>
                                             <Typography><strong>Verge</strong></Typography>
                                         </Grid>
 
-                                        <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                        <Grid item xs={9}>
                                             <Typography>{user.guardian}</Typography>
                                         </Grid>
                                     </>}
 
-                                    <Grid item xs={3} sm={3} md={3} lg={2} xl={2}>
+                                    <Grid item xs={3}>
                                         <Typography><strong>Kommentar</strong></Typography>
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={10} xl={10}>
+                                    <Grid item xs={9}>
                                         <Typography>-</Typography>
                                     </Grid>
                                 </Grid>
 
                                 {/*Rettighet og reset container*/}
-                                <Grid container>
+                                <Grid container xs={6}>
                                     <Grid item>
-                                        <Typography>Test</Typography>
+                                        <Typography>Checkbokser definert som vi vil vises her. if cb === roles(checked)</Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>

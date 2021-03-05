@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.LogicLayer.ViewModels;
@@ -10,6 +11,7 @@ namespace Warpweb.LogicLayer.Services
     public class UserService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public UserService(ApplicationDbContext dbContext)
         {
@@ -18,6 +20,24 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<List<UserListVm>> GetUsersAsync()
         {
+
+            //var users = _userManager.Users;
+            //var userVmList = new List<UserListVm>();
+
+            //foreach(IdentityUser user in  users)
+            //{
+            //    var userRole = await _userManager.GetRolesAsync(user);
+
+            //    new UserListVm
+            //    {
+            //        Id = user.Id,
+            //        Roles = userRole,
+            //        EMail = user.Email,
+            //        FirstName = user.
+
+            //    }
+            //}
+
             return await _dbContext.ApplicationUsers
                 .Select(a => new UserListVm
                 {
@@ -32,6 +52,7 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        
         public async Task<UserVm> GetUserAsync(string id)
         {
             return await _dbContext.ApplicationUsers

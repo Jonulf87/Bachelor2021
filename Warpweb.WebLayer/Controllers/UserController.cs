@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
@@ -14,10 +16,12 @@ namespace Warpweb.WebLayer.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly SecurityService _securityService;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, SecurityService securityService)
         {
             _userService = userService;
+            _securityService = securityService;
         }
 
         [HttpGet]
@@ -33,6 +37,14 @@ namespace Warpweb.WebLayer.Controllers
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
 
             return await _userService.GetUserAsync(userId.Value);
+        }
+
+        [HttpGet]
+        [Route("UserRoles")]
+        public async Task<IList<string>> GetUserRolesAsync()
+        {
+            return await _securityService.GetUserRolesAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
         }
     }
 }
