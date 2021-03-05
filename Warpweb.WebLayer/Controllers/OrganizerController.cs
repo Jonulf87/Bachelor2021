@@ -10,7 +10,7 @@ namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/tenant")]
     [ApiController]
-    [Authorize(Roles = "TenantMasterMan")]
+    [Authorize]
 
     // CRUD functionality for organizer
     // Note Dependency Injection for SecurityService and MainEventService

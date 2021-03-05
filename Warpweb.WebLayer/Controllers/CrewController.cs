@@ -10,7 +10,7 @@ namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admins")]
+    [Authorize]
 
     // CRUD functionality for crew
     // TODO : Crew deletion

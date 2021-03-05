@@ -10,6 +10,7 @@ namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TicketTypeController : ControllerBase
     {
         private readonly TicketTypeService _ticketTypeService;

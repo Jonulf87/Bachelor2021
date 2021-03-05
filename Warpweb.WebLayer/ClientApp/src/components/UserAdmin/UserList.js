@@ -1,12 +1,8 @@
-﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper, Divider } from '@material-ui/core';
+﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper, Divider, Accordion, AccordionSummary, AccordionDetails, Button } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
 import authService from '../api-authorization/AuthorizeService';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
