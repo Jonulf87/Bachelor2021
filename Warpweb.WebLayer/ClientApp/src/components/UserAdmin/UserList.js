@@ -6,11 +6,20 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        collapseUser: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            padding: 0,
-            margin: 0
+
+        accordionWrapper: {
+            width: '100%',
+            '&> :nth-child(even)': {
+                '&> div:first-child': {
+                    backgroundColor: 'lightgray'
+                },
+
+            },
+            '&> :nth-child(odd)': {
+                '&> div:first-child': {
+                    backgroundColor: 'white'
+                },
+            },
         },
     }),
 );
@@ -59,7 +68,7 @@ export default function UserList() {
     function mapUsers() {
 
         return (
-            <div className={classes.root}>
+            <div className={classes.accordionWrapper}>
                 {userList.map((user) => (
                     <Accordion key={user.id} expanded={expanded === user.id} onChange={handleChange(user.id)}>
                         <AccordionSummary
