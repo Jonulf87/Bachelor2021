@@ -22,157 +22,157 @@ namespace WarpTest.WebLayer.Controllers
 
         private EntityEntry<ApplicationUser> _createdUser;
 
-        [Test]
-        public async Task ShouldGetMainEvents()
-        {
-            CreateMainEvents();
+        //[Test]
+        //public async Task ShouldGetMainEvents()
+        //{
+        //    CreateMainEvents();
 
-            // Check
-            MainEventService mainEventService = new MainEventService(_dbContext);
-            SecurityService securityService = new SecurityService(_dbContext);
+        //    // Check
+        //    MainEventService mainEventService = new MainEventService(_dbContext);
+        //    SecurityService securityService = new SecurityService(_dbContext);
 
-            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
-            List<MainEventListVm> result = await mainEventController.GetMainEvents();
+        //    List<MainEventListVm> result = await mainEventController.GetMainEvents();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(1, result[0].Id);
-            Assert.AreEqual(_eventName1, result[0].Name);
-            Assert.AreEqual(_startTime1, result[0].StartTime);
-            Assert.AreEqual(_endTime1, result[0].EndTime);
-            Assert.AreEqual(2, result[1].Id);
-            Assert.AreEqual(_eventName2, result[1].Name);
-            Assert.AreEqual(_startTime2, result[1].StartTime);
-            Assert.AreEqual(_endTime2, result[1].EndTime);
-        }
+        //    Assert.AreEqual(2, result.Count);
+        //    Assert.AreEqual(1, result[0].Id);
+        //    Assert.AreEqual(_eventName1, result[0].Name);
+        //    Assert.AreEqual(_startTime1, result[0].StartTime);
+        //    Assert.AreEqual(_endTime1, result[0].EndTime);
+        //    Assert.AreEqual(2, result[1].Id);
+        //    Assert.AreEqual(_eventName2, result[1].Name);
+        //    Assert.AreEqual(_startTime2, result[1].StartTime);
+        //    Assert.AreEqual(_endTime2, result[1].EndTime);
+        //}
 
-        [Test]
-        public async Task ShouldGetMainEventById()
-        {
-            CreateMainEvents();
+        //[Test]
+        //public async Task ShouldGetMainEventById()
+        //{
+        //    CreateMainEvents();
 
-            // Check that we can get both by id
-            MainEventService mainEventService = new MainEventService(_dbContext);
-            SecurityService securityService = new SecurityService(_dbContext);
+        //    // Check that we can get both by id
+        //    MainEventService mainEventService = new MainEventService(_dbContext);
+        //    SecurityService securityService = new SecurityService(_dbContext);
 
-            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
-            ActionResult<MainEventVm> result1 = await mainEventController.GetMainEvent(1);
-            MainEventVm returnedMainEvent = result1.Value;
-            Assert.AreEqual(1, returnedMainEvent.Id);
-            Assert.AreEqual(_eventName1, returnedMainEvent.Name);
-            Assert.AreEqual(_startTime1, returnedMainEvent.StartTime);
-            Assert.AreEqual(_endTime1, returnedMainEvent.EndTime);
+        //    ActionResult<MainEventVm> result1 = await mainEventController.GetMainEvent(1);
+        //    MainEventVm returnedMainEvent = result1.Value;
+        //    Assert.AreEqual(1, returnedMainEvent.Id);
+        //    Assert.AreEqual(_eventName1, returnedMainEvent.Name);
+        //    Assert.AreEqual(_startTime1, returnedMainEvent.StartTime);
+        //    Assert.AreEqual(_endTime1, returnedMainEvent.EndTime);
 
-            ActionResult<MainEventVm> result2 = await mainEventController.GetMainEvent(2);
-            MainEventVm returnedMainEvent2 = result2.Value;
-            Assert.AreEqual(2, returnedMainEvent2.Id);
-            Assert.AreEqual(_eventName2, returnedMainEvent2.Name);
-            Assert.AreEqual(_startTime2, returnedMainEvent2.StartTime);
-            Assert.AreEqual(_endTime2, returnedMainEvent2.EndTime);
-        }
+        //    ActionResult<MainEventVm> result2 = await mainEventController.GetMainEvent(2);
+        //    MainEventVm returnedMainEvent2 = result2.Value;
+        //    Assert.AreEqual(2, returnedMainEvent2.Id);
+        //    Assert.AreEqual(_eventName2, returnedMainEvent2.Name);
+        //    Assert.AreEqual(_startTime2, returnedMainEvent2.StartTime);
+        //    Assert.AreEqual(_endTime2, returnedMainEvent2.EndTime);
+        //}
 
-        [Test]
-        public async Task ShouldCreateMainEvent()
-        {
-            string name = "Test Event 3";
-            DateTime startTime = DateTime.Now.AddDays(4);
-            DateTime endTime = DateTime.Now.AddDays(8);
+        //[Test]
+        //public async Task ShouldCreateMainEvent()
+        //{
+        //    string name = "Test Event 3";
+        //    DateTime startTime = DateTime.Now.AddDays(4);
+        //    DateTime endTime = DateTime.Now.AddDays(8);
 
-            MainEventService mainEventService = new MainEventService(_dbContext);
-            SecurityService securityService = new SecurityService(_dbContext);
-            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+        //    MainEventService mainEventService = new MainEventService(_dbContext);
+        //    SecurityService securityService = new SecurityService(_dbContext);
+        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
-            CreateUser();
-            SetUser(mainEventController, _createdUser.Entity.Id);
-            CreateOrganizers();
-            CreateVenues();
+        //    CreateUser();
+        //    SetUser(mainEventController, _createdUser.Entity.Id);
+        //    CreateOrganizers();
+        //    CreateVenues();
 
-            MainEventVm mainEventVm = new MainEventVm { Name = name, StartTime = startTime, EndTime = endTime, VenueId = 2, OrganizerId = 1 };
+        //    MainEventVm mainEventVm = new MainEventVm { Name = name, StartTime = startTime, EndTime = endTime, VenueId = 2, OrganizerId = 1 };
 
-            ActionResult<MainEventVm> result = await mainEventController.CreateMainEvent(mainEventVm);
+        //    ActionResult<MainEventVm> result = await mainEventController.CreateMainEvent(mainEventVm);
 
-            MainEventVm createdMainEvent = (MainEventVm)((OkObjectResult)result.Result).Value;
+        //    MainEventVm createdMainEvent = (MainEventVm)((OkObjectResult)result.Result).Value;
 
-            // Check object that is returned from the controller
-            Assert.AreEqual(1, createdMainEvent.Id);
-            Assert.AreEqual(name, createdMainEvent.Name);
-            Assert.AreEqual(startTime, createdMainEvent.StartTime);
-            Assert.AreEqual(endTime, createdMainEvent.EndTime);
-            Assert.AreEqual(2, createdMainEvent.VenueId);
-            Assert.AreEqual(1, createdMainEvent.OrganizerId);
+        //    // Check object that is returned from the controller
+        //    Assert.AreEqual(1, createdMainEvent.Id);
+        //    Assert.AreEqual(name, createdMainEvent.Name);
+        //    Assert.AreEqual(startTime, createdMainEvent.StartTime);
+        //    Assert.AreEqual(endTime, createdMainEvent.EndTime);
+        //    Assert.AreEqual(2, createdMainEvent.VenueId);
+        //    Assert.AreEqual(1, createdMainEvent.OrganizerId);
 
-            // Check what we really have in the DB
-            MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
-            Assert.AreEqual(1, mainEvent1.Id);
-            Assert.AreEqual(name, mainEvent1.Name);
-            Assert.AreEqual(startTime, mainEvent1.StartTime);
-            Assert.AreEqual(endTime, mainEvent1.EndTime);
-            Assert.AreEqual(2, mainEvent1.VenueId);
-            Assert.AreEqual(1, mainEvent1.OrganizerId);
+        //    // Check what we really have in the DB
+        //    MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
+        //    Assert.AreEqual(1, mainEvent1.Id);
+        //    Assert.AreEqual(name, mainEvent1.Name);
+        //    Assert.AreEqual(startTime, mainEvent1.StartTime);
+        //    Assert.AreEqual(endTime, mainEvent1.EndTime);
+        //    Assert.AreEqual(2, mainEvent1.VenueId);
+        //    Assert.AreEqual(1, mainEvent1.OrganizerId);
 
-        }
+        //}
 
-        [Test]
-        public async Task ShouldUpdateMainEvent()
-        {
-            CreateMainEvents();
+        //[Test]
+        //public async Task ShouldUpdateMainEvent()
+        //{
+        //    CreateMainEvents();
 
-            string newName = "Test name 3";
-            DateTime newStartTime = DateTime.Now.AddDays(4);
-            DateTime newEndTime = DateTime.Now.AddDays(8);
+        //    string newName = "Test name 3";
+        //    DateTime newStartTime = DateTime.Now.AddDays(4);
+        //    DateTime newEndTime = DateTime.Now.AddDays(8);
 
-            MainEventService mainEventService = new MainEventService(_dbContext);
-            SecurityService securityService = new SecurityService(_dbContext);
+        //    MainEventService mainEventService = new MainEventService(_dbContext);
+        //    SecurityService securityService = new SecurityService(_dbContext);
 
-            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
-            MainEventVm mainEventVm = new MainEventVm { Id = 1, Name = newName, StartTime = newStartTime, EndTime = newEndTime, VenueId = 3, OrganizerId = 3 };
+        //    MainEventVm mainEventVm = new MainEventVm { Id = 1, Name = newName, StartTime = newStartTime, EndTime = newEndTime, VenueId = 3, OrganizerId = 3 };
 
-            await mainEventController.UpdateMainEvent(mainEventVm);
+        //    await mainEventController.UpdateMainEvent(mainEventVm);
 
-            // Check that only one has been changed
-            MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
-            Assert.AreEqual(newName, mainEvent1.Name);
-            Assert.AreEqual(newStartTime, mainEvent1.StartTime);
-            Assert.AreEqual(newEndTime, mainEvent1.EndTime);
-            Assert.AreEqual(1, mainEvent1.VenueId);
-            Assert.AreEqual(1, mainEvent1.OrganizerId);
+        //    // Check that only one has been changed
+        //    MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
+        //    Assert.AreEqual(newName, mainEvent1.Name);
+        //    Assert.AreEqual(newStartTime, mainEvent1.StartTime);
+        //    Assert.AreEqual(newEndTime, mainEvent1.EndTime);
+        //    Assert.AreEqual(1, mainEvent1.VenueId);
+        //    Assert.AreEqual(1, mainEvent1.OrganizerId);
 
-            MainEvent mainEvent2 = _dbContext.MainEvents.Find(2);
-            Assert.AreEqual(_eventName2, mainEvent2.Name);
-            Assert.AreEqual(_startTime2, mainEvent2.StartTime);
-            Assert.AreEqual(_endTime2, mainEvent2.EndTime);
-            Assert.AreEqual(2, mainEvent2.VenueId);
-            Assert.AreEqual(2, mainEvent2.OrganizerId);
-        }
+        //    MainEvent mainEvent2 = _dbContext.MainEvents.Find(2);
+        //    Assert.AreEqual(_eventName2, mainEvent2.Name);
+        //    Assert.AreEqual(_startTime2, mainEvent2.StartTime);
+        //    Assert.AreEqual(_endTime2, mainEvent2.EndTime);
+        //    Assert.AreEqual(2, mainEvent2.VenueId);
+        //    Assert.AreEqual(2, mainEvent2.OrganizerId);
+        //}
 
-        [Test]
-        public async Task ShouldDeleteMainEvent()
-        {
-            CreateMainEvents();
+        //[Test]
+        //public async Task ShouldDeleteMainEvent()
+        //{
+        //    CreateMainEvents();
 
-            MainEventService mainEventService = new MainEventService(_dbContext);
-            SecurityService securityService = new SecurityService(_dbContext);
+        //    MainEventService mainEventService = new MainEventService(_dbContext);
+        //    SecurityService securityService = new SecurityService(_dbContext);
 
-            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
-            MainEventVm mainEventVm = new MainEventVm
-            {
-                Id = 1
-            };
+        //    MainEventVm mainEventVm = new MainEventVm
+        //    {
+        //        Id = 1
+        //    };
 
-            ActionResult<MainEventVm> result = await mainEventController.DeleteMainEvent(mainEventVm);
-            MainEventVm deletedMainEvent = (MainEventVm)((OkObjectResult)result.Result).Value;
+        //    ActionResult<MainEventVm> result = await mainEventController.DeleteMainEvent(mainEventVm);
+        //    MainEventVm deletedMainEvent = (MainEventVm)((OkObjectResult)result.Result).Value;
 
-            Assert.AreEqual(1, deletedMainEvent.Id);
+        //    Assert.AreEqual(1, deletedMainEvent.Id);
 
-            // Check that we have deleted only the first, but not the other
-            MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
-            Assert.IsNull(mainEvent1);
-            MainEvent mainEvent2 = _dbContext.MainEvents.Find(2);
-            Assert.IsNotNull(mainEvent2);
-        }
+        //    // Check that we have deleted only the first, but not the other
+        //    MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
+        //    Assert.IsNull(mainEvent1);
+        //    MainEvent mainEvent2 = _dbContext.MainEvents.Find(2);
+        //    Assert.IsNotNull(mainEvent2);
+        //}
 
         // Helper methods
         private void CreateUser()

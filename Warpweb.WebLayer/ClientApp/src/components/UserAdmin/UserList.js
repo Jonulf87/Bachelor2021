@@ -1,4 +1,4 @@
-﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper, Divider, Accordion, AccordionSummary, AccordionDetails, Button } from '@material-ui/core';
+﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper, Divider, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
 import authService from '../api-authorization/AuthorizeService';
@@ -26,57 +26,55 @@ const useStyles = makeStyles((theme) =>
 
 export default function UserList() {
 
-    let [isReady, setIsReady] = useState(false);
+    let [getUsersIsReady, setGetUsersIsReady] = useState(false);
+    let [getRolesIsReady, setGetRolesIsReady] = useState(false);
     let [userList, setUserList] = useState([]);
+
     let [expanded, setExpanded] = useState(false);
     let [userRoles, setUserRoles] = useState([]);
 
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false)
-    }
     let [userOpen, setUserOpen] = useState(false);
     let [rolesList, setRolesList] = useState([]);
 
     useEffect(() => {
         const getUsers = async () => {
-
             const authenticationResult = await authService.isAuthenticated();
-
             if (authenticationResult) {
                 const accessToken = await authService.getAccessToken();
-
                 const response = await fetch('/api/users/UsersList', {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
                     }
                 });
-
                 const result = await response.json();
                 setUserList(result);
-
-                //const rolesResponse = await fetch('/api/users/UserRoles', {
-                //    header: {
-                //        'Authorization': `Bearer ${accessToken}`
-                //    }
-                //});
-
-                
-                //const rolesResult = await rolesResponse.json();
-                //setUserRoles(rolesResult);
-
-
-                setIsReady(true);
+                setGetUsersIsReady(true);
             }
         }
-
-
-
-
-
         getUsers();
     }, []);
 
-    
+    useEffect(() => {
+        const getRoles = async () => {
+            if (expanded) {
+                const authenticationResult = await authService.isAuthenticated();
+                if (authenticationResult) {
+                    const accessToken = await authService.getAccessToken();
+                    const rolesResponse = await fetch(`/api/users/UserRoles/${expanded}`, {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    const rolesResult = await rolesResponse.json();
+                    setUserRoles(rolesResult);
+                    console.log(userRoles);
+                    setGetRolesIsReady(true);
+                }
+            }
+            
+        }
+        getRoles();
+    }, [expanded]);
 
 
     // Personalia er låst
@@ -91,7 +89,7 @@ export default function UserList() {
         return (
             <div className={classes.accordionWrapper}>
                 {userList.map((user) => (
-                    <Accordion key={user.id} expanded={expanded === user.id} onChange={handleChange(user.id)}>
+                    <Accordion key={user.id} expanded={expanded === user.id} onChange={(event, isExpanded) => setExpanded(isExpanded ? user.id : false)}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -195,7 +193,10 @@ export default function UserList() {
                                 {/*Rettighet og reset container*/}
                                 <Grid container xs={6}>
                                     <Grid item>
-                                        <Typography>Checkbokser definert som vi vil vises her. if cb === roles(checked)</Typography>
+                                        <Typography>Roller: Checkbokser definert som vi vil vises her. if cb === roles(checked)</Typography>
+                                        <Checkbox />
+
+                                        
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -211,7 +212,7 @@ export default function UserList() {
 
     return (
         <>
-            {isReady && (<>
+            {getUsersIsReady && (<>
                 <Typography>
                     <strong>Brukerliste</strong>
                 </Typography>
@@ -219,7 +220,7 @@ export default function UserList() {
             </>
             )}
 
-            {!isReady && (<p>Laster brukerliste...</p>)}
+            {!getUsersIsReady && (<p>Laster brukerliste...</p>)}
 
         </>
 
