@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
@@ -26,66 +27,68 @@ namespace WarpTest.WebLayer.Controllers
         private const string _address2 = "Test gate 321";
         private const string _email2 = "kari@test.com";
         private const string _userName2 = "user2";
+        private UserManager<ApplicationUser> _userManager;
 
         EntityEntry<ApplicationUser> _user1;
         EntityEntry<ApplicationUser> _user2;
 
+        [Test]
+        public async Task ShouldGetUsers()
+        {
+            CreateUsers();
 
-        //[Test]
-        //public async Task ShouldGetUsers()
-        //{
-        //    CreateUsers();
+            UserService userService = new UserService(_dbContext);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager);
+            UserController userController = new UserController(userService, securityService);
 
-        //    UserService userService = new UserService(_dbContext);
-        //    UserController userController = new UserController(userService);
+            List<UserListVm> result = await userController.GetUsersAsync();
 
-        //    List<UserListVm> result = await userController.GetUsersAsync();
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(_user1.Entity.Id, result[0].Id);
+            Assert.AreEqual(_firstName1, result[0].FirstName);
+            Assert.AreEqual(_middleName1, result[0].MiddleName);
+            Assert.AreEqual(_lastName1, result[0].LastName);
+            Assert.AreEqual(_user2.Entity.Id, result[1].Id);
+            Assert.AreEqual(_firstName2, result[1].FirstName);
+            Assert.AreEqual(_middleName2, result[1].MiddleName);
+            Assert.AreEqual(_lastName2, result[1].LastName);
+        }
 
-        //    Assert.AreEqual(2, result.Count);
-        //    Assert.AreEqual(_user1.Entity.Id, result[0].Id);
-        //    Assert.AreEqual(_firstName1, result[0].FirstName);
-        //    Assert.AreEqual(_middleName1, result[0].MiddleName);
-        //    Assert.AreEqual(_lastName1, result[0].LastName);
-        //    Assert.AreEqual(_user2.Entity.Id, result[1].Id);
-        //    Assert.AreEqual(_firstName2, result[1].FirstName);
-        //    Assert.AreEqual(_middleName2, result[1].MiddleName);
-        //    Assert.AreEqual(_lastName2, result[1].LastName);
-        //}
+        [Test]
+        public async Task ShouldGetUserById()
+        {
+            CreateUsers();
 
-        //[Test]
-        //public async Task ShouldGetUserById()
-        //{
-        //    CreateUsers();
+            UserService userService = new UserService(_dbContext);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager);
+            UserController userController = new UserController(userService, securityService);
 
-        //    UserService userService = new UserService(_dbContext);
-        //    UserController userController = new UserController(userService);
+            SetUser(userController, _user1.Entity.Id);
+            ActionResult<UserVm> result1 = await userController.GetUserAsync();
 
-        //    SetUser(userController, _user1.Entity.Id);
-        //    ActionResult<UserVm> result1 = await userController.GetUserAsync();
+            UserVm returnedUser1 = result1.Value;
+            Assert.AreEqual(_user1.Entity.Id, returnedUser1.Id);
+            Assert.AreEqual(_firstName1, returnedUser1.FirstName);
+            Assert.AreEqual(_middleName1, returnedUser1.MiddleName);
+            Assert.AreEqual(_lastName1, returnedUser1.LastName);
+            Assert.AreEqual(_phoneNumber1, returnedUser1.PhoneNumber);
+            Assert.AreEqual(_address1, returnedUser1.Address);
+            Assert.AreEqual(_email1, returnedUser1.EMail);
+            Assert.AreEqual(_userName1, returnedUser1.UserName);
 
-        //    UserVm returnedUser1 = result1.Value;
-        //    Assert.AreEqual(_user1.Entity.Id, returnedUser1.Id);
-        //    Assert.AreEqual(_firstName1, returnedUser1.FirstName);
-        //    Assert.AreEqual(_middleName1, returnedUser1.MiddleName);
-        //    Assert.AreEqual(_lastName1, returnedUser1.LastName);
-        //    Assert.AreEqual(_phoneNumber1, returnedUser1.PhoneNumber);
-        //    Assert.AreEqual(_address1, returnedUser1.Address);
-        //    Assert.AreEqual(_email1, returnedUser1.EMail);
-        //    Assert.AreEqual(_userName1, returnedUser1.UserName);
+            SetUser(userController, _user2.Entity.Id);
+            ActionResult<UserVm> result2 = await userController.GetUserAsync();
 
-        //    SetUser(userController, _user2.Entity.Id);
-        //    ActionResult<UserVm> result2 = await userController.GetUserAsync();
-
-        //    UserVm returnedUser2 = result2.Value;
-        //    Assert.AreEqual(_user2.Entity.Id, returnedUser2.Id);
-        //    Assert.AreEqual(_firstName2, returnedUser2.FirstName);
-        //    Assert.AreEqual(_middleName2, returnedUser2.MiddleName);
-        //    Assert.AreEqual(_lastName2, returnedUser2.LastName);
-        //    Assert.AreEqual(_phoneNumber2, returnedUser2.PhoneNumber);
-        //    Assert.AreEqual(_address2, returnedUser2.Address);
-        //    Assert.AreEqual(_email2, returnedUser2.EMail);
-        //    Assert.AreEqual(_userName2, returnedUser2.UserName);
-        //}
+            UserVm returnedUser2 = result2.Value;
+            Assert.AreEqual(_user2.Entity.Id, returnedUser2.Id);
+            Assert.AreEqual(_firstName2, returnedUser2.FirstName);
+            Assert.AreEqual(_middleName2, returnedUser2.MiddleName);
+            Assert.AreEqual(_lastName2, returnedUser2.LastName);
+            Assert.AreEqual(_phoneNumber2, returnedUser2.PhoneNumber);
+            Assert.AreEqual(_address2, returnedUser2.Address);
+            Assert.AreEqual(_email2, returnedUser2.EMail);
+            Assert.AreEqual(_userName2, returnedUser2.UserName);
+        }
 
         // Helper methods
         private void CreateUsers()
