@@ -14,12 +14,12 @@ namespace Warpweb.LogicLayer.Services
     public class SecurityService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SecurityService(ApplicationDbContext dbContext, UserManager<IdentityUser> userManager)
+        public SecurityService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
-            var _dbContext = dbContext;
-            var _userManager = userManager;
+            _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task<List<OrganizerListVm>> GetOrganizersAsync(string userId)
