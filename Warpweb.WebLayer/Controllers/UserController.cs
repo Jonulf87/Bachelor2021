@@ -41,9 +41,9 @@ namespace Warpweb.WebLayer.Controllers
 
         [HttpGet]
         [Route("UserRoles/{id}")]
-        public async Task<IList<string>> GetUserRolesAsync(string guid)
+        public async Task<IList<string>> GetUserRolesAsync(string id)
         {
-            return await _securityService.GetUserRolesAsync(guid);
+            return await _securityService.GetUserRolesAsync(id);
 
         }
     }
