@@ -37,7 +37,8 @@ namespace WarpTest.WebLayer.Controllers
             CreateUsers();
 
             UserService userService = new UserService(_dbContext);
-            UserController userController = new UserController(userService);
+            SecurityService securityService = new SecurityService(_dbContext);
+            UserController userController = new UserController(userService, securityService);
 
             List<UserListVm> result = await userController.GetUsersAsync();
 
@@ -58,7 +59,8 @@ namespace WarpTest.WebLayer.Controllers
             CreateUsers();
 
             UserService userService = new UserService(_dbContext);
-            UserController userController = new UserController(userService);
+            SecurityService securityService = new SecurityService(_dbContext);
+            UserController userController = new UserController(userService, securityService);
 
             SetUser(userController, _user1.Entity.Id);
             ActionResult<UserVm> result1 = await userController.GetUserAsync();
