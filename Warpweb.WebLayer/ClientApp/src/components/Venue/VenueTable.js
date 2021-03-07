@@ -1,5 +1,6 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useState } from "react";
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+//import { DataGrid } from '@material-ui/data-grid';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,20 +23,23 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-function createData(id, name, location, sqMeters, maxCapacity) {
-    return { id, name, location, sqMeters, maxCapacity };
-}
+//function createData(id, name, location, sqMeters, maxCapacity) {
+//    return { id, name, location, sqMeters, maxCapacity };
+//}
 
-const rows = [
-    createData(1, 'Vallhall arena', 'Oslo', '10000', '1337'),
-    createData(2, 'Randaberg Camping', 'Randaberg', '423', '52'),
-    createData(3, 'Vikingskipet', 'Lillehammer', '9001', '24000'),
-    createData(4, 'P35', 'Pilestredet', '10000', '0'),
-];
+//const rows = [
+//    createData(1, 'Vallhall arena', 'Oslo', '10000', '1337'),
+//    createData(2, 'Randaberg Camping', 'Randaberg', '423', '52'),
+//    createData(3, 'Vikingskipet', 'Lillehammer', '9001', '24000'),
+//    createData(4, 'P35', 'Pilestredet', '10000', '0'),
+//];
 
-export default function VenueTable() {
 
+export default function VenueTable(props) {
     const classes = useStyles();
+    const [rows, setRows] = useState(props.venues);
+
+    const handleClick = {};
 
     return (
 
@@ -43,7 +47,7 @@ export default function VenueTable() {
             <Typography gutterBottom variant="h5" component="h2">
                 Lokaleoversikt
             </Typography>
-            <Table className={classes.table} aria-label="simple table">
+            <Table className={classes.table} aria-label="Lokaletabell">
                 <TableHead>
                     <TableRow>
                         <TableCell align="left">Id</TableCell>
@@ -63,7 +67,7 @@ export default function VenueTable() {
                             <TableCell align="left">{row.sqMeters}</TableCell>
                             <TableCell align="left">{row.maxCapacity}</TableCell>
                             <TableCell align="left">
-                                <Button variant="contained">Mer info</Button>
+                                <Button variant="contained" onClick={handleClick}>Mer info</Button>
                             </TableCell>
                         </TableRow>
                     ))}
