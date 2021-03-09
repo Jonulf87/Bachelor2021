@@ -86,51 +86,80 @@ namespace Warpweb.WebLayer
                 //};
 
 
+                // Sjekk om rolle eksisterer
+                var roleSuperAdminExist = await roleManager.RoleExistsAsync("SuperAdmin");
+                var roleAdminExist = await roleManager.RoleExistsAsync("Admin");
+                var roleUserExist = await roleManager.RoleExistsAsync("User");
 
-                string[] roles = new string[]
+                // Lag rolle hvis ikke eksisterer
+                if (!roleSuperAdminExist)
                 {
-                    "Tenant",
-                    "Superadmin",
-                    "Admin",
-                    "Crewleader",
-                    "Crewmember",
-                    "user"
-                };
+                    var role = new IdentityRole();
+                    role.Name = "SuperAdmin";
+                    await roleManager.CreateAsync(role);
+                }
 
-                foreach (string role in roles)
+                if (!roleAdminExist)
                 {
-                    if (!await roleManager.RoleExistsAsync(role))
-                    {
-                        await roleManager.CreateAsync(new IdentityRole { Name = role });
-                    }
+                    var role = new IdentityRole();
+                    role.Name = "Admin";
+                    await roleManager.CreateAsync(role);
+                }
+
+                if (!roleUserExist)
+                {
+                    var role = new IdentityRole();
+                    role.Name = "User";
+                    await roleManager.CreateAsync(role);
                 }
 
                 var userExist = await userManager.FindByEmailAsync(user.Email);
+
                 if (userExist == null)
                 {
                     var result = await userManager.CreateAsync(user, "SuperHemmelig");
                     if (!result.Succeeded) {
                         Console.WriteLine("Failed to create user #1");
                     }
-                    
+
+                    var roleResult = await userManager.AddToRoleAsync(user, "SuperAdmin");
+                    if (!roleResult.Succeeded)
+                    {
+                        Console.WriteLine("Failed to add user #1 to role");
+                    }
+
                 };
 
                 var user2Exist = await userManager.FindByEmailAsync(user2.Email);
+
                 if (user2Exist == null)
                 {
                     var result = await userManager.CreateAsync(user2, "SuperHemmelig");
                     if (!result.Succeeded) {
                         Console.WriteLine("Failed to create user #2");
                     }
-                   
+
+                    var roleResult = await userManager.AddToRoleAsync(user2, "Admin");
+                    if (!roleResult.Succeeded)
+                    {
+                        Console.WriteLine("Failed to add user #1 to role");
+                    }
+
                 };
 
                 var user3Exist = await userManager.FindByEmailAsync(user3.Email);
+
                 if (user3Exist == null)
                 {
                     var result = await userManager.CreateAsync(user3, "IkkeHemmelig");
                     if (!result.Succeeded) {
                         Console.WriteLine("Failed to create user #3");
+                    }
+
+                    var roleResult = await userManager.AddToRoleAsync(user3, "User");
+                    if (!roleResult.Succeeded)
+                    {
+                        Console.WriteLine("Failed to add user #1 to role");
                     }
                 };
                 

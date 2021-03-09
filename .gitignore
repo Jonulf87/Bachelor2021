@@ -349,3 +349,6 @@ healthchecksdb
 # Test DB
 /Warpweb.WebLayer/WebApplication.db
 
+/Warpweb.DataAccessLayer/Data/Migrations/20210309100333_init.cs
+/Warpweb.DataAccessLayer/Data/Migrations/20210309100333_init.Designer.cs
+*.cs

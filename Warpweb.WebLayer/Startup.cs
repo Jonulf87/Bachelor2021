@@ -32,7 +32,7 @@ namespace Warpweb.WebLayer
                     Configuration.GetConnectionString("DefaultConnection")));
 
             // Needed per service
-            services.AddScoped<OrganizerService>(); 
+            services.AddScoped<OrganizerService>();
             services.AddScoped<SecurityService>();
             services.AddScoped<MainEventService>();
             services.AddScoped<TicketService>();
@@ -44,7 +44,9 @@ namespace Warpweb.WebLayer
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
