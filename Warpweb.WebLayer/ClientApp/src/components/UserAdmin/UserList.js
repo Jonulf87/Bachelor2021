@@ -67,7 +67,7 @@ export default function UserList() {
                     });
                     const rolesResult = await rolesResponse.json();
                     setUserRoles(rolesResult);
-                    console.log(userRoles);
+                    console.log(rolesResult[0]);
                     setGetRolesIsReady(true);
                 }
             }
@@ -193,10 +193,9 @@ export default function UserList() {
                                 {/*Rettighet og reset container*/}
                                 <Grid container xs={6}>
                                     <Grid item>
-                                        <Typography>Roller: Checkbokser definert som vi vil vises her. if cb === roles(checked)</Typography>
-                                        <Checkbox />
-
-                                        
+                                        {/*Checkbokser definert som vi vil vises her. if cb === roles(checked)*/}
+                                        <Typography>Roller:</Typography>
+                                        {userRoles.map((role) => (<Checkbox key={role.id}> {role.rolename} </Checkbox>))}
                                     </Grid>
                                 </Grid>
                             </Grid>
