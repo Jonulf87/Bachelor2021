@@ -15,11 +15,13 @@ namespace Warpweb.LogicLayer.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public SecurityService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public SecurityService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<List<OrganizerListVm>> GetOrganizersAsync(string userId)
@@ -35,12 +37,25 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
+
+ 
+
         public async Task<IList<string>> GetUserRolesAsync(string id)
         {
 
             var user = await _userManager.FindByIdAsync(id);
-            return await _userManager.GetRolesAsync(user);
-            
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var roles = _roleManager.Roles;
+
+            foreach(var role in roles)
+            {
+                System.Console.WriteLine(role);
+            }
+
+            return  await _userManager.GetRolesAsync(user);
+
+            //return list av objekter. Navn på rollen og rollen bool
         }
     }
 }

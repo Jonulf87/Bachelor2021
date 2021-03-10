@@ -1,4 +1,4 @@
-﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper, Divider, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox } from '@material-ui/core';
+﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper, Divider, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
 import authService from '../api-authorization/AuthorizeService';
@@ -67,7 +67,7 @@ export default function UserList() {
                     });
                     const rolesResult = await rolesResponse.json();
                     setUserRoles(rolesResult);
-                    console.log(rolesResult[0]);
+                    console.log(rolesResult);
                     setGetRolesIsReady(true);
                 }
             }
@@ -83,6 +83,29 @@ export default function UserList() {
     // Trenger knapp for passord reset
     // Sette rettigheter for bruker
     // Må finne en løsning for tekst i mobilversjon. ALternativet er å brekke det nedm men blir ikke optimalt.
+
+    function mapRoles() {
+        return (
+        <>
+            { userRoles.map((role) => 
+                <Grid item>
+                    <FormGroup>
+                        <FormControlLabel
+                            control={
+                                <Checkbox />
+                            }
+                            label={role}
+                        />
+                            
+                        
+                    </FormGroup>
+                </Grid>
+            )}
+         </>
+            
+        )
+
+    };
 
     function mapUsers() {
 
@@ -192,11 +215,7 @@ export default function UserList() {
 
                                 {/*Rettighet og reset container*/}
                                 <Grid container xs={6}>
-                                    <Grid item>
-                                        {/*Checkbokser definert som vi vil vises her. if cb === roles(checked)*/}
-                                        <Typography>Roller:</Typography>
-                                        {userRoles.map((role) => (<Checkbox key={role.id}> {role.rolename} </Checkbox>))}
-                                    </Grid>
+                                    {mapRoles()}
                                 </Grid>
                             </Grid>
 

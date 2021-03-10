@@ -123,6 +123,8 @@ namespace Warpweb.WebLayer
                     }
 
                     var roleResult = await userManager.AddToRoleAsync(user, "SuperAdmin");
+                    var roleResult2 = await userManager.AddToRoleAsync(user, "Admin");
+                    var reoleResult3 =await userManager.AddToRoleAsync(user, "User");
                     if (!roleResult.Succeeded)
                     {
                         Console.WriteLine("Failed to add user #1 to role");
