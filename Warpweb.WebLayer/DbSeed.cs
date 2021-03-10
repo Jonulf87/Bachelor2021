@@ -123,14 +123,16 @@ namespace Warpweb.WebLayer
                     }
 
                     var roleResult = await userManager.AddToRoleAsync(user, "SuperAdmin");
-                    var roleResult2 = await userManager.AddToRoleAsync(user, "Admin");
-                    var reoleResult3 =await userManager.AddToRoleAsync(user, "User");
+                    
                     if (!roleResult.Succeeded)
                     {
                         Console.WriteLine("Failed to add user #1 to role");
                     }
 
                 };
+
+                await userManager.AddToRoleAsync(user, "Admin");
+                await userManager.AddToRoleAsync(user, "User");
 
                 var user2Exist = await userManager.FindByEmailAsync(user2.Email);
 
@@ -148,6 +150,8 @@ namespace Warpweb.WebLayer
                     }
 
                 };
+
+                await userManager.AddToRoleAsync(user2, "SuperAdmin");
 
                 var user3Exist = await userManager.FindByEmailAsync(user3.Email);
 
