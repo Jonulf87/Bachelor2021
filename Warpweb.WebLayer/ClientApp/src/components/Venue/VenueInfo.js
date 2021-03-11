@@ -1,15 +1,12 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React from "react";
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 //import { DataGrid } from '@material-ui/data-grid';
-import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -25,8 +22,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function VenueInfo(props) {
     const classes = useStyles();
-
-    const [venue, setVenue] = useState(props.venues[1]);
+    const venue = props.venue;
 
     return (
         <TableContainer className={classes.root} component={Paper}>
@@ -38,11 +34,11 @@ export default function VenueInfo(props) {
                         </TableRow>
                         <TableRow>
                             <TableCell align="right">Sted</TableCell>
-                            <TableCell>{venue.location}</TableCell>
+                            <TableCell>{venue.adress}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell align="right">Areal</TableCell>
-                            <TableCell>{venue.sqMeters}</TableCell>
+                            <TableCell>{venue.area}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell align="right">Maks kapasitet</TableCell>
