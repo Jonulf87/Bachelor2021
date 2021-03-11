@@ -56,11 +56,20 @@ namespace Warpweb.LogicLayer.Services
                 {
                     if(role.Name == userRole)
                     {
-                        userRolesList.Add(new UserRolesListVm() { Name = role.Name, UserHasRole = true });
+                        var checkForExistingTrue = new UserRolesListVm() { Name = role.Name, UserHasRole = true };
+                        if(userRolesList.Any(a => a.Name == checkForExistingTrue.Name))
+                        {
+                            userRolesList.Add(checkForExistingTrue);
+                        }
                     }
                     else
                     {
-                        userRolesList.Add(new UserRolesListVm() { Name = role.Name, UserHasRole = false });
+                        var checkForExistingFalse = new UserRolesListVm() { Name = role.Name, UserHasRole = true };
+                        if(userRolesList.Any(a => a.Name == checkForExistingFalse.Name))
+                        {
+                            userRolesList.Add(checkForExistingFalse);
+                        }
+                        
                     }
 
                 }
