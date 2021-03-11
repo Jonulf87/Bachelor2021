@@ -87,14 +87,16 @@ export default function UserList() {
     function mapRoles() {
         return (
         <>
-            { userRoles.map((role) => 
-                <Grid item>
+                { userRoles.map((role) =>
+                    <Grid item key={ role.name }>
                     <FormGroup>
                         <FormControlLabel
                             control={
-                                <Checkbox />
+                                    <Checkbox
+                                        checked={role.userHasRole}
+                                    />
                             }
-                            label={role}
+                            label={role.name}
                         />
                             
                         

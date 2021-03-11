@@ -58,6 +58,8 @@ export default function CreateVenue() {
             'ContactId': contactId
         }
 
+
+
         const authenticationResult = await authService.isAuthenticated();
         if (authenticationResult) {
             const accessToken = await authService.getAccessToken();

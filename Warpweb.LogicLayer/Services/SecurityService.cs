@@ -40,7 +40,7 @@ namespace Warpweb.LogicLayer.Services
 
  
 
-        public async Task<IList<string>> GetUserRolesAsync(string id)
+        public async Task<List<UserRolesListVm>> GetUserRolesAsync(string id)
         {
 
             var user = await _userManager.FindByIdAsync(id);
@@ -48,12 +48,29 @@ namespace Warpweb.LogicLayer.Services
 
             var roles = _roleManager.Roles;
 
+            List<UserRolesListVm> userRolesList = new List<UserRolesListVm>();
+
             foreach(var role in roles)
             {
-                System.Console.WriteLine(role);
+                foreach(var userRole in userRoles)
+                {
+                    if(role.Name == userRole)
+                    {
+                        userRolesList.Add(new UserRolesListVm() { Name = role.Name, UserHasRole = true });
+                    }
+                    else
+                    {
+                        userRolesList.Add(new UserRolesListVm() { Name = role.Name, UserHasRole = false });
+                    }
+
+                }
+
+                
             }
 
-            return  await _userManager.GetRolesAsync(user);
+            return userRolesList;
+
+            //return  await _userManager.GetRolesAsync(user);
 
             //return list av objekter. Navn på rollen og rollen bool
         }
