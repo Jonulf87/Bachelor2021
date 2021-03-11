@@ -10,7 +10,6 @@ namespace Warpweb.LogicLayer.ViewModels
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public bool UserHasRole { get; set; } //Dette er en kommentar
-        public int Integer { get; set; }
+        public bool UserHasRole { get; set; }
     }
 }
