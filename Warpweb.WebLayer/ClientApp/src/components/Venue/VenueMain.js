@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React, { useState } from "react";
 import authService from '../api-authorization/AuthorizeService';
 import VenueInfo from './VenueInfo';
 import VenueAdmin from './VenueAdmin';
@@ -23,16 +23,20 @@ const dataRows = [
 
 export default function VenueMain() {
     const [rows, setRows] = useState(dataRows);
-    const [row, setRow] = useState(rows[0]);  
     
+    const [row, setRow] = useState(rows[1]);  
+
     const handleClick = (e) => {
-        setRow(rows[e])
+        const inId = parseInt(e);
+        const newRow = rows.find(obj => {
+            return obj.id === inId
+        })
+        console.log("newrow: " + newRow);
+        setRow(newRow);
     };
 
     const handleSetRows = (e) => {
-        console.log(rows);
         setRows(e);
-        console.log(rows);
     }
 
     return (
@@ -47,7 +51,9 @@ export default function VenueMain() {
                 <VenueAdmin />
             </Grid>
             <Grid item xs={12}>
-                <VenueTable onClick={handleClick} rows={rows} setRows={handleSetRows} />
+                <VenueTable onClick={handleClick} rows={rows} setRows={handleSetRows} >
+                    <VenueInfo/>
+                </VenueTable>
             </Grid>          
         </Grid>
     );
