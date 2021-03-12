@@ -9,10 +9,12 @@ namespace Warpweb.DataAccessLayer.Models
         public string Name { get; set; }
         public string OrgNumber { get; set; } // VAT/MVA code etc. Org.nr.
         public string Description { get; set; }
-        public string ContactId { get; set; }
 
-        [ForeignKey(nameof(ContactId))]
+        [ForeignKey(nameof(Contact))]
+        public string ContactId { get; set; }
+        [NotMapped] //Må ordnes. Får en relasjonsfeil. Er bare for å få applikasjonen til å kjøre
         public virtual ApplicationUser Contact { get; set; } //Organizer contact person
+        public virtual ICollection<ApplicationUser> Admins { get; set; }
         public virtual ICollection<MainEvent> MainEvent { get; set; }
 
     }

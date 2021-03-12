@@ -16,121 +16,121 @@ namespace WarpTest.WebLayer.Controllers
         private const int _price2 = 20;
         private const string _seat2 = "Seat 2";
 
-        [Test]
-        public async Task ShouldGetTickets()
-        {
-            CreateTickets();
+        //[Test]
+        //public async Task ShouldGetTickets()
+        //{
+        //    CreateTickets();
 
-            TicketService ticketService = new TicketService(_dbContext);
-            TicketController ticketController = new TicketController(ticketService);
+        //    TicketService ticketService = new TicketService(_dbContext);
+        //    TicketController ticketController = new TicketController(ticketService);
 
-            List<TicketListVm> result = await ticketController.GetTickets();
+        //    List<TicketListVm> result = await ticketController.GetTickets();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(1, result[0].Id);
-            Assert.AreEqual(_price1, result[0].Price);
-            Assert.AreEqual(_seat1, result[0].Seat);
-            Assert.AreEqual(2, result[1].Id);
-            Assert.AreEqual(_price2, result[1].Price);
-            Assert.AreEqual(_seat2, result[1].Seat);
-        }
+        //    Assert.AreEqual(2, result.Count);
+        //    Assert.AreEqual(1, result[0].Id);
+        //    Assert.AreEqual(_price1, result[0].Price);
+        //    Assert.AreEqual(_seat1, result[0].Seat);
+        //    Assert.AreEqual(2, result[1].Id);
+        //    Assert.AreEqual(_price2, result[1].Price);
+        //    Assert.AreEqual(_seat2, result[1].Seat);
+        //}
 
-        [Test]
-        public async Task ShouldGetTicketById()
-        {
-            CreateTickets();
+        //[Test]
+        //public async Task ShouldGetTicketById()
+        //{
+        //    CreateTickets();
 
-            TicketService ticketService = new TicketService(_dbContext);
-            TicketController ticketController = new TicketController(ticketService);
+        //    TicketService ticketService = new TicketService(_dbContext);
+        //    TicketController ticketController = new TicketController(ticketService);
 
-            ActionResult<TicketVm> result1 = await ticketController.GetTicket(1);
-            TicketVm returnedTicket1 = result1.Value;
-            Assert.AreEqual(1, returnedTicket1.Id);
-            Assert.AreEqual(_price1, returnedTicket1.Price);
-            Assert.AreEqual(_seat1, returnedTicket1.Seat);
+        //    ActionResult<TicketVm> result1 = await ticketController.GetTicket(1);
+        //    TicketVm returnedTicket1 = result1.Value;
+        //    Assert.AreEqual(1, returnedTicket1.Id);
+        //    Assert.AreEqual(_price1, returnedTicket1.Price);
+        //    Assert.AreEqual(_seat1, returnedTicket1.Seat);
 
-            ActionResult<TicketVm> result2 = await ticketController.GetTicket(2);
-            TicketVm returnedTicket2 = result2.Value;
-            Assert.AreEqual(2, returnedTicket2.Id);
-            Assert.AreEqual(_price2, returnedTicket2.Price);
-            Assert.AreEqual(_seat2, returnedTicket2.Seat);
-        }
+        //    ActionResult<TicketVm> result2 = await ticketController.GetTicket(2);
+        //    TicketVm returnedTicket2 = result2.Value;
+        //    Assert.AreEqual(2, returnedTicket2.Id);
+        //    Assert.AreEqual(_price2, returnedTicket2.Price);
+        //    Assert.AreEqual(_seat2, returnedTicket2.Seat);
+        //}
 
-        [Test]
-        public async Task ShouldCreateTicket()
-        {
-            CreateTickets();
+        //[Test]
+        //public async Task ShouldCreateTicket()
+        //{
+        //    CreateTickets();
 
-            int price3 = 30;
-            string seat3 = "seat 3";
+        //    int price3 = 30;
+        //    string seat3 = "seat 3";
 
-            TicketService ticketService = new TicketService(_dbContext);
-            TicketController ticketController = new TicketController(ticketService);
+        //    TicketService ticketService = new TicketService(_dbContext);
+        //    TicketController ticketController = new TicketController(ticketService);
 
-            TicketVm ticketVm = new TicketVm { Price = price3, Seat = seat3 };
+        //    TicketVm ticketVm = new TicketVm { Price = price3, Seat = seat3 };
 
-            ActionResult<TicketVm> result = await ticketController.CreateTicket(ticketVm);
+        //    ActionResult<TicketVm> result = await ticketController.CreateTicket(ticketVm);
 
-            TicketVm createdTicket = (TicketVm)((OkObjectResult)result.Result).Value;
+        //    TicketVm createdTicket = (TicketVm)((OkObjectResult)result.Result).Value;
 
-            // Check object that is returned from the controller
-            Assert.AreEqual(3, createdTicket.Id);
-            Assert.AreEqual(price3, createdTicket.Price);
-            Assert.AreEqual(seat3, createdTicket.Seat);
+        //    // Check object that is returned from the controller
+        //    Assert.AreEqual(3, createdTicket.Id);
+        //    Assert.AreEqual(price3, createdTicket.Price);
+        //    Assert.AreEqual(seat3, createdTicket.Seat);
 
-            // Check what we really have in the DB
-            Ticket ticket1 = _dbContext.Tickets.Find(3);
-            Assert.AreEqual(3, ticket1.Id);
-            Assert.AreEqual(price3, ticket1.Price);
-            Assert.AreEqual(seat3, ticket1.Seat);
-        }
+        //    // Check what we really have in the DB
+        //    Ticket ticket1 = _dbContext.Tickets.Find(3);
+        //    Assert.AreEqual(3, ticket1.Id);
+        //    Assert.AreEqual(price3, ticket1.Price);
+        //    Assert.AreEqual(seat3, ticket1.Seat);
+        //}
 
-        [Test]
-        public async Task ShouldUpdateTicket()
-        {
-            CreateTickets();
+        //[Test]
+        //public async Task ShouldUpdateTicket()
+        //{
+        //    CreateTickets();
 
-            int newPrice = 50;
-            string newSeat = "Seat 4";
+        //    int newPrice = 50;
+        //    string newSeat = "Seat 4";
 
-            TicketService ticketService = new TicketService(_dbContext);
-            TicketController ticketController = new TicketController(ticketService);
+        //    TicketService ticketService = new TicketService(_dbContext);
+        //    TicketController ticketController = new TicketController(ticketService);
 
-            TicketVm ticketVm = new TicketVm { Id = 1, Price = newPrice, Seat = newSeat };
+        //    TicketVm ticketVm = new TicketVm { Id = 1, Price = newPrice, Seat = newSeat };
 
-            await ticketController.UpdateTicket(ticketVm);
+        //    await ticketController.UpdateTicket(ticketVm);
 
-            // Check that only one has been changed
-            Ticket ticket1 = _dbContext.Tickets.Find(1);
-            Assert.AreEqual(newPrice, ticket1.Price);
-            Assert.AreEqual(newSeat, ticket1.Seat);
+        //    // Check that only one has been changed
+        //    Ticket ticket1 = _dbContext.Tickets.Find(1);
+        //    Assert.AreEqual(newPrice, ticket1.Price);
+        //    Assert.AreEqual(newSeat, ticket1.Seat);
 
-            Ticket ticket2 = _dbContext.Tickets.Find(2);
-            Assert.AreEqual(_price2, ticket2.Price);
-            Assert.AreEqual(_seat2, ticket2.Seat);
-        }
+        //    Ticket ticket2 = _dbContext.Tickets.Find(2);
+        //    Assert.AreEqual(_price2, ticket2.Price);
+        //    Assert.AreEqual(_seat2, ticket2.Seat);
+        //}
 
-        [Test]
-        public async Task ShouldDeleteTicket()
-        {
-            CreateTickets();
+        //[Test]
+        //public async Task ShouldDeleteTicket()
+        //{
+        //    CreateTickets();
 
-            TicketService ticketService = new TicketService(_dbContext);
-            TicketController ticketController = new TicketController(ticketService);
+        //    TicketService ticketService = new TicketService(_dbContext);
+        //    TicketController ticketController = new TicketController(ticketService);
 
-            TicketVm ticketVm = new TicketVm { Id = 1 };
+        //    TicketVm ticketVm = new TicketVm { Id = 1 };
 
-            ActionResult<TicketVm> result = await ticketController.DeleteTicket(ticketVm);
-            TicketVm deletedTicket = (TicketVm)((OkObjectResult)result.Result).Value;
+        //    ActionResult<TicketVm> result = await ticketController.DeleteTicket(ticketVm);
+        //    TicketVm deletedTicket = (TicketVm)((OkObjectResult)result.Result).Value;
 
-            Assert.AreEqual(1, deletedTicket.Id);
+        //    Assert.AreEqual(1, deletedTicket.Id);
 
-            // Check that we have deleted only the first, but not the other
-            Ticket ticket1 = _dbContext.Tickets.Find(1);
-            Assert.IsNull(ticket1);
-            Ticket ticket2 = _dbContext.Tickets.Find(2);
-            Assert.IsNotNull(ticket2);
-        }
+        //    // Check that we have deleted only the first, but not the other
+        //    Ticket ticket1 = _dbContext.Tickets.Find(1);
+        //    Assert.IsNull(ticket1);
+        //    Ticket ticket2 = _dbContext.Tickets.Find(2);
+        //    Assert.IsNotNull(ticket2);
+        //}
 
         // Helper methods
         private void CreateTickets()

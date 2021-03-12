@@ -9,6 +9,6 @@ namespace Warpweb.LogicLayer.ViewModels
 
         public string CrewName { get; set; }
 
-        public ICollection<CrewRole> CrewRoles { get; set; }
+        public ICollection<CrewUser> CrewRoles { get; set; }
     }
 }

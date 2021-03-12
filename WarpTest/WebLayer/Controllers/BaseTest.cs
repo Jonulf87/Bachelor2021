@@ -24,7 +24,7 @@ namespace WarpTest.WebLayer.Controllers
         [SetUp]
         public void Setup()
         {
-            CreateInMemoryDatabase();
+            //CreateInMemoryDatabase();
         }
 
         [TearDown]
@@ -46,25 +46,25 @@ namespace WarpTest.WebLayer.Controllers
             controller.ControllerContext = _controllerContext;
         }
 
-        private void CreateInMemoryDatabase()
-        {
-            _connection = new SqliteConnection("DataSource=:memory:");
+        //private void CreateInMemoryDatabase()
+        //{
+        //    _connection = new SqliteConnection("DataSource=:memory:");
 
-            _connection.Open();
+        //    _connection.Open();
 
-            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlite(_connection)
-                .Options;
+        //    _options = new DbContextOptionsBuilder<ApplicationDbContext>()
+        //        .UseSqlite(_connection)
+        //        .Options;
 
-            _dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()));
-            _dbContext.Database.EnsureDeleted();
-            _dbContext.Database.EnsureCreated();
+        //    _dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()));
+        //    _dbContext.Database.EnsureDeleted();
+        //    _dbContext.Database.EnsureCreated();
 
-            _dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 1, Description = "Test Rolle 1" });
-            _dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 2, Description = "Test Rolle 2" });
-            _dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 3, Description = "Test Rolle 3" });
+        //    _dbContext.CrewRoles.Add(new CrewUser { Id = 1, Description = "Test Rolle 1" });
+        //    _dbContext.CrewRoles.Add(new CrewUser { Id = 2, Description = "Test Rolle 2" });
+        //    _dbContext.CrewRoles.Add(new CrewUser { Id = 3, Description = "Test Rolle 3" });
 
-            _dbContext.SaveChangesAsync();
-        }
+        //    _dbContext.SaveChangesAsync();
+        //}
     }
 }

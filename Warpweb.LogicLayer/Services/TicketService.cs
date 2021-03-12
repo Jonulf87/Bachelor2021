@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
@@ -13,22 +14,25 @@ namespace Warpweb.LogicLayer.Services
     public class TicketService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMainEventProvider _mainEventProvider;
 
-        public TicketService(ApplicationDbContext dbContext)
+        public TicketService(ApplicationDbContext dbContext, IMainEventProvider mainEventProvider)
         {
             _dbContext = dbContext;
+            _mainEventProvider = mainEventProvider;
         }
 
         public async Task<List<TicketListVm>> GetTicketsAsync()
         {
             return await _dbContext.Tickets
+                .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
                 .Select(a => new TicketListVm
                 {
                     Id = a.Id,
                     MainEvent = a.MainEvent,
                     Price = a.Price,
                     Seat = a.Seat,
-                    Type = a.TicketType,
+                    Type = a.Type,
                     User = a.User
                 }).ToListAsync();
         }
@@ -36,14 +40,14 @@ namespace Warpweb.LogicLayer.Services
         public async Task<TicketVm> GetTicketAsync(int id)
         {
             return await _dbContext.Tickets
-                .Where(a => a.Id == id)
+                .Where(a => a.Id == id && a.MainEventId == _mainEventProvider.MainEventId)
                 .Select(a => new TicketVm
                 {
                     Id = a.Id,
                     MainEvent = a.MainEvent,
                     Price = a.Price,
                     Seat = a.Seat,
-                    Type = a.TicketType,
+                    Type = a.Type,
                     User = a.User
                 }).SingleOrDefaultAsync();
         }
@@ -51,7 +55,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<int> CreateTicketAsync(TicketVm ticketVm)
         {
             var existingTicket = _dbContext.Tickets
-                .Where(a => a.Id == ticketVm.Id || a.Seat == ticketVm.Seat)
+                .Where(a => (a.Id == ticketVm.Id || a.Seat == ticketVm.Seat) && a.MainEventId == _mainEventProvider.MainEventId)
                 .FirstOrDefault();
 
             if (existingTicket != null)
@@ -65,7 +69,7 @@ namespace Warpweb.LogicLayer.Services
                 Seat = ticketVm.Seat,
                 MainEvent = ticketVm.MainEvent,
                 Price = ticketVm.Price,
-                TicketType = ticketVm.Type,
+                Type = ticketVm.Type,
                 User = ticketVm.User
             };
 
@@ -77,7 +81,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<int> UpdateTicketAsync(TicketVm ticketVm)
         {
 
-            var existingTicket = _dbContext.Tickets.Where(a => a.Id == ticketVm.Id).FirstOrDefault();
+            var existingTicket = _dbContext.Tickets.Where(a => a.Id == ticketVm.Id && a.MainEventId == _mainEventProvider.MainEventId).FirstOrDefault();
 
             if (existingTicket == null)
             {
@@ -88,7 +92,7 @@ namespace Warpweb.LogicLayer.Services
             existingTicket.Seat = ticketVm.Seat;
             existingTicket.MainEvent = ticketVm.MainEvent;
             existingTicket.Price = ticketVm.Price;
-            existingTicket.TicketType = ticketVm.Type;
+            existingTicket.Type = ticketVm.Type;
             existingTicket.User = ticketVm.User;
 
             _dbContext.Update<Ticket>(existingTicket);
@@ -101,7 +105,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<int> DeleteTicketAsync(TicketVm ticketVm)
         {
 
-            var ticketToBeDeleted = _dbContext.Tickets.Where(a => a.Id == ticketVm.Id).FirstOrDefault();
+            var ticketToBeDeleted = _dbContext.Tickets.Where(a => a.Id == ticketVm.Id && a.MainEventId == _mainEventProvider.MainEventId).FirstOrDefault();
 
             if (ticketToBeDeleted == null)
             {

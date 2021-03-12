@@ -25,9 +25,9 @@ namespace Warpweb.LogicLayer.Services
             return await _dbContext.CrewRoles
                 .Select(a => new CrewRoleListVm
                 {
-                    CrewRoleId = a.CrewRoleId,
-                    Description = a.Description,
-                    Crews = a.Crews
+                    CrewRoleId = a.Id,
+                    IsLeader = a.IsLeader,
+                    CrewId = a.CrewId
                 })
                 .ToListAsync();
         }
@@ -35,12 +35,12 @@ namespace Warpweb.LogicLayer.Services
         public async Task<CrewRoleVm> GetCrewRoleAsync(int id)
         {
             return await _dbContext.CrewRoles
-                .Where(a => a.CrewRoleId == id)
+                .Where(a => a.Id == id)
                 .Select(a => new CrewRoleVm
                 {
-                    CrewRoleId = a.CrewRoleId,
-                    Description = a.Description,
-                    Crews = a.Crews
+                    CrewRoleId = a.Id,
+                    IsLeader = a.IsLeader,
+                    CrewId = a.CrewId
                 }).SingleOrDefaultAsync();
         }
 
@@ -57,50 +57,50 @@ namespace Warpweb.LogicLayer.Services
             }
             */
 
-            var crewrole = new CrewRole
+            var crewrole = new CrewUser
             {
-                Description = crewroleVm.Description
+                IsLeader = crewroleVm.IsLeader
             };
 
             _dbContext.CrewRoles.Add(crewrole);
             await _dbContext.SaveChangesAsync();
 
-            return crewrole.CrewRoleId;
+            return crewrole.Id;
         }
 
         public async Task<int> UpdateCrewRoleAsync(CrewRoleVm crewroleVm)
         {
-            var existingCrewRole = _dbContext.CrewRoles.Where(a => a.CrewRoleId == crewroleVm.CrewRoleId).FirstOrDefault();
+            var existingCrewRole = _dbContext.CrewRoles.Where(a => a.Id == crewroleVm.CrewRoleId).FirstOrDefault();
 
             if (existingCrewRole == null)
             {
                 throw new NotImplementedException();
             }
 
-            existingCrewRole.CrewRoleId = crewroleVm.CrewRoleId;
-            existingCrewRole.Description = crewroleVm.Description;
+            existingCrewRole.Id = crewroleVm.CrewRoleId;
+            existingCrewRole.IsLeader = crewroleVm.IsLeader;
 
-            _dbContext.Update<CrewRole>(existingCrewRole);
+            _dbContext.Update<CrewUser>(existingCrewRole);
             await _dbContext.SaveChangesAsync();
 
-            return existingCrewRole.CrewRoleId;
+            return existingCrewRole.Id;
         }
 
         // Restrict to SuperAdmin
         public async Task<int> DeleteCrewRoleAsync(CrewRoleVm crewroleVm)
         {
 
-            var crewroleToBeDeleted = _dbContext.CrewRoles.Where(a => a.CrewRoleId == crewroleVm.CrewRoleId).FirstOrDefault();
+            var crewroleToBeDeleted = _dbContext.CrewRoles.Where(a => a.Id == crewroleVm.CrewRoleId).FirstOrDefault();
 
             if (crewroleToBeDeleted == null)
             {
                 throw new NotImplementedException();
             }
 
-            _dbContext.Remove<CrewRole>(crewroleToBeDeleted);
+            _dbContext.Remove<CrewUser>(crewroleToBeDeleted);
             await _dbContext.SaveChangesAsync();
 
-            return crewroleToBeDeleted.CrewRoleId;
+            return crewroleToBeDeleted.Id;
 
         }
     }

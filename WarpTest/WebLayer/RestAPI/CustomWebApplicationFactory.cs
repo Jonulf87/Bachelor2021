@@ -43,9 +43,9 @@ namespace WarpTest.WebLayer.RestAPI
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
 
-            dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 1, Description = "Test Rolle 1" });
-            dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 2, Description = "Test Rolle 2" });
-            dbContext.CrewRoles.Add(new CrewRole { CrewRoleId = 3, Description = "Test Rolle 3" });
+            //dbContext.CrewRoles.Add(new CrewUser { Id = 1, Description = "Test Rolle 1" });
+            //dbContext.CrewRoles.Add(new CrewUser { Id = 2, Description = "Test Rolle 2" });
+            //dbContext.CrewRoles.Add(new CrewUser { Id = 3, Description = "Test Rolle 3" });
 
             dbContext.SaveChangesAsync();
         }

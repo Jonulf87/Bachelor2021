@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
@@ -17,15 +18,18 @@ namespace Warpweb.LogicLayer.Services
     public class VenueService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMainEventProvider _mainEventProvider;
 
-        public VenueService(ApplicationDbContext dbContext)
+        public VenueService(ApplicationDbContext dbContext, IMainEventProvider mainEventProvider)
         {
             _dbContext = dbContext;
+            _mainEventProvider = mainEventProvider;
         }
 
         public async Task<List<VenueListVm>> GetVenuesAsync()
         {
             return await _dbContext.Venues
+                .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
                 .Select(a => new VenueListVm
                 {
                     VenueId = a.VenueId,

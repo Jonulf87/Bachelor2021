@@ -12,21 +12,27 @@ namespace Warpweb.DataAccessLayer
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
-        
+
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Organizer> Organizers { get; set; }
         public DbSet<Crew> Crews { get; set; }
-        public DbSet<CrewRole> CrewRoles { get; set; }
+        public DbSet<CrewUser> CrewRoles { get; set; }
         public DbSet<MainEvent> MainEvents { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
         public DbSet<Venue> Venues { get; set; }
+        public DbSet<CrewPermission> CrewPermissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Organizer>()
+                .HasMany(a => a.Admins)
+                .WithMany(a => a.AdminRoleAtOrganizers)
+                .UsingEntity(a => a.ToTable("OrganizerAdmins"));
         }
 
     }

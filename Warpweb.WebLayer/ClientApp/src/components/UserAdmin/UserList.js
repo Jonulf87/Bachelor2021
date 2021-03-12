@@ -83,6 +83,15 @@ export default function UserList() {
     // Trenger knapp for passord reset
     // Sette rettigheter for bruker
     // Må finne en løsning for tekst i mobilversjon. ALternativet er å brekke det nedm men blir ikke optimalt.
+    
+
+    let toggleUserRole = (e, roleName) => {
+        let roles = [...userRoles];
+        let role = roles.find(r => r.name === roleName);
+        role.userHasRole = e.target.checked;
+
+        setUserRoles(roles);
+    }
 
     function mapRoles() {
         return (
@@ -94,6 +103,7 @@ export default function UserList() {
                             control={
                                     <Checkbox
                                         checked={role.userHasRole}
+                                        onChange={(e) => toggleUserRole(e, role.name)}
                                     />
                             }
                             label={role.name}
@@ -126,7 +136,7 @@ export default function UserList() {
                         <AccordionDetails>
                             <Grid container>
                                 {/*Personalia container*/}
-                                <Grid container xs={6}>
+                                <Grid item xs={6} container>
 
                                     <Grid item xs={3}>
                                         <Typography><strong>Fornavn</strong></Typography>
@@ -216,7 +226,7 @@ export default function UserList() {
                                 </Grid>
 
                                 {/*Rettighet og reset container*/}
-                                <Grid container xs={6}>
+                                <Grid item xs={6} container direction="column" align-items="flex-start">
                                     {mapRoles()}
                                 </Grid>
                             </Grid>

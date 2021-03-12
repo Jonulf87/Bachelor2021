@@ -4,9 +4,9 @@ namespace Warpweb.DataAccessLayer.Models
 {
     public class Crew
     {
-        public int CrewId { get; set; }
-        public string CrewName { get; set; } //Eks. Logistikkcrew, HMScrew
-        public ICollection<CrewRole> CrewRoles { get; set; }
-        //public virtual List<User> Users { get; set; } Crew peker mot crewrolle i stedet.
+        public int Id { get; set; }
+        public string Name { get; set; } //Eks. Logistikkcrew, HMScrew
+        public ICollection<CrewUser> Users { get; set; }
+        public ICollection<CrewPermission> CrewPermissions { get; set; }
     }
 }

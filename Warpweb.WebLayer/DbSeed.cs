@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
 
 namespace Warpweb.WebLayer
@@ -12,7 +13,7 @@ namespace Warpweb.WebLayer
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         
-        public DbSeed(IServiceScopeFactory serviceScopeFactory)
+        public DbSeed(IServiceScopeFactory serviceScopeFactory) //Iservicescopefactory håndterer DI'er, basically
         {
             _serviceScopeFactory = serviceScopeFactory;
         }
@@ -25,153 +26,171 @@ namespace Warpweb.WebLayer
         private async Task SeedRoles()
         {
             //Lager et nytt DI scope for å hente ut scoped services til å bruke i singleton
-            using (var scope = _serviceScopeFactory.CreateScope())
+            using var scope = _serviceScopeFactory.CreateScope(); //Nytt scope på samme måte som en request mot api.
+            var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+            var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+            var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+            var user = new ApplicationUser
             {
-                var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-                
+                FirstName = "Post",
+                LastName = "Man",
+                Email = "postmanwarpweb@gmail.com",
+                EmailConfirmed = true,
+                PhoneNumber = "+111111111111",
+                PhoneNumberConfirmed = true,
+                LockoutEnabled = false,
+                UserName = "postmanwarpweb@gmail.com"
+            };
 
-                var user = new ApplicationUser
-                {
-                    FirstName = "Post",
-                    LastName = "Man",
-                    Email = "postmanwarpweb@gmail.com",
-                    EmailConfirmed = true,
-                    PhoneNumber = "+111111111111",
-                    PhoneNumberConfirmed = true,
-                    LockoutEnabled = false,
-                    UserName = "postmanwarpweb@gmail.com"
-                };
+            var user2 = new ApplicationUser
+            {
+                FirstName = "Jan",
+                MiddleName = "Petter",
+                LastName = "Hansen",
+                Email = "Hansen69@mail.com",
+                EmailConfirmed = true,
+                PhoneNumber = "45454545",
+                PhoneNumberConfirmed = true,
+                LockoutEnabled = false,
+                UserName = "Hansen69@mail.com",
+                Address = "Hjemme"
 
-                var user2 = new ApplicationUser
-                {
-                    FirstName = "Jan",
-                    MiddleName = "Petter",
-                    LastName = "Hansen",
-                    Email = "Hansen69@mail.com",
-                    EmailConfirmed = true,
-                    PhoneNumber = "45454545",
-                    PhoneNumberConfirmed = true,
-                    LockoutEnabled = false,
-                    UserName = "Hansen69@mail.com",
-                    Address = "Hjemme"
+            };
 
-                };
+            var user3 = new ApplicationUser
+            {
+                FirstName = "Ole",
+                LastName = "Brum",
+                Email = "olebole247@gmail.com",
+                EmailConfirmed = true,
+                PhoneNumber = "+111111111111",
+                PhoneNumberConfirmed = true,
+                LockoutEnabled = false,
+                UserName = "olebole247@gmail.com"
+            };
 
-                var user3 = new ApplicationUser
-                {
-                    FirstName = "Ole",
-                    LastName = "Brum",
-                    Email = "olebole247@gmail.com",
-                    EmailConfirmed = true,
-                    PhoneNumber = "+111111111111",
-                    PhoneNumberConfirmed = true,
-                    LockoutEnabled = false,
-                    UserName = "olebole247@gmail.com"
-                };
-
-                //var ticketType = new TicketType
-                //{
-                //    BasePrice = 350,
-                //    DescriptionName = "Platinum"
-                //};
-                
-                
-
-                //var ticket = new Ticket
-                //{
-                //    Price = 350,
-                //    Seat = "14D",
-                //    TicketType = new TicketType { DescriptionName = "Platinum", BasePrice = 350 }
-                //};
+            //var ticketType = new TicketType
+            //{
+            //    BasePrice = 350,
+            //    DescriptionName = "Platinum"
+            //};
 
 
-                // Sjekk om rolle eksisterer
-                var roleSuperAdminExist = await roleManager.RoleExistsAsync("SuperAdmin");
-                var roleAdminExist = await roleManager.RoleExistsAsync("Admin");
-                var roleUserExist = await roleManager.RoleExistsAsync("User");
 
-                // Lag rolle hvis ikke eksisterer
-                if (!roleSuperAdminExist)
-                {
-                    var role = new IdentityRole();
-                    role.Name = "SuperAdmin";
-                    await roleManager.CreateAsync(role);
-                }
+            //var ticket = new Ticket
+            //{
+            //    Price = 350,
+            //    Seat = "14D",
+            //    TicketType = new TicketType { DescriptionName = "Platinum", BasePrice = 350 }
+            //};
 
-                if (!roleAdminExist)
-                {
-                    var role = new IdentityRole();
-                    role.Name = "Admin";
-                    await roleManager.CreateAsync(role);
-                }
 
-                if (!roleUserExist)
-                {
-                    var role = new IdentityRole();
-                    role.Name = "User";
-                    await roleManager.CreateAsync(role);
-                }
+            // Sjekk om rolle eksisterer
+            var roleSuperAdminExist = await roleManager.RoleExistsAsync("SuperAdmin");
+            var roleAdminExist = await roleManager.RoleExistsAsync("Admin");
+            var roleUserExist = await roleManager.RoleExistsAsync("User");
 
-                var userExist = await userManager.FindByEmailAsync(user.Email);
-
-                if (userExist == null)
-                {
-                    var result = await userManager.CreateAsync(user, "SuperHemmelig");
-                    if (!result.Succeeded) {
-                        Console.WriteLine("Failed to create user #1");
-                    }
-
-                    var roleResult = await userManager.AddToRoleAsync(user, "SuperAdmin");
-                    
-                    if (!roleResult.Succeeded)
-                    {
-                        Console.WriteLine("Failed to add user #1 to role");
-                    }
-
-                };
-
-                await userManager.AddToRoleAsync(user, "Admin");
-                await userManager.AddToRoleAsync(user, "User");
-
-                var user2Exist = await userManager.FindByEmailAsync(user2.Email);
-
-                if (user2Exist == null)
-                {
-                    var result = await userManager.CreateAsync(user2, "SuperHemmelig");
-                    if (!result.Succeeded) {
-                        Console.WriteLine("Failed to create user #2");
-                    }
-
-                    var roleResult = await userManager.AddToRoleAsync(user2, "Admin");
-                    if (!roleResult.Succeeded)
-                    {
-                        Console.WriteLine("Failed to add user #1 to role");
-                    }
-
-                };
-
-                await userManager.AddToRoleAsync(user2, "SuperAdmin");
-
-                var user3Exist = await userManager.FindByEmailAsync(user3.Email);
-
-                if (user3Exist == null)
-                {
-                    var result = await userManager.CreateAsync(user3, "IkkeHemmelig");
-                    if (!result.Succeeded) {
-                        Console.WriteLine("Failed to create user #3");
-                    }
-
-                    var roleResult = await userManager.AddToRoleAsync(user3, "User");
-                    if (!roleResult.Succeeded)
-                    {
-                        Console.WriteLine("Failed to add user #1 to role");
-                    }
-                };
-                
-                //user3Exist.Tickets.Add(ticket); 
-                //userManager.save(user3Exist);
+            // Lag rolle hvis ikke eksisterer
+            if (!roleSuperAdminExist)
+            {
+                var role = new IdentityRole();
+                role.Name = "SuperAdmin";
+                await roleManager.CreateAsync(role);
             }
+
+            if (!roleAdminExist)
+            {
+                var role = new IdentityRole();
+                role.Name = "Admin";
+                await roleManager.CreateAsync(role);
+            }
+
+            if (!roleUserExist)
+            {
+                var role = new IdentityRole();
+                role.Name = "User";
+                await roleManager.CreateAsync(role);
+            }
+
+            var userExist = await userManager.FindByEmailAsync(user.Email);
+
+            if (userExist == null)
+            {
+                var result = await userManager.CreateAsync(user, "SuperHemmelig");
+                if (!result.Succeeded)
+                {
+                    Console.WriteLine("Failed to create user #1");
+                }
+
+                var roleResult = await userManager.AddToRoleAsync(user, "SuperAdmin");
+
+                if (!roleResult.Succeeded)
+                {
+                    Console.WriteLine("Failed to add user #1 to role");
+                }
+
+            };
+
+            await userManager.AddToRoleAsync(user, "Admin");
+            await userManager.AddToRoleAsync(user, "User");
+
+            var user2Exist = await userManager.FindByEmailAsync(user2.Email);
+
+            if (user2Exist == null)
+            {
+                var result = await userManager.CreateAsync(user2, "SuperHemmelig");
+                if (!result.Succeeded)
+                {
+                    Console.WriteLine("Failed to create user #2");
+                }
+
+                var roleResult = await userManager.AddToRoleAsync(user2, "Admin");
+                if (!roleResult.Succeeded)
+                {
+                    Console.WriteLine("Failed to add user #1 to role");
+                }
+
+            };
+
+            await userManager.AddToRoleAsync(user2, "SuperAdmin");
+
+            var user3Exist = await userManager.FindByEmailAsync(user3.Email);
+
+            if (user3Exist == null)
+            {
+                var result = await userManager.CreateAsync(user3, "IkkeHemmelig");
+                if (!result.Succeeded)
+                {
+                    Console.WriteLine("Failed to create user #3");
+                }
+
+                var roleResult = await userManager.AddToRoleAsync(user3, "User");
+                if (!roleResult.Succeeded)
+                {
+                    Console.WriteLine("Failed to add user #1 to role");
+                }
+            };
+
+            var organizer = new Organizer
+            {
+                Name = "Warpcrew",
+                OrgNumber = "123456789",
+                Description = "Warpcrew er en ting."
+
+            };
+
+            dbContext.Organizers.Add(organizer);
+            dbContext.SaveChanges(); //Savechanges skriver automatisk Id tilbake til eksisterende objekt.
+
+            var mainEvent = new MainEvent
+            {
+                Name = "WarpZone 21",
+                OrganizerId = organizer.Id
+            };
+
+            dbContext.MainEvents.Add(mainEvent);
+            dbContext.SaveChanges();
         }
     }
 }

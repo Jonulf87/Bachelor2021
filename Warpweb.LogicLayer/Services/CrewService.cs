@@ -13,7 +13,7 @@ namespace Warpweb.LogicLayer.Services
     public class CrewService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<CrewService> _log;
+        private readonly ILogger<CrewService> _log; //Denne må ordnes. Den er i bruk nede, men vil alltid være null av en eller annen grunn. Foreløpig ukjent
 
         public CrewService(ApplicationDbContext dbContext)
         {
@@ -25,8 +25,8 @@ namespace Warpweb.LogicLayer.Services
             return await _dbContext.Crews
                 .Select(a => new CrewListVm
                 {
-                    CrewId = a.CrewId,
-                    CrewName = a.CrewName,
+                    CrewId = a.Id,
+                    CrewName = a.Name,
                 })
                 .ToListAsync();
         }
@@ -34,12 +34,12 @@ namespace Warpweb.LogicLayer.Services
         public async Task<CrewVm> GetCrewAsync(int id)
         {
             return await _dbContext.Crews
-                .Where(a => a.CrewId == id)
+                .Where(a => a.Id == id)
                 .Select(a => new CrewVm
                 {
-                    CrewId = a.CrewId,
-                    CrewName = a.CrewName,
-                    CrewRoles = a.CrewRoles
+                    CrewId = a.Id,
+                    CrewName = a.Name,
+                    //CrewRoles = a.CrewRoles
                 }).SingleOrDefaultAsync();
         }
 
@@ -49,20 +49,20 @@ namespace Warpweb.LogicLayer.Services
             try
             {
                 var existingCrew = _dbContext.Crews
-                .Where(a => a.CrewId == crewVm.CrewId || a.CrewName == crewVm.CrewName)
+                .Where(a => a.Id == crewVm.CrewId || a.Name == crewVm.CrewName)
                 .FirstOrDefault();
 
                 var crew = new Crew
                 {
-                    CrewName = crewVm.CrewName,
-                    CrewRoles = crewVm.CrewRoles
+                    Name = crewVm.CrewName,
+                    //Roles = crewVm.CrewRoles
 
                 };
 
                 _dbContext.Crews.Add(crew);
                 await _dbContext.SaveChangesAsync();
 
-                return crew.CrewId;
+                return crew.Id;
             }
             catch (CrewDoesNotExistException e)
             {
@@ -73,7 +73,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<int> UpdateCrewAsync(CrewVm crewVm)
         {
-            var existingCrew = _dbContext.Crews.Where(a => a.CrewId == crewVm.CrewId).FirstOrDefault();
+            var existingCrew = _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).FirstOrDefault();
 
             if(existingCrew == null)
             {
@@ -86,29 +86,29 @@ namespace Warpweb.LogicLayer.Services
 
             if (crewVm.CrewName == null)
             {
-                crewVm.CrewName = existingCrew.CrewName;
+                crewVm.CrewName = existingCrew.Name;
             }
 
-            if (crewVm.CrewRoles == null)
-            {
-                crewVm.CrewRoles = existingCrew.CrewRoles;
-            }
+            //if (crewVm.CrewRoles == null)
+            //{
+            //    crewVm.CrewRoles = existingCrew.Roles;
+            //}
 
-            existingCrew.CrewId = crewVm.CrewId;
-            existingCrew.CrewName = crewVm.CrewName;
-            existingCrew.CrewRoles = crewVm.CrewRoles;
+            existingCrew.Id = crewVm.CrewId;
+            existingCrew.Name = crewVm.CrewName;
+            //existingCrew.CrewRoles = crewVm.CrewRoles;
 
             _dbContext.Update<Crew>(existingCrew);
             await _dbContext.SaveChangesAsync();
 
-            return existingCrew.CrewId;
+            return existingCrew.Id;
         }
 
         // Restrict to SuperAdmin
         public async Task<int> DeleteCrewAsync(CrewVm crewVm)
         {
 
-            var crewToBeDeleted = _dbContext.Crews.Where(a => a.CrewId == crewVm.CrewId).FirstOrDefault();
+            var crewToBeDeleted = _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).FirstOrDefault();
 
             if (crewToBeDeleted == null)
             {
@@ -118,7 +118,7 @@ namespace Warpweb.LogicLayer.Services
             _dbContext.Remove<Crew>(crewToBeDeleted);
             await _dbContext.SaveChangesAsync();
 
-            return crewToBeDeleted.CrewId;
+            return crewToBeDeleted.Id;
 
         }
     }

@@ -13,7 +13,7 @@ namespace Warpweb.LogicLayer.ViewModels
         public string EMail { get; set; }
         public string UserName { get; set; }
         public ICollection<string> Roles { get; set; }
-        public ICollection<CrewRole> CrewRoles { get; set; }
+        public ICollection<CrewUser> CrewRoles { get; set; }
 
     }
 }

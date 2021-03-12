@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Services;
 
@@ -39,6 +41,9 @@ namespace Warpweb.WebLayer
             services.AddScoped<VenueService>();
             services.AddScoped<CrewService>();
             services.AddScoped<UserService>();
+            services.AddHttpContextAccessor();
+            services.AddTransient<IMainEventProvider, MainEventProvider>();
+
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 

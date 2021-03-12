@@ -48,40 +48,34 @@ namespace Warpweb.LogicLayer.Services
 
             var roles = _roleManager.Roles;
 
-            List<UserRolesListVm> userRolesList = new List<UserRolesListVm>();
-
-            foreach(var role in roles)
+            return roles.Select(a => new UserRolesListVm
             {
-                foreach(var userRole in userRoles)
-                {
-                    if(role.Name == userRole)
-                    {
-                        var checkForExistingTrue = new UserRolesListVm() { Name = role.Name, UserHasRole = true };
-                        if(userRolesList.Any(a => a.Name == checkForExistingTrue.Name))
-                        {
-                            userRolesList.Add(checkForExistingTrue);
-                        }
-                    }
-                    else
-                    {
-                        var checkForExistingFalse = new UserRolesListVm() { Name = role.Name, UserHasRole = true };
-                        if(userRolesList.Any(a => a.Name == checkForExistingFalse.Name))
-                        {
-                            userRolesList.Add(checkForExistingFalse);
-                        }
-                        
-                    }
+                Name = a.Name,
+                UserHasRole = userRoles.Any(b => b == a.Name)
+            }).ToList();
 
-                }
 
-                
-            }
 
-            return userRolesList;
+            //var userHasRole = false;
 
-            //return  await _userManager.GetRolesAsync(user);
+            //List<UserRolesListVm> userRolesList = new List<UserRolesListVm>();
 
-            //return list av objekter. Navn på rollen og rollen bool
+            //foreach(var role in roles)
+            //{
+            //    foreach(var userRole in userRoles)
+            //    {
+            //        if(role.Name == userRole)
+            //        {
+            //            userHasRole = true;
+            //        }
+            //    }
+            //    userRolesList.Add(new UserRolesListVm() { Name = role.Name, UserHasRole = userHasRole });
+            //    userHasRole = false;                
+            //}
+
+            //return userRolesList;
+
+
         }
     }
 }

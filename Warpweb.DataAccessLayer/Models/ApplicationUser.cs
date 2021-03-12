@@ -32,9 +32,18 @@ namespace Warpweb.DataAccessLayer.Models
         [PersonalData]
         public virtual ICollection<ApplicationUser> Minor { get; set; } // Den mindreårige i vergehierarkiet
         [PersonalData]
-        public virtual ICollection<CrewRole> CrewRoles { get; set; }
+        public virtual ICollection<CrewUser> Crews { get; set; }
         [PersonalData]
         public virtual ICollection<Ticket> Tickets { get; set; }
+        [PersonalData]
+        public virtual ICollection<Organizer> AdminRoleAtOrganizers { get; set; } //Organisasjonen brukeren er admin i
+        
+        [ForeignKey("CurrentMainEvent")]
+        public int? CurrentMainEventId { get; set; }
+        public virtual MainEvent CurrentMainEvent { get; set; }
+
+        [NotMapped] //Må ordnes. Får en relasjonsfeil. Er bare for å få applikasjonen til å kjøre
+        public virtual Organizer Organizer { get; set; }
 
 
 
