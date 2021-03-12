@@ -46,6 +46,7 @@ export default function VenueTable(props) {
     
 
     const handleSortClick = (e) => {       
+        //const index = e.target.id -1;
         const inRows = rows.sort(sortRows(e.target.id, order)); // sorting array
         const newOrder = (order === 'desc') ? 'asc' :  'desc';
         setOrder(newOrder);
@@ -55,7 +56,7 @@ export default function VenueTable(props) {
 
     //sending venue 
     const handleClick = (e) => {
-        const SelectedRow = e.currentTarget.value - 1;
+        const SelectedRow = e.currentTarget.value;
         props.onClick(SelectedRow);
     };
 
