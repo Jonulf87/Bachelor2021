@@ -338,3 +338,5 @@ ASALocalRun/
 
 # Mac OS
 *.DS_Store
+/Warpweb.DataAccessLayer/Migrations/20210311104657_Init.cs
+/Warpweb.DataAccessLayer/Migrations/20210311104657_Init.Designer.cs
