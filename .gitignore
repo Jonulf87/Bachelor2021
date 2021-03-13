@@ -338,17 +338,3 @@ ASALocalRun/
 
 # Mac OS
 *.DS_Store
-
-# BeatPulse healthcheck temp database
-healthchecksdb
-/Warpweb.DataAccessLayer/Migrations/20210203140046_warpweb.cs
-/Warpweb.DataAccessLayer/Migrations/20210203140046_warpweb.Designer.cs
-/Warpweb.DataAccessLayer/Migrations/20210226111519_warpweb.cs
-/Warpweb.DataAccessLayer/Migrations/20210226111519_warpweb.Designer.cs
-
-# Test DB
-/Warpweb.WebLayer/WebApplication.db
-
-/Warpweb.DataAccessLayer/Data/Migrations/20210309100333_init.cs
-/Warpweb.DataAccessLayer/Data/Migrations/20210309100333_init.Designer.cs
-*.cs
