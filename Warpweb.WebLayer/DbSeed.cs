@@ -177,7 +177,6 @@ namespace Warpweb.WebLayer
                 Name = "Warpcrew",
                 OrgNumber = "123456789",
                 Description = "Warpcrew er en ting."
-
             };
 
             dbContext.Organizers.Add(organizer);

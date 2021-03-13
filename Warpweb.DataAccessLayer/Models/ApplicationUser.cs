@@ -42,7 +42,8 @@ namespace Warpweb.DataAccessLayer.Models
         public int? CurrentMainEventId { get; set; }
         public virtual MainEvent CurrentMainEvent { get; set; }
 
-        [NotMapped] //Må ordnes. Får en relasjonsfeil. Er bare for å få applikasjonen til å kjøre
+        [ForeignKey(nameof(Organizer))]
+        public int OrganizerId { get; set; }
         public virtual Organizer Organizer { get; set; }
 
 

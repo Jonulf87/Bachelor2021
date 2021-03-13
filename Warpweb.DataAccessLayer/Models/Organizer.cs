@@ -12,8 +12,8 @@ namespace Warpweb.DataAccessLayer.Models
 
         [ForeignKey(nameof(Contact))]
         public string ContactId { get; set; }
-        [NotMapped] //Må ordnes. Får en relasjonsfeil. Er bare for å få applikasjonen til å kjøre
         public virtual ApplicationUser Contact { get; set; } //Organizer contact person
+
         public virtual ICollection<ApplicationUser> Admins { get; set; }
         public virtual ICollection<MainEvent> MainEvent { get; set; }
 
