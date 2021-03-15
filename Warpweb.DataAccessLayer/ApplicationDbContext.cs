@@ -33,6 +33,11 @@ namespace Warpweb.DataAccessLayer
                 .HasMany(a => a.Admins)
                 .WithMany(a => a.AdminRoleAtOrganizers)
                 .UsingEntity(a => a.ToTable("OrganizerAdmins"));
+
+            builder.Entity<ApplicationUser>()
+                .HasOne(a => a.Organizer)
+                .WithOne(b => b.Contact)
+                .HasForeignKey<Organizer>(b => b.ContactId);
         }
 
     }

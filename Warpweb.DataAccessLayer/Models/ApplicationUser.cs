@@ -43,8 +43,8 @@ namespace Warpweb.DataAccessLayer.Models
         public virtual MainEvent CurrentMainEvent { get; set; }
 
         [ForeignKey(nameof(Organizer))]
-        public int OrganizerId { get; set; }
-        public virtual Organizer Organizer { get; set; }
+        public int? OrganizerId { get; set; }
+        public virtual Organizer Organizer { get; set; } //Organisasjonen som brukeren er kontaktperson i
 
 
 
