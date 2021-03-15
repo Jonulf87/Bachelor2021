@@ -16,6 +16,5 @@ namespace Warpweb.DataAccessLayer.Models
 
         public virtual ICollection<ApplicationUser> Admins { get; set; }
         public virtual ICollection<MainEvent> MainEvent { get; set; }
-
     }
 }

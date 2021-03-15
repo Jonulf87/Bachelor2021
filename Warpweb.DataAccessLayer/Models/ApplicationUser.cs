@@ -29,24 +29,25 @@ namespace Warpweb.DataAccessLayer.Models
         [Display(Name = "Samtykkeperson")]
         [PersonalData]
         public virtual ICollection<ApplicationUser> Guardian { get; set; } // Verge / foresatt 
+        
         [PersonalData]
         public virtual ICollection<ApplicationUser> Minor { get; set; } // Den mindreårige i vergehierarkiet
+        
         [PersonalData]
         public virtual ICollection<CrewUser> Crews { get; set; }
+        
         [PersonalData]
         public virtual ICollection<Ticket> Tickets { get; set; }
+        
         [PersonalData]
         public virtual ICollection<Organizer> AdminRoleAtOrganizers { get; set; } //Organisasjonen brukeren er admin i
         
+        [InverseProperty("Contact")]
+        public virtual ICollection<Organizer> ContactForOrganizer { get; set; } //Organisasjonen som brukeren er kontaktperson i
+
         [ForeignKey("CurrentMainEvent")]
         public int? CurrentMainEventId { get; set; }
         public virtual MainEvent CurrentMainEvent { get; set; }
-
-        [ForeignKey(nameof(Organizer))]
-        public int? OrganizerId { get; set; }
-        public virtual Organizer Organizer { get; set; } //Organisasjonen som brukeren er kontaktperson i
-
-
 
         public int? YearlyFee { get; set; } //Null angir ingen kontingent betalt
     }
