@@ -22,7 +22,7 @@ export default function EventList() {
     useEffect(() => {
         const getEvents = async () => {
 
-            const authenticationResult = authService.isAuthenticated();
+            const authenticationResult = await authService.isAuthenticated();
 
             if (authenticationResult) {
                 const accessToken = await authService.getAccessToken();

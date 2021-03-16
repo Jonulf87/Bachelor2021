@@ -8,45 +8,21 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import authService from '../api-authorization/AuthorizeService';
 
-// Mock venues
-const venues = [
-    {
-        value: 'John Dee',
-    },
-    {
-        value: 'Rockefeller',
-    },
-    {
-        value: 'Spektrum',
-    },
-];
-
-// Mock organizers
-const organizers = [
-    {
-        value: 'WarpCrew',
-    },
-    {
-        value: 'CarpCrew',
-    },
-    {
-        value: 'WrapCrew',
-    },
-];
-
 const useStyles = makeStyles((theme) => ({
     root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: '25ch',
-        },
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: '25ch',
     },
 }));
-
 export default function CreateEvent() {
 
     const classes = useStyles();
-    const [venue, setVenue] = useState('Tom');
+
 
     //Her følger variablene til VM for mainEvent til posting
     let [name, setName] = useState();
@@ -59,7 +35,9 @@ export default function CreateEvent() {
 
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
     let [organizers, setOrganizers] = useState([]);
-    let [isReady, setIsReady] = useState(false);
+    let [venues, setVenues] = useState([]);
+    let [isOrganizerReady, setIsOrganizerReady] = useState(false);
+    let [isVenueReady, setIsVenueReady] = useState(false);
 
 
     //const handleChangeOrganizer = (event) => {
@@ -82,14 +60,32 @@ export default function CreateEvent() {
                 });
                 const result = await response.json();
                 setOrganizers(result);
-                setIsReady(true);
+                setIsOrganizerReady(true);
             }
         }
         getOrganizers();
     }, []);
 
+    useEffect(() => {
+        const getVenues = async () => {
+            const authenticationResult = await authService.isAuthenticated();
+            if (authenticationResult) {
+                const accessToken = await authService.getAccessToken();
+                const response = await fetch(`/api/venues/VenuesList`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const result = await response.json();
+                setVenues(result);
+                setIsVenueReady(true);
+            }
+        }
+        getVenues();
+    }, []);
+
     return (
-        <Grid container>
+        <Grid container className={classes.root}>
             <Grid item xs={12}>
                 <Typography gutterBottom variant="h5" component="h2">
                     Opprett arrangement
@@ -97,52 +93,76 @@ export default function CreateEvent() {
             </Grid>
             <Grid item xs={12}>
                 <Form>
-                    <TextField id="eventName" label="Navn på arrangement" />
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid item xs={12}>
+                        <TextField id="eventName" label="Navn på arrangement" fullWidth />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
-                        <KeyboardDatePicker
-                            id="startDatePicker"
-                            label="Startdato"
-                            variant="inline"
-                            value={startDate}
-                            onChange={(dateEvent) => setStartDate(dateEvent)}
+                            <KeyboardDatePicker
+                                id="startDatePicker"
+                                label="Startdato"
+                                variant="inline"
+                                value={startDate}
+                                onChange={(dateEvent) => setStartDate(dateEvent)}
 
-                        />
-                        <KeyboardTimePicker
-                            id="startTimePicker"
-                            label="Startklokkeslett"
-                            variant="inline"
-                            value={startTime}
-                            onChange={(timeEvent) => setStartTime(timeEvent)}
-                        />
+                            />
+                            <KeyboardTimePicker
+                                id="startTimePicker"
+                                label="Startklokkeslett"
+                                variant="inline"
+                                value={startTime}
+                                onChange={(timeEvent) => setStartTime(timeEvent)}
+                            />
+                        </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                id="endDatePicker"
+                                label="Sluttdato"
+                                variant="inline"
+                                value={endDate}
+                                onChange={(dateEvent) => setEndDate(dateEvent)}
 
-                        <KeyboardDatePicker
-                            id="endDatePicker"
-                            label="Sluttdato"
-                            variant="inline"
-                            value={endDate}
-                            onChange={(dateEvent) => setEndDate(dateEvent)}
-
-                        />
-                        <KeyboardTimePicker
-                            id="endTimePicker"
-                            label="Sluttklokkeslett"
-                            variant="inline"
-                            value={endTime}
-                            onChange={(timeEvent) => setEndTime(timeEvent)}
-                        />
-                    </MuiPickersUtilsProvider>
-                    <TextField
-                        select
-                        id="organizer"
-                        label="Organisator"
-                    >
-                        {organizers.map((organizer) => (
-                            <MenuItem key={organizer.id} value={organizer.id}>
-                                {organizer.name}
-                            </MenuItem>
-                        ))}
-                    </TextField>
+                            />
+                            <KeyboardTimePicker
+                                id="endTimePicker"
+                                label="Sluttklokkeslett"
+                                variant="inline"
+                                value={endTime}
+                                onChange={(timeEvent) => setEndTime(timeEvent)}
+                            />
+                        </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField
+                            select
+                            id="organizer"
+                            label="Organisator"
+                            fullWidth
+                        >
+                            {organizers.map((organizer) => (
+                                <MenuItem key={organizer.id} value={organizer.id}>
+                                    {organizer.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField
+                            select
+                            id="venue"
+                            label="Lokale"
+                            fullWidth
+                        >
+                            {venues.map((venue) => (
+                                <MenuItem key={venue.id} value={venue.id}>
+                                    {venue.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Grid>
                 </Form>
             </Grid>
         </Grid>

@@ -1,4 +1,4 @@
-﻿import { Card, CardContent, Typography, List, ListItem, ListItemText, Collapse, Grid, Paper, Divider, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
+﻿import { Typography, Grid, Divider, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
 import authService from '../api-authorization/AuthorizeService';
@@ -71,7 +71,7 @@ export default function UserList() {
                     setGetRolesIsReady(true);
                 }
             }
-            
+
         }
         getRoles();
     }, [expanded]);
@@ -83,7 +83,7 @@ export default function UserList() {
     // Trenger knapp for passord reset
     // Sette rettigheter for bruker
     // Må finne en løsning for tekst i mobilversjon. ALternativet er å brekke det nedm men blir ikke optimalt.
-    
+
 
     let toggleUserRole = (e, roleName) => {
         let roles = [...userRoles];
@@ -95,28 +95,25 @@ export default function UserList() {
 
     function mapRoles() {
         return (
-        <>
+            <>
                 { userRoles.map((role) =>
-                    <Grid item key={ role.name }>
-                    <FormGroup>
-                        <FormControlLabel
-                            control={
+                    <Grid item key={role.name}>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={
                                     <Checkbox
                                         checked={role.userHasRole}
                                         onChange={(e) => toggleUserRole(e, role.name)}
                                     />
-                            }
-                            label={role.name}
-                        />
-                            
-                        
-                    </FormGroup>
-                </Grid>
-            )}
-         </>
-            
-        )
+                                }
+                                label={role.name}
+                            />
+                        </FormGroup>
+                    </Grid>
+                )}
+            </>
 
+        )
     };
 
     function mapUsers() {

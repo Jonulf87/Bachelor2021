@@ -31,6 +31,7 @@ namespace Warpweb.WebLayer
             var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
             var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
+            //Lager noen brukere
             var user = new ApplicationUser
             {
                 FirstName = "Post",
@@ -70,22 +71,6 @@ namespace Warpweb.WebLayer
                 UserName = "olebole247@gmail.com"
             };
 
-            //var ticketType = new TicketType
-            //{
-            //    BasePrice = 350,
-            //    DescriptionName = "Platinum"
-            //};
-
-
-
-            //var ticket = new Ticket
-            //{
-            //    Price = 350,
-            //    Seat = "14D",
-            //    TicketType = new TicketType { DescriptionName = "Platinum", BasePrice = 350 }
-            //};
-
-
             // Sjekk om rolle eksisterer
             var roleSuperAdminExist = await roleManager.RoleExistsAsync("SuperAdmin");
             var roleAdminExist = await roleManager.RoleExistsAsync("Admin");
@@ -113,6 +98,8 @@ namespace Warpweb.WebLayer
                 await roleManager.CreateAsync(role);
             }
 
+            // Sett e-post/passord og rolle
+
             var userExist = await userManager.FindByEmailAsync(user.Email);
 
             if (userExist == null)
@@ -130,10 +117,7 @@ namespace Warpweb.WebLayer
                     Console.WriteLine("Failed to add user #1 to role");
                 }
 
-            };
-
-            await userManager.AddToRoleAsync(user, "Admin");
-            await userManager.AddToRoleAsync(user, "User");
+            };     
 
             var user2Exist = await userManager.FindByEmailAsync(user2.Email);
 
@@ -153,8 +137,6 @@ namespace Warpweb.WebLayer
 
             };
 
-            await userManager.AddToRoleAsync(user2, "SuperAdmin");
-
             var user3Exist = await userManager.FindByEmailAsync(user3.Email);
 
             if (user3Exist == null)
@@ -172,6 +154,14 @@ namespace Warpweb.WebLayer
                 }
             };
 
+            // Ekstra roller for user
+            await userManager.AddToRoleAsync(user, "Admin");
+            await userManager.AddToRoleAsync(user, "User");
+
+            // Ekstra rolle for user2
+            await userManager.AddToRoleAsync(user2, "SuperAdmin");
+
+            // Opprett noen arrangører
             var organizer = new Organizer
             {
                 Name = "Warpcrew",
@@ -179,7 +169,15 @@ namespace Warpweb.WebLayer
                 Description = "Warpcrew er en ting."
             };
 
+            var organizer2 = new Organizer
+            {
+                Name = "CarpWred",
+                OrgNumber = "34567891011",
+                Description = "Bedre enn WarpCrew"
+            };
+
             dbContext.Organizers.Add(organizer);
+            dbContext.Organizers.Add(organizer2);
             dbContext.SaveChanges(); //Savechanges skriver automatisk Id tilbake til eksisterende objekt.
 
             var mainEvent = new MainEvent
@@ -189,6 +187,22 @@ namespace Warpweb.WebLayer
             };
 
             dbContext.MainEvents.Add(mainEvent);
+            dbContext.SaveChanges();
+
+            var venue = new Venue
+            {
+                Name = "Rockefeller",
+                Address = "Torggata Bad 1"
+            };
+
+            var venue2 = new Venue
+            {
+                Name = "Spektrum",
+                Address = "Ikke Torggata Bad 1"
+            };
+
+            dbContext.Venues.Add(venue);
+            dbContext.Venues.Add(venue2);
             dbContext.SaveChanges();
         }
     }

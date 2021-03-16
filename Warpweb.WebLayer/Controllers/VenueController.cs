@@ -8,7 +8,7 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/venues")]
     [ApiController]
     [Authorize]
     public class VenueController : ControllerBase
@@ -21,6 +21,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpGet]
+        [Route("VenuesList")]
         public async Task<List<VenueListVm>> GetVenues()
         {
             return await _venueService.GetVenuesAsync();

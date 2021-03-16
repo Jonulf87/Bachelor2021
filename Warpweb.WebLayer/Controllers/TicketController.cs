@@ -8,7 +8,7 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tickets")]
     [ApiController]
     [Authorize]
     public class TicketController : ControllerBase
