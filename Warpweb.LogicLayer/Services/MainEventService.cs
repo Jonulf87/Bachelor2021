@@ -64,7 +64,6 @@ namespace Warpweb.LogicLayer.Services
                 Name = maineventVm.Name,
                 StartTime = maineventVm.StartTime,
                 EndTime = maineventVm.EndTime,
-                VenueId = maineventVm.VenueId,
                 OrganizerId = maineventVm.OrganizerId
             };
 

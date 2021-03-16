@@ -200,22 +200,22 @@ namespace WarpTest.WebLayer.Controllers
 
         private void CreateVenues()
         {
-            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 1", VenueAddress = "Venueveien 1", VenueAreaAvailable = 1, VenueCapacity = 1 });
+            _dbContext.Venues.Add(new Venue { Name = "Venue Name 1", Address = "Venueveien 1", AreaAvailable = 1, Capacity = 1 });
             _dbContext.SaveChanges();
-            _dbContext.Venues.Add(new Venue { VenueName = "Venue Name 2", VenueAddress = "Venueveien 2", VenueAreaAvailable = 2, VenueCapacity = 2 });
+            _dbContext.Venues.Add(new Venue { Name = "Venue Name 2", Address = "Venueveien 2", AreaAvailable = 2, Capacity = 2 });
             _dbContext.SaveChanges();
         }
 
-        private void CreateMainEvents()
-        {
-            CreateUser();
-            CreateOrganizers();
-            CreateVenues();            
+        //private void CreateMainEvents()
+        //{
+        //    CreateUser();
+        //    CreateOrganizers();
+        //    CreateVenues();            
 
-            _dbContext.MainEvents.Add(new MainEvent { Name = _eventName1, StartTime = _startTime1, EndTime = _endTime1, VenueId = 1, OrganizerId = 1 });
-            _dbContext.SaveChanges();
-            _dbContext.MainEvents.Add(new MainEvent { Name = _eventName2, StartTime = _startTime2, EndTime = _endTime2, VenueId = 2, OrganizerId = 2 });
-            _dbContext.SaveChanges();
-        }
+        //    _dbContext.MainEvents.Add(new MainEvent { Name = _eventName1, StartTime = _startTime1, EndTime = _endTime1, VenueId = 1, OrganizerId = 1 });
+        //    _dbContext.SaveChanges();
+        //    _dbContext.MainEvents.Add(new MainEvent { Name = _eventName2, StartTime = _startTime2, EndTime = _endTime2, VenueId = 2, OrganizerId = 2 });
+        //    _dbContext.SaveChanges();
+        //}
     }
 }

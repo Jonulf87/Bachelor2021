@@ -134,9 +134,9 @@ namespace WarpTest.WebLayer.Controllers
         // Helper methods
         private void CreateVenues()
         {
-            _dbContext.Venues.Add(new Venue { VenueName = _venueName1, VenueAddress = _venueAddress1, VenueAreaAvailable = _venueAreaAvailable1, VenueCapacity = _venueCapacity1 });
+            _dbContext.Venues.Add(new Venue { Name = _venueName1, Address = _venueAddress1, AreaAvailable = _venueAreaAvailable1, Capacity = _venueCapacity1 });
             _dbContext.SaveChanges();
-            _dbContext.Venues.Add(new Venue { VenueName = _venueName2, VenueAddress = _venueAddress2, VenueAreaAvailable = _venueAreaAvailable2, VenueCapacity = _venueCapacity2 });
+            _dbContext.Venues.Add(new Venue { Name = _venueName2, Address = _venueAddress2, AreaAvailable = _venueAreaAvailable2, Capacity = _venueCapacity2 });
             _dbContext.SaveChanges();
         }
     }

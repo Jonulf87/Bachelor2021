@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Warpweb.DataAccessLayer;
 
 namespace Warpweb.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210315120031_ICv14")]
+    partial class ICv14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -468,6 +470,9 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("VenueId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizerId");
@@ -630,29 +635,30 @@ namespace Warpweb.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("VenueId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AreaAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
                     b.Property<int>("MainEventId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("VenueAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("VenueAreaAvailable")
+                        .HasColumnType("int");
 
-                    b.HasIndex("MainEventId");
+                    b.Property<int>("VenueCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VenueName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VenueId");
+
+                    b.HasIndex("MainEventId")
+                        .IsUnique();
 
                     b.ToTable("Venues");
                 });
@@ -863,8 +869,8 @@ namespace Warpweb.DataAccessLayer.Migrations
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>
                 {
                     b.HasOne("Warpweb.DataAccessLayer.Models.MainEvent", "MainEvent")
-                        .WithMany()
-                        .HasForeignKey("MainEventId")
+                        .WithOne("Venue")
+                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Venue", "MainEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -885,6 +891,11 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Navigation("CrewPermissions");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.MainEvent", b =>
+                {
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Organizer", b =>

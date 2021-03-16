@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Warpweb.DataAccessLayer.Migrations
 {
-    public partial class newIC : Migration
+    public partial class ICv14 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,13 +25,13 @@ namespace Warpweb.DataAccessLayer.Migrations
                 name: "Crews",
                 columns: table => new
                 {
-                    CrewId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CrewName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Crews", x => x.CrewId);
+                    table.PrimaryKey("PK_Crews", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -74,22 +74,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Venues",
-                columns: table => new
-                {
-                    VenueId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    VenueName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VenueAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VenueAreaAvailable = table.Column<int>(type: "int", nullable: false),
-                    VenueCapacity = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Venues", x => x.VenueId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -111,6 +95,194 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CrewPermissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CrewId = table.Column<int>(type: "int", nullable: false),
+                    PermissionType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CrewPermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CrewPermissions_Crews_CrewId",
+                        column: x => x.CrewId,
+                        principalTable: "Crews",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserApplicationUser",
+                columns: table => new
+                {
+                    GuardianId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MinorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserApplicationUser", x => new { x.GuardianId, x.MinorId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CrewRoles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsLeader = table.Column<bool>(type: "bit", nullable: false),
+                    CrewId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CrewRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CrewRoles_Crews_CrewId",
+                        column: x => x.CrewId,
+                        principalTable: "Crews",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrganizerAdmins",
+                columns: table => new
+                {
+                    AdminRoleAtOrganizersId = table.Column<int>(type: "int", nullable: false),
+                    AdminsId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganizerAdmins", x => new { x.AdminRoleAtOrganizersId, x.AdminsId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Organizers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrgNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organizers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MainEvents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VenueId = table.Column<int>(type: "int", nullable: false),
+                    OrganizerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MainEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MainEvents_Organizers_OrganizerId",
+                        column: x => x.OrganizerId,
+                        principalTable: "Organizers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Venues",
+                columns: table => new
+                {
+                    VenueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VenueName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VenueAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VenueAreaAvailable = table.Column<int>(type: "int", nullable: false),
+                    VenueCapacity = table.Column<int>(type: "int", nullable: false),
+                    MainEventId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Venues", x => x.VenueId);
+                    table.ForeignKey(
+                        name: "FK_Venues_MainEvents_MainEventId",
+                        column: x => x.MainEventId,
+                        principalTable: "MainEvents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -123,6 +295,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                     IsAllergic = table.Column<bool>(type: "bit", nullable: false),
                     AllergyDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrentMainEventId = table.Column<int>(type: "int", nullable: true),
                     YearlyFee = table.Column<int>(type: "int", nullable: true),
                     VenueId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -143,6 +316,12 @@ namespace Warpweb.DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_MainEvents_CurrentMainEventId",
+                        column: x => x.CurrentMainEventId,
+                        principalTable: "MainEvents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Venues_VenueId",
                         column: x => x.VenueId,
@@ -171,157 +350,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApplicationUserApplicationUser",
-                columns: table => new
-                {
-                    GuardianId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MinorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUserApplicationUser", x => new { x.GuardianId, x.MinorId });
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserApplicationUser_AspNetUsers_GuardianId",
-                        column: x => x.GuardianId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserApplicationUser_AspNetUsers_MinorId",
-                        column: x => x.MinorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CrewRoles",
-                columns: table => new
-                {
-                    CrewRoleId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CrewRoles", x => x.CrewRoleId);
-                    table.ForeignKey(
-                        name: "FK_CrewRoles_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Organizers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrgNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Organizers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Organizers_AspNetUsers_ContactId",
-                        column: x => x.ContactId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Row",
                 columns: table => new
                 {
@@ -344,59 +372,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CrewCrewRole",
-                columns: table => new
-                {
-                    CrewRolesCrewRoleId = table.Column<int>(type: "int", nullable: false),
-                    CrewsCrewId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CrewCrewRole", x => new { x.CrewRolesCrewRoleId, x.CrewsCrewId });
-                    table.ForeignKey(
-                        name: "FK_CrewCrewRole_CrewRoles_CrewRolesCrewRoleId",
-                        column: x => x.CrewRolesCrewRoleId,
-                        principalTable: "CrewRoles",
-                        principalColumn: "CrewRoleId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CrewCrewRole_Crews_CrewsCrewId",
-                        column: x => x.CrewsCrewId,
-                        principalTable: "Crews",
-                        principalColumn: "CrewId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MainEvents",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    VenueId = table.Column<int>(type: "int", nullable: false),
-                    OrganizerId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MainEvents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MainEvents_Organizers_OrganizerId",
-                        column: x => x.OrganizerId,
-                        principalTable: "Organizers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MainEvents_Venues_VenueId",
-                        column: x => x.VenueId,
-                        principalTable: "Venues",
-                        principalColumn: "VenueId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tickets",
                 columns: table => new
                 {
@@ -404,16 +379,16 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Price = table.Column<int>(type: "int", nullable: false),
                     Seat = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TicketTypeId = table.Column<int>(type: "int", nullable: true),
-                    MainEventId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    TicketTypeId = table.Column<int>(type: "int", nullable: false),
+                    MainEventId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tickets_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Tickets_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -422,7 +397,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                         column: x => x.MainEventId,
                         principalTable: "MainEvents",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -512,6 +487,11 @@ namespace Warpweb.DataAccessLayer.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_CurrentMainEventId",
+                table: "AspNetUsers",
+                column: "CurrentMainEventId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_VenueId",
                 table: "AspNetUsers",
                 column: "VenueId");
@@ -524,14 +504,19 @@ namespace Warpweb.DataAccessLayer.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CrewCrewRole_CrewsCrewId",
-                table: "CrewCrewRole",
-                column: "CrewsCrewId");
+                name: "IX_CrewPermissions_CrewId",
+                table: "CrewPermissions",
+                column: "CrewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CrewRoles_ApplicationUserId",
                 table: "CrewRoles",
                 column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrewRoles_CrewId",
+                table: "CrewRoles",
+                column: "CrewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -550,9 +535,9 @@ namespace Warpweb.DataAccessLayer.Migrations
                 column: "OrganizerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MainEvents_VenueId",
-                table: "MainEvents",
-                column: "VenueId");
+                name: "IX_OrganizerAdmins_AdminsId",
+                table: "OrganizerAdmins",
+                column: "AdminsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Organizers_ContactId",
@@ -595,6 +580,11 @@ namespace Warpweb.DataAccessLayer.Migrations
                 column: "VenueId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tickets_ApplicationUserId",
+                table: "Tickets",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_MainEventId",
                 table: "Tickets",
                 column: "MainEventId");
@@ -605,14 +595,95 @@ namespace Warpweb.DataAccessLayer.Migrations
                 column: "TicketTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tickets_UserId",
-                table: "Tickets",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TicketTypes_SeatId",
                 table: "TicketTypes",
                 column: "SeatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Venues_MainEventId",
+                table: "Venues",
+                column: "MainEventId",
+                unique: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ApplicationUserApplicationUser_AspNetUsers_GuardianId",
+                table: "ApplicationUserApplicationUser",
+                column: "GuardianId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ApplicationUserApplicationUser_AspNetUsers_MinorId",
+                table: "ApplicationUserApplicationUser",
+                column: "MinorId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                table: "AspNetUserTokens",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_CrewRoles_AspNetUsers_ApplicationUserId",
+                table: "CrewRoles",
+                column: "ApplicationUserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_OrganizerAdmins_AspNetUsers_AdminsId",
+                table: "OrganizerAdmins",
+                column: "AdminsId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_OrganizerAdmins_Organizers_AdminRoleAtOrganizersId",
+                table: "OrganizerAdmins",
+                column: "AdminRoleAtOrganizersId",
+                principalTable: "Organizers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Organizers_AspNetUsers_ContactId",
+                table: "Organizers",
+                column: "ContactId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Tickets_TicketTypes_TicketTypeId",
@@ -620,7 +691,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                 column: "TicketTypeId",
                 principalTable: "TicketTypes",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -630,20 +701,20 @@ namespace Warpweb.DataAccessLayer.Migrations
                 table: "Organizers");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Tickets_AspNetUsers_UserId",
+                name: "FK_Tickets_AspNetUsers_ApplicationUserId",
                 table: "Tickets");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_MainEvents_Venues_VenueId",
-                table: "MainEvents");
+                name: "FK_Tickets_MainEvents_MainEventId",
+                table: "Tickets");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Venues_MainEvents_MainEventId",
+                table: "Venues");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_SeatGroup_Venues_VenueId",
                 table: "SeatGroup");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_MainEvents_Organizers_OrganizerId",
-                table: "MainEvents");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Row_SeatGroup_SeatGroupId",
@@ -676,10 +747,16 @@ namespace Warpweb.DataAccessLayer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CrewCrewRole");
+                name: "CrewPermissions");
+
+            migrationBuilder.DropTable(
+                name: "CrewRoles");
 
             migrationBuilder.DropTable(
                 name: "DeviceCodes");
+
+            migrationBuilder.DropTable(
+                name: "OrganizerAdmins");
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
@@ -688,19 +765,19 @@ namespace Warpweb.DataAccessLayer.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "CrewRoles");
-
-            migrationBuilder.DropTable(
                 name: "Crews");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Venues");
+                name: "MainEvents");
 
             migrationBuilder.DropTable(
                 name: "Organizers");
+
+            migrationBuilder.DropTable(
+                name: "Venues");
 
             migrationBuilder.DropTable(
                 name: "SeatGroup");
@@ -710,9 +787,6 @@ namespace Warpweb.DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tickets");
-
-            migrationBuilder.DropTable(
-                name: "MainEvents");
 
             migrationBuilder.DropTable(
                 name: "TicketTypes");

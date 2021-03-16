@@ -32,29 +32,29 @@ namespace Warpweb.LogicLayer.Services
                 .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
                 .Select(a => new VenueListVm
                 {
-                    VenueId = a.VenueId,
-                    VenueName = a.VenueName
+                    VenueId = a.Id,
+                    VenueName = a.Name
                 }).ToListAsync();
         }
 
         public async Task<VenueVm> GetVenueAsync(int id)
         {
             return await _dbContext.Venues
-                .Where(a => a.VenueId == id)
+                .Where(a => a.Id == id)
                 .Select(a => new VenueVm
                 {
-                    VenueId = a.VenueId,
-                    VenueName = a.VenueName,
-                    VenueAddress = a.VenueAddress,
-                    VenueAreaAvailable = a.VenueAreaAvailable,
-                    VenueCapacity = a.VenueCapacity,
+                    VenueId = a.Id,
+                    VenueName = a.Name,
+                    VenueAddress = a.Address,
+                    VenueAreaAvailable = a.AreaAvailable,
+                    VenueCapacity = a.Capacity,
                 }).SingleOrDefaultAsync();
         }
 
         public async Task<int> CreateVenueAsync(VenueVm venueVm)
         {
             var existingVenue = _dbContext.Venues
-                .Where(a => a.VenueId == venueVm.VenueId || a.VenueName == venueVm.VenueName)
+                .Where(a => a.Id == venueVm.VenueId || a.Name == venueVm.VenueName)
                 .FirstOrDefault();
 
             if (existingVenue != null)
@@ -64,45 +64,45 @@ namespace Warpweb.LogicLayer.Services
 
             var venue = new Venue
             {
-                VenueId = venueVm.VenueId,
-                VenueName = venueVm.VenueName,
-                VenueAddress = venueVm.VenueAddress,
-                VenueAreaAvailable = venueVm.VenueAreaAvailable,
-                VenueCapacity = venueVm.VenueCapacity
+                Id = venueVm.VenueId,
+                Name = venueVm.VenueName,
+                Address = venueVm.VenueAddress,
+                AreaAvailable = venueVm.VenueAreaAvailable,
+                Capacity = venueVm.VenueCapacity
             };
 
             _dbContext.Venues.Add(venue);
             await _dbContext.SaveChangesAsync();
 
-            return venue.VenueId;
+            return venue.Id;
         }
 
         public async Task<int> UpdateVenueAsync(VenueVm venueVm)
         {
-            var existingVenue = _dbContext.Venues.Where(a => a.VenueId == venueVm.VenueId).FirstOrDefault();
+            var existingVenue = _dbContext.Venues.Where(a => a.Id == venueVm.VenueId).FirstOrDefault();
 
             if (existingVenue == null)
             {
                 throw new NotImplementedException();
             }
 
-            existingVenue.VenueId = venueVm.VenueId;
-            existingVenue.VenueName = venueVm.VenueName;
-            existingVenue.VenueAddress = venueVm.VenueAddress;
-            existingVenue.VenueAreaAvailable = venueVm.VenueAreaAvailable;
-            existingVenue.VenueCapacity = venueVm.VenueCapacity;
+            existingVenue.Id = venueVm.VenueId;
+            existingVenue.Name = venueVm.VenueName;
+            existingVenue.Address = venueVm.VenueAddress;
+            existingVenue.AreaAvailable = venueVm.VenueAreaAvailable;
+            existingVenue.Capacity = venueVm.VenueCapacity;
 
             _dbContext.Update<Venue>(existingVenue);
             await _dbContext.SaveChangesAsync();
 
-            return existingVenue.VenueId;
+            return existingVenue.Id;
         }
 
         // Restrict to SuperAdmin
         public async Task<int> DeleteVenueAsync(VenueVm venueVm)
         {
 
-            var venueToBeDeleted = _dbContext.Venues.Where(a => a.VenueId == venueVm.VenueId).FirstOrDefault();
+            var venueToBeDeleted = _dbContext.Venues.Where(a => a.Id == venueVm.VenueId).FirstOrDefault();
 
             if (venueToBeDeleted == null)
             {
@@ -112,7 +112,7 @@ namespace Warpweb.LogicLayer.Services
             _dbContext.Remove<Venue>(venueToBeDeleted);
             await _dbContext.SaveChangesAsync();
 
-            return venueToBeDeleted.VenueId;
+            return venueToBeDeleted.Id;
 
         }
     }
