@@ -11,9 +11,9 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    [Route("api/arrangement")]
+    [Route("api/events")]
     [ApiController]
-    [Authorize(Roles = "admin")]
+    [Authorize]
 
     // CRUD functionality for events
     // Note Dependency Injection for SecurityService and MainEventService
@@ -30,7 +30,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpGet]
-        
+        [Route("EventsList")]
         public async Task<List<MainEventListVm>> GetMainEvents()
         {
             return await _mainEventService.GetMainEventsAsync();
