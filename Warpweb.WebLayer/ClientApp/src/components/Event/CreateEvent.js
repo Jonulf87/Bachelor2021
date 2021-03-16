@@ -1,11 +1,12 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
+import { Grid, Button, Typography, CardContent, Card, TextField, MenuItem } from '@material-ui/core';
+import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Form } from 'reactstrap';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import authService from '../api-authorization/AuthorizeService';
 
 // Mock venues
 const venues = [
@@ -45,115 +46,105 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateEvent() {
 
     const classes = useStyles();
-    const [organizer, setOrganizer] = React.useState('Tom');
-    const [venue, setVenue] = React.useState('Tom');
+    const [venue, setVenue] = useState('Tom');
 
-    const handleChangeOrganizer = (event) => {
-        setOrganizer(event.target.value);
-    };
+    //Her følger variablene til VM for mainEvent til posting
+    let [name, setName] = useState();
+    let [startDate, setStartDate] = useState();
+    let [startTime, setStartTime] = useState();
+    let [endDate, setEndDate] = useState();
+    let [endTime, setEndTime] = useState();
+    let [organizerId, setOrganizerId] = useState(null);
+    let [venueId, setVenueId] = useState(null);
 
-    const handleChangeVenue = (event) => {
-        setVenue(event.target.value);
-    };
+    //Her følger noen variabler som trengs for å vise rette ting og greier og saker
+    let [organizers, setOrganizers] = useState([]);
+    let [isReady, setIsReady] = useState(false);
+
+
+    //const handleChangeOrganizer = (event) => {
+    //    setOrganizer(event.target.value);
+    //};
+
+    //const handleChangeVenue = (event) => {
+    //    setVenue(event.target.value);
+    //};
+
+    useEffect(() => {
+        const getOrganizers = async () => {
+            const authenticationResult = await authService.isAuthenticated();
+            if (authenticationResult) {
+                const accessToken = await authService.getAccessToken();
+                const response = await fetch(`/api/tenant`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const result = await response.json();
+                setOrganizers(result);
+                setIsReady(true);
+            }
+        }
+        getOrganizers();
+    }, []);
 
     return (
-        <Card className={classes.root}>
-            <CardContent>
+        <Grid container>
+            <Grid item xs={12}>
                 <Typography gutterBottom variant="h5" component="h2">
                     Opprett arrangement
                 </Typography>
-                <form className={classes.root} noValidate autoComplete="off">
-                    <div>
-                        <div>
-                            <TextField
-                                id="outlined-full-width"
-                                label="Arrangementnavn"
-                                style={{ margin: 8 }}
-                                placeholder="Navn på arrangement"
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
-                            />
-                        </div>
+            </Grid>
+            <Grid item xs={12}>
+                <Form>
+                    <TextField id="eventName" label="Navn på arrangement" />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
-                        <div className={classes.container} noValidate>
-                            <TextField
-                                id="datetime-local"
-                                label="Startdato / tidspunkt"
-                                type="datetime-local"
-                                defaultValue="2017-05-24T10:30"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
-                            />
+                        <KeyboardDatePicker
+                            id="startDatePicker"
+                            label="Startdato"
+                            variant="inline"
+                            value={startDate}
+                            onChange={(dateEvent) => setStartDate(dateEvent)}
 
-                            <TextField
-                                id="datetime-local"
-                                label="Sluttdato / tidspunkt"
-                                type="datetime-local"
-                                defaultValue="2017-05-24T10:30"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
-                            />
-                        </div>
+                        />
+                        <KeyboardTimePicker
+                            id="startTimePicker"
+                            label="Startklokkeslett"
+                            variant="inline"
+                            value={startTime}
+                            onChange={(timeEvent) => setStartTime(timeEvent)}
+                        />
 
-                        <TextField
-                            id="outlined-select-organizer-native"
-                            select
-                            label="Arrangør"
-                            value={organizer}
-                            onChange={handleChangeOrganizer}
-                            SelectProps={{
-                                native: true,
-                            }}
-                            helperText="Velg arranør"
-                            variant="outlined"
-                        >
-                            {organizers.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.value}
-                                </option>
-                            ))}
-                        </TextField>
+                        <KeyboardDatePicker
+                            id="endDatePicker"
+                            label="Sluttdato"
+                            variant="inline"
+                            value={endDate}
+                            onChange={(dateEvent) => setEndDate(dateEvent)}
 
-                        <TextField
-                            id="outlined-select-venue-native"
-                            select
-                            label="Lokale"
-                            value={venue}
-                            onChange={handleChangeVenue}
-                            SelectProps={{
-                                native: true,
-                            }}
-                            helperText="Velg lokale"
-                            variant="outlined"
-                        >
-                            {venues.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.value}
-                                </option>
-                            ))}
-                        </TextField>
-                    </div>
-                </form>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    className={classes.button}
-                    startIcon={<SaveIcon />}
-                >
-                    Lagre
-                </Button>
-            </CardContent>
-        </Card>
+                        />
+                        <KeyboardTimePicker
+                            id="endTimePicker"
+                            label="Sluttklokkeslett"
+                            variant="inline"
+                            value={endTime}
+                            onChange={(timeEvent) => setEndTime(timeEvent)}
+                        />
+                    </MuiPickersUtilsProvider>
+                    <TextField
+                        select
+                        id="organizer"
+                        label="Organisator"
+                    >
+                        {organizers.map((organizer) => (
+                            <MenuItem key={organizer.id} value={organizer.id}>
+                                {organizer.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Form>
+            </Grid>
+        </Grid>
     );
 }
