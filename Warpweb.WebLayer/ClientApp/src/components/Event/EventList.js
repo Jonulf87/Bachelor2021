@@ -1,17 +1,7 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import { Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import authService from '../api-authorization/AuthorizeService';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -24,37 +14,37 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function ParticipantInfo() {
+export default function EventList() {
 
     let [isReady, setIsReady] = useState(false);
-    let [usersList, setUsersList] = useState([]);
+    let [eventsList, setEventsList] = useState([]);
 
     useEffect(() => {
-        const getUsers = async () => {
+        const getEvents = async () => {
 
             const authenticationResult = authService.isAuthenticated();
 
             if (authenticationResult) {
                 const accessToken = await authService.getAccessToken();
 
-                const response = await fetch('/api/users/UsersList', {
+                const response = await fetch('/api/events/EventsList', {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
                     }
                 });
 
                 const result = await response.json();
-                setUsersList(result);
+                setEventsList(result);
 
                 setIsReady(true);
             }
         }
 
-        getUsers();
+        getEvents();
 
     }, []);
 
-    function getUsersFromList() {
+    function getEventsFromList() {
 
         return (
 
@@ -62,20 +52,18 @@ export default function ParticipantInfo() {
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="left">Fornavn</TableCell>
-                            <TableCell align="left">Etternavn</TableCell>
-                            <TableCell align="left">Epost</TableCell>
-                            <TableCell align="left">Nick</TableCell>
+                            <TableCell align="left">Navn</TableCell>
+                            <TableCell align="left">Starttid</TableCell>
+                            <TableCell align="left">Slutttid</TableCell>
                             <TableCell align="left"></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {usersList.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell align="left">{user.firstName}</TableCell>
-                                <TableCell align="left">{user.lastName}</TableCell>
-                                <TableCell align="left">{user.email}</TableCell>
-                                <TableCell align="left">{user.userName}</TableCell>
+                        {eventsList.map((event) => (
+                            <TableRow key={event.id}>
+                                <TableCell align="left">{event.name}</TableCell>
+                                <TableCell align="left">{event.startTime}</TableCell>
+                                <TableCell align="left">{event.endTime}</TableCell>
                                 <TableCell align="left">
                                     <Button variant="contained">Mer info</Button>
                                 </TableCell>
@@ -96,11 +84,11 @@ export default function ParticipantInfo() {
             <CardContent>
 
                 <Typography gutterBottom variant="h5" component="h2">
-                    Deltakeroversikt
+                    Arrangementsoversikt
                 </Typography>
 
                 {isReady && (<>
-                    {getUsersFromList()}
+                    {getEventsFromList()}
                 </>)}
 
                 {!isReady && (<p>Loading...</p>)}
