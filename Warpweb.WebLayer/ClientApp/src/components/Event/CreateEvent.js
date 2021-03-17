@@ -16,8 +16,15 @@ const useStyles = makeStyles((theme) => ({
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
-        width: '25ch',
     },
+    keyboardDatePicker: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),  
+    },
+    keyboardTimePicker: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1), 
+    }
 }));
 
 export default function CreateEvent() {
@@ -94,23 +101,26 @@ export default function CreateEvent() {
             <Grid item xs={12}>
                 <Form>
                     <Grid item xs={12}>
-                        <TextField id="eventName" label="Navn på arrangement" fullWidth />
+                        <TextField className={classes.textField} id="eventName" label="Navn på arrangement" fullWidth />
                     </Grid>
                     <Grid item xs={12}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-
                             <KeyboardDatePicker
+                                className={classes.keyboardDatePicker}
                                 id="startDatePicker"
                                 label="Startdato"
                                 variant="inline"
+                                margin="normal"
                                 value={startDate}
                                 onChange={(dateEvent) => setStartDate(dateEvent)}
 
                             />
                             <KeyboardTimePicker
+                                className={classes.keyboardTimePicker}
                                 id="startTimePicker"
                                 label="Startklokkeslett"
                                 variant="inline"
+                                margin="normal"
                                 value={startTime}
                                 onChange={(timeEvent) => setStartTime(timeEvent)}
                             />
@@ -119,17 +129,21 @@ export default function CreateEvent() {
                     <Grid item xs={12}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
+                                className={classes.keyboardDatePicker}
                                 id="endDatePicker"
                                 label="Sluttdato"
                                 variant="inline"
+                                margin="normal"
                                 value={endDate}
                                 onChange={(dateEvent) => setEndDate(dateEvent)}
 
                             />
                             <KeyboardTimePicker
+                                className={classes.keyboardTimePicker}
                                 id="endTimePicker"
                                 label="Sluttklokkeslett"
                                 variant="inline"
+                                margin="normal"
                                 value={endTime}
                                 onChange={(timeEvent) => setEndTime(timeEvent)}
                             />
@@ -138,6 +152,7 @@ export default function CreateEvent() {
                     <Grid item xs={6}>
                         <TextField
                             select
+                            className={classes.textField} 
                             id="organizer"
                             label="Organisator"
                             fullWidth
@@ -152,6 +167,7 @@ export default function CreateEvent() {
                     <Grid item xs={6}>
                         <TextField
                             select
+                            className={classes.textField} 
                             id="venue"
                             label="Lokale"
                             fullWidth
