@@ -12,23 +12,34 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
+        
     },
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
+        marginBottom: 10
     },
     keyboardDatePicker: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
+        marginBottom: 10
     },
     keyboardTimePicker: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
+        marginBottom: 10
     },
     typography: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
+        marginBottom: 10
+    },
+    button: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        marginBottom: 10
     }
+
 }));
 
 export default function CreateEvent() {
@@ -185,6 +196,15 @@ export default function CreateEvent() {
                             </TextField>
                         </Grid>
                     </Form>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        className={classes.button}
+                        startIcon={<SaveIcon />}
+                    >
+                        Lagre
+                </Button>
                 </Grid>
             </Grid>
         </Paper>

@@ -180,30 +180,40 @@ namespace Warpweb.WebLayer
             dbContext.Organizers.Add(organizer2);
             dbContext.SaveChanges(); //Savechanges skriver automatisk Id tilbake til eksisterende objekt.
 
+            //// Legg til noen lokaler
+            //var venue = new Venue
+            //{
+            //    Name = "Rockefeller",
+            //    Address = "Torggata Bad 1"
+            //};
+
+            //var venue2 = new Venue
+            //{
+            //    Name = "Spektrum",
+            //    Address = "Ikke Torggata Bad 1"
+            //};
+
+            //dbContext.Venues.Add(venue);
+            //dbContext.Venues.Add(venue2);
+            //dbContext.SaveChanges();
+
+            // Legg til noen events
             var mainEvent = new MainEvent
             {
                 Name = "WarpZone 21",
-                OrganizerId = organizer.Id
+                OrganizerId = organizer.Id,
+            };
+
+            var mainEvent2 = new MainEvent
+            {
+                Name = "BygdeLan 21",
+                OrganizerId = organizer2.Id,
             };
 
             dbContext.MainEvents.Add(mainEvent);
+            dbContext.MainEvents.Add(mainEvent2);
             dbContext.SaveChanges();
-
-            var venue = new Venue
-            {
-                Name = "Rockefeller",
-                Address = "Torggata Bad 1"
-            };
-
-            var venue2 = new Venue
-            {
-                Name = "Spektrum",
-                Address = "Ikke Torggata Bad 1"
-            };
-
-            dbContext.Venues.Add(venue);
-            dbContext.Venues.Add(venue2);
-            dbContext.SaveChanges();
+  
         }
     }
 }
