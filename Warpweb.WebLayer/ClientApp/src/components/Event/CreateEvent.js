@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
-import { Grid, Button, Typography, CardContent, Card, TextField, MenuItem } from '@material-ui/core';
+import { Grid, Button, Typography, Paper, TextField, MenuItem } from '@material-ui/core';
 import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Form } from 'reactstrap';
 import 'date-fns';
@@ -19,11 +19,15 @@ const useStyles = makeStyles((theme) => ({
     },
     keyboardDatePicker: {
         marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),  
+        marginRight: theme.spacing(1),
     },
     keyboardTimePicker: {
         marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1), 
+        marginRight: theme.spacing(1),
+    },
+    typography: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
     }
 }));
 
@@ -92,95 +96,97 @@ export default function CreateEvent() {
     }, []);
 
     return (
-        <Grid container className={classes.root}>
-            <Grid item xs={12}>
-                <Typography gutterBottom variant="h5" component="h2">
-                    Opprett arrangement
+        <Paper variant="outlined" elevation={2}>
+            <Grid container className={classes.root}>
+                <Grid item xs={12}>
+                    <Typography className={classes.typography} gutterBottom variant="h5" component="h2">
+                        Opprett arrangement
                 </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Form>
-                    <Grid item xs={12}>
-                        <TextField className={classes.textField} id="eventName" label="Navn på arrangement" fullWidth />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                className={classes.keyboardDatePicker}
-                                id="startDatePicker"
-                                label="Startdato"
-                                variant="inline"
-                                margin="normal"
-                                value={startDate}
-                                onChange={(dateEvent) => setStartDate(dateEvent)}
+                </Grid>
+                <Grid item xs={12}>
+                    <Form>
+                        <Grid item xs={12}>
+                            <TextField className={classes.textField} id="eventName" label="Navn på arrangement" fullWidth />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    className={classes.keyboardDatePicker}
+                                    id="startDatePicker"
+                                    label="Startdato"
+                                    variant="inline"
+                                    margin="normal"
+                                    value={startDate}
+                                    onChange={(dateEvent) => setStartDate(dateEvent)}
 
-                            />
-                            <KeyboardTimePicker
-                                className={classes.keyboardTimePicker}
-                                id="startTimePicker"
-                                label="Startklokkeslett"
-                                variant="inline"
-                                margin="normal"
-                                value={startTime}
-                                onChange={(timeEvent) => setStartTime(timeEvent)}
-                            />
-                        </MuiPickersUtilsProvider>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                className={classes.keyboardDatePicker}
-                                id="endDatePicker"
-                                label="Sluttdato"
-                                variant="inline"
-                                margin="normal"
-                                value={endDate}
-                                onChange={(dateEvent) => setEndDate(dateEvent)}
+                                />
+                                <KeyboardTimePicker
+                                    className={classes.keyboardTimePicker}
+                                    id="startTimePicker"
+                                    label="Startklokkeslett"
+                                    variant="inline"
+                                    margin="normal"
+                                    value={startTime}
+                                    onChange={(timeEvent) => setStartTime(timeEvent)}
+                                />
+                            </MuiPickersUtilsProvider>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    className={classes.keyboardDatePicker}
+                                    id="endDatePicker"
+                                    label="Sluttdato"
+                                    variant="inline"
+                                    margin="normal"
+                                    value={endDate}
+                                    onChange={(dateEvent) => setEndDate(dateEvent)}
 
-                            />
-                            <KeyboardTimePicker
-                                className={classes.keyboardTimePicker}
-                                id="endTimePicker"
-                                label="Sluttklokkeslett"
-                                variant="inline"
-                                margin="normal"
-                                value={endTime}
-                                onChange={(timeEvent) => setEndTime(timeEvent)}
-                            />
-                        </MuiPickersUtilsProvider>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <TextField
-                            select
-                            className={classes.textField} 
-                            id="organizer"
-                            label="Organisator"
-                            fullWidth
-                        >
-                            {organizers.map((organizer) => (
-                                <MenuItem key={organizer.id} value={organizer.id}>
-                                    {organizer.name}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <TextField
-                            select
-                            className={classes.textField} 
-                            id="venue"
-                            label="Lokale"
-                            fullWidth
-                        >
-                            {venues.map((venue) => (
-                                <MenuItem key={venue.id} value={venue.id}>
-                                    {venue.name}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </Grid>
-                </Form>
+                                />
+                                <KeyboardTimePicker
+                                    className={classes.keyboardTimePicker}
+                                    id="endTimePicker"
+                                    label="Sluttklokkeslett"
+                                    variant="inline"
+                                    margin="normal"
+                                    value={endTime}
+                                    onChange={(timeEvent) => setEndTime(timeEvent)}
+                                />
+                            </MuiPickersUtilsProvider>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                select
+                                className={classes.textField}
+                                id="organizer"
+                                label="Organisator"
+                                fullWidth
+                            >
+                                {organizers.map((organizer) => (
+                                    <MenuItem key={organizer.id} value={organizer.id}>
+                                        {organizer.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                select
+                                className={classes.textField}
+                                id="venue"
+                                label="Lokale"
+                                fullWidth
+                            >
+                                {venues.map((venue) => (
+                                    <MenuItem key={venue.id} value={venue.id}>
+                                        {venue.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                    </Form>
+                </Grid>
             </Grid>
-        </Grid>
+        </Paper>
     );
 }
