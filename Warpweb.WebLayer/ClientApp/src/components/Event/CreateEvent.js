@@ -168,6 +168,7 @@ export default function CreateEvent() {
                         <Grid item xs={6}>
                             <TextField
                                 select
+                                defaultValue=""
                                 className={classes.textField}
                                 id="organizer"
                                 label="Organisator"
@@ -183,6 +184,7 @@ export default function CreateEvent() {
                         <Grid item xs={6}>
                             <TextField
                                 select
+                                defaultValue=""
                                 className={classes.textField}
                                 id="venue"
                                 label="Lokale"
