@@ -180,22 +180,22 @@ namespace Warpweb.WebLayer
             dbContext.Organizers.Add(organizer2);
             dbContext.SaveChanges(); //Savechanges skriver automatisk Id tilbake til eksisterende objekt.
 
-            //// Legg til noen lokaler
-            //var venue = new Venue
-            //{
-            //    Name = "Rockefeller",
-            //    Address = "Torggata Bad 1"
-            //};
+            // Legg til noen lokaler
+            var venue = new Venue
+            {
+                Name = "Rockefeller",
+                Address = "Torggata Bad 1",
+            };
 
-            //var venue2 = new Venue
-            //{
-            //    Name = "Spektrum",
-            //    Address = "Ikke Torggata Bad 1"
-            //};
+            var venue2 = new Venue
+            {
+                Name = "Spektrum",
+                Address = "Ikke Torggata Bad 1"
+            };
 
-            //dbContext.Venues.Add(venue);
-            //dbContext.Venues.Add(venue2);
-            //dbContext.SaveChanges();
+            dbContext.Venues.Add(venue);
+            dbContext.Venues.Add(venue2);
+            dbContext.SaveChanges();
 
             // Legg til noen events
             var mainEvent = new MainEvent

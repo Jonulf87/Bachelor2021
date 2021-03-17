@@ -26,7 +26,19 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
+        // Returner alle venues
         public async Task<List<VenueListVm>> GetVenuesAsync()
+        {
+            return await _dbContext.Venues
+                .Select(a => new VenueListVm
+                {
+                    VenueId = a.Id,
+                    VenueName = a.Name
+                }).ToListAsync();
+        }
+
+        // Returner venues knyttet til arrangement
+        public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
             return await _dbContext.Venues
                 .Where(a => a.MainEventId == _mainEventProvider.MainEventId)

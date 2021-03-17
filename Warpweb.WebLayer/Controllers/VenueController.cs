@@ -20,11 +20,20 @@ namespace Warpweb.WebLayer.Controllers
             _venueService = venueService;
         }
 
+        // Hent alle venues
         [HttpGet]
         [Route("VenuesList")]
         public async Task<List<VenueListVm>> GetVenues()
         {
             return await _venueService.GetVenuesAsync();
+        }
+
+        // Hent kun venues knyttet til arrangør
+        [HttpGet]
+        [Route("OrganizerVenuesList")]
+        public async Task<List<VenueListVm>> GetOrganizerVenues()
+        {
+            return await _venueService.GetOrganizerVenuesAsync();
         }
 
         [HttpGet("{id}")]
