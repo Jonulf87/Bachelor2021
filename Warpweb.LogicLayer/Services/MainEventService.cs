@@ -42,9 +42,10 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
+                    StartDate = a.StartDate,
                     StartTime = a.StartTime,
-                    EndTime = a.EndTime
-
+                    EndDate = a.EndDate,
+                    EndTime = a.EndTime,
                 })
                 .SingleOrDefaultAsync();
         }
@@ -62,7 +63,9 @@ namespace Warpweb.LogicLayer.Services
             var mainevent = new MainEvent
             {
                 Name = maineventVm.Name,
+                StartDate = maineventVm.StartDate,
                 StartTime = maineventVm.StartTime,
+                EndDate = maineventVm.EndDate,
                 EndTime = maineventVm.EndTime,
                 OrganizerId = maineventVm.OrganizerId
             };
@@ -85,7 +88,9 @@ namespace Warpweb.LogicLayer.Services
 
             existingMainEvent.Id = maineventVm.Id;
             existingMainEvent.Name = maineventVm.Name;
+            existingMainEvent.StartDate = maineventVm.StartDate;
             existingMainEvent.StartTime = maineventVm.StartTime;
+            existingMainEvent.EndDate = maineventVm.EndDate;
             existingMainEvent.EndTime = maineventVm.EndTime;
 
             _dbContext.Update<MainEvent>(existingMainEvent);

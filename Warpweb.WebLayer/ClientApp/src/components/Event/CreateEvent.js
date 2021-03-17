@@ -7,6 +7,7 @@ import { Form } from 'reactstrap';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import authService from '../api-authorization/AuthorizeService';
+import { set } from 'date-fns/esm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,12 +48,12 @@ export default function CreateEvent() {
     const classes = useStyles();
 
     //Her følger variablene til VM for mainEvent til posting
-    let [name, setName] = useState();
+    let [name, setName] = useState("");
     let [startDate, setStartDate] = useState();
     let [startTime, setStartTime] = useState();
     let [endDate, setEndDate] = useState();
     let [endTime, setEndTime] = useState();
-    let [organizerId, setOrganizerId] = useState(null);
+    let [organizerId, setOrganizerId] = useState("");
     let [venueId, setVenueId] = useState(null);
 
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
@@ -62,14 +63,9 @@ export default function CreateEvent() {
     let [isVenueReady, setIsVenueReady] = useState(false);
 
 
-    //const handleChangeOrganizer = (event) => {
-    //    setOrganizer(event.target.value);
-    //};
 
-    //const handleChangeVenue = (event) => {
-    //    setVenue(event.target.value);
-    //};
 
+    //Henter organizere brukeren er knyttet til
     useEffect(() => {
         const getOrganizers = async () => {
             const authenticationResult = await authService.isAuthenticated();
@@ -88,23 +84,52 @@ export default function CreateEvent() {
         getOrganizers();
     }, []);
 
-    useEffect(() => {
-        const getVenues = async () => {
-            const authenticationResult = await authService.isAuthenticated();
-            if (authenticationResult) {
-                const accessToken = await authService.getAccessToken();
-                const response = await fetch(`/api/venues/VenuesList`, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-                const result = await response.json();
-                setVenues(result);
-                setIsVenueReady(true);
-            }
+    //Henter Venues knyttet til organizeren brukeren er knyttet til
+    //Flyttes til egen komponent
+    //useEffect(() => {
+    //    const getVenues = async () => {
+    //        const authenticationResult = await authService.isAuthenticated();
+    //        if (authenticationResult) {
+    //            const accessToken = await authService.getAccessToken();
+    //            const response = await fetch(`/api/venues/VenuesList`, {
+    //                headers: {
+    //                    'Authorization': `Bearer ${accessToken}`
+    //                }
+    //            });
+    //            const result = await response.json();
+    //            setVenues(result);
+    //            setIsVenueReady(true);
+    //        }
+    //    }
+    //    getVenues();
+    //}, []);
+
+    const mainEventDataToBeSent = {
+        'Name': name,
+        'StartDate': startDate,
+        'StartTime': startTime,
+        'EndDate': endDate,
+        'EndTime': endTime,
+        'OrganizerId': organizerId
+    }
+
+
+    const submitForm = async () => {
+        const authenticationResult = await authService.isAuthenticated();
+        if (authenticationResult) {
+            const accessToken = await authService.getAccessToken();
+            const response = await fetch('/api/events', {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(mainEventDataToBeSent)
+            });
+            const result = await response.Json();
+            console.log(result);
         }
-        getVenues();
-    }, []);
+    }
 
     return (
         <Paper variant="outlined" elevation={2}>
@@ -117,7 +142,14 @@ export default function CreateEvent() {
                 <Grid item xs={12}>
                     <Form>
                         <Grid item xs={12}>
-                            <TextField className={classes.textField} id="eventName" label="Navn på arrangement" fullWidth />
+                            <TextField
+                                className={classes.textField}
+                                id="eventName"
+                                label="Navn på arrangement"
+                                fullWidth
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -168,31 +200,16 @@ export default function CreateEvent() {
                         <Grid item xs={6}>
                             <TextField
                                 select
-                                defaultValue=""
                                 className={classes.textField}
                                 id="organizer"
                                 label="Organisator"
                                 fullWidth
+                                value={organizerId}
+                                onChange={(e) => setOrganizerId(e.target.value)}
                             >
                                 {organizers.map((organizer) => (
                                     <MenuItem key={organizer.id} value={organizer.id}>
                                         {organizer.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                select
-                                defaultValue=""
-                                className={classes.textField}
-                                id="venue"
-                                label="Lokale"
-                                fullWidth
-                            >
-                                {venues.map((venue) => (
-                                    <MenuItem key={venue.id} value={venue.id}>
-                                        {venue.name}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -204,9 +221,10 @@ export default function CreateEvent() {
                         size="large"
                         className={classes.button}
                         startIcon={<SaveIcon />}
+                        onClick={submitForm}
                     >
                         Lagre
-                </Button>
+                    </Button>
                 </Grid>
             </Grid>
         </Paper>
