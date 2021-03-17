@@ -342,3 +342,5 @@ ASALocalRun/
 /Warpweb.DataAccessLayer/Migrations/20210311104657_Init.Designer.cs
 /Warpweb.WebLayer/ClientApp/gitignore_clientapp
 /Warpweb.WebLayer/gitignore_weblayer
+/Warpweb.DataAccessLayer/Migrations/20210317081630_Init.cs
+/Warpweb.DataAccessLayer/Migrations/20210317081630_Init.Designer.cs

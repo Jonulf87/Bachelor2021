@@ -19,10 +19,10 @@ const useStyles = makeStyles((theme) => ({
         width: '25ch',
     },
 }));
+
 export default function CreateEvent() {
 
     const classes = useStyles();
-
 
     //Her følger variablene til VM for mainEvent til posting
     let [name, setName] = useState();

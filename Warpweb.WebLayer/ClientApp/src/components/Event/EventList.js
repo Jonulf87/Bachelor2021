@@ -8,7 +8,6 @@ const useStyles = makeStyles((theme) =>
         root: {
             display: 'flex',
             flexWrap: 'wrap',
-            maxWidth: 500,
             marginBottom: 20,
         },
     }),
@@ -78,23 +77,18 @@ export default function EventList() {
     const classes = useStyles();
 
     return (
-
-        <Card className={classes.root}>
-
-            <CardContent>
-
-                <Typography gutterBottom variant="h5" component="h2">
-                    Arrangementsoversikt
+        <>
+            {isReady && (<>
+                <Typography>
+                    <strong> Arrangementsoversikt</strong>
                 </Typography>
+                {getEventsFromList()}
+            </>
+            )}
 
-                {isReady && (<>
-                    {getEventsFromList()}
-                </>)}
+            {!isReady && (<p>Laster arrangementsoversikt...</p>)}
 
-                {!isReady && (<p>Loading...</p>)}
+        </>
 
-            </CardContent>
-
-        </Card>
     );
 }
