@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
-        
+
     },
     textField: {
         marginLeft: theme.spacing(1),
@@ -113,7 +113,7 @@ export default function CreateEvent() {
         'OrganizerId': organizerId
     }
 
-
+    // NB - Må sjekke at det er gjort valg i skjema før innsending
     const submitForm = async () => {
         const authenticationResult = await authService.isAuthenticated();
         if (authenticationResult) {
@@ -126,7 +126,8 @@ export default function CreateEvent() {
                 method: 'POST',
                 body: JSON.stringify(mainEventDataToBeSent)
             });
-            const result = await response.Json();
+            // Tror det skal holde med å droppe .json() fra response
+            const result = await response;
             console.log(result);
         }
     }
