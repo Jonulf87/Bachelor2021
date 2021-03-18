@@ -118,7 +118,7 @@ export default function CreateEvent() {
         const authenticationResult = await authService.isAuthenticated();
         if (authenticationResult) {
             const accessToken = await authService.getAccessToken();
-            const response = await fetch('/api/events', {
+            const response = await fetch('/api/events/createMainEvent', {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'content-type': 'application/json'

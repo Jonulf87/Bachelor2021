@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +33,32 @@ namespace Warpweb.WebLayer
             var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
             var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
+            // Opprett noen arrangører
+            var organizer = new Organizer
+            {
+                Name = "Warpcrew",
+                OrgNumber = "123456789",
+                Description = "Warpcrew er en ting."
+            };
+
+            var organizer2 = new Organizer
+            {
+                Name = "CarpWred",
+                OrgNumber = "34567891011",
+                Description = "Bedre enn WarpCrew"
+            };
+
+            dbContext.Organizers.Add(organizer);
+            dbContext.Organizers.Add(organizer2);
+            dbContext.SaveChanges(); //Savechanges skriver automatisk Id tilbake til eksisterende objekt.
+
             //Lager noen brukere
+            // Må legge inn AdminRoleAtOrganizer for å få CreateEvent til å virke?
+
+            //var organizerList = new List<Organizer>();
+
+            //organizerList.Add(organizer);
+
             var user = new ApplicationUser
             {
                 FirstName = "Post",
@@ -42,6 +69,7 @@ namespace Warpweb.WebLayer
                 PhoneNumberConfirmed = true,
                 LockoutEnabled = false,
                 UserName = "postmanwarpweb@gmail.com"
+                
             };
 
             var user2 = new ApplicationUser
@@ -160,25 +188,6 @@ namespace Warpweb.WebLayer
 
             // Ekstra rolle for user2
             await userManager.AddToRoleAsync(user2, "SuperAdmin");
-
-            // Opprett noen arrangører
-            var organizer = new Organizer
-            {
-                Name = "Warpcrew",
-                OrgNumber = "123456789",
-                Description = "Warpcrew er en ting."
-            };
-
-            var organizer2 = new Organizer
-            {
-                Name = "CarpWred",
-                OrgNumber = "34567891011",
-                Description = "Bedre enn WarpCrew"
-            };
-
-            dbContext.Organizers.Add(organizer);
-            dbContext.Organizers.Add(organizer2);
-            dbContext.SaveChanges(); //Savechanges skriver automatisk Id tilbake til eksisterende objekt.
 
             // Legg til noen lokaler
             var venue = new Venue
