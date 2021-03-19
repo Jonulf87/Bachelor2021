@@ -163,10 +163,12 @@ namespace Warpweb.WebLayer
                         await userManager.AddToRoleAsync(user, "Admin");
                         await userManager.AddToRoleAsync(user, "User");
                     }
-
-                    await userManager.CreateAsync(user, "SuperHemmelig");
-                    await userManager.AddToRoleAsync(user, "Admin");
-                    await userManager.AddToRoleAsync(user, "User");
+                    else
+                    {
+                        await userManager.CreateAsync(user, "SuperHemmelig");
+                        await userManager.AddToRoleAsync(user, "Admin");
+                        await userManager.AddToRoleAsync(user, "User");
+                    }
                 }
             }
 
