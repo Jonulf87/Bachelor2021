@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -211,11 +212,23 @@ namespace Warpweb.WebLayer
                 Admins = adminsListHordalan
             };
 
-            dbContext.Organizers.Add(organizerWarpcrew);
-            dbContext.Organizers.Add(organizerKandu);
-            dbContext.Organizers.Add(organizerHordalan);
-            dbContext.SaveChanges();
+            List<Organizer> organizerList = new List<Organizer>();
+            organizerList.Add(organizerKandu);
+            organizerList.Add(organizerHordalan);
+            organizerList.Add(organizerWarpcrew);
 
+            foreach(Organizer organizer in organizerList)
+            {
+                var organizerExists = dbContext.Organizers
+                    .Where(a => a.Name == organizer.Name)
+                    .FirstOrDefault();
+
+                if(organizerExists == null)
+                {
+                    dbContext.Organizers.Add(organizer);
+                    dbContext.SaveChanges();
+                }
+            }
 
             // Legg til noen lokaler
             var venueRockefeller = new Venue
@@ -245,16 +258,14 @@ namespace Warpweb.WebLayer
                 Users = adminsListHordalan
             };
 
-            dbContext.Venues.Add(venueRockefeller);
-            dbContext.Venues.Add(venueSpektrum);
-            dbContext.Venues.Add(venueVikingskipet);
-            dbContext.SaveChanges();
 
             // Legg til noen events
             var mainEventWarpzone = new MainEvent
             {
                 Name = "WarpZone 21",
                 OrganizerId = organizerWarpcrew.Id,
+                StartDateTime = new DateTime(2021, 5, 12, 17, 0, 0),
+                EndDateTime = new DateTime(2021, 5, 14, 9, 0, 0),
                 Venue = venueRockefeller
             };
 
@@ -262,6 +273,8 @@ namespace Warpweb.WebLayer
             {
                 Name = "TG 21",
                 OrganizerId = organizerKandu.Id,
+                StartDateTime = new DateTime(2021, 7, 12, 17, 0, 0),
+                EndDateTime = new DateTime(2021, 7, 14, 9, 0, 0),
                 Venue = venueSpektrum
             };
 
@@ -269,15 +282,28 @@ namespace Warpweb.WebLayer
             {
                 Name = "Hordalan 21",
                 OrganizerId = organizerHordalan.Id,
+                StartDateTime = new DateTime(2021, 6, 12, 17, 0, 0),
+                EndDateTime = new DateTime(2021, 6, 14, 9, 0, 0),
                 Venue = venueVikingskipet
             };
 
+            List<MainEvent> mainEventsList = new List<MainEvent>();
+            mainEventsList.Add(mainEventHordalan);
+            mainEventsList.Add(mainEventWarpzone);
+            mainEventsList.Add(mainEventTheGathering);
 
-            dbContext.MainEvents.Add(mainEventWarpzone);
-            dbContext.MainEvents.Add(mainEventTheGathering);
-            dbContext.MainEvents.Add(mainEventHordalan);
-            dbContext.SaveChanges();
-  
+            foreach(MainEvent mainEvent in mainEventsList)
+            {
+                var mainEventExists = dbContext.MainEvents
+                    .Where(a => a.Name == mainEvent.Name)
+                    .FirstOrDefault();
+
+                if(mainEventExists == null)
+                {
+                    dbContext.MainEvents.Add(mainEvent);
+                    dbContext.SaveChanges();
+                }
+            }
         }
     }
 }

@@ -456,7 +456,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("EndTime")
+                    b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -465,7 +465,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -652,7 +652,8 @@ namespace Warpweb.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MainEventId");
+                    b.HasIndex("MainEventId")
+                        .IsUnique();
 
                     b.ToTable("Venues");
                 });
@@ -863,8 +864,8 @@ namespace Warpweb.DataAccessLayer.Migrations
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>
                 {
                     b.HasOne("Warpweb.DataAccessLayer.Models.MainEvent", "MainEvent")
-                        .WithMany()
-                        .HasForeignKey("MainEventId")
+                        .WithOne("Venue")
+                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Venue", "MainEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -885,6 +886,11 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Navigation("CrewPermissions");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.MainEvent", b =>
+                {
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Organizer", b =>

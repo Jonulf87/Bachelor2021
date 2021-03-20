@@ -10,8 +10,8 @@ using Warpweb.DataAccessLayer;
 namespace Warpweb.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210316095101_Init")]
-    partial class Init
+    [Migration("20210319110604_ICv15")]
+    partial class ICv15
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -458,6 +458,9 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -467,11 +470,11 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("VenueId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -635,27 +638,27 @@ namespace Warpweb.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>
                 {
-                    b.Property<int>("VenueId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AreaAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
                     b.Property<int>("MainEventId")
                         .HasColumnType("int");
 
-                    b.Property<string>("VenueAddress")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VenueAreaAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VenueCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VenueName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("VenueId");
+                    b.HasKey("Id");
 
                     b.HasIndex("MainEventId")
                         .IsUnique();

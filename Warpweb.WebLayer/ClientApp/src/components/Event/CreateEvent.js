@@ -8,6 +8,7 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import authService from '../api-authorization/AuthorizeService';
 import { set } from 'date-fns/esm';
+import main from '../MainPage/MainPage';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -127,8 +128,9 @@ export default function CreateEvent() {
                 body: JSON.stringify(mainEventDataToBeSent)
             });
             // Tror det skal holde med å droppe .json() fra response
-            const result = await response;
+            const result = await response.json();
             console.log(result);
+            console.log("Startdate = " + mainEventDataToBeSent.StartDate + " StartTime = " + mainEventDataToBeSent.StartTime)
         }
     }
 

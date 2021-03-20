@@ -28,8 +28,8 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    StartTime = a.StartTime,
-                    EndTime = a.EndTime
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime
                 })
                 .ToListAsync();
         }
@@ -42,10 +42,8 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    StartDate = a.StartDate,
-                    StartTime = a.StartTime,
-                    EndDate = a.EndDate,
-                    EndTime = a.EndTime,
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime,
                 })
                 .SingleOrDefaultAsync();
         }
@@ -63,10 +61,8 @@ namespace Warpweb.LogicLayer.Services
             var mainevent = new MainEvent
             {
                 Name = maineventVm.Name,
-                StartDate = maineventVm.StartDate,
-                StartTime = maineventVm.StartTime,
-                EndDate = maineventVm.EndDate,
-                EndTime = maineventVm.EndTime,
+                StartDateTime = maineventVm.StartDateTime,
+                EndDateTime = maineventVm.EndDateTime,
                 OrganizerId = maineventVm.OrganizerId
             };
 
@@ -88,10 +84,8 @@ namespace Warpweb.LogicLayer.Services
 
             existingMainEvent.Id = maineventVm.Id;
             existingMainEvent.Name = maineventVm.Name;
-            existingMainEvent.StartDate = maineventVm.StartDate;
-            existingMainEvent.StartTime = maineventVm.StartTime;
-            existingMainEvent.EndDate = maineventVm.EndDate;
-            existingMainEvent.EndTime = maineventVm.EndTime;
+            existingMainEvent.StartDateTime = maineventVm.StartDateTime;
+            existingMainEvent.EndDateTime = maineventVm.EndDateTime;
 
             _dbContext.Update<MainEvent>(existingMainEvent);
             await _dbContext.SaveChangesAsync();

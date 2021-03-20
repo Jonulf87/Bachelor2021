@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Warpweb.DataAccessLayer.Migrations
 {
-    public partial class Init : Migration
+    public partial class ICv15 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -243,9 +243,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    VenueId = table.Column<int>(type: "int", nullable: false),
                     OrganizerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -263,17 +264,17 @@ namespace Warpweb.DataAccessLayer.Migrations
                 name: "Venues",
                 columns: table => new
                 {
-                    VenueId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VenueName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VenueAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VenueAreaAvailable = table.Column<int>(type: "int", nullable: false),
-                    VenueCapacity = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AreaAvailable = table.Column<int>(type: "int", nullable: false),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
                     MainEventId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Venues", x => x.VenueId);
+                    table.PrimaryKey("PK_Venues", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Venues_MainEvents_MainEventId",
                         column: x => x.MainEventId,
@@ -326,7 +327,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                         name: "FK_AspNetUsers_Venues_VenueId",
                         column: x => x.VenueId,
                         principalTable: "Venues",
-                        principalColumn: "VenueId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -345,7 +346,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                         name: "FK_SeatGroup_Venues_VenueId",
                         column: x => x.VenueId,
                         principalTable: "Venues",
-                        principalColumn: "VenueId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 

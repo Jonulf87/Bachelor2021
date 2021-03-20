@@ -8,18 +8,8 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime StartDate { get; set; }
-
-        [DataType(DataType.Time)]
-        public DateTime StartTime { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
-
-        [DataType(DataType.Time)]
-        public DateTime EndTime { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
 
         [ForeignKey(nameof(Organizer))]
         public int OrganizerId { get; set; }
