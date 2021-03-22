@@ -31,8 +31,9 @@ namespace Warpweb.DataAccessLayer.Models
         public virtual ICollection<ApplicationUser> Guardian { get; set; } // Verge / foresatt 
         
         [PersonalData]
-        public virtual ICollection<ApplicationUser> Minor { get; set; } // Den mindreårige i vergehierarkiet
-        
+        public virtual ICollection<Minor> Minors { get; set; } // Den mindreårige i vergehierarkiet
+        public virtual ICollection<Guardian> Guardians { get; set; }
+
         [PersonalData]
         public virtual ICollection<CrewUser> Crews { get; set; }
         

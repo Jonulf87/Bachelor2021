@@ -6,7 +6,6 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int Id { get; set; }
         public int Price { get; set; }
-        public string Seat { get; set; } //Seteplassering. Må opprette klasse for bordkart
 
         [ForeignKey(nameof(Type))]
         public int TicketTypeId { get; set; }
@@ -19,5 +18,8 @@ namespace Warpweb.DataAccessLayer.Models
         [ForeignKey(nameof(User))]
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser User { get; set; }
+
+        public virtual Seat Seat { get; set; }
+
     }
 }

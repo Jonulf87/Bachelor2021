@@ -41,7 +41,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
             return await _dbContext.Venues
-                .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
+                .Where(a => a.MainEvent.Any(b => b.Id == _mainEventProvider.MainEventId))
                 .Select(a => new VenueListVm
                 {
                     VenueId = a.Id,

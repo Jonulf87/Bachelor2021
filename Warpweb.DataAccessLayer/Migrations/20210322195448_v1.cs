@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Warpweb.DataAccessLayer.Migrations
 {
-    public partial class ICv15 : Migration
+    public partial class v1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -74,6 +74,22 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Venues",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AreaAvailable = table.Column<int>(type: "int", nullable: false),
+                    Capacity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Venues", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -115,6 +131,47 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SeatGroup",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VenueId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeatGroup", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SeatGroup_Venues_VenueId",
+                        column: x => x.VenueId,
+                        principalTable: "Venues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Row",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    XCoordinate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    YCoordinate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rotation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SeatGroupId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Row", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Row_SeatGroup_SeatGroupId",
+                        column: x => x.SeatGroupId,
+                        principalTable: "SeatGroup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
@@ -130,18 +187,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApplicationUserApplicationUser",
-                columns: table => new
-                {
-                    GuardianId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MinorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUserApplicationUser", x => new { x.GuardianId, x.MinorId });
                 });
 
             migrationBuilder.CreateTable(
@@ -209,6 +254,32 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Guardian",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Guardian", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Minor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Minor", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrganizerAdmins",
                 columns: table => new
                 {
@@ -243,11 +314,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrganizerId = table.Column<int>(type: "int", nullable: false)
+                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrganizerId = table.Column<int>(type: "int", nullable: false),
+                    VenueId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -258,27 +328,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                         principalTable: "Organizers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Venues",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AreaAvailable = table.Column<int>(type: "int", nullable: false),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
-                    MainEventId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Venues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Venues_MainEvents_MainEventId",
-                        column: x => x.MainEventId,
-                        principalTable: "MainEvents",
+                        name: "FK_MainEvents_Venues_VenueId",
+                        column: x => x.VenueId,
+                        principalTable: "Venues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -298,6 +351,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrentMainEventId = table.Column<int>(type: "int", nullable: true),
                     YearlyFee = table.Column<int>(type: "int", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     VenueId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -318,6 +372,12 @@ namespace Warpweb.DataAccessLayer.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_AspNetUsers_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_AspNetUsers_MainEvents_CurrentMainEventId",
                         column: x => x.CurrentMainEventId,
                         principalTable: "MainEvents",
@@ -332,54 +392,12 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SeatGroup",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    VenueId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SeatGroup", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SeatGroup_Venues_VenueId",
-                        column: x => x.VenueId,
-                        principalTable: "Venues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Row",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    XCoordinate = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    YCoordinate = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rotation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SeatGroupId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Row", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Row_SeatGroup_SeatGroupId",
-                        column: x => x.SeatGroupId,
-                        principalTable: "SeatGroup",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tickets",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Price = table.Column<int>(type: "int", nullable: false),
-                    Seat = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TicketTypeId = table.Column<int>(type: "int", nullable: false),
                     MainEventId = table.Column<int>(type: "int", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -451,11 +469,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserApplicationUser_MinorId",
-                table: "ApplicationUserApplicationUser",
-                column: "MinorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -486,6 +499,11 @@ namespace Warpweb.DataAccessLayer.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ApplicationUserId",
+                table: "AspNetUsers",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_CurrentMainEventId",
@@ -531,9 +549,24 @@ namespace Warpweb.DataAccessLayer.Migrations
                 column: "Expiration");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Guardian_ApplicationUserId",
+                table: "Guardian",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MainEvents_OrganizerId",
                 table: "MainEvents",
                 column: "OrganizerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MainEvents_VenueId",
+                table: "MainEvents",
+                column: "VenueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Minor_ApplicationUserId",
+                table: "Minor",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrganizerAdmins_AdminsId",
@@ -573,7 +606,8 @@ namespace Warpweb.DataAccessLayer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Seat_TicketId",
                 table: "Seat",
-                column: "TicketId");
+                column: "TicketId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SeatGroup_VenueId",
@@ -600,12 +634,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                 table: "TicketTypes",
                 column: "SeatId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Venues_MainEventId",
-                table: "Venues",
-                column: "MainEventId",
-                unique: true);
-
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                 table: "AspNetUserRoles",
@@ -613,22 +641,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserApplicationUser_AspNetUsers_GuardianId",
-                table: "ApplicationUserApplicationUser",
-                column: "GuardianId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserApplicationUser_AspNetUsers_MinorId",
-                table: "ApplicationUserApplicationUser",
-                column: "MinorId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
@@ -657,6 +669,22 @@ namespace Warpweb.DataAccessLayer.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_CrewRoles_AspNetUsers_ApplicationUserId",
                 table: "CrewRoles",
+                column: "ApplicationUserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Guardian_AspNetUsers_ApplicationUserId",
+                table: "Guardian",
+                column: "ApplicationUserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Minor_AspNetUsers_ApplicationUserId",
+                table: "Minor",
                 column: "ApplicationUserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
@@ -710,10 +738,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                 table: "Tickets");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Venues_MainEvents_MainEventId",
-                table: "Venues");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_SeatGroup_Venues_VenueId",
                 table: "SeatGroup");
 
@@ -728,9 +752,6 @@ namespace Warpweb.DataAccessLayer.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Seat_Tickets_TicketId",
                 table: "Seat");
-
-            migrationBuilder.DropTable(
-                name: "ApplicationUserApplicationUser");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -755,6 +776,12 @@ namespace Warpweb.DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "DeviceCodes");
+
+            migrationBuilder.DropTable(
+                name: "Guardian");
+
+            migrationBuilder.DropTable(
+                name: "Minor");
 
             migrationBuilder.DropTable(
                 name: "OrganizerAdmins");

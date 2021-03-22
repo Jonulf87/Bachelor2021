@@ -133,12 +133,12 @@ namespace WarpTest.WebLayer.Controllers
         //}
 
         // Helper methods
-        private void CreateTickets()
-        {
-            _dbContext.Tickets.Add(new Ticket { Price = _price1, Seat = _seat1 });
-            _dbContext.SaveChanges();
-            _dbContext.Tickets.Add(new Ticket { Price = _price2, Seat = _seat2 });
-            _dbContext.SaveChanges();
-        }
+        //private void CreateTickets()
+        //{
+        //    _dbContext.Tickets.Add(new Ticket { Price = _price1, Seat = _seat1 });
+        //    _dbContext.SaveChanges();
+        //    _dbContext.Tickets.Add(new Ticket { Price = _price2, Seat = _seat2 });
+        //    _dbContext.SaveChanges();
+        //}
     }
 }

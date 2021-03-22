@@ -15,6 +15,8 @@ namespace Warpweb.DataAccessLayer.Models
         public int OrganizerId { get; set; }
         public virtual Organizer Organizer { get; set; }
 
+        [ForeignKey(nameof(Venue))]
+        public int VenueId { get; set; }
         public virtual Venue Venue { get; set; }
     }
 }

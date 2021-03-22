@@ -34,6 +34,5 @@ namespace Warpweb.DataAccessLayer
                 .WithMany(a => a.AdminRoleAtOrganizers)
                 .UsingEntity(a => a.ToTable("OrganizerAdmins"));
         }
-
     }
 }

@@ -10,6 +10,7 @@ namespace Warpweb.DataAccessLayer.Models
         [ForeignKey(nameof(Ticket))]
         public int TicketId { get; set; }
         public virtual Ticket Ticket { get; set; }
+
         public virtual ICollection<TicketType> TicketTypes { get; set; }
         public string SeatNumber { get; set; }
     }
