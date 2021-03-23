@@ -54,7 +54,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> CreateMainEvent(MainEventVm mainEventVm)
         {
             // Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.
-            var organizers = await _securityService.GetOrganizersAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            //var organizers = await _securityService.GetOrganizersAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             // Returnerer alltid Forbid - feil Id?
             //if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) 
@@ -62,18 +62,18 @@ namespace Warpweb.WebLayer.Controllers
             //    return Forbid();
             //}
 
-            int mainEventId;
+            //int mainEventId;
 
             try
             {
-                mainEventId = await _mainEventService.CreateMainEventAsync(mainEventVm);
+                await _mainEventService.CreateMainEventAsync(mainEventVm);
             }
             catch (Exception)
             {
                 return BadRequest();
             }
 
-            mainEventVm.Id = mainEventId;
+            //mainEventVm.Id = mainEventId;
             return Ok(mainEventVm);
         } 
 

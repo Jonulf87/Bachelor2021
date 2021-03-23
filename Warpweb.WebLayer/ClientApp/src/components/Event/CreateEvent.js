@@ -50,10 +50,8 @@ export default function CreateEvent() {
 
     //Her følger variablene til VM for mainEvent til posting
     let [name, setName] = useState("");
-    let [startDate, setStartDate] = useState();
-    let [startTime, setStartTime] = useState();
-    let [endDate, setEndDate] = useState();
-    let [endTime, setEndTime] = useState();
+    let [startDateTime, setStartDateTime] = useState(new Date('2019-01-01T15:30:00'));
+    let [endDateTime, setEndDateTime] = useState(new Date('2020-01-01T15:30:00'));
     let [organizerId, setOrganizerId] = useState("");
     let [venueId, setVenueId] = useState(null);
 
@@ -106,12 +104,10 @@ export default function CreateEvent() {
     //}, []);
 
     const mainEventDataToBeSent = {
-        'Name': name,
-        'StartDate': startDate,
-        'StartTime': startTime,
-        'EndDate': endDate,
-        'EndTime': endTime,
-        'OrganizerId': organizerId
+        'name': name,
+        'startDateTime': startDateTime,
+        'endDateTime': endDateTime,
+        'organizerId': organizerId
     }
 
     // NB - Må sjekke at det er gjort valg i skjema før innsending
@@ -160,10 +156,11 @@ export default function CreateEvent() {
                                     className={classes.keyboardDatePicker}
                                     id="startDatePicker"
                                     label="Startdato"
+                                    format="yyyy/MM/dd"
                                     variant="inline"
                                     margin="normal"
-                                    value={startDate}
-                                    onChange={(dateEvent) => setStartDate(dateEvent)}
+                                    value={startDateTime}
+                                    onChange={(dateEvent) => setStartDateTime(dateEvent)}
 
                                 />
                                 <KeyboardTimePicker
@@ -172,8 +169,8 @@ export default function CreateEvent() {
                                     label="Startklokkeslett"
                                     variant="inline"
                                     margin="normal"
-                                    value={startTime}
-                                    onChange={(timeEvent) => setStartTime(timeEvent)}
+                                    value={startDateTime}
+                                    onChange={(timeEvent) => setStartDateTime(timeEvent)}
                                 />
                             </MuiPickersUtilsProvider>
                         </Grid>
@@ -183,10 +180,11 @@ export default function CreateEvent() {
                                     className={classes.keyboardDatePicker}
                                     id="endDatePicker"
                                     label="Sluttdato"
+                                    format="yyyy/MM/dd"
                                     variant="inline"
                                     margin="normal"
-                                    value={endDate}
-                                    onChange={(dateEvent) => setEndDate(dateEvent)}
+                                    value={endDateTime}
+                                    onChange={(dateEvent) => setEndDateTime(dateEvent)}
 
                                 />
                                 <KeyboardTimePicker
@@ -195,8 +193,8 @@ export default function CreateEvent() {
                                     label="Sluttklokkeslett"
                                     variant="inline"
                                     margin="normal"
-                                    value={endTime}
-                                    onChange={(timeEvent) => setEndTime(timeEvent)}
+                                    value={endDateTime}
+                                    onChange={(timeEvent) => setEndDateTime(timeEvent)}
                                 />
                             </MuiPickersUtilsProvider>
                         </Grid>
