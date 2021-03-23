@@ -258,6 +258,11 @@ namespace Warpweb.WebLayer
                 Users = adminsListHordalan
             };
 
+            var venueNullIsland = new Venue
+            {
+                Name = "Lokale ikke avklart."
+            };
+
 
             // Legg til noen events
             var mainEventWarpzone = new MainEvent

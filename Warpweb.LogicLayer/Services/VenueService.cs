@@ -32,8 +32,8 @@ namespace Warpweb.LogicLayer.Services
             return await _dbContext.Venues
                 .Select(a => new VenueListVm
                 {
-                    VenueId = a.Id,
-                    VenueName = a.Name
+                    Id = a.Id,
+                    Name = a.Name
                 }).ToListAsync();
         }
 
@@ -44,8 +44,8 @@ namespace Warpweb.LogicLayer.Services
                 .Where(a => a.MainEvents.Any(b => b.Id == _mainEventProvider.MainEventId))
                 .Select(a => new VenueListVm
                 {
-                    VenueId = a.Id,
-                    VenueName = a.Name
+                    Id = a.Id,
+                    Name = a.Name
                 }).ToListAsync();
         }
 

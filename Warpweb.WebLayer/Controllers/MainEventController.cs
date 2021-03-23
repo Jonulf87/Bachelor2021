@@ -62,7 +62,6 @@ namespace Warpweb.WebLayer.Controllers
             //    return Forbid();
             //}
 
-            //int mainEventId;
 
             try
             {
@@ -73,7 +72,6 @@ namespace Warpweb.WebLayer.Controllers
                 return BadRequest();
             }
 
-            //mainEventVm.Id = mainEventId;
             return Ok(mainEventVm);
         } 
 

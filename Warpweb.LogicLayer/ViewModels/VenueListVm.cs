@@ -2,7 +2,7 @@
 {
     public class VenueListVm
     {
-        public int VenueId { get; set; }
-        public string VenueName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }
