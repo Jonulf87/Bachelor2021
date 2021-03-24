@@ -12,6 +12,7 @@ import main from '../MainPage/MainPage';
 import CreateVenue from '../Venue/CreateVenue';
 
 const useStyles = makeStyles((theme) => ({
+
     root: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -63,9 +64,6 @@ export default function CreateEvent() {
     let [isVenueReady, setIsVenueReady] = useState(false);
     let [createVenue, setCreateVenue] = useState(false);
     let [venuePosted, setVenuePosted] = useState(false);
-
-
-
 
     //Henter organizere brukeren er knyttet til
     useEffect(() => {
@@ -252,10 +250,11 @@ export default function CreateEvent() {
                                         label="Lokale"
                                         fullWidth
                                         value={venueId}
+                                        defaultValue=""
                                         onChange={(e) => setVenueId(e.target.value)}
                                     >
                                         {venues.map((venue) => (
-                                            <MenuItem key={venue.id} value={venue.id}>
+                                            <MenuItem key={venue.id} value={venue.id} >
                                                 {venue.name}
                                             </MenuItem>
                                         ))}
@@ -272,10 +271,11 @@ export default function CreateEvent() {
                                         label="Organisator"
                                         fullWidth
                                         value={organizerId}
+                                        defaultValue=""
                                         onChange={(e) => setOrganizerId(e.target.value)}
                                     >
                                         {organizers.map((organizer) => (
-                                            <MenuItem key={organizer.id} value={organizer.id}>
+                                            <MenuItem key={organizer.id} value={organizer.id} >
                                                 {organizer.name}
                                             </MenuItem>
                                         ))}

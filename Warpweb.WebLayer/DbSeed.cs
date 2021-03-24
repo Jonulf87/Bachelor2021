@@ -263,6 +263,9 @@ namespace Warpweb.WebLayer
                 Name = "Lokale ikke avklart."
             };
 
+            dbContext.Venues.Add(venueNullIsland);
+            dbContext.SaveChanges();
+
 
             // Legg til noen events
             var mainEventWarpzone = new MainEvent
