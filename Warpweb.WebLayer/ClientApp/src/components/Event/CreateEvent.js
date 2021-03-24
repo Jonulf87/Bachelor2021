@@ -9,6 +9,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import authService from '../api-authorization/AuthorizeService';
 import { set } from 'date-fns/esm';
 import main from '../MainPage/MainPage';
+import CreateVenue from '../Venue/CreateVenue';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,13 +54,15 @@ export default function CreateEvent() {
     let [startDateTime, setStartDateTime] = useState(new Date('2019-01-01T15:30:00'));
     let [endDateTime, setEndDateTime] = useState(new Date('2020-01-01T15:30:00'));
     let [organizerId, setOrganizerId] = useState("");
-    let [venueId, setVenueId] = useState(null);
+    let [venueId, setVenueId] = useState("");
 
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
     let [organizers, setOrganizers] = useState([]);
     let [venues, setVenues] = useState([]);
     let [isOrganizerReady, setIsOrganizerReady] = useState(false);
     let [isVenueReady, setIsVenueReady] = useState(false);
+    let [createVenue, setCreateVenue] = useState(false);
+    let [venuePosted, setVenuePosted] = useState(false);
 
 
 
@@ -83,25 +86,31 @@ export default function CreateEvent() {
         getOrganizers();
     }, []);
 
+
+    const getVenues = async () => {
+        const authenticationResult = await authService.isAuthenticated();
+        if (authenticationResult) {
+            const accessToken = await authService.getAccessToken();
+            const response = await fetch(`/api/venues/VenuesList`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+            const result = await response.json();
+            setVenues(result);
+            setIsVenueReady(true);
+        }
+    }
+
     //Henter Venues knyttet til organizeren brukeren er knyttet til
     //Flyttes til egen komponent. Kanskje ikke allikevel
     useEffect(() => {
-        const getVenues = async () => {
-            const authenticationResult = await authService.isAuthenticated();
-            if (authenticationResult) {
-                const accessToken = await authService.getAccessToken();
-                const response = await fetch(`/api/venues/VenuesList`, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-                const result = await response.json();
-                setVenues(result);
-                setIsVenueReady(true);
-            }
-        }
         getVenues();
     }, []);
+
+
+
+
 
     const mainEventDataToBeSent = {
         'name': name,
@@ -125,10 +134,34 @@ export default function CreateEvent() {
             });
             // Tror det skal holde med å droppe .json() fra response
             const result = await response.json();
+            const SetEventPosted(true);
             console.log(result);
             console.log("Startdate = " + mainEventDataToBeSent.StartDate + " StartTime = " + mainEventDataToBeSent.StartTime)
         }
     }
+
+    let createVenueDiv = (
+        <Grid
+            item
+            xs={6}
+        >
+            <CreateVenue />
+        </Grid>
+    )
+
+    let stopButton = (
+        <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            className={classes.button}
+            startIcon={<SaveIcon />}
+            onClick={() => setCreateVenue(false)}
+        >
+            stopp
+        </Button>
+        )
+
 
     return (
         <Paper variant="outlined" elevation={2}>
@@ -143,7 +176,8 @@ export default function CreateEvent() {
                 </Grid>
                 <Grid
                     container
-                    item xs={12}
+                    item
+                    xs={6}
                     direction="row"
                     justify="flex-start"
                 >
@@ -210,7 +244,7 @@ export default function CreateEvent() {
                                 </Grid>
 
                                 {/*Dropdown for Lokaler*/}
-                                <Grid item xs={6}>
+                                <Grid item xs={12}>
                                     <TextField
                                         select
                                         className={classes.textField}
@@ -227,21 +261,10 @@ export default function CreateEvent() {
                                         ))}
                                     </TextField>
                                 </Grid>
-                                <Grid item xs={3}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        size="large"
-                                        className={classes.button}
-                                        startIcon={<SaveIcon />}
-                                        onClick={submitForm}
-                                    >
-                                        Lagre
-                            </Button>
-                                </Grid>
+                                
 
                                 {/*Dropdown for arrangører*/}
-                                <Grid item xs={6}>
+                                <Grid item xs={12}>
                                     <TextField
                                         select
                                         className={classes.textField}
@@ -258,7 +281,7 @@ export default function CreateEvent() {
                                         ))}
                                     </TextField>
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item xs={2}>
                                     <Button
                                         variant="contained"
                                         color="primary"
@@ -268,14 +291,28 @@ export default function CreateEvent() {
                                         onClick={submitForm}
                                     >
                                         Lagre
-                            </Button>
+                                    </Button>
                                 </Grid>
+                                <Grid item xs={4}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        className={classes.button}
+                                        startIcon={<SaveIcon />}
+                                        onClick={() => setCreateVenue(true) }
+                                    >
+                                        Legg til nytt lokale
+                                    </Button>
+                                </Grid>
+                                {createVenue ? stopButton : null}
                             </Grid>
                         </Form>
                     </Grid>
-
-
                 </Grid>
+
+                { createVenue ? createVenueDiv : null}
+                
             </Grid>
         </Paper>
     );
