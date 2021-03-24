@@ -11,6 +11,7 @@ import { set } from 'date-fns/esm';
 import main from '../MainPage/MainPage';
 
 const useStyles = makeStyles((theme) => ({
+
     root: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -53,16 +54,13 @@ export default function CreateEvent() {
     let [startDateTime, setStartDateTime] = useState(new Date('2019-01-01T15:30:00'));
     let [endDateTime, setEndDateTime] = useState(new Date('2020-01-01T15:30:00'));
     let [organizerId, setOrganizerId] = useState("");
-    let [venueId, setVenueId] = useState(null);
+    let [venueId, setVenueId] = useState("");
 
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
     let [organizers, setOrganizers] = useState([]);
     let [venues, setVenues] = useState([]);
     let [isOrganizerReady, setIsOrganizerReady] = useState(false);
     let [isVenueReady, setIsVenueReady] = useState(false);
-
-
-
 
     //Henter organizere brukeren er knyttet til
     useEffect(() => {
@@ -124,7 +122,7 @@ export default function CreateEvent() {
                 body: JSON.stringify(mainEventDataToBeSent)
             });
             // Tror det skal holde med å droppe .json() fra response
-            const result = await response.json();
+            const result = await response;
             console.log(result);
             console.log("Startdate = " + mainEventDataToBeSent.StartDate + " StartTime = " + mainEventDataToBeSent.StartTime)
         }
@@ -218,10 +216,11 @@ export default function CreateEvent() {
                                         label="Lokale"
                                         fullWidth
                                         value={venueId}
+                                        defaultValue=""
                                         onChange={(e) => setVenueId(e.target.value)}
                                     >
                                         {venues.map((venue) => (
-                                            <MenuItem key={venue.id} value={venue.id}>
+                                            <MenuItem key={venue.id} value={venue.id} >
                                                 {venue.name}
                                             </MenuItem>
                                         ))}
@@ -231,12 +230,12 @@ export default function CreateEvent() {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        size="large"
+                                        size="medium"
                                         className={classes.button}
                                         startIcon={<SaveIcon />}
                                         onClick={submitForm}
                                     >
-                                        Lagre
+                                        Opprett
                             </Button>
                                 </Grid>
 
@@ -249,29 +248,31 @@ export default function CreateEvent() {
                                         label="Organisator"
                                         fullWidth
                                         value={organizerId}
+                                        defaultValue=""
                                         onChange={(e) => setOrganizerId(e.target.value)}
                                     >
                                         {organizers.map((organizer) => (
-                                            <MenuItem key={organizer.id} value={organizer.id}>
+                                            <MenuItem key={organizer.id} value={organizer.id} >
                                                 {organizer.name}
                                             </MenuItem>
                                         ))}
                                     </TextField>
                                 </Grid>
-                                <Grid item xs={3}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        size="large"
-                                        className={classes.button}
-                                        startIcon={<SaveIcon />}
-                                        onClick={submitForm}
-                                    >
-                                        Lagre
-                            </Button>
-                                </Grid>
+                                
                             </Grid>
                         </Form>
+                        <Grid item xs={3}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="medium"
+                                className={classes.button}
+                                startIcon={<SaveIcon />}
+                                onClick={submitForm}
+                            >
+                                Lagre
+                                    </Button>
+                        </Grid>
                     </Grid>
 
 
