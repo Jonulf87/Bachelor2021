@@ -7,8 +7,8 @@ import SaveIcon from '@material-ui/icons/Save';
 export default function TicketTypeAdminForm() {
 
     let [ticketTypeName, setTicketTypeName] = useState("");
-    let [basePrice, setBasePrice] = useState("");
-    let [amountAvailable, setAmountAvailable] = useState("");
+    let [basePrice, setBasePrice] = useState(0);
+    let [amountAvailable, setAmountAvailable] = useState(0);
 
     const ticketTypeDataToBeSent =
     {
@@ -52,8 +52,8 @@ export default function TicketTypeAdminForm() {
                         id="ticketTypeName"
                         label="Navn på billettype"
                         required
-                        value={basePrice}
-                        onChange={(e) => setBasePrice(e.target.value)}
+                        value={ticketTypeName}
+                        onChange={(e) => setTicketTypeName(e.target.value)}
                     />
                 </Grid>
 
@@ -69,8 +69,8 @@ export default function TicketTypeAdminForm() {
                         required
                         type="number"
                         inputProps={inputProps}
-                        value={ticketTypeName}
-                        onChange={(e) => setTicketTypeName(e.target.value)}
+                        value={basePrice}
+                        onChange={(e) => setBasePrice(e.target.value)}
                     />
                 </Grid>
 

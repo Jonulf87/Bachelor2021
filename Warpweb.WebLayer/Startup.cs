@@ -38,8 +38,10 @@ namespace Warpweb.WebLayer
             services.AddScoped<SecurityService>();
             services.AddScoped<MainEventService>();
             services.AddScoped<TicketService>();
+            services.AddScoped<TicketTypeService>();
             services.AddScoped<VenueService>();
             services.AddScoped<CrewService>();
+            services.AddScoped<CrewRoleService>();
             services.AddScoped<UserService>();
             services.AddHttpContextAccessor();
             services.AddTransient<IMainEventProvider, MainEventProvider>();

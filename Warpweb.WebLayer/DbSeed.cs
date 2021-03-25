@@ -263,8 +263,15 @@ namespace Warpweb.WebLayer
                 Name = "Lokale ikke avklart."
             };
 
-            dbContext.Venues.Add(venueNullIsland);
-            dbContext.SaveChanges();
+            var venueExists = dbContext.Venues
+                    .Where(a => a.Name == venueNullIsland.Name)
+                    .FirstOrDefault();
+
+            if (venueExists == null)
+            {
+                dbContext.Venues.Add(venueNullIsland);
+                dbContext.SaveChanges();
+            }
 
 
             // Legg til noen events

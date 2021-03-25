@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace Warpweb.WebLayer.Controllers
     [Route("api/tickettypes")]
     [ApiController]
     [Authorize]
+
     public class TicketTypeController : ControllerBase
     {
         private readonly TicketTypeService _ticketTypeService;
@@ -35,14 +37,14 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPost]
         [Route("createTicketType")]
         //[Authorize(Roles = "Admins")]
-        public async Task<ActionResult<TicketTypeVm>> CreateTicketType(TicketTypeVm ticketTypeVm)
+        public async Task<ActionResult> CreateTicketType(TicketTypeVm ticketTypeVm)
         {
 
             try
             {
                 await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
             }
-            catch (TicketTypeAlreadyExistsException)
+            catch (Exception)
             {
                 return BadRequest();
             }
