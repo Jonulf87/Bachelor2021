@@ -106,10 +106,6 @@ export default function CreateEvent() {
         getVenues();
     }, []);
 
-
-
-
-
     const mainEventDataToBeSent = {
         'name': name,
         'startDateTime': startDateTime,
@@ -132,7 +128,7 @@ export default function CreateEvent() {
             });
             // Tror det skal holde med å droppe .json() fra response
             const result = await response.json();
-            const SetEventPosted(true);
+            const SetEventPosted = true;
             console.log(result);
             console.log("Startdate = " + mainEventDataToBeSent.StartDate + " StartTime = " + mainEventDataToBeSent.StartTime)
         }
@@ -187,6 +183,7 @@ export default function CreateEvent() {
                                         className={classes.textField}
                                         id="eventName"
                                         label="Navn på arrangement"
+                                        required
                                         fullWidth
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
@@ -198,7 +195,7 @@ export default function CreateEvent() {
                                             className={classes.keyboardDatePicker}
                                             id="startDatePicker"
                                             label="Startdato"
-                                            format="yyyy/MM/dd"
+                                            format="dd/MM/yyyy"
                                             variant="inline"
                                             margin="normal"
                                             value={startDateTime}
@@ -211,6 +208,7 @@ export default function CreateEvent() {
                                             label="Startklokkeslett"
                                             variant="inline"
                                             margin="normal"
+                                            ampm={false}
                                             value={startDateTime}
                                             onChange={(timeEvent) => setStartDateTime(timeEvent)}
                                         />
@@ -222,7 +220,7 @@ export default function CreateEvent() {
                                             className={classes.keyboardDatePicker}
                                             id="endDatePicker"
                                             label="Sluttdato"
-                                            format="yyyy/MM/dd"
+                                            format="dd/MM/yyyy"
                                             variant="inline"
                                             margin="normal"
                                             value={endDateTime}
@@ -235,6 +233,7 @@ export default function CreateEvent() {
                                             label="Sluttklokkeslett"
                                             variant="inline"
                                             margin="normal"
+                                            ampm={false}
                                             value={endDateTime}
                                             onChange={(timeEvent) => setEndDateTime(timeEvent)}
                                         />
@@ -250,7 +249,6 @@ export default function CreateEvent() {
                                         label="Lokale"
                                         fullWidth
                                         value={venueId}
-                                        defaultValue=""
                                         onChange={(e) => setVenueId(e.target.value)}
                                     >
                                         {venues.map((venue) => (
@@ -271,7 +269,6 @@ export default function CreateEvent() {
                                         label="Organisator"
                                         fullWidth
                                         value={organizerId}
-                                        defaultValue=""
                                         onChange={(e) => setOrganizerId(e.target.value)}
                                     >
                                         {organizers.map((organizer) => (
