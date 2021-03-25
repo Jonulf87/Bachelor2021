@@ -52,8 +52,10 @@ export default function CreateEvent() {
 
     //Her følger variablene til VM for mainEvent til posting
     let [name, setName] = useState("");
-    let [startDateTime, setStartDateTime] = useState(new Date('2019-01-01T15:30:00'));
-    let [endDateTime, setEndDateTime] = useState(new Date('2020-01-01T15:30:00'));
+    let [startDate, setStartDate] = useState(new Date());
+    let [startTime, setStartTime] = useState(new Date('2020-05-05T11:54:00'));
+    let [endDate, setEndDate] = useState(new Date());
+    let [endTime, setEndTime] = useState(new Date('2020-01-01T12:00:00'))
     let [organizerId, setOrganizerId] = useState("");
     let [venueId, setVenueId] = useState("");
 
@@ -106,11 +108,15 @@ export default function CreateEvent() {
         getVenues();
     }, []);
 
+
     const mainEventDataToBeSent = {
         'name': name,
-        'startDateTime': startDateTime,
-        'endDateTime': endDateTime,
-        'organizerId': organizerId
+        'startDate': startDate,
+        'startTime': startTime,
+        'endDate': endDate,
+        'endTime': endTime,
+        'organizerId': organizerId,
+        'venueId': venueId
     }
 
     // NB - Må sjekke at det er gjort valg i skjema før innsending
@@ -197,9 +203,8 @@ export default function CreateEvent() {
                                             format="dd/MM/yyyy"
                                             variant="inline"
                                             margin="normal"
-                                            value={startDateTime}
-                                            onChange={(dateEvent) => setStartDateTime(dateEvent)}
-
+                                            value={startDate}
+                                            onChange={(dateEvent) => setStartDate(dateEvent)}
                                         />
                                         <KeyboardTimePicker
                                             className={classes.keyboardTimePicker}
@@ -208,8 +213,8 @@ export default function CreateEvent() {
                                             variant="inline"
                                             margin="normal"
                                             ampm={false}
-                                            value={startDateTime}
-                                            onChange={(timeEvent) => setStartDateTime(timeEvent)}
+                                            value={startTime}
+                                            onChange={(timeEvent) => setStartTime(timeEvent)}
                                         />
                                     </MuiPickersUtilsProvider>
                                 </Grid>
@@ -222,8 +227,8 @@ export default function CreateEvent() {
                                             format="dd/MM/yyyy"
                                             variant="inline"
                                             margin="normal"
-                                            value={endDateTime}
-                                            onChange={(dateEvent) => setEndDateTime(dateEvent)}
+                                            value={endDate}
+                                            onChange={(dateEvent) => setEndDate(dateEvent)}
 
                                         />
                                         <KeyboardTimePicker
@@ -233,8 +238,8 @@ export default function CreateEvent() {
                                             variant="inline"
                                             margin="normal"
                                             ampm={false}
-                                            value={endDateTime}
-                                            onChange={(timeEvent) => setEndDateTime(timeEvent)}
+                                            value={endTime}
+                                            onChange={(timeEvent) => setEndTime(timeEvent)}
                                         />
                                     </MuiPickersUtilsProvider>
                                 </Grid>

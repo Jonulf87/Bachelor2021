@@ -42,8 +42,10 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    StartDateTime = a.StartDateTime,
-                    EndDateTime = a.EndDateTime,
+                    StartDate = a.StartDateTime,
+                    StartTime = a.StartDateTime,
+                    EndDate = a.EndDateTime,
+                    EndTime = a.EndDateTime
                 })
                 .SingleOrDefaultAsync();
         }
@@ -58,12 +60,16 @@ namespace Warpweb.LogicLayer.Services
                 throw new NotImplementedException(); //Må endres
             }
 
+            DateTime StartDateTime = maineventVm.StartDate.Date + maineventVm.StartTime.TimeOfDay;
+            DateTime EndDateTime = maineventVm.EndDate.Date + maineventVm.EndTime.TimeOfDay;
+
             var mainevent = new MainEvent
             {
                 Name = maineventVm.Name,
-                StartDateTime = maineventVm.StartDateTime,
-                EndDateTime = maineventVm.EndDateTime,
-                OrganizerId = maineventVm.OrganizerId
+                StartDateTime = StartDateTime,
+                EndDateTime = EndDateTime,
+                OrganizerId = maineventVm.OrganizerId,
+                VenueId = maineventVm.VenueId
             };
 
             _dbContext.MainEvents.Add(mainevent);
@@ -82,10 +88,13 @@ namespace Warpweb.LogicLayer.Services
                 throw new NotImplementedException();
             }
 
+            DateTime StartDateTime = maineventVm.StartDate.Date + maineventVm.StartTime.TimeOfDay;
+            DateTime EndDateTime = maineventVm.EndDate.Date + maineventVm.EndTime.TimeOfDay;
+
             existingMainEvent.Id = maineventVm.Id;
             existingMainEvent.Name = maineventVm.Name;
-            existingMainEvent.StartDateTime = maineventVm.StartDateTime;
-            existingMainEvent.EndDateTime = maineventVm.EndDateTime;
+            existingMainEvent.StartDateTime = StartDateTime;
+            existingMainEvent.EndDateTime = EndDateTime;
 
             _dbContext.Update<MainEvent>(existingMainEvent);
             await _dbContext.SaveChangesAsync();
