@@ -10,6 +10,8 @@ import EventIcon from '@material-ui/icons/Event';
 import GroupIcon from '@material-ui/icons/Group';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import EventSeatIcon from '@material-ui/icons/EventSeat';
+import SettingsIcon from '@material-ui/icons/Settings';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom';
 
@@ -26,12 +28,17 @@ export default function AdminMainMenu() {
 
             <ListItem button button component={Link} to='/venue'>
                 <ListItemIcon><HomeWorkIcon /></ListItemIcon>
-                <ListItemText primary='Lokasjon' />
+                <ListItemText primary='Lokaler' />
             </ListItem>
 
             <ListItem button button component={Link} to='/ticket'>
                 <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
                 <ListItemText primary='Billetter' />
+            </ListItem>
+
+            <ListItem button button component={Link} to='/seatmap'>
+                <ListItemIcon><EventSeatIcon /></ListItemIcon>
+                <ListItemText primary='Setekart' />
             </ListItem>
 
             <ListItem button component={Link} to='/event'>
@@ -50,7 +57,7 @@ export default function AdminMainMenu() {
             </ListItem>
 
             <ListItem button button component={Link} to='/useradmin'>
-                <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                <ListItemIcon><SettingsIcon /></ListItemIcon>
                 <ListItemText primary='Brukeradmin' />
             </ListItem>
 
