@@ -6,6 +6,12 @@ import TicketTypeList from './TicketTypeList';
 
 export default function TicketMain() {
 
+    let [triggerUpdate, setTriggerUpdate] = useState(false);
+
+    const updateList = () => {
+        setTriggerUpdate(oldValue => !oldValue);
+    }
+
     return (
         <>
             <Grid
@@ -22,13 +28,13 @@ export default function TicketMain() {
                         item
                         xs={4}
                     >
-                        <TicketTypeAdminForm />
+                        <TicketTypeAdminForm updateList={ updateList }/>
                     </Grid>
                     <Grid
                         item
                         xs={8}
                     >
-                        <TicketTypeList />
+                        <TicketTypeList triggerUpdate={ triggerUpdate } />
                     </Grid>
                 </Grid>
 

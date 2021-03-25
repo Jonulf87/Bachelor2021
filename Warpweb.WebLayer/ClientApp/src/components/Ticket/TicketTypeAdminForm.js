@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function TicketTypeAdminForm() {
+export default function TicketTypeAdminForm({ updateList }) {
 
     let [ticketTypeName, setTicketTypeName] = useState("");
     let [basePrice, setBasePrice] = useState(0);
@@ -41,6 +41,12 @@ export default function TicketTypeAdminForm() {
                 body: JSON.stringify(ticketTypeDataToBeSent)
             });
             const result = response.json();
+            if (response.status === 200) {
+                updateList();
+                setTicketTypeName("");
+                setBasePrice(0);
+                setAmountAvailable(0);
+            }
             console.log(result);
         }
     }

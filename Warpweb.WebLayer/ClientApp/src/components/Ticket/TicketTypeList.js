@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function TicketTypeList() {
+export default function TicketTypeList({ triggerUpdate }) {
 
     let [isReady, setIsReady] = useState(false);
     let [ticketTypeList, setTicketTypeList] = useState([]);
@@ -41,7 +41,7 @@ export default function TicketTypeList() {
 
         getEvents();
 
-    }, []);
+    }, [triggerUpdate]);
 
     function getTicketTypesFromList() {
 
