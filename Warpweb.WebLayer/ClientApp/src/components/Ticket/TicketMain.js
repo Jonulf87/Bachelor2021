@@ -1,31 +1,49 @@
-﻿import React, { useState } from 'react';
-import TicketInfo from './TicketInfo';
-import TicketAdmin from './TicketAdmin';
-import SeatMapAdminMenu from '../SeatMap/SeatMapAdminMenu';
-import SeatMapFloor from '../SeatMap/SeatMapFloor';
-
+﻿import { Grid } from '@material-ui/core';
+import React, { useState } from 'react';
+import TicketTypeAdminForm from './TicketTypeAdminForm';
 
 
 export default function TicketMain() {
 
-    const [rows, setRows] = useState([]);
-
-    function deleteRow(index) {
-        setRows((oldRows) => {
-            let newList = [...oldRows];
-            newList.splice(index, 1);
-            return newList;
-        });
-    }
-
-    function addRow(numberOfSeats) {
-        setRows((oldRows) => [...oldRows, numberOfSeats]);
-    }
 
     return (
-        <div>
-            <SeatMapAdminMenu addRow={addRow}  />
-            <SeatMapFloor rows={rows} deleteRow={deleteRow} />
-        </div>
+        <>
+            <Grid
+                container
+            >
+                {/*Grid container som inneholder admin for billettyper*/}
+                <Grid
+                    container
+                    item
+                    xs={6}
+                >
+                    <Grid
+                        container
+                        item
+                        xs={4}
+                    >
+                        <TicketTypeAdminForm />
+                    </Grid>
+                    <Grid
+                        item
+                        xs={8}
+                    >
+                        Her kommer listen over billettyper
+                    </Grid>
+                </Grid>
+
+                {/*Grid container som inneholder admin for kampanjer*/}
+                <Grid
+                    container
+                    item
+                    xs={6}
+                >
+                </Grid>
+
+                {/*Grid container som inneholder en liste over alle solgte billetter. expandable*/}
+                <Grid>
+                </Grid>
+            </Grid>
+        </>
     );
 }

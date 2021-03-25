@@ -1,7 +1,6 @@
 ﻿import React from 'react';
 
-export default function TicketAdmin() {
-
+export default function TicketList() {
     return (
         <>
         </>

@@ -33,20 +33,20 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admins")]
+        [Route("createTicketType")]
+        //[Authorize(Roles = "Admins")]
         public async Task<ActionResult<TicketTypeVm>> CreateTicketType(TicketTypeVm ticketTypeVm)
         {
-            int ticketTypeId;
+
             try
             {
-                ticketTypeId = await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
+                await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
             }
             catch (TicketTypeAlreadyExistsException)
             {
                 return BadRequest();
             }
 
-            ticketTypeVm.Id = ticketTypeId;
             return Ok(ticketTypeVm);
         }
 
