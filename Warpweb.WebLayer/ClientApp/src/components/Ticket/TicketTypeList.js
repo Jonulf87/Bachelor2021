@@ -82,7 +82,7 @@ export default function TicketTypeList() {
             </>
             )}
 
-            {!isReady && (<p>Laster arrangementsoversikt...</p>)}
+            {!isReady && (<p>Laster billettype-oversikt...</p>)}
 
         </>
 

@@ -1,8 +1,19 @@
 ﻿import { TextField, Grid, Paper, Typography, Button } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { Form } from 'reactstrap/lib';
 import authService from '../api-authorization/AuthorizeService';
 import SaveIcon from '@material-ui/icons/Save';
+
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            margin: 10
+        },
+    }),
+);
 
 export default function TicketTypeAdminForm() {
 
@@ -38,17 +49,24 @@ export default function TicketTypeAdminForm() {
         step: 10,
     };
 
+    const classes = useStyles();
 
     return (
-        <Form>
-            <Grid container className={classes.root} component={Paper}>
+
+        <Grid container className={classes.root} component={Paper}>
+            <Typography>
+                <strong>Opprett billettype</strong>
+            </Typography>
+
+            <Form>
                 {/*name input*/}
                 <Grid
                     item
                     xs={12}
                 >
                     <TextField
-                        className="KommerEnStyleTing"
+                        className={classes.root}
+                        variant="outlined"
                         id="ticketTypeName"
                         label="Navn på billettype"
                         required
@@ -63,7 +81,8 @@ export default function TicketTypeAdminForm() {
                     xs={12}
                 >
                     <TextField
-                        className="KommerEnStyleTing"
+                        className={classes.root}
+                        variant="outlined"
                         id="basePrice"
                         label="Grunnpris på billettype"
                         required
@@ -80,7 +99,8 @@ export default function TicketTypeAdminForm() {
                     xs={12}
                 >
                     <TextField
-                        className="KommerEnStyleTing"
+                        className={classes.root}
+                        variant="outlined"
                         id="amountAvailable"
                         label="Antall"
                         required
@@ -108,7 +128,8 @@ export default function TicketTypeAdminForm() {
                         Legg til billettype
                     </Button>
                 </Grid>
-            </Grid>
-        </Form>
+            </Form>
+        </Grid>
+        
     );
 }
