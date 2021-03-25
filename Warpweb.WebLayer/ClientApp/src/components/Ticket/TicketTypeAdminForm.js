@@ -1,4 +1,4 @@
-﻿import { TextField, Grid, Button } from '@material-ui/core';
+﻿import { TextField, Grid, Paper, Typography, Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import { Form } from 'reactstrap/lib';
 import authService from '../api-authorization/AuthorizeService';
@@ -41,7 +41,7 @@ export default function TicketTypeAdminForm() {
 
     return (
         <Form>
-            <Grid container>
+            <Grid container className={classes.root} component={Paper}>
                 {/*name input*/}
                 <Grid
                     item

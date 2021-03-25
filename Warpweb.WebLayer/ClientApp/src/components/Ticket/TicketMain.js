@@ -1,10 +1,10 @@
 ﻿import { Grid } from '@material-ui/core';
 import React, { useState } from 'react';
 import TicketTypeAdminForm from './TicketTypeAdminForm';
+import TicketTypeList from './TicketTypeList';
 
 
 export default function TicketMain() {
-
 
     return (
         <>
@@ -15,7 +15,7 @@ export default function TicketMain() {
                 <Grid
                     container
                     item
-                    xs={6}
+                    xs={12}
                 >
                     <Grid
                         container
@@ -28,7 +28,7 @@ export default function TicketMain() {
                         item
                         xs={8}
                     >
-                        Her kommer listen over billettyper
+                        <TicketTypeList />
                     </Grid>
                 </Grid>
 
