@@ -132,7 +132,6 @@ export default function CreateEvent() {
             });
             // Tror det skal holde med å droppe .json() fra response
             const result = await response.json();
-            const SetEventPosted(true);
             console.log(result);
             console.log("Startdate = " + mainEventDataToBeSent.StartDate + " StartTime = " + mainEventDataToBeSent.StartTime)
         }
