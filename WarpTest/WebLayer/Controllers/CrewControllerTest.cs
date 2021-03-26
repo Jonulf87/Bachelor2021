@@ -14,29 +14,29 @@ namespace WarpTest.WebLayer.Controllers
         private const string _crewName1 = "Test Crew 1";
         private const string _crewName2 = "Test Crew 2";
 
-        [Test]
-        public async Task ShouldGetCrews()
-        {
-            List<CrewUser> crewRoles = new List<CrewUser>
-            {
-            };
+        //[Test]
+        //public async Task ShouldGetCrews()
+        //{
+        //    List<CrewUser> crewRoles = new List<CrewUser>
+        //    {
+        //    };
 
-            // Create 2 crew members
-            await CreateCrew(crewRoles, _crewName1);
-            await CreateCrew(crewRoles, _crewName2);
+        //    // Create 2 crew members
+        //    await CreateCrew(crewRoles, _crewName1);
+        //    await CreateCrew(crewRoles, _crewName2);
 
-            // Check that the list contains both
-            CrewService crewService = new CrewService(_dbContext);
-            CrewController crewController = new CrewController(crewService);
+        //    // Check that the list contains both
+        //    //CrewService crewService = new CrewService(_dbContext);
+        //    //CrewController crewController = new CrewController(crewService);
 
-            List<CrewListVm> result = await crewController.GetCrews();
+        //    List<CrewListVm> result = await crewController.GetCrews();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(1, result[0].CrewId);
-            Assert.AreEqual(_crewName1, result[0].CrewName);
-            Assert.AreEqual(2, result[1].CrewId);
-            Assert.AreEqual(_crewName2, result[1].CrewName);
-        }
+        //    Assert.AreEqual(2, result.Count);
+        //    Assert.AreEqual(1, result[0].CrewId);
+        //    Assert.AreEqual(_crewName1, result[0].CrewName);
+        //    Assert.AreEqual(2, result[1].CrewId);
+        //    Assert.AreEqual(_crewName2, result[1].CrewName);
+        //}
 
         //[Test]
         //public async Task ShouldGetCrewById()
@@ -240,24 +240,24 @@ namespace WarpTest.WebLayer.Controllers
 
 
         // Helper methods
-        private async Task<ActionResult<CrewVm>> CreateCrew(List<CrewUser> crewRoles)
-        {
-            return await CreateCrew(crewRoles, _crewName1);
-        }
+        //private async Task<ActionResult<CrewVm>> CreateCrew(List<CrewUser> crewRoles)
+        //{
+        //    return await CreateCrew(crewRoles, _crewName1);
+        //}
 
-        private async Task<ActionResult<CrewVm>> CreateCrew(List<CrewUser> crewRoles, string crewName)
-        {
-            CrewService crewService = new CrewService(_dbContext);
-            CrewController crewController = new CrewController(crewService);
+        //private async Task<ActionResult<CrewVm>> CreateCrew(List<CrewUser> crewRoles, string crewName)
+        //{
+        //    CrewService crewService = new CrewService(_dbContext);
+        //    CrewController crewController = new CrewController(crewService);
 
-            CrewVm crewVm = new CrewVm
-            {
-                CrewName = crewName,
-                CrewRoles = crewRoles
-            };
+        //    CrewVm crewVm = new CrewVm
+        //    {
+        //        CrewName = crewName,
+        //        CrewRoles = crewRoles
+        //    };
 
-            return await crewController.CreateCrew(crewVm);
-        }
+        //    return await crewController.CreateCrew(crewVm);
+        //}
 
         //private void CheckCreatedCrew(CrewVm createdCrew, List<CrewUser> crewRoles)
         //{

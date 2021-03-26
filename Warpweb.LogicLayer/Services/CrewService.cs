@@ -15,9 +15,10 @@ namespace Warpweb.LogicLayer.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<CrewService> _log; //Denne må ordnes. Den er i bruk nede, men vil alltid være null av en eller annen grunn. Foreløpig ukjent
 
-        public CrewService(ApplicationDbContext dbContext)
+        public CrewService(ApplicationDbContext dbContext, ILogger<CrewService> log)
         {
             _dbContext = dbContext;
+            _log = log;
         }
 
         public async Task<List<CrewListVm>> GetCrewsAsync()
