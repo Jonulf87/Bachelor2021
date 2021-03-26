@@ -1,25 +1,30 @@
 ﻿import { TextField, Button } from '@material-ui/core';
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants';
 import authService from '../api-authorization/AuthorizeService';
 
 export default function UserRegister() {
 
 
-    let [firstName, setFirstName] = useState("");
-    let [middleName, setMiddleName] = useState("");
-    let [lastName, setLastName] = useState("");
-    let [phoneNumber, setPhoneNumber] = useState("");
-    let [address, setAddress] = useState("");
-    let [zipCode, setZipCode] = useState("");
-    let [eMail, setEMail] = useState("");
-    let [userName, setUserName] = useState("");
-    let [dateOfBirth, setDateOfBirth] = useState(new Date());
-    let [gender, setGender] = useState("");
-    let [isAllergic, setIsAllergic] = useState(false);
-    let [allergyDescription, setAllergyDescription] = useState("");
-    let [comments, setComments] = useState("");
-    let [team, setTeam] = useState("");
-    let [password, setPassword] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [middleName, setMiddleName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [address, setAddress] = useState("");
+    const [zipCode, setZipCode] = useState("");
+    const [eMail, setEMail] = useState("");
+    const [userName, setUserName] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState(new Date());
+    const [gender, setGender] = useState("");
+    const [isAllergic, setIsAllergic] = useState(false);
+    const [allergyDescription, setAllergyDescription] = useState("");
+    const [comments, setComments] = useState("");
+    const [team, setTeam] = useState("");
+    const [password, setPassword] = useState("");
+
+    const [error, setError] = useState();
+    const [isRegistered, setIsRegistered] = useState(false);
 
     const userDataToBeSent = {
         'firstName': firstName,
@@ -40,26 +45,30 @@ export default function UserRegister() {
     }
 
     const submitForm = async () => {
-        const authenticationResult = await authService.isAuthenticated();
-        if (authenticationResult) {
-            const accessToken = await authService.getAccessToken();
-            const response = await fetch('/api/users/register', {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'content-type': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(userDataToBeSent)
-            });
-            const result = await response.json();
-            console.log(result);
+
+        const response = await fetch('/api/users/register', {
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(userDataToBeSent)
+        });
+        if (response.ok) {
+            setIsRegistered(true);
+        }
+        else {
+            setError(await response.text());
         }
     }
 
+    if (isRegistered) {
+        return <Redirect to={ApplicationPaths.Login} />
+    }
 
     return (
         <>
             <form>
+                {error && <pre style={{ color: "red" }}>{error}</pre>}
                 {/*Input fornavn*/}
                 <TextField
                     id="firstName"
@@ -117,7 +126,6 @@ export default function UserRegister() {
                 >
                     Lagre
                 </Button>
-
             </form>
         </>
     );

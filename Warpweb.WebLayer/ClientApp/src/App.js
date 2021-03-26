@@ -40,6 +40,7 @@ import clsx from 'clsx';
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
 import UserRegister from "./components/User/UserRegister";
+import UserLogin from "./components/User/UserLogin";
 
 
 
@@ -200,6 +201,7 @@ export default function App(props) {
                         <Route path='/participant' component={ParticipantMain} />
                         <Route path='/ticket' component={TicketMain} />
                         <Route path='/register' component={UserRegister} />
+                        <Route path='/login' component={UserLogin} />
                     </Switch>
 
                     <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
@@ -52,35 +54,38 @@ namespace Warpweb.LogicLayer.Services
             }).ToList();
         }
 
-        public async Task<UserVm> RegisterUserAsync(UserVm user)
+        public async Task RegisterUserAsync(UserVm user)
         {
             var userExists = await _userManager.FindByEmailAsync(user.EMail);
 
-            if(userExists == null)
+            if(userExists != null)
             {
-                var userDataToBeStored = new ApplicationUser
-                {
-                    FirstName = user.FirstName,
-                    MiddleName = user.MiddleName,
-                    LastName = user.LastName,
-                    Address = user.Address,
-                    ZipCode = user.ZipCode,
-                    Team = user.Team,
-                    DateOfBirth = user.DateOfBirth,
-                    IsAllergic = user.IsAllergic,
-                    AllergyDescription = user.AllergyDescription,
-                    Gender = user.Gender,
-                    Comments = user.Comments,
-                    PhoneNumber = user.PhoneNumber,
-                    Email = user.EMail,
-                    UserName = user.UserName
-                };
-
-                await _userManager.CreateAsync(userDataToBeStored, user.Password);
-                user.Id = userDataToBeStored.Id;
-                return user;
+                throw new UserAlreadyExistsException();
             }
-            return null; //Må finne ut hva som skal returneres.
+
+            var userDataToBeStored = new ApplicationUser
+            {
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                Address = user.Address,
+                ZipCode = user.ZipCode,
+                Team = user.Team,
+                DateOfBirth = user.DateOfBirth,
+                IsAllergic = user.IsAllergic,
+                AllergyDescription = user.AllergyDescription,
+                Gender = user.Gender,
+                Comments = user.Comments,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.EMail,
+                UserName = user.UserName
+            };
+
+            var result = await _userManager.CreateAsync(userDataToBeStored, user.Password);
+            if(!result.Succeeded)
+            {
+                throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(a => a.Description)));
+            }
         }
     }
 }
