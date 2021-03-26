@@ -51,7 +51,7 @@ export default function UserMainMenu() {
             {!isAuthenticated && (
                 <>
                     
-                    <ListItem button component={Link} to={ApplicationPaths.Register}>
+                    <ListItem button component={Link} to={'/register'}>
                         <ListItemIcon><PersonIcon /></ListItemIcon>
                         <ListItemText primary='Register' />
                     </ListItem>

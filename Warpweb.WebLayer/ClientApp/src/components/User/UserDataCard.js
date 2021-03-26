@@ -66,7 +66,7 @@ export default function UserDataCard() {
             <CardContent>
                 {isReady && (<>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {userInfo.firstName} { userInfo.lastName }  
+                        Hei {userInfo.firstName} { userInfo.lastName }  
                     </Typography>
 
                     <List>
@@ -74,22 +74,61 @@ export default function UserDataCard() {
                             <ListItemIcon><BusinessIcon /></ListItemIcon>
                             <ListItemText primary={ userInfo.address } />
                         </ListItem>
+
+                        <ListItem>
+                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText primary={userInfo.zipCode} />
+                        </ListItem>
+
                         <ListItem>
                             <ListItemIcon><PhoneIcon /></ListItemIcon>
                             <ListItemText primary={ userInfo.phoneNumber } />
                         </ListItem>
+
                         <ListItem>
                             <ListItemIcon><EmailIcon /></ListItemIcon>
                             <ListItemText primary={ userInfo.eMail } />
                         </ListItem>
+
                         <ListItem>
                             <ListItemIcon><CakeIcon /></ListItemIcon>
                             <ListItemText primary={ userInfo.dateOfBirth }/>
                         </ListItem>
+
                         <ListItem>
                             <ListItemIcon><AccountCircleIcon /></ListItemIcon>
                             <ListItemText primary={ userInfo.userName } />
                         </ListItem>
+
+                        <ListItem>
+                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText primary={userInfo.gender} />
+                        </ListItem>
+
+                        <ListItem>
+                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText primary={userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'} />
+                        </ListItem>
+
+                        {userInfo.isAllergic ? 
+                            <ListItem>
+                                <ListItemIcon><BusinessIcon /></ListItemIcon>
+                                <ListItemText primary={userInfo.allergyDescription} />
+                            </ListItem>
+                            :
+                            null}
+
+                        <ListItem>
+                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText primary={userInfo.team} />
+                        </ListItem>
+
+                        <ListItem>
+                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText primary={userInfo.comments} />
+                        </ListItem>
+                        
+
                     </List>
                 </>)}
 

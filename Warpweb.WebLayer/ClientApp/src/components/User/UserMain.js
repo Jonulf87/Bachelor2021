@@ -22,7 +22,7 @@ export default function PaperSheet() {
     }));
 
 
-    const classes = useStyles(); //Denne gir masse feilkoder
+    const classes = useStyles(); 
 
     return (
         <Grid container spacing={3}>

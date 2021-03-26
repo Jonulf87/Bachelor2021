@@ -37,9 +37,6 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
-
- 
-
         public async Task<List<UserRolesListVm>> GetUserRolesAsync(string id)
         {
 
@@ -53,29 +50,37 @@ namespace Warpweb.LogicLayer.Services
                 Name = a.Name,
                 UserHasRole = userRoles.Any(b => b == a.Name)
             }).ToList();
+        }
 
+        public async Task<UserVm> RegisterUserAsync(UserVm user)
+        {
+            var userExists = await _userManager.FindByEmailAsync(user.EMail);
 
+            if(userExists == null)
+            {
+                var userDataToBeStored = new ApplicationUser
+                {
+                    FirstName = user.FirstName,
+                    MiddleName = user.MiddleName,
+                    LastName = user.LastName,
+                    Address = user.Address,
+                    ZipCode = user.ZipCode,
+                    Team = user.Team,
+                    DateOfBirth = user.DateOfBirth,
+                    IsAllergic = user.IsAllergic,
+                    AllergyDescription = user.AllergyDescription,
+                    Gender = user.Gender,
+                    Comments = user.Comments,
+                    PhoneNumber = user.PhoneNumber,
+                    Email = user.EMail,
+                    UserName = user.UserName
+                };
 
-            //var userHasRole = false;
-
-            //List<UserRolesListVm> userRolesList = new List<UserRolesListVm>();
-
-            //foreach(var role in roles)
-            //{
-            //    foreach(var userRole in userRoles)
-            //    {
-            //        if(role.Name == userRole)
-            //        {
-            //            userHasRole = true;
-            //        }
-            //    }
-            //    userRolesList.Add(new UserRolesListVm() { Name = role.Name, UserHasRole = userHasRole });
-            //    userHasRole = false;                
-            //}
-
-            //return userRolesList;
-
-
+                await _userManager.CreateAsync(userDataToBeStored, user.Password);
+                user.Id = userDataToBeStored.Id;
+                return user;
+            }
+            return null; //Må finne ut hva som skal returneres.
         }
     }
 }

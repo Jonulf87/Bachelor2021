@@ -39,6 +39,7 @@ import VenueMain from './components/Venue/VenueMain';
 import clsx from 'clsx';
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
+import UserRegister from "./components/User/UserRegister";
 
 
 
@@ -198,6 +199,7 @@ export default function App(props) {
                         <Route path='/event' component={EventMain} />
                         <Route path='/participant' component={ParticipantMain} />
                         <Route path='/ticket' component={TicketMain} />
+                        <Route path='/register' component={UserRegister} />
                     </Switch>
 
                     <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />

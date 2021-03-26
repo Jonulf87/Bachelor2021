@@ -46,5 +46,13 @@ namespace Warpweb.WebLayer.Controllers
             return await _securityService.GetUserRolesAsync(id);
 
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("/register")]
+        public async Task<ActionResult<UserVm>> RegisterUserAsync(UserVm user)
+        {
+            return await _securityService.RegisterUserAsync(user);
+        }
     }
 }

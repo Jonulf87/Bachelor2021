@@ -16,6 +16,10 @@ namespace Warpweb.DataAccessLayer.Models
         public string LastName { get; set; }
         [PersonalData]
         public string Address { get; set; }
+        [PersonalData]
+        public string ZipCode { get; set; }
+        [PersonalData]
+        public string Team { get; set; }
         [Column(TypeName = "Date")]
         [PersonalData]
         public DateTime DateOfBirth { get; set; }
@@ -24,15 +28,14 @@ namespace Warpweb.DataAccessLayer.Models
         [PersonalData]
         public string AllergyDescription { get; set; }
         [PersonalData]
+        public string Gender { get; set; }
+
+        [PersonalData]
         public string Comments { get; set; } //print 
 
-        [Display(Name = "Samtykkeperson")]
+        [Display(Name = "Verge")]
         [PersonalData]
-        public virtual ICollection<ApplicationUser> Guardian { get; set; } // Verge / foresatt 
-        
-        [PersonalData]
-        public virtual ICollection<Minor> Minors { get; set; } // Den mindreårige i vergehierarkiet
-        public virtual ICollection<Guardian> Guardians { get; set; }
+        public virtual Guardian Guardian { get; set; } // Verge / foresatt 
 
         [PersonalData]
         public virtual ICollection<CrewUser> Crews { get; set; }
