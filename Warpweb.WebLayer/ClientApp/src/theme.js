@@ -3,12 +3,16 @@
 const theme = createMuiTheme({
     palette: {
         primary: {
-            main: '#444444', //bare for å se etter endring
+            light: '#484848',
+            main: '#212121',
+            dark: '#000000',
+            contrastText: '#fff',
         },
         secondary: {
-            main: '#ff555',
-        },
-        background: {
+            light: '#ff7b47',
+            main: '#e54819',
+            dark: '#ab0300',
+            contrastText: '#000',
         },
     },
 });

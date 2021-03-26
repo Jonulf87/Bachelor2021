@@ -1,11 +1,16 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
+import authService from '../api-authorization/AuthorizeService';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
     Input, InputAdornment, InputLabel, FormControl, Typography, Table, TableBody,
-    TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Button, TextField
+    TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Button, TextField,
+    Accordion, AccordionSummary, AccordionDetails, Collapse, Box
 } from '@material-ui/core';
 //import { DataGrid } from '@material-ui/data-grid';
 import SearchIcon from '@material-ui/icons/Search';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import VenueInfo from './VenueInfo';
+import { isNull } from "util";
 
 
 
@@ -40,14 +45,45 @@ function sortRows(sortBy, sortOrder) {
 
 export default function VenueTable(props) {
     const [order, setOrder] = useState('asc');
-    const [tableRows, setTableRows] = useState(props.rows);
-    const [filteredRows, setFilteredRows] = useState(props.rows);
+    const [venueList, setVenueList] = useState([]);
+    const [tableColumns, setTableColumns] = useState([]);
+    const [filteredRows, setFilteredRows] = useState(venueList);
+    const [isReady, setIsReady] = useState(false);
+    const [open, setOpen] = useState(0);
+    const [openCreate, setOpenCreate] = useState(false);
+
     const classes = useStyles();
     
+    useEffect(() => {
+        //fetching venues
+        const getVenues = async () => {
+
+            const authenticationResult = authService.isAuthenticated();
+
+            if(authenticationResult) {
+                const accessToken = await authService.getAccessToken();
+
+                const respone = await fetch('/api/venues/VenuesList', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                const result = await respone.json();
+                setVenueList(result);
+                setTableColumns(Object.keys(result[0]))
+                setIsReady(true);
+            }
+        }
+
+        getVenues();
+
+    }, []);
+
     //search table function
     const handleChange = (e) => {
         const searchTerm = e.currentTarget.value;
-        const newRows = tableRows.filter(obj => {
+        const newRows = venueList.filter(obj => {
             return  obj.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
                     obj.adress.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
                     obj.area.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
@@ -60,15 +96,55 @@ export default function VenueTable(props) {
     const handleSortClick = (e) => {       
         const inRows = filteredRows.sort(sortRows(e.target.id, order));
         const newOrder = (order === 'desc') ? 'asc' :  'desc';
-        console.log("newrow: " + JSON.stringify(inRows));
         setOrder(newOrder);
         setFilteredRows(inRows);
     };
 
     //show info
     const handleClick = (e) => {
-        const SelectedRow = e.currentTarget.value;
-        props.onClick(SelectedRow);
+        const inId = parseInt(e.currentTarget.value);
+        const SelectedVenue = (inId === open) ? 0 : inId;
+        setOpen(SelectedVenue);
+    };
+
+    function getVenuesfromList() {
+
+        return (
+            <TableBody>
+                    {venueList.map((venuesList) => (
+                        <>
+                        <TableRow key={venuesList.id}>
+                                    <TableCell align="left">{venuesList.id}</TableCell>
+                                    <TableCell align="left">{venuesList.name}</TableCell>
+                                    <TableCell align="left">
+                                            <Button
+                                            value={venuesList.id}
+                                            variant="outlined"
+                                            onClick={handleClick}
+                                            >
+                                                Mer info
+                                            </Button>
+                                            <Button
+                                            value={venuesList.id}
+                                            variant="outlined"
+                                            >
+                                                Endre
+                                            </Button>
+                                    </TableCell>
+                        </TableRow>
+                        <TableRow key={venuesList.id * -1}>
+                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }}  colSpan={3}>
+                            <Collapse in={venuesList.id === open} timeout="auto" unmountOnExit>
+                                <Box>
+                                    <VenueInfo venue={venuesList.id} />
+                                </Box>
+                            </Collapse>
+                            </TableCell>
+                        </TableRow>
+                        </>
+                    ))}
+            </TableBody>
+        )
     };
 
     return (
@@ -90,62 +166,33 @@ export default function VenueTable(props) {
                 ),
               }}
             />
+            {/*<Button
+                variant="outlined"
+                onClick={setOpenCreate(!openCreate)}
+            >
+                Opprett lokale
+            </Button>
+            <Collapse in={openCreate} unmountOnExit>
+                <Box>Hei</Box>
+            </Collapse>*/}
             <Table className={classes.table} aria-label="Lokaletabell">
                 <TableHead>
                     <TableRow>
+                    {tableColumns.map((tableColumn) => (
                         <TableCell align="left" >
-                            <TableSortLabel id="id" onClick={handleSortClick}>
-                                Id
+                            <TableSortLabel id={tableColumn} onClick={handleSortClick}>
+                                {tableColumn}
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell align="left">
-                            <TableSortLabel id='name' onClick={handleSortClick}>
-                                Navn
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell align="left">
-                            <TableSortLabel id="adress" onClick={handleSortClick}>
-                                Sted
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell align="left"><TableSortLabel id="area" onClick={handleSortClick}>
-                                Areal
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell align="left">
-                            <TableSortLabel id="maxCapacity" onClick={handleSortClick}>
-                                Maks kapasitet
-                            </TableSortLabel>
-                        </TableCell>
+                        ))}
                         <TableCell align="left">Handlinger</TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {filteredRows.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell align="left">{row.id}</TableCell>
-                            <TableCell align="left">{row.name}</TableCell>
-                            <TableCell align="left">{row.adress}</TableCell>
-                            <TableCell align="left">{row.area}</TableCell>
-                            <TableCell align="left">{row.maxCapacity}</TableCell>
-                            <TableCell align="left">
-                                <Button
-                                value={row.id}
-                                variant="outlined"
-                                onClick={handleClick}
-                                >
-                                    Mer info
-                                </Button>
-                                <Button
-                                value={row.id}
-                                variant="outlined"
-                                >
-                                    Endre
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
+                {isReady && (<>
+                    {getVenuesfromList()}
+                </>)}
+
+                {!isReady && (<p>Loading...</p>)}
             </Table>
         </TableContainer>
     )
