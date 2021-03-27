@@ -24,6 +24,7 @@ namespace Warpweb.DataAccessLayer
         public DbSet<TicketType> TicketTypes { get; set; }
         public DbSet<Venue> Venues { get; set; }
         public DbSet<CrewPermission> CrewPermissions { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

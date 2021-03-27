@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Text;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,10 +12,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Services;
+using Warpweb.WebLayer.Configs;
 
 namespace Warpweb.WebLayer
 {
@@ -29,6 +33,8 @@ namespace Warpweb.WebLayer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -55,15 +61,32 @@ namespace Warpweb.WebLayer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                RequireExpirationTime = false
+            };
 
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddSingleton(tokenValidationParameters);
 
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(jwt => {
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = tokenValidationParameters;
+            });
+
+            services.AddControllers();
+            
             services.Configure<IdentityOptions>(options =>
             {
                 //password settings. M? oppdateres
@@ -81,20 +104,6 @@ namespace Warpweb.WebLayer
                 options.User.RequireUniqueEmail = true;
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ1234567890-_.@+-"; //Husk å teste for æøå og + - i brukernavn
                 options.SignIn.RequireConfirmedAccount = false; //Bør kanskje ikke være true?
-            });
-
-            services.ConfigureApplicationCookie(options => //Cookie settings
-            {
-                //cookies
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-
-                //login
-                //options.LoginPath = "/Identity/Account/Login";
-                //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                //Usikker hvor de to over skal peke per n?.
-                options.SlidingExpiration = true;
-
             });
 
             // In production, the React files will be served from this directory
@@ -128,16 +137,8 @@ namespace Warpweb.WebLayer
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
-            });
-
+            
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = Path.Join(env.ContentRootPath, "ClientApp");

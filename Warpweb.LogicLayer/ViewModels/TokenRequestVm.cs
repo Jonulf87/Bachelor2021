@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Warpweb.LogicLayer.ViewModels
 {
-    public class LoginUserVm
+    public class TokenRequestVm
     {
         [Required]
-        public string UserName { get; set; }
+        public string Token { get; set; }
         [Required]
-        public string Password { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
