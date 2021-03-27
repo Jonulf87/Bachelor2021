@@ -11,10 +11,7 @@ import './custom.css'
 import MainPage from './components/MainPage/MainPage';
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
-import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import AppBar from '@material-ui/core/AppBar';
-import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
-import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CrewMain from './components/Crew/CrewMain';
@@ -24,7 +21,6 @@ import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import EventMain from './components/Event/EventMain';
 import IconButton from '@material-ui/core/IconButton';
-import { LoginMenu } from './components/api-authorization/LoginMenu';
 import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
 import MenuIcon from '@material-ui/icons/Menu';
 import ParticipantMain from './components/Participant/ParticipantMain';
@@ -203,8 +199,6 @@ export default function App(props) {
                         <Route path='/register' component={UserRegister} />
                         <Route path='/login' component={UserLogin} />
                     </Switch>
-
-                    <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
                 </main>
             </div>
         </ThemeProvider>

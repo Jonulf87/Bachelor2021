@@ -39,9 +39,10 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpGet]
+        [Route("")]
         public async Task<UserVm> GetUserAsync()
         {
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
 
             return await _userService.GetUserAsync(userId.Value);
         }

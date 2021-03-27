@@ -18,7 +18,9 @@ using Warpweb.WebLayer.Configs;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    public class AuthController : Controller
+    [Route("api/auth")]
+    [ApiController]
+    public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JwtConfig _jwtConfig;
@@ -36,7 +38,7 @@ namespace Warpweb.WebLayer.Controllers
 
 
         [HttpPost]
-        [Route("Login")]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserVm user)
         {
             if (ModelState.IsValid)
@@ -79,7 +81,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpPost]
-        [Route("RefreshToken")]
+        [Route("refreshtoken")]
         public async Task<IActionResult> RefreshToken([FromBody] TokenRequestVm tokenRequest)
         {
             if (ModelState.IsValid)

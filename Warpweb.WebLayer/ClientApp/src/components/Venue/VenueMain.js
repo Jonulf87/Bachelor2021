@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
 import VenueInfo from './VenueInfo';
 import VenueAdmin from './VenueAdmin';
 import VenueTable from './VenueTable';

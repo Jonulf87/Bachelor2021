@@ -4,7 +4,7 @@ import { TextareaAutosize } from '@material-ui/core';
 import UserDataCard from './UserDataCard';
 import UserTicketTable from './UserTicketTable';
 import UserCrewTable from './UserCrewTable';
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
 import Grid from '@material-ui/core/Grid';
 
 export default function PaperSheet() {

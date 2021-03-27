@@ -1,8 +1,7 @@
 ﻿import { TextField, Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants';
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
 
 export default function UserRegister() {
 
@@ -62,7 +61,7 @@ export default function UserRegister() {
     }
 
     if (isRegistered) {
-        return <Redirect to={ApplicationPaths.Login} />
+        return <Redirect to={'/login'} />
     }
 
     return (

@@ -1,7 +1,7 @@
 ﻿import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
 
 const useStyles = makeStyles((theme) =>
     createStyles({

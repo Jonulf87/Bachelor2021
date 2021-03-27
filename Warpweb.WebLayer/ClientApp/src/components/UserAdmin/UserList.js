@@ -1,7 +1,7 @@
 ﻿import { Typography, Grid, Divider, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) =>

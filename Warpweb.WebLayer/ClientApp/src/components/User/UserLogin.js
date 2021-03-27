@@ -1,40 +1,37 @@
 ﻿import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
+import { Redirect } from 'react-router-dom';
 
 export default function UserLogin() {
 
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
-    const [error, setError] = useState("");
+    const [loginSuccess, setLoginSuccess] = useState(false);
+
+    const [errors, setErrors] = useState([]);
 
 
     const logInSubmit = async () => {
 
-        const userDataToBeSent = {
-            'userName': userName,
-            'password': password
-        }
+        const response = await authService.login(userName, password);
 
-        const response = await fetch('/api/users/login', {
-            headers: {
-                'content-type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(userDataToBeSent)
-        });
-
-        if (response.ok) {
-            await authService.completeSignIn("/user")
+        if (response.token) {
+            setLoginSuccess(true);
         }
         else {
-            setError(await response.text())
+            setErrors(response.errors)
         }
+    }
+
+    if (loginSuccess) {
+        return (<Redirect to={'/user'}/>)
     }
 
     return (
         <>
+            {errors.map(error => (<p>{error}</p>))}
             <form>
                 {/*Input brukernavn/email*/}
                 <TextField

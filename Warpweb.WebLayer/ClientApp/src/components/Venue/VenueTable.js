@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
     Input, InputAdornment, InputLabel, FormControl, Typography, Table, TableBody,

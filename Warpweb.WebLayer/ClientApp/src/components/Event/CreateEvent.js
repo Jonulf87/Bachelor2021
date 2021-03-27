@@ -6,7 +6,7 @@ import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from 
 import { Form } from 'reactstrap';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
 import { set } from 'date-fns/esm';
 import main from '../MainPage/MainPage';
 import CreateVenue from '../Venue/CreateVenue';

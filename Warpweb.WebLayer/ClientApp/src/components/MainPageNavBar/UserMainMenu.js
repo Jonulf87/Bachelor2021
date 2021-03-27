@@ -5,8 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
-import authService from '../api-authorization/AuthorizeService';
-import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants';
+import authService from '../../services/authService';
 import { Link, useHistory } from 'react-router-dom';
 
 export default function UserMainMenu() {
@@ -41,10 +40,10 @@ export default function UserMainMenu() {
                         <ListItemText primary='Min side' />
                     </ListItem>
 
-                    <ListItem button component={Link} to={{pathname: ApplicationPaths.LogOut, state: {local: true}}} history={history}>
+                    {/*<ListItem button component={Link} to={{pathname: ApplicationPaths.LogOut, state: {local: true}}} history={history}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg ut' />
-                    </ListItem>
+                    </ListItem>*/}
 
 
                 </>)}
@@ -57,7 +56,7 @@ export default function UserMainMenu() {
                     </ListItem>
 
 
-                    <ListItem button component={Link} to={ApplicationPaths.Login}>
+                    <ListItem button component={Link} to={'/login'}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg inn' />
                     </ListItem>

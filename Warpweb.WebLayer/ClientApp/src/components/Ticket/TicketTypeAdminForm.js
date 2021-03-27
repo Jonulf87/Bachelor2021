@@ -2,7 +2,7 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { Form } from 'reactstrap/lib';
-import authService from '../api-authorization/AuthorizeService';
+import authService from '../../services/authService';
 import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles((theme) =>

@@ -54,5 +54,6 @@ namespace Warpweb.DataAccessLayer.Models
         public virtual MainEvent CurrentMainEvent { get; set; }
 
         public int? YearlyFee { get; set; } //Null angir ingen kontingent betalt
+        public virtual List<RefreshToken> RefreshTokens { get; set; }
     }
 }
