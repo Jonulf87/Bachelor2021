@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -36,6 +37,27 @@ namespace Warpweb.WebLayer.Controllers
             _applicationDbContext = applicationDbContext;
         }
 
+        [HttpPost]
+        [Route("logout")]
+        [Authorize]
+        public async Task<ActionResult> Logout(TokenRequestVm token)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).ToString();
+
+            var refreshToken = await _applicationDbContext.RefreshTokens.Where(a => a.UserId == userId && a.Token == token.Token).FirstOrDefaultAsync();
+
+            if (refreshToken == null)
+            {
+                return BadRequest();
+            }
+            else if (userId == null)
+            {
+                return BadRequest();
+            }
+            refreshToken.IsRevoked = true;
+            await _applicationDbContext.SaveChangesAsync();
+            return Ok();
+        }
 
         [HttpPost]
         [Route("login")]

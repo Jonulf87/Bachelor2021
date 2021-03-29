@@ -40,7 +40,7 @@ export default function UserDataCard() {
             if (authenticationResult) {
                 const accessToken = authService.getAccessToken();
 
-                const response = await fetch('/api/users', {
+                const response = await fetch('/api/user', {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
                     }

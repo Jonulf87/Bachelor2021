@@ -30,6 +30,11 @@ export default function UserMainMenu() {
         return <p>Loading...</p>;
     }
 
+    const logout = () => {
+        setIsAuthenticated(false);
+        authService.logout()
+    }
+
     return (
         <List>
             {isAuthenticated && (
@@ -40,10 +45,10 @@ export default function UserMainMenu() {
                         <ListItemText primary='Min side' />
                     </ListItem>
 
-                    {/*<ListItem button component={Link} to={{pathname: ApplicationPaths.LogOut, state: {local: true}}} history={history}>
+                    <ListItem button component={Link} to='/login' onClick={logout}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg ut' />
-                    </ListItem>*/}
+                    </ListItem>
 
 
                 </>)}

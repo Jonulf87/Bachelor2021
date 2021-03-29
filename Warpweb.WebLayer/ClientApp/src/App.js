@@ -1,47 +1,32 @@
-
-
+import React, { useState } from 'react';
+import theme from './theme'
 import {
     Route,
     BrowserRouter as Router,
     Switch
 } from "react-router-dom";
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import './custom.css';
 
-import './custom.css'
-import MainPage from './components/MainPage/MainPage';
+import { makeStyles, useTheme, ThemeProvider } from '@material-ui/core/styles';
+import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar } from '@material-ui/core';
+import { ChevronLeftIcon, ChevronRigthIcon } from '@material-ui/icons';
+import MenuIcon from '@material-ui/icons/Menu';
+
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
-import AppBar from '@material-ui/core/AppBar';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CrewMain from './components/Crew/CrewMain';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
 import EventMain from './components/Event/EventMain';
-import IconButton from '@material-ui/core/IconButton';
-import MainPageNavBar from './components/MainPageNavBar/MainPageNavBar';
-import MenuIcon from '@material-ui/icons/Menu';
 import ParticipantMain from './components/Participant/ParticipantMain';
-import React from 'react';
 import ReportMain from './components/Report/ReportMain';
 import TicketMain from './components/Ticket/TicketMain';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import UserMain from './components/User/UserMain';
 import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import VenueMain from './components/Venue/VenueMain';
-import clsx from 'clsx';
-import { ThemeProvider } from '@material-ui/core/styles'
-import theme from './theme'
 import UserRegister from "./components/User/UserRegister";
 import UserLogin from "./components/User/UserLogin";
 
-
-
 export default function App(props) {
-    //static displayName = App.name;
 
     const drawerWidth = 240;
 
@@ -81,20 +66,11 @@ export default function App(props) {
 
     const { window } = props;
     const classes = useStyles();
-    //const theme = useTheme();
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-
-    //    function handleDrawerOpen() {
-    //        setOpen(true);
-    //    };
-
-    //    function handleDrawerClose() {
-    //        setOpen(false);
-    //};
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -156,35 +132,6 @@ export default function App(props) {
                     </Hidden>
                 </nav>
 
-                {/*<Drawer
-                //    variant="permanent"
-                //    className={clsx(classes.drawer, {
-                //        [classes.drawerOpen]: open,
-                //        [classes.drawerClose]: !open,
-                //    })}
-                //    classes={{
-                //        paper: clsx({
-                //            [classes.drawerOpen]: open,
-                //            [classes.drawerClose]: !open,
-                //        }),
-                //    }}
-                //>
-                //    <div className={classes.toolbar}>
-                //        <IconButton onClick={handleDrawerClose}>
-                //            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                //        </IconButton>
-                //    </div>
-                //    <Divider />
-
-                //    <UserMainMenu />
-
-                //    <Divider />
-
-                //    <AdminMainMenu />
-                
-                //</Drawer>*/}
-
-
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     <Switch>
@@ -202,16 +149,5 @@ export default function App(props) {
                 </main>
             </div>
         </ThemeProvider>
-
-        // <Route path='/seat' component={SeatMapBackdrop} />
-        //<div className="container">
-        //    <MainPageNavBar />
-
-        //</div>
-        //<Layout>
-        //<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-        //</Layout>
-
-        //<Route path='/useradmin' component={} />
     );
 }
