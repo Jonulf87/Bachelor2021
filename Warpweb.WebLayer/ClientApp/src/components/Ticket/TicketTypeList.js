@@ -1,7 +1,7 @@
 ﻿import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import authService from '../../services/authService';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -15,26 +15,21 @@ const useStyles = makeStyles((theme) =>
 
 export default function TicketTypeList({ triggerUpdate }) {
 
-    let [isReady, setIsReady] = useState(false);
     let [ticketTypeList, setTicketTypeList] = useState([]);
+    const [isReady, setIsReady] = useState(false);
+    const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
         const getEvents = async () => {
-
-            const authenticationResult = await authService.isAuthenticated();
-
-            if (authenticationResult) {
-                const accessToken = await authService.getAccessToken();
-
+            if (isAuthenticated) {
                 const response = await fetch('/api/tickettypes', {
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`
+                        'Authorization': `Bearer ${token}`
                     }
                 });
 
                 const result = await response.json();
                 setTicketTypeList(result);
-
                 setIsReady(true);
             }
         }

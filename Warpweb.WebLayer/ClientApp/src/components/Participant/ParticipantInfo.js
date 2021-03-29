@@ -3,7 +3,6 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import authService from '../../services/authService';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,6 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -26,26 +26,23 @@ const useStyles = makeStyles((theme) =>
 
 export default function ParticipantInfo() {
 
-    let [isReady, setIsReady] = useState(false);
     let [usersList, setUsersList] = useState([]);
+    const [isReady, setIsReady] = useState(false);
+    const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
         const getUsers = async () => {
 
-            const authenticationResult = authService.isAuthenticated();
-
-            if (authenticationResult) {
-                const accessToken = await authService.getAccessToken();
+            if (isAuthenticated) {
 
                 const response = await fetch('/api/users/UsersList', {
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`
+                        'Authorization': `Bearer ${token}`
                     }
                 });
 
                 const result = await response.json();
                 setUsersList(result);
-
                 setIsReady(true);
             }
         }

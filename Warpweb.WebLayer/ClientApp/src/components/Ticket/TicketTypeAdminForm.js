@@ -2,8 +2,8 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { Form } from 'reactstrap/lib';
-import authService from '../../services/authService';
 import SaveIcon from '@material-ui/icons/Save';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -20,6 +20,7 @@ export default function TicketTypeAdminForm({ updateList }) {
     let [ticketTypeName, setTicketTypeName] = useState("");
     let [basePrice, setBasePrice] = useState(0);
     let [amountAvailable, setAmountAvailable] = useState(0);
+    const { isAuthenticated, token } = useAuth();
 
     const ticketTypeDataToBeSent =
     {
@@ -29,12 +30,10 @@ export default function TicketTypeAdminForm({ updateList }) {
     }
 
     const submitForm = async () => {
-        const authenticationResult = await authService.isAuthenticated();
-        if (authenticationResult) {
-            const accessToken = await authService.getAccessToken();
+        if (isAuthenticated) {
             const response = await fetch('/api/tickettypes/createTicketType', {
                 headers: {
-                    'Authorization': `Bearer ${accessToken}`,
+                    'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
                 },
                 method: 'POST',

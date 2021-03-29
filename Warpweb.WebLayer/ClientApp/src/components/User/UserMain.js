@@ -1,10 +1,8 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextareaAutosize } from '@material-ui/core';
 import UserDataCard from './UserDataCard';
 import UserTicketTable from './UserTicketTable';
 import UserCrewTable from './UserCrewTable';
-import authService from '../../services/authService';
 import Grid from '@material-ui/core/Grid';
 
 export default function PaperSheet() {
@@ -21,7 +19,6 @@ export default function PaperSheet() {
         },
     }));
 
-
     const classes = useStyles(); 
 
     return (
@@ -36,7 +33,5 @@ export default function PaperSheet() {
                 <UserCrewTable />
             </Grid>
         </Grid>
-
-
     );
 }

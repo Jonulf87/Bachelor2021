@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
-import authService from '../../services/authService';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +30,8 @@ export default function CreateVenue() {
     const [postalCode, setPostalCode] = useState('');
     const [area, setArea] = useState('');
     const [capacity, setCapacity] = useState('');
+
+    const { isAuthenticated, token } = useAuth();
 
     useEffect(
         () => {
@@ -59,20 +61,16 @@ export default function CreateVenue() {
         }
 
 
-
-        const authenticationResult = await authService.isAuthenticated();
-        if (authenticationResult) {
-            const accessToken = await authService.getAccessToken();
+        if (isAuthenticated) {
             const response = await fetch('/api/Venue', {
                 headers: {
-                    'Authorization': `Bearer ${accessToken}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 method: 'POST',
                 body: JSON.stringify(data)
             });
             const result = await response.json();
-            console.log(result);
         } else {
             alert("Not authorized");
         }

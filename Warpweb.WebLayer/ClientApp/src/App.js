@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import clsx from 'clsx';
 import './custom.css';
+import AuthProvider from './providers/AuthProvider';
 
 import { makeStyles, useTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar } from '@material-ui/core';
@@ -75,79 +76,81 @@ export default function App(props) {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        <ThemeProvider theme={theme}>
-            <div className={classes.root}>
-                <CssBaseline />
-                <AppBar position="fixed" className={classes.appBar}>
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            edge="start"
-                            onClick={handleDrawerToggle}
-                            className={classes.menuButton}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap>
-                            WarpWeb
+        <AuthProvider>
+            <ThemeProvider theme={theme}>
+                <div className={classes.root}>
+                    <CssBaseline />
+                    <AppBar position="fixed" className={classes.appBar}>
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                edge="start"
+                                onClick={handleDrawerToggle}
+                                className={classes.menuButton}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6" noWrap>
+                                WarpWeb
                         </Typography>
-                    </Toolbar>
-                </AppBar>
-                <nav className={classes.drawer} aria-label="mailbox folders">
-                    <Hidden smUp implementation="css">
-                        <Drawer
-                            container={container}
-                            variant="temporary"
-                            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                            open={mobileOpen}
-                            onClose={handleDrawerToggle}
-                            classes={{
-                                paper: classes.drawerPaper,
-                            }}
-                            ModalProps={{
-                                keepMounted: true, // Better open performance on mobile.
-                            }}
-                        >
-                            <Divider />
-                            <UserMainMenu />
-                            <Divider />
-                            <AdminMainMenu />
-                        </Drawer>
-                    </Hidden>
-                    <Hidden xsDown implementation="css">
-                        <Drawer
-                            classes={{
-                                paper: classes.drawerPaper,
-                            }}
-                            variant="permanent"
-                            open
-                        >
-                            <div className={classes.toolbar} background="primary" />
-                            <Divider />
-                            <UserMainMenu />
-                            <Divider />
-                            <AdminMainMenu />
-                        </Drawer>
-                    </Hidden>
-                </nav>
+                        </Toolbar>
+                    </AppBar>
+                    <nav className={classes.drawer} aria-label="mailbox folders">
+                        <Hidden smUp implementation="css">
+                            <Drawer
+                                container={container}
+                                variant="temporary"
+                                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                                open={mobileOpen}
+                                onClose={handleDrawerToggle}
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                                ModalProps={{
+                                    keepMounted: true, // Better open performance on mobile.
+                                }}
+                            >
+                                <Divider />
+                                <UserMainMenu />
+                                <Divider />
+                                <AdminMainMenu />
+                            </Drawer>
+                        </Hidden>
+                        <Hidden xsDown implementation="css">
+                            <Drawer
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                                variant="permanent"
+                                open
+                            >
+                                <div className={classes.toolbar} background="primary" />
+                                <Divider />
+                                <UserMainMenu />
+                                <Divider />
+                                <AdminMainMenu />
+                            </Drawer>
+                        </Hidden>
+                    </nav>
 
-                <main className={classes.content}>
-                    <div className={classes.toolbar} />
-                    <Switch>
-                        <Route path='/user' component={UserMain} />
-                        <Route path='/venue' component={VenueMain} />
-                        <Route path='/crew' component={CrewMain} />
-                        <Route path='/useradmin' component={UserAdminMain} />
-                        <Route path='/report' component={ReportMain} />
-                        <Route path='/event' component={EventMain} />
-                        <Route path='/participant' component={ParticipantMain} />
-                        <Route path='/ticket' component={TicketMain} />
-                        <Route path='/register' component={UserRegister} />
-                        <Route path='/login' component={UserLogin} />
-                    </Switch>
-                </main>
-            </div>
-        </ThemeProvider>
+                    <main className={classes.content}>
+                        <div className={classes.toolbar} />
+                        <Switch>
+                            <Route path='/user' component={UserMain} />
+                            <Route path='/venue' component={VenueMain} />
+                            <Route path='/crew' component={CrewMain} />
+                            <Route path='/useradmin' component={UserAdminMain} />
+                            <Route path='/report' component={ReportMain} />
+                            <Route path='/event' component={EventMain} />
+                            <Route path='/participant' component={ParticipantMain} />
+                            <Route path='/ticket' component={TicketMain} />
+                            <Route path='/register' component={UserRegister} />
+                            <Route path='/login' component={UserLogin} />
+                        </Switch>
+                    </main>
+                </div>
+            </ThemeProvider>
+        </AuthProvider>
     );
 }

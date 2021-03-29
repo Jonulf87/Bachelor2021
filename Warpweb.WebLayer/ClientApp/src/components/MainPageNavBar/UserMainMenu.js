@@ -5,35 +5,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import List from '@material-ui/core/List';
-import authService from '../../services/authService';
-import { Link, useHistory } from 'react-router-dom';
+import authService from '../../providers/AuthProvider';
+import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 export default function UserMainMenu() {
 
-    let [isReady, setIsReady] = useState(false);
-    let [isAuthenticated, setIsAuthenticated] = useState(false);
-    let history = useHistory();
-
-    useEffect(() => {
-        const getAuthenticationState = async () => {
-            const authenticationResult = await authService.isAuthenticated();
-
-            setIsAuthenticated(authenticationResult);
-            setIsReady(true);
-        }
-
-        getAuthenticationState();
-    }, [])
-    //logikk som sier hva som returneres
-
-    if (!isReady) {
-        return <p>Loading...</p>;
-    }
-
-    const logout = () => {
-        setIsAuthenticated(false);
-        authService.logout()
-    }
+    const { isAuthenticated, logout } = useAuth();
 
     return (
         <List>
@@ -45,7 +23,7 @@ export default function UserMainMenu() {
                         <ListItemText primary='Min side' />
                     </ListItem>
 
-                    <ListItem button component={Link} to='/login' onClick={logout}>
+                    <ListItem button onClick={logout}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg ut' />
                     </ListItem>

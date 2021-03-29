@@ -12,7 +12,7 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
 import CakeIcon from '@material-ui/icons/Cake';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import authService from '../../services/authService';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -27,22 +27,17 @@ const useStyles = makeStyles((theme) =>
 
 export default function UserDataCard() {
 
-
-    let [isReady, setIsReady] = useState(false);
     let [userInfo, setUserInfo] = useState(null);
+    const [isReady, setIsReady] = useState(false);
+    const { isAuthenticated, token } = useAuth();
 
 
     useEffect(() => {
         const getUser = async () => {
-
-            const authenticationResult = authService.isAuthenticated();
-
-            if (authenticationResult) {
-                const accessToken = authService.getAccessToken();
-
-                const response = await fetch('/api/user', {
+            if (isAuthenticated) {
+                const response = await fetch('/api/users', {
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`
+                        'Authorization': `Bearer ${token}`
                     }
                 });
 
@@ -51,10 +46,7 @@ export default function UserDataCard() {
                 setIsReady(true);
             }
         }
-
         getUser();
-
-
 
     }, []);
 

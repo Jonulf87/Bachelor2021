@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,22 +41,23 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPost]
         [Route("logout")]
         [Authorize]
-        public async Task<ActionResult> Logout(TokenRequestVm token)
+        public async Task<ActionResult> Logout()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).ToString();
+            var refreshToken = Request.Cookies["refreshToken"];
 
-            var refreshToken = await _applicationDbContext.RefreshTokens.Where(a => a.UserId == userId && a.Token == token.Token).FirstOrDefaultAsync();
+            if (!string.IsNullOrEmpty(refreshToken))
+            {
+                var storedToken = await _applicationDbContext.RefreshTokens.FirstOrDefaultAsync(a => a.Token == refreshToken);
 
-            if (refreshToken == null)
-            {
-                return BadRequest();
+                if (storedToken != null)
+                {
+                    storedToken.IsRevoked = true;
+
+                    await _applicationDbContext.SaveChangesAsync();
+                }
             }
-            else if (userId == null)
-            {
-                return BadRequest();
-            }
-            refreshToken.IsRevoked = true;
-            await _applicationDbContext.SaveChangesAsync();
+
+            Response.Cookies.Delete("refreshToken");
             return Ok();
         }
 
@@ -104,35 +106,41 @@ namespace Warpweb.WebLayer.Controllers
 
         [HttpPost]
         [Route("refreshtoken")]
-        public async Task<IActionResult> RefreshToken([FromBody] TokenRequestVm tokenRequest)
+        public async Task<IActionResult> RefreshToken()
         {
-            if (ModelState.IsValid)
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
             {
-                var result = await VerifyAndGenerateToken(tokenRequest);
-
-                if (result == null)
+                return BadRequest(new AuthResultVm()
                 {
-                    return BadRequest(new AuthResultVm()
+                    Errors = new List<string>()
                     {
-                        Errors = new List<string>() {
-                            "Invalid tokens"
-                        }
-                    });
-                }
-                else if (result.Errors != null && result.Errors.Count > 0)
-                {
-                    return BadRequest(result);
-                }
-
-                return Ok(result);
+                         "Refresh Tokens eksisterer ikke. Vennligst logg på igjen."
+                    }
+                });
             }
 
-            return BadRequest(new AuthResultVm()
+            var result = await VerifyAndGenerateToken(refreshToken);
+
+            if (result == null)
             {
-                Errors = new List<string>() {
-                    "Invalid payload"
-                }
-            });
+                Response.Cookies.Delete("refreshToken");
+
+                return BadRequest(new AuthResultVm()
+                {
+                    Errors = new List<string>()
+                    {
+                        "Ugyldig token"
+                    }
+                });
+            }
+            else if (result.Errors != null && result.Errors.Count > 0)
+            {
+                Response.Cookies.Delete("refreshToken");
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
 
@@ -142,15 +150,22 @@ namespace Warpweb.WebLayer.Controllers
 
             var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
 
+            var claimsIdentity = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            });
+
+            foreach (var role in await _userManager.GetRolesAsync(user))
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("Id", user.Id),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                }),
+                Subject = claimsIdentity,
                 Expires = DateTime.UtcNow.AddMinutes(5), // 5-10 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -160,62 +175,34 @@ namespace Warpweb.WebLayer.Controllers
 
             var refreshToken = new RefreshToken()
             {
-                JwtId = token.Id,
                 IsUsed = false,
                 IsRevoked = false,
                 UserId = user.Id,
                 AddedDate = DateTime.UtcNow,
                 ExpiryDate = DateTime.UtcNow.AddMonths(6),
-                Token = RandomString(35) + Guid.NewGuid()
+                Token = RandomString()
             };
 
             await _applicationDbContext.RefreshTokens.AddAsync(refreshToken);
             await _applicationDbContext.SaveChangesAsync();
 
+            SetTokenCookie(refreshToken.Token, refreshToken.ExpiryDate);
+
             return new AuthResultVm()
             {
-                Token = jwtToken,
-                RefreshToken = refreshToken.Token
+                Token = jwtToken
             };
         }
 
-        private async Task<AuthResultVm> VerifyAndGenerateToken(TokenRequestVm tokenRequest)
+        private async Task<AuthResultVm> VerifyAndGenerateToken(string refreshToken)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
             try
             {
-                // Validation 1 - Validation JWT token format
-                var tokenInVerification = jwtTokenHandler.ValidateToken(tokenRequest.Token, _tokenValidationParameters, out var validatedToken);
-
-                // Validation 2 - Validate encryption alg
-                if (validatedToken is JwtSecurityToken jwtSecurityToken)
-                {
-                    var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
-
-                    if (result == false)
-                    {
-                        return null;
-                    }
-                }
-
-                // Validation 3 - validate expiry date
-                var utcExpiryDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-
-                var expiryDate = UnixTimeStampToDateTime(utcExpiryDate);
-
-                if (expiryDate > DateTime.UtcNow)
-                {
-                    return new AuthResultVm()
-                    {
-                        Errors = new List<string>() {
-                            "Token er fortsatt gyldig"
-                        }
-                    };
-                }
-
+                
                 // validation 4 - validate existence of the token
-                var storedToken = await _applicationDbContext.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.RefreshToken);
+                var storedToken = await _applicationDbContext.RefreshTokens.FirstOrDefaultAsync(a => a.Token == refreshToken);
 
                 if (storedToken == null)
                 {
@@ -248,20 +235,7 @@ namespace Warpweb.WebLayer.Controllers
                         }
                     };
                 }
-
-                // Validation 7 - validate the id
-                var jti = tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-
-                if (storedToken.JwtId != jti)
-                {
-                    return new AuthResultVm()
-                    {
-                        Errors = new List<string>() {
-                            "Refreshtoken stemmer ikke med Jwt"
-                        }
-                    };
-                }
-
+                                
                 // update current token 
 
                 storedToken.IsUsed = true;
@@ -297,16 +271,32 @@ namespace Warpweb.WebLayer.Controllers
         private DateTime UnixTimeStampToDateTime(long unixTimeStamp)
         {
             var dateTimeVal = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp).ToLocalTime();
+            dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp).ToUniversalTime();
             return dateTimeVal;
         }
 
-        private string RandomString(int length)
+        private string RandomString()
         {
-            var random = new Random();
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(x => x[random.Next(x.Length)]).ToArray());
+            using(var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+            {
+                var randomBytes = new byte[64];
+                rngCryptoServiceProvider.GetBytes(randomBytes);
+
+                return Convert.ToBase64String(randomBytes);
+            }
+        }
+
+        private void SetTokenCookie(string token, DateTime expirationDate)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = expirationDate,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            };
+
+            Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
     }
 }

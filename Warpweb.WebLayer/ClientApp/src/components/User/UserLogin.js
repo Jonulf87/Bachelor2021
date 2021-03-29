@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
-import authService from '../../services/authService';
 import { Redirect } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 export default function UserLogin() {
 
@@ -12,10 +12,12 @@ export default function UserLogin() {
 
     const [errors, setErrors] = useState([]);
 
+    const { login } = useAuth();
+
 
     const logInSubmit = async () => {
 
-        const response = await authService.login(userName, password);
+        const response = await login(userName, password);
 
         if (response.token) {
             setLoginSuccess(true);

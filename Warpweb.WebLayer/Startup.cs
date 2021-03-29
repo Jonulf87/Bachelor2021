@@ -109,7 +109,8 @@ namespace Warpweb.WebLayer
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
-                RequireExpirationTime = false
+                RequireExpirationTime = false,
+                ClockSkew = TimeSpan.FromSeconds(60)
             };
 
             services.AddSingleton(tokenValidationParameters);

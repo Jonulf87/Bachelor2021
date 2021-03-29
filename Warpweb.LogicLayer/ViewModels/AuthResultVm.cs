@@ -10,6 +10,5 @@ namespace Warpweb.LogicLayer.ViewModels
     {
         public List<string> Errors { get; set; }
         public string Token { get; set; }
-        public string RefreshToken { get; set; }
     }
 }

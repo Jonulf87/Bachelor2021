@@ -1,14 +1,8 @@
 ﻿import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import authService from '../../services/authService';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from "@material-ui/core";
+import useAuth from "../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -23,32 +17,32 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function VenueInfo(props) {
+
     const [venue, setVenue] = useState([]);
     const venueId = props.venue;
+
+    const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
         const getVenue = async () => {
 
-                const authenticationResult = await authService.isAuthenticated();
+            if (isAuthenticated) {
+                const response = await fetch(`/api/venues/${venueId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const result = await response.json();
+                setVenue(result);
+            }
 
-                if (authenticationResult) {
-                    const accessToken = await authService.getAccessToken();
-                    const response = await fetch(`/api/venues/${venueId}`, {
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    });
-                    const result = await response.json();
-                    setVenue(result);
-                }
-            
 
         }
         getVenue();
     }, []);
 
     const classes = useStyles();
-    
+
     return (
         <Grid container>
             <Grid item xs={4}>
@@ -93,8 +87,8 @@ export default function VenueInfo(props) {
             <Grid item xs={8}>
                 {venue.contactId}
             </Grid>
-            
-            
+
+
         </Grid>
 
     );

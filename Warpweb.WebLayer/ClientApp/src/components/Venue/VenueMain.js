@@ -1,21 +1,13 @@
 ﻿import React, { useState, useEffect } from "react";
-import authService from '../../services/authService';
 import VenueInfo from './VenueInfo';
 import VenueAdmin from './VenueAdmin';
 import VenueTable from './VenueTable';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from "@material-ui/core";
 
-
-
-
-
-
 export default function VenueMain() {
-    //const [isReady, setIsReady] = useState(false);
     const [venueList, setVenueList] = useState([]);
     const [venue, setVenue] = useState(3);
-    const [isReady, setIsReady] = useState(false);
 
 
     
@@ -39,7 +31,6 @@ export default function VenueMain() {
                 <VenueTable
                 venueList={venueList}
                 onClick={handleClick}
-                isReady={isReady}
                 >
                     <VenueInfo/>
                 </VenueTable>

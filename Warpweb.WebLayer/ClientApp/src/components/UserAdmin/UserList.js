@@ -1,8 +1,9 @@
 ﻿import { Typography, Grid, Divider, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
-import authService from '../../services/authService';
+import authService from '../../providers/AuthProvider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -36,14 +37,14 @@ export default function UserList() {
     let [userOpen, setUserOpen] = useState(false);
     let [rolesList, setRolesList] = useState([]);
 
+    const { isAuthenticated, token } = useAuth();
+
     useEffect(() => {
         const getUsers = async () => {
-            const authenticationResult = await authService.isAuthenticated();
-            if (authenticationResult) {
-                const accessToken = await authService.getAccessToken();
+            if (isAuthenticated) {
                 const response = await fetch('/api/users/UsersList', {
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`
+                        'Authorization': `Bearer ${token}`
                     }
                 });
                 const result = await response.json();
@@ -57,12 +58,10 @@ export default function UserList() {
     useEffect(() => {
         const getRoles = async () => {
             if (expanded) {
-                const authenticationResult = await authService.isAuthenticated();
-                if (authenticationResult) {
-                    const accessToken = await authService.getAccessToken();
+                if (isAuthenticated) {
                     const rolesResponse = await fetch(`/api/users/UserRoles/${expanded}`, {
                         headers: {
-                            'Authorization': `Bearer ${accessToken}`
+                            'Authorization': `Bearer ${token}`
                         }
                     });
                     const rolesResult = await rolesResponse.json();

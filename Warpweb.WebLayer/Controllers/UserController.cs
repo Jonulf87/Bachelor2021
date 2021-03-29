@@ -76,36 +76,6 @@ namespace Warpweb.WebLayer.Controllers
             return Ok();
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("login")]
-        public async Task<ActionResult> LoginUserAsync(LoginUserVm postedUser)
-        {
-            var user = await _userManager.FindByEmailAsync(postedUser.UserName) ?? await _userManager.FindByNameAsync(postedUser.UserName);
-
-            if (user != null && !user.EmailConfirmed)
-            {
-                return BadRequest("E-Mailen er ikke bekreftet");
-            }
-            if (!await _userManager.CheckPasswordAsync(user, postedUser.Password))
-            {
-                return BadRequest("Feil i innlogging");
-            }
-
-            var result = await _signInManager.PasswordSignInAsync(user, postedUser.Password, true, true); //IsPersitant må oppdateres til å være en checkbox for "husk meg" type
-
-            if (result.Succeeded)
-            {
-                return Ok();
-            }
-            else if (result.IsLockedOut)
-            {
-                return BadRequest("Du er låst ute. Kontakt en administrator for hjelp.");
-            }
-            else
-            {
-                return BadRequest("Kan ikke logge på. Prøv igjen senere eller kontakt administrator.");
-            }
-        }
+        
     }
 }

@@ -6,7 +6,7 @@ import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from 
 import { Form } from 'reactstrap';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
-import authService from '../../services/authService';
+import useAuth from '../../hooks/useAuth';
 import { set } from 'date-fns/esm';
 import main from '../MainPage/MainPage';
 import CreateVenue from '../Venue/CreateVenue';
@@ -62,25 +62,22 @@ export default function CreateEvent() {
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
     let [organizers, setOrganizers] = useState([]);
     let [venues, setVenues] = useState([]);
-    let [isOrganizerReady, setIsOrganizerReady] = useState(false);
-    let [isVenueReady, setIsVenueReady] = useState(false);
     let [createVenue, setCreateVenue] = useState(false);
-    let [venuePosted, setVenuePosted] = useState(false);
+
+    const { isAuthenticated, token } = useAuth();
 
     //Henter organizere brukeren er knyttet til
     useEffect(() => {
         const getOrganizers = async () => {
-            const authenticationResult = await authService.isAuthenticated();
-            if (authenticationResult) {
-                const accessToken = await authService.getAccessToken();
+
+            if (isAuthenticated) {
                 const response = await fetch(`/api/tenant`, {
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`
+                        'Authorization': `Bearer ${token}`
                     }
                 });
                 const result = await response.json();
                 setOrganizers(result);
-                setIsOrganizerReady(true);
             }
         }
         getOrganizers();
@@ -88,17 +85,15 @@ export default function CreateEvent() {
 
 
     const getVenues = async () => {
-        const authenticationResult = await authService.isAuthenticated();
-        if (authenticationResult) {
-            const accessToken = await authService.getAccessToken();
+
+        if (isAuthenticated) {
             const response = await fetch(`/api/venues/VenuesList`, {
                 headers: {
-                    'Authorization': `Bearer ${accessToken}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             const result = await response.json();
             setVenues(result);
-            setIsVenueReady(true);
         }
     }
 
@@ -121,12 +116,10 @@ export default function CreateEvent() {
 
     // NB - Må sjekke at det er gjort valg i skjema før innsending
     const submitForm = async () => {
-        const authenticationResult = await authService.isAuthenticated();
-        if (authenticationResult) {
-            const accessToken = await authService.getAccessToken();
+        if (isAuthenticated) {
             const response = await fetch('/api/events/createMainEvent', {
                 headers: {
-                    'Authorization': `Bearer ${accessToken}`,
+                    'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
                 },
                 method: 'POST',

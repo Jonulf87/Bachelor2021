@@ -1,7 +1,6 @@
 ﻿import { TextField, Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import authService from '../../services/authService';
 
 export default function UserRegister() {
 
