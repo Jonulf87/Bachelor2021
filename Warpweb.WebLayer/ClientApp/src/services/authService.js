@@ -1,5 +1,4 @@
-﻿import jwt_decode from 'jwt-decode';
-
+﻿
 const login = async (userName, password) => {
     const response = await fetch('/api/auth/login', {
         headers: {
