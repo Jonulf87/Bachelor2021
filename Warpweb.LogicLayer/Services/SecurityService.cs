@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -82,6 +83,21 @@ namespace Warpweb.LogicLayer.Services
             };
 
             var result = await _userManager.CreateAsync(userDataToBeStored, user.Password);
+
+            if(!user.ParentPhoneNumber.IsNullOrEmpty())
+            {
+                var parentToBeStored = new Guardian
+                {
+                    FirstName = user.ParentFirstName,
+                    LastName = user.ParentLastName,
+                    PhoneNumber = user.ParentPhoneNumber,
+                    EMail = user.ParentEMail,
+                    ApplicationUserId = userDataToBeStored.Id
+                };
+
+                var resultparent = _dbContext.Guardians.Add(parentToBeStored);
+                var test = _dbContext.SaveChanges();
+            }
             if(!result.Succeeded)
             {
                 throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(a => a.Description)));

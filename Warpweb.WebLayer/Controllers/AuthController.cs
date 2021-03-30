@@ -40,7 +40,6 @@ namespace Warpweb.WebLayer.Controllers
 
         [HttpPost]
         [Route("logout")]
-        [Authorize]
         public async Task<ActionResult> Logout()
         {
             var refreshToken = Request.Cookies["refreshToken"];

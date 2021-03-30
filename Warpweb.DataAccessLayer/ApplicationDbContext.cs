@@ -25,6 +25,7 @@ namespace Warpweb.DataAccessLayer
         public DbSet<Venue> Venues { get; set; }
         public DbSet<CrewPermission> CrewPermissions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Guardian> Guardians { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

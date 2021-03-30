@@ -23,5 +23,9 @@ namespace Warpweb.LogicLayer.ViewModels
         public string Team { get; set; }
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public string ParentFirstName { get; set; }
+        public string ParentLastName { get; set; }
+        public string ParentPhoneNumber { get; set; }
+        public string ParentEMail { get; set; }
     }
 }
