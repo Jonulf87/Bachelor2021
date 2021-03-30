@@ -82,8 +82,7 @@ export default function CreateVenue() {
     };
 
     return (
-        <Card className={classes.root}>
-            <CardContent>
+        <>
                 <Typography gutterBottom variant="h5" component="h2">
                     Opprett lokale
                 </Typography>
@@ -198,7 +197,6 @@ export default function CreateVenue() {
                 >
                     Lagre
                 </Button>
-            </CardContent>
-        </Card>
+        </>
     );
 }
