@@ -1,13 +1,16 @@
 ﻿import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
-    Input, InputAdornment, InputLabel, FormControl, Typography, Table, TableBody,
+    IconButton, Input, InputAdornment, InputLabel, FormControl, Typography, Table, TableBody,
     TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Button, TextField,
-    Accordion, AccordionSummary, AccordionDetails, Collapse, Box
+    Collapse, Box
 } from '@material-ui/core';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SearchIcon from '@material-ui/icons/Search';
 import VenueInfo from './VenueInfo';
 import useAuth from "../../hooks/useAuth";
+import CreateVenue from "./CreateVenue";
 
 
 
@@ -101,49 +104,9 @@ export default function VenueTable(props) {
         setOpen(SelectedVenue);
     };
 
-    function getVenuesfromList() {
-
-        return (
-            <TableBody>
-                {venueList.map((venuesList) => (
-                    <>
-                        <TableRow key={venuesList.id}>
-                            <TableCell align="left">{venuesList.id}</TableCell>
-                            <TableCell align="left">{venuesList.name}</TableCell>
-                            <TableCell align="left">
-                                <Button
-                                    value={venuesList.id}
-                                    variant="outlined"
-                                    onClick={handleClick}
-                                >
-                                    Mer info
-                                            </Button>
-                                <Button
-                                    value={venuesList.id}
-                                    variant="outlined"
-                                >
-                                    Endre
-                                            </Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow key={venuesList.id * -1}>
-                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
-                                <Collapse in={venuesList.id === open} timeout="auto" unmountOnExit>
-                                    <Box>
-                                        <VenueInfo venue={venuesList.id} />
-                                    </Box>
-                                </Collapse>
-                            </TableCell>
-                        </TableRow>
-                    </>
-                ))}
-            </TableBody>
-        )
-    };
-
     return (
 
-        <TableContainer className={classes.root} component={Paper}>
+        <>
             <Typography gutterBottom variant="h5" component="h2">
                 Lokaleoversikt
             </Typography>
@@ -160,34 +123,55 @@ export default function VenueTable(props) {
                     ),
                 }}
             />
-            {/*<Button
-                variant="outlined"
-                onClick={setOpenCreate(!openCreate)}
-            >
-                Opprett lokale
+            <Button variant="contained" color="primary" onClick={() => setOpenCreate(!openCreate)} disableElevation>
+                Legg til
             </Button>
             <Collapse in={openCreate} unmountOnExit>
-                <Box>Hei</Box>
-            </Collapse>*/}
+                <Box margin={1}>
+                    <CreateVenue />
+                </Box>
+            </Collapse>
             <Table className={classes.table} aria-label="Lokaletabell">
                 <TableHead>
                     <TableRow>
-                        {tableColumns.map((tableColumn) => (
-                            <TableCell align="left" >
-                                <TableSortLabel id={tableColumn} onClick={handleSortClick}>
-                                    {tableColumn}
-                                </TableSortLabel>
-                            </TableCell>
-                        ))}
-                        <TableCell align="left">Handlinger</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell align="left" >
+                            <TableSortLabel id="id" onClick={handleSortClick}>
+                                Id
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell align="left">
+                            <TableSortLabel id='name' onClick={handleSortClick}>
+                                Navn
+                            </TableSortLabel>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
-                {isReady && (<>
-                    {getVenuesfromList()}
-                </>)}
-
-                {!isReady && (<p>Loading...</p>)}
+                <TableBody>
+                {venueList.map((venuesList) => (
+                    <>
+                        <TableRow key={venuesList.id}>
+                            <TableCell>
+                                <IconButton aria-label="" size="small" onClick={handleClick} value={venuesList.id}>
+                                    {(open === venuesList.id) ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                </IconButton>
+                            </TableCell>
+                            <TableCell align="left">{venuesList.id}</TableCell>
+                            <TableCell align="left">{venuesList.name}</TableCell>
+                        </TableRow>
+                        <TableRow key={venuesList.id * -1}>
+                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
+                                <Collapse in={venuesList.id === open} timeout="auto" unmountOnExit>
+                                    <Box p={{ xs: 1, sm: 2, md: 2 }}>
+                                        <VenueInfo venue={venuesList.id} />
+                                    </Box>
+                                </Collapse>
+                            </TableCell>
+                        </TableRow>
+                    </>
+                ))}
+            </TableBody>
             </Table>
-        </TableContainer>
+        </>
     )
 }

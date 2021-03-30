@@ -21,18 +21,12 @@ export default function VenueMain() {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12} >
-                <Typography variant="h2">Lokaler</Typography>
-            </Grid> 
-            <Grid item xs={12}>
-                <VenueAdmin />
-            </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={10}>
                 <VenueTable
                 venueList={venueList}
                 onClick={handleClick}
                 >
-                    <VenueInfo/>
+                    
                 </VenueTable>
             </Grid>          
         </Grid>
