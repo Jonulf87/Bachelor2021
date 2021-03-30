@@ -46,10 +46,21 @@ namespace Warpweb.LogicLayer.Services
                     MiddleName = a.MiddleName,
                     LastName = a.LastName,
                     Address = a.Address,
+                    ZipCode = a.ZipCode,
                     EMail = a.Email,
                     PhoneNumber = a.PhoneNumber,
                     UserName = a.UserName,
-                    DateOfBirth = a.DateOfBirth
+                    DateOfBirth = a.DateOfBirth,
+                    AllergyDescription = a.AllergyDescription,
+                    Comments = a.Comments,
+                    Gender = a.Gender,
+                    IsAllergic = a.IsAllergic,
+                    ParentEMail = a.Guardian.EMail,
+                    ParentFirstName = a.Guardian.FirstName,
+                    ParentLastName = a.Guardian.LastName,
+                    ParentPhoneNumber = a.Guardian.PhoneNumber,
+                    Team = a.Team
+
                 }).SingleOrDefaultAsync();
         }
     }

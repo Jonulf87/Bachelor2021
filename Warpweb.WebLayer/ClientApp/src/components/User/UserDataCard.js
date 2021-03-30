@@ -1,12 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import {
+    Card, CardContent, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 import BusinessIcon from '@material-ui/icons/Business';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
@@ -29,6 +24,7 @@ export default function UserDataCard() {
 
     let [userInfo, setUserInfo] = useState(null);
     const [isReady, setIsReady] = useState(false);
+    const [showParents, setShowParent] = useState(false);
     const { isAuthenticated, token } = useAuth();
 
 
@@ -50,6 +46,15 @@ export default function UserDataCard() {
 
     }, []);
 
+    //useEffect(() => {
+    //    const showParents = () => {
+    //        if (userInfo.parentPhoneNumber !== null) {
+    //            setShowParent(true);
+    //        }
+    //    };
+    //    showParents();
+    //}, []);
+
 
     const classes = useStyles();
     return (
@@ -58,67 +63,78 @@ export default function UserDataCard() {
             <CardContent>
                 {isReady && (<>
                     <Typography gutterBottom variant="h5" component="h2">
-                        Hei {userInfo.firstName} { userInfo.lastName }  
+                        Hei {userInfo.firstName}  
                     </Typography>
 
                     <List>
                         <ListItem>
-                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText>Etternavn:</ListItemText>
+                            <ListItemText primary={userInfo.lastName} />
+                        </ListItem>
+
+                        <ListItem>
+                            <ListItemText>Mellomnavn:</ListItemText>
+                            <ListItemText primary={userInfo.middleName} />
+                        </ListItem>
+
+                        <ListItem>
+                            <ListItemText>Adresse:</ListItemText>
                             <ListItemText primary={ userInfo.address } />
                         </ListItem>
 
                         <ListItem>
-                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText>Postnummer:</ListItemText>
                             <ListItemText primary={userInfo.zipCode} />
                         </ListItem>
 
                         <ListItem>
-                            <ListItemIcon><PhoneIcon /></ListItemIcon>
+                            <ListItemText>Telefon:</ListItemText>
                             <ListItemText primary={ userInfo.phoneNumber } />
                         </ListItem>
 
                         <ListItem>
-                            <ListItemIcon><EmailIcon /></ListItemIcon>
+                            <ListItemText>E-Post:</ListItemText>
                             <ListItemText primary={ userInfo.eMail } />
                         </ListItem>
 
                         <ListItem>
-                            <ListItemIcon><CakeIcon /></ListItemIcon>
+                            <ListItemText>Fødselsdato:</ListItemText>
                             <ListItemText primary={ userInfo.dateOfBirth }/>
                         </ListItem>
 
                         <ListItem>
-                            <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+                            <ListItemText>Brukernavn:</ListItemText>
                             <ListItemText primary={ userInfo.userName } />
                         </ListItem>
 
                         <ListItem>
-                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText>Kjønn:</ListItemText>
                             <ListItemText primary={userInfo.gender} />
                         </ListItem>
 
                         <ListItem>
-                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText>Allergisk:</ListItemText>
                             <ListItemText primary={userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'} />
                         </ListItem>
 
-                        {userInfo.isAllergic ? 
+                        {userInfo.isAllergic && 
                             <ListItem>
-                                <ListItemIcon><BusinessIcon /></ListItemIcon>
+                                <ListItemText>Allergibeskrivelse:</ListItemText>
                                 <ListItemText primary={userInfo.allergyDescription} />
                             </ListItem>
-                            :
-                            null}
+                        }
 
                         <ListItem>
-                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText>Lag/klan:</ListItemText>
                             <ListItemText primary={userInfo.team} />
                         </ListItem>
 
                         <ListItem>
-                            <ListItemIcon><BusinessIcon /></ListItemIcon>
+                            <ListItemText>Tilleggsinformasjon</ListItemText>
                             <ListItemText primary={userInfo.comments} />
                         </ListItem>
+
+                        {userInfo}
                         
 
                     </List>
