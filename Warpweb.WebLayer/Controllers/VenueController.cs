@@ -20,28 +20,40 @@ namespace Warpweb.WebLayer.Controllers
             _venueService = venueService;
         }
 
-        // Hent alle venues
+        /// <summary>
+        /// Returns all Venues.
+        /// </summary>
         [HttpGet]
-        [Route("VenuesList")]
+        [Route("venueslist")]
         public async Task<List<VenueListVm>> GetVenues()
         {
             return await _venueService.GetVenuesAsync();
         }
 
-        // Hent kun venues knyttet til arrangør
+        /// <summary>
+        /// Returns only Venues under Tenant
+        /// </summary>
         [HttpGet]
-        [Route("OrganizerVenuesList")]
+        [Route("organizervenueslist")]
         public async Task<List<VenueListVm>> GetOrganizerVenues()
         {
             return await _venueService.GetOrganizerVenuesAsync();
         }
 
+        /// <summary>
+        /// Returns a specific Venue.
+        /// </summary>
+        /// <param name="id"></param>  
         [HttpGet("{id}")]
         public async Task<ActionResult<VenueVm>> GetVenue(int id)
         {
             return await _venueService.GetVenueAsync(id);
         }
 
+        /// <summary>
+        /// Create a Venue.
+        /// </summary>
+        /// <param name="venueVm"></param>  
         [HttpPost]
         public async Task<ActionResult<VenueVm>> CreateVenue(VenueVm venueVm)
         {
@@ -59,6 +71,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(venueVm);
         }
 
+        /// <summary>
+        /// Modify specific venue
+        /// </summary>
+        /// <param name="venueVm"></param>  
         [HttpPut]
         public async Task<ActionResult> UpdateVenue(VenueVm venueVm)
         {

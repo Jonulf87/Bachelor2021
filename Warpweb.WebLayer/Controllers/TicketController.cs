@@ -20,18 +20,29 @@ namespace Warpweb.WebLayer.Controllers
             _ticketService = ticketService;
         }
 
+        /// <summary>
+        /// Return all tickets
+        /// </summary>
         [HttpGet]
         public async Task<List<TicketListVm>> GetTickets()
         {
             return await _ticketService.GetTicketsAsync();
         }
-        
+
+        /// <summary>
+        /// Return specific ticket
+        /// </summary>
+        /// <param name="id"></param> 
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketVm>> GetTicket(int id)
         {
             return await _ticketService.GetTicketAsync(id);
         }
 
+        /// <summary>
+        /// Create ticket
+        /// </summary>
+        /// <param name="ticketVm"></param> 
         [HttpPost]
         [Authorize(Roles = "Users")]
         public async Task<ActionResult<TicketVm>> CreateTicket(TicketVm ticketVm)
@@ -50,6 +61,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(ticketVm);
         }
 
+        /// <summary>
+        /// Modify ticket
+        /// </summary>
+        /// <param name="ticketVm"></param> 
         [HttpPut]
         [Authorize(Roles = "Admins")]
         public async Task<ActionResult> UpdateTicket(TicketVm ticketVm)
@@ -66,7 +81,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(ticketVm);
         }
 
-        // TODO: Restrict to SuperAdmin
+        /// <summary>
+        /// Delete ticket
+        /// </summary>
+        /// <param name="ticketVm"></param> 
         [HttpDelete]
         public async Task<ActionResult> DeleteTicket(TicketVm ticketVm)
         {

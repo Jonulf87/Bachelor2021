@@ -130,6 +130,7 @@ export default function UserRegister() {
                         <TextField
                             id="firstName"
                             label="Fornavn"
+                            type="text"
                             required
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
@@ -138,6 +139,7 @@ export default function UserRegister() {
                         <TextField
                             id="middleName"
                             label="Mellomnavn"
+                            type="text"
                             required
                             value={middleName}
                             onChange={(e) => setMiddleName(e.target.value)}
@@ -146,6 +148,7 @@ export default function UserRegister() {
                         <TextField
                             id="lastName"
                             label="Etternavn"
+                            type="text"
                             required
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
@@ -159,6 +162,7 @@ export default function UserRegister() {
                         <TextField
                             id="userName"
                             label="Brukernavn"
+                            type="text"
                             required
                             value={userName}
                             onChange={(e) => setUserName(e.target.value)}
@@ -167,6 +171,7 @@ export default function UserRegister() {
                         <TextField
                             id="password"
                             label="Passord"
+                            type="password"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -180,6 +185,7 @@ export default function UserRegister() {
                         <TextField
                             id="eMail"
                             label="Epost"
+                            type="email"
                             required
                             value={eMail}
                             onChange={(e) => setEMail(e.target.value)}
@@ -193,6 +199,7 @@ export default function UserRegister() {
                         <TextField
                             id="address"
                             label="Adresse"
+                            type="text"
                             required
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
@@ -201,6 +208,7 @@ export default function UserRegister() {
                         <TextField
                             id="zipCode"
                             label="Postnummer"
+                            type="text"
                             required
                             value={zipCode}
                             onChange={(e) => setZipCode(e.target.value)}
@@ -214,6 +222,7 @@ export default function UserRegister() {
                         <TextField
                             id="phoneNumber"
                             label="Telefon"
+                            type="tel"
                             required
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
@@ -264,6 +273,7 @@ export default function UserRegister() {
                                 <TextField
                                     id="firstName"
                                     label="Foresatte fornavn"
+                                    type="text"
                                     required
                                     value={parentFirstName}
                                     onChange={(e) => setParentFirstName(e.target.value)}
@@ -276,6 +286,7 @@ export default function UserRegister() {
                                 <TextField
                                     id="lastName"
                                     label="Foresatte etternavn"
+                                    type="text"
                                     required
                                     value={parentLastName}
                                     onChange={(e) => setParentLastName(e.target.value)}
@@ -288,6 +299,7 @@ export default function UserRegister() {
                                 <TextField
                                     id="parentPhoneNumber"
                                     label="Foresatte telefon"
+                                    type="tel"
                                     required
                                     value={parentPhoneNumber}
                                     onChange={(e) => setParentPhoneNumber(e.target.value)}
@@ -300,6 +312,7 @@ export default function UserRegister() {
                                 <TextField
                                     id="parentEMail"
                                     label="Foresatte s-post"
+                                    type="email"
                                     required
                                     value={parentEMail}
                                     onChange={(e) => setParentEMail(e.target.value)}
@@ -358,6 +371,7 @@ export default function UserRegister() {
                         <TextField
                             id="comments"
                             label="Tilleggsinformasjon"
+                            multiline
                             required
                             value={comments}
                             onChange={(e) => setComments(e.target.value)}

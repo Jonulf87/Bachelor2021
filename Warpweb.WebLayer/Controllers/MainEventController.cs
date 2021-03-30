@@ -14,10 +14,6 @@ namespace Warpweb.WebLayer.Controllers
     [Route("api/events")]
     [ApiController]
     [Authorize]
-
-    // CRUD functionality for events
-    // Note Dependency Injection for SecurityService and MainEventService
-
     public class MainEventController : ControllerBase 
     {
         private readonly MainEventService _mainEventService;
@@ -60,7 +56,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="mainEventVm"></param>  
         [HttpPost]
-        [Route("CreateMainEvent")]
+        [Route("createmainevent")]
         public async Task<ActionResult> CreateMainEvent(MainEventVm mainEventVm)
         {
             // Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.

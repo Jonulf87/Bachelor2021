@@ -22,20 +22,31 @@ namespace Warpweb.WebLayer.Controllers
             _ticketTypeService = ticketTypeService;
         }
 
+        /// <summary>
+        /// Returns all ticket types
+        /// </summary>
         [HttpGet]
         public async Task<List<TicketTypeListVm>> GetTicketTypes()
         {
             return await _ticketTypeService.GetTicketTypesAsync();
         }
 
+        /// <summary>
+        /// Return specific ticket type
+        /// </summary>
+        /// <param name="id"></param>  
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketTypeVm>> GetTicketType(int id)
         {
             return await _ticketTypeService.GetTicketTypeAsync(id);
         }
 
+        /// <summary>
+        /// Create ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         [HttpPost]
-        [Route("createTicketType")]
+        [Route("createtickettype")]
         //[Authorize(Roles = "Admins")]
         public async Task<ActionResult> CreateTicketType(TicketTypeVm ticketTypeVm)
         {
@@ -52,6 +63,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(ticketTypeVm);
         }
 
+        /// <summary>
+        /// Modify ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         [HttpPut]
         public async Task<ActionResult> UpdateTicketType(TicketTypeVm ticketTypeVm)
         {
@@ -67,7 +82,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(ticketTypeVm);
         }
 
-        // TODO: Restrict to SuperAdmin
+        /// <summary>
+        /// Deletes ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         [HttpDelete]
         public async Task<ActionResult> DeleteTicketType(TicketTypeVm ticketTypeVm)
         {

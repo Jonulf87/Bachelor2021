@@ -8,11 +8,9 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/crewroles")]
     [ApiController]
     [Authorize]
-
-    // CRUD functionality for Crew Roles
 
     public class CrewRoleController : ControllerBase
     {
@@ -23,18 +21,29 @@ namespace Warpweb.WebLayer.Controllers
             _crewroleService = crewroleService;
         }
 
+        /// <summary>
+        /// Returns all crew roles
+        /// </summary>
         [HttpGet]
         public async Task<List<CrewRoleListVm>> GetCrewRoles()
         {
             return await _crewroleService.GetCrewRolesAsync();
         }
 
+        /// <summary>
+        /// Returns specific crew role
+        /// </summary>
+        /// <param name="id"></param> 
         [HttpGet("{id}")]
         public async Task<ActionResult<CrewRoleVm>> GetCrewRole(int id)
         {
             return await _crewroleService.GetCrewRoleAsync(id);
         }
 
+        /// <summary>
+        /// Create crew role
+        /// </summary>
+        /// <param name="crewroleVm"></param> 
         [HttpPost]
         public async Task<ActionResult<CrewRoleVm>> CreateCrewRole(CrewRoleVm crewroleVm)
         {
@@ -53,6 +62,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(crewroleVm);
         }
 
+        /// <summary>
+        /// Modify crew role
+        /// </summary>
+        /// <param name="crewroleVm"></param> 
         [HttpPut]
         public async Task<ActionResult> UpdateCrewRole(CrewRoleVm crewroleVm)
         {
@@ -68,7 +81,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(crewroleVm);
         }
 
-        // TODO: Restrict to SuperAdmin
+        /// <summary>
+        /// Delete crew role
+        /// </summary>
+        /// <param name="crewroleVm"></param> 
         [HttpDelete]
         public async Task<ActionResult> DeleteCrewRole(CrewRoleVm crewroleVm)
         {

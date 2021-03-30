@@ -8,7 +8,7 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/crews")]
     [ApiController]
     [Authorize]
 
@@ -24,20 +24,29 @@ namespace Warpweb.WebLayer.Controllers
             _crewService = crewService;
         }
 
-
+        /// <summary>
+        /// Returns all crews
+        /// </summary>
         [HttpGet]
         public async Task<List<CrewListVm>> GetCrews()
         {
             return await _crewService.GetCrewsAsync();
         }
 
+        /// <summary>
+        /// Return specific crew
+        /// </summary>
+        /// <param name="id"></param> 
         [HttpGet("{id}")]
         public async Task<ActionResult<CrewVm>> GetCrew(int id)
         {
             return await _crewService.GetCrewAsync(id);
         }
 
-
+        /// <summary>
+        /// Create crew
+        /// </summary>
+        /// <param name="crewVm"></param> 
         [HttpPost]
         [Authorize(Roles = "Admins")]
         public async Task<ActionResult<CrewVm>> CreateCrew(CrewVm crewVm)
@@ -57,6 +66,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(crewVm);
         }
 
+        /// <summary>
+        /// Modify crew
+        /// </summary>
+        /// <param name="crewVm"></param> 
         [HttpPut]
         [Authorize(Roles = "Admins")]
         public async Task<ActionResult> UpdateCrew(CrewVm crewVm)
@@ -73,7 +86,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(crewVm);
         }
 
-        // TODO: Restrict to SuperAdmin
+        /// <summary>
+        /// Delete crew
+        /// </summary>
+        /// <param name="crewVm"></param> 
         [HttpDelete]
         public async Task<ActionResult> DeleteCrew(CrewVm crewVm)
         {

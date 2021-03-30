@@ -31,15 +31,21 @@ namespace Warpweb.WebLayer.Controllers
             _signInManager = signInManager;
         }
 
+        /// <summary>
+        /// Returns all users
+        /// </summary>
         [HttpGet]
-        [Route("UsersList")]
+        [Route("userslist")]
         public async Task<List<UserListVm>> GetUsersAsync()
         {
             return await _userService.GetUsersAsync();
         }
 
+        /// <summary>
+        /// Returns current logged in user
+        /// </summary>
         [HttpGet]
-        [Route("")]
+        [Route("currentuser")]
         public async Task<UserVm> GetUserAsync()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -47,14 +53,21 @@ namespace Warpweb.WebLayer.Controllers
             return await _userService.GetUserAsync(userId.Value);
         }
 
+        /// <summary>
+        /// Returns specific user
+        /// </summary>
+        /// <param name="id"></param>  
         [HttpGet]
-        [Route("UserRoles/{id}")]
+        [Route("userroles/{id}")]
         public async Task<List<UserRolesListVm>> GetUserRolesAsync(string id)
         {
             return await _securityService.GetUserRolesAsync(id);
 
         }
 
+        /// <summary>
+        /// Register new user
+        /// </summary>
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]

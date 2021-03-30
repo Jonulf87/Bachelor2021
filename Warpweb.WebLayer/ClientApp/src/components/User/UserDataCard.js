@@ -31,9 +31,11 @@ export default function UserDataCard() {
     useEffect(() => {
         const getUser = async () => {
             if (isAuthenticated) {
-                const response = await fetch('/api/users', {
+                const response = await fetch('/api/users/currentuser', {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
                 });
 

@@ -29,7 +29,6 @@ namespace Warpweb.WebLayer.Controllers
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ApplicationDbContext _applicationDbContext;
 
-
         public AuthController(UserManager<ApplicationUser> userManager, IOptionsMonitor<JwtConfig> optionsMonitor, TokenValidationParameters tokenValidationParameters, ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
@@ -38,6 +37,9 @@ namespace Warpweb.WebLayer.Controllers
             _applicationDbContext = applicationDbContext;
         }
 
+        /// <summary>
+        /// Log out
+        /// </summary>
         [HttpPost]
         [Route("logout")]
         public async Task<ActionResult> Logout()
@@ -60,6 +62,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Log in
+        /// </summary>
+        /// <param name="user"></param> 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserVm user)
@@ -103,6 +109,9 @@ namespace Warpweb.WebLayer.Controllers
             });
         }
 
+        /// <summary>
+        /// Refresh token
+        /// </summary>
         [HttpPost]
         [Route("refreshtoken")]
         public async Task<IActionResult> RefreshToken()
@@ -142,7 +151,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(result);
         }
 
-
+        /// <summary>
+        /// Generate JWT Token
+        /// </summary>
+        /// <param name="user"></param> 
         private async Task<AuthResultVm> GenerateJwtToken(ApplicationUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();

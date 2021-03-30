@@ -8,7 +8,7 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.WebLayer.Controllers
 {
-    [Route("api/tenant")]
+    [Route("api/tenants")]
     [ApiController]
     [Authorize]
 
@@ -23,12 +23,19 @@ namespace Warpweb.WebLayer.Controllers
             _organizerService = organizerService;
         }
 
+        /// <summary>
+        /// Returns all tentants/organizers
+        /// </summary>
         [HttpGet]
         public async Task<List<OrganizerListVm>> GetOrganizers()
         {
             return await _organizerService.GetOrganizersAsync();
         }
-        
+
+        /// <summary>
+        /// Return specific tentant/organizer
+        /// </summary>
+        /// <param name="id"></param> 
         [HttpGet("{id}")]
         public async Task<ActionResult<OrganizerVm>> GetOrganizer(int id)
         {
@@ -42,6 +49,10 @@ namespace Warpweb.WebLayer.Controllers
             return organizer;
         }
 
+        /// <summary>
+        /// Create tenant/organizer
+        /// </summary>
+        /// <param name="organizerVm"></param> 
         [HttpPost]
         public async Task<ActionResult> CreateOrganizer(OrganizerVm organizerVm)
         {
@@ -60,6 +71,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(organizerVm);
         }
 
+        /// <summary>
+        /// Create tenant/organizer
+        /// </summary>
+        /// <param name="organizerVm"></param> 
         [HttpPut]
         public async Task<ActionResult> UpdateOrganizer(OrganizerVm organizerVm)
         {
@@ -75,7 +90,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(organizerVm);
         }
 
-        // TODO: Restrict to SuperAdmin
+        /// <summary>
+        /// Delete tenant/organizer
+        /// </summary>
+        /// <param name="organizerVm"></param> 
         [HttpDelete]
         public async Task<ActionResult> DeleteOrganizer(OrganizerVm organizerVm)
         {
