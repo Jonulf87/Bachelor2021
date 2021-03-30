@@ -28,14 +28,20 @@ namespace Warpweb.WebLayer.Controllers
             _mainEventService = mainEventService;
             _securityService = securityService;
         }
-
+        /// <summary>
+        /// Returns all events
+        /// </summary>
         [HttpGet]
-        [Route("EventsList")]
+        [Route("eventslist")]
         public async Task<List<MainEventListVm>> GetMainEvents()
         {
             return await _mainEventService.GetMainEventsAsync();
         }
 
+        /// <summary>
+        /// Returns a specific Event.
+        /// </summary>
+        /// <param name="id"></param>  
         [HttpGet("{id}")]
         public async Task<ActionResult<MainEventVm>> GetMainEvent(int id)
         {
@@ -48,7 +54,11 @@ namespace Warpweb.WebLayer.Controllers
 
             return mainevent;
         }
-        
+
+        /// <summary>
+        /// Creates a new Event.
+        /// </summary>
+        /// <param name="mainEventVm"></param>  
         [HttpPost]
         [Route("CreateMainEvent")]
         public async Task<ActionResult> CreateMainEvent(MainEventVm mainEventVm)
@@ -73,8 +83,12 @@ namespace Warpweb.WebLayer.Controllers
             }
 
             return Ok(mainEventVm);
-        } 
+        }
 
+        /// <summary>
+        /// Updates a specific Event.
+        /// </summary>
+        /// <param name="maineventVm"></param>  
         [HttpPut]
         public async Task<ActionResult> UpdateMainEvent (MainEventVm maineventVm)
         {
@@ -90,7 +104,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(maineventVm);
         }
 
-        // TODO: Restrict to SuperAdmin
+        /// <summary>
+        /// Deletes a specific Event.
+        /// </summary>
+        /// <param name="maineventVm"></param>  
         [HttpDelete]
         public async Task<ActionResult> DeleteMainEvent (MainEventVm maineventVm)
         {
