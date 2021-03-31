@@ -1,4 +1,4 @@
-﻿import { TextField, Button, Grid, Checkbox, FormControlLabel, MenuItem  } from '@material-ui/core';
+﻿import { Select, FormControl, InputLabel, TextField, Button, Grid, Checkbox, FormControlLabel, MenuItem  } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -249,20 +249,21 @@ export default function UserRegister() {
                         item
                         xs={12}
                     >
-                        <TextField
-                            id="gender"
-                            label="Kjønn"
-                            select
-                            required
-                            value={gender}
-                            onChange={(e) => setGender(e.target.value)}
-                        >
-                        {genders.map((gender) => (
-                            <MenuItem key={gender.value} value={gender.value}>
-                                {gender.label}
-                            </MenuItem>
-                        ))}
-                        </TextField>
+                        <FormControl>
+                            <InputLabel id="demo-simple-select-label">Kjønn</InputLabel>
+                            <Select
+                                labelId="gender"
+                                id="gender"
+                                value={gender}
+                                onChange={(e) => setGender(e.target.value)}
+                            >
+                                {genders.map((gender) => (
+                                    <MenuItem key={gender.value} value={gender.value}>
+                                        {gender.label}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     {/*Input fødselsdag*/}
                     <Grid
