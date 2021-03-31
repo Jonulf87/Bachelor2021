@@ -33,7 +33,11 @@ namespace Warpweb.LogicLayer.Services
                 .Select(a => new VenueListVm
                 {
                     Id = a.Id,
-                    Name = a.Name
+                    Name = a.Name,
+                    Address = a.Address,
+                    AreaAvailable = a.AreaAvailable,
+                    Capacity = a.Capacity,
+
                 }).ToListAsync();
         }
 

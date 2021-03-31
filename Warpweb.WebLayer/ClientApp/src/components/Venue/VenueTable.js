@@ -35,6 +35,7 @@ function getOrder(sortOrder) {
 
 //sorterer ikke tall korrekt. link under for mulig fiks
 //https://stackoverflow.com/questions/175739/built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
+
 function sortRows(sortBy, sortOrder) {
     let order = getOrder(sortOrder);
     return function (a, b) {
@@ -43,10 +44,9 @@ function sortRows(sortBy, sortOrder) {
     }
 };
 
-export default function VenueTable(props) {
+export default function VenueTable() {
     const [order, setOrder] = useState('asc');
     const [venueList, setVenueList] = useState([]);
-    const [tableColumns, setTableColumns] = useState([]);
     const [filteredRows, setFilteredRows] = useState(venueList);
     const [isReady, setIsReady] = useState(false);
     const [open, setOpen] = useState(0);
@@ -56,8 +56,9 @@ export default function VenueTable(props) {
 
     const classes = useStyles();
 
+    
+    //fetch venues
     useEffect(() => {
-        //fetching venues
         const getVenues = async () => {
             if (isAuthenticated) {
                 const respone = await fetch('/api/venues/venueslist', {
@@ -68,7 +69,6 @@ export default function VenueTable(props) {
 
                 const result = await respone.json();
                 setVenueList(result);
-                setTableColumns(Object.keys(result[0]))
                 setIsReady(true);
             }
         }
@@ -76,6 +76,10 @@ export default function VenueTable(props) {
         getVenues();
 
     }, []);
+
+    useEffect(() => {
+        console.log(JSON.stringify(venueList))
+    });
 
     //search table function
     const handleChange = (e) => {
@@ -145,6 +149,26 @@ export default function VenueTable(props) {
                                 Navn
                             </TableSortLabel>
                         </TableCell>
+                        <TableCell align="left">
+                            <TableSortLabel id='address' onClick={handleSortClick}>
+                                Addresse
+                            </TableSortLabel>
+                        </TableCell>
+                        {/*<TableCell align="left">
+                            <TableSortLabel id='postalCode' onClick={handleSortClick}>
+                                Postnummer
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell align="left">
+                            <TableSortLabel id='areaAvailable' onClick={handleSortClick}>
+                                Tilgjengelig areal
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell align="left">
+                            <TableSortLabel id='capacity' onClick={handleSortClick}>
+                                Maks kapasitet
+                            </TableSortLabel>
+                        </TableCell>*/}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -158,9 +182,13 @@ export default function VenueTable(props) {
                             </TableCell>
                             <TableCell align="left">{venuesList.id}</TableCell>
                             <TableCell align="left">{venuesList.name}</TableCell>
+                            <TableCell align="left">{venuesList.address}</TableCell>
+                            {/*<TableCell align="left">{venuesList.postalCode}</TableCell>
+                            <TableCell align="left">{venuesList.areaAvailable}</TableCell>
+                            <TableCell align="left">{venuesList.capacity}</TableCell>*/}
                         </TableRow>
                         <TableRow key={venuesList.id * -1}>
-                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
+                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
                                 <Collapse in={venuesList.id === open} timeout="auto" unmountOnExit>
                                     <Box p={{ xs: 1, sm: 2, md: 2 }}>
                                         <VenueInfo venue={venuesList.id} />
