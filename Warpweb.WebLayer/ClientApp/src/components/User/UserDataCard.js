@@ -19,6 +19,7 @@ export default function UserDataCard() {
     const [isReady, setIsReady] = useState(false);
     const [showParents, setShowParent] = useState(false);
     const { isAuthenticated, token } = useAuth();
+    
 
 
     useEffect(() => {
@@ -41,9 +42,10 @@ export default function UserDataCard() {
 
     }, []);
 
+
     useEffect(() => {
         const showParents = () => {
-            if (userInfo.parentPhoneNumber !== null) {
+            if (userInfo.parentPhoneNumber) {
                 setShowParent(true);
             }
         };
@@ -59,81 +61,82 @@ export default function UserDataCard() {
             <CardContent>
                 {isReady && (<>
                     <Typography gutterBottom variant="h5" component="h2">
-                        Hei {userInfo.firstName}  
+                        Hei {userInfo.firstName}
                     </Typography>
 
                     <List>
                         <ListItem divider>
-                            <ListItemText primary={userInfo.lastName} secondary="Etternavn"/>
+                            <ListItemText primary={userInfo.lastName} secondary="Etternavn" />
                         </ListItem>
-                        
+
                         <ListItem divider>
                             <ListItemText primary={userInfo.middleName} secondary="Mellomnavn" />
                         </ListItem>
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.address} secondary="Adresse"/>
+                            <ListItemText primary={userInfo.address} secondary="Adresse" />
                         </ListItem>
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.zipCode} secondary="Postnr"/>
+                            <ListItemText primary={userInfo.zipCode} secondary="Postnr" />
                         </ListItem>
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.phoneNumber} secondary="Telefon"/>
+                            <ListItemText primary={userInfo.phoneNumber} secondary="Telefon" />
                         </ListItem>
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.eMail} secondary="E-post"/>
+                            <ListItemText primary={userInfo.eMail} secondary="E-post" />
                         </ListItem>
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.dateOfBirth} secondary="Fødselsdato"/>
+                            <ListItemText primary={userInfo.dateOfBirth} secondary="Fødselsdato" />
                         </ListItem>
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.userName} secondary="Brukernavn"/>
+                            <ListItemText primary={userInfo.userName} secondary="Brukernavn" />
                         </ListItem>
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.gender} secondary="Kjønn"/>
+                            <ListItemText primary={userInfo.gender} secondary="Kjønn" />
                         </ListItem>
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'} secondary="Allergisk"/>
+                            <ListItemText primary={userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'} secondary="Allergisk" />
                         </ListItem>
 
-                        {userInfo.isAllergic && 
+                        {userInfo.isAllergic &&
                             <ListItem divider>
-                            <ListItemText primary={userInfo.allergyDescription} secondary="Allergibeskrivelse"/>
+                                <ListItemText primary={userInfo.allergyDescription} secondary="Allergibeskrivelse" />
                             </ListItem>
                         }
 
-                        {showParents && 
-                        <Grid container>
-                        <ListItem divider>
-                            <ListItemText primary={userInfo.parentFirstName} secondary="Foresatt fornavn" />
-                        </ListItem>
+                        {showParents && <>
+                            <Grid container>
+                                <ListItem divider>
+                                    <ListItemText primary={userInfo.parentFirstName} secondary="Foresatt fornavn" />
+                                </ListItem>
+
+                                <ListItem divider>
+                                    <ListItemText primary={userInfo.parentLastName} secondary="Foresatt etternavn" />
+                                </ListItem>
+
+                                <ListItem divider>
+                                    <ListItemText primary={userInfo.parentPhoneNumber} secondary="Foresatt telefon" />
+                                </ListItem>
+
+                                <ListItem divider>
+                                    <ListItemText primary={userInfo.parentEMail} secondary="Foresatt e-post" />
+                                </ListItem>
+                            </Grid>
+                        </>}
 
                         <ListItem divider>
-                            <ListItemText primary={userInfo.parentLastName} secondary="Foresatt etternavn" />
-                        </ListItem>
-
-                        <ListItem divider>
-                            <ListItemText primary={userInfo.parentPhoneNumber} secondary="Foresatt telefon" />
-                        </ListItem>
-
-                        <ListItem divider>
-                            <ListItemText primary={userInfo.parentEMail} secondary="Foresatt e-post" />
-                            </ListItem>
-                        </Grid>
-                        }
-                        <ListItem divider>
-                            <ListItemText primary={userInfo.team} secondary="Lag/klan"/>
+                            <ListItemText primary={userInfo.team} secondary="Lag/klan" />
                         </ListItem>
 
                         <ListItem>
-                            <ListItemText primary={userInfo.comments} secondary="Tilleggsinformasjon"/>
+                            <ListItemText primary={userInfo.comments} secondary="Tilleggsinformasjon" />
                         </ListItem>
 
                         <ListItem>
@@ -146,7 +149,7 @@ export default function UserDataCard() {
                 </>)}
 
                 {!isReady && (<p>Loading...</p>)}
-                
+
             </CardContent>
         </Card>
     );
