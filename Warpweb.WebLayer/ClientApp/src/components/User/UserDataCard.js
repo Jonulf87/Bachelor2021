@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Grid, Card, CardContent, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { Divider, Card, CardContent, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
@@ -8,7 +8,6 @@ const useStyles = makeStyles((theme) =>
         root: {
             display: 'flex',
             flexWrap: 'wrap',
-            //maxWidth: 500,
             marginBottom: 20,
         },
     }),
@@ -54,71 +53,58 @@ export default function UserDataCard() {
                     </Typography>
 
                     <List>
-                        <ListItem>
-                            <ListItemText>Etternavn:</ListItemText>
-                            <ListItemText primary={userInfo.lastName} />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.lastName} secondary="Etternavn"/>
+                        </ListItem>
+                        
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.middleName} secondary="Mellomnavn" />
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>Mellomnavn:</ListItemText>
-                            <ListItemText primary={userInfo.middleName} />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.address} secondary="Adresse"/>
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>Adresse:</ListItemText>
-                            <ListItemText primary={ userInfo.address } />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.zipCode} secondary="Postnr"/>
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>Postnummer:</ListItemText>
-                            <ListItemText primary={userInfo.zipCode} />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.phoneNumber} secondary="Telefon"/>
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>Telefon:</ListItemText>
-                            <ListItemText primary={ userInfo.phoneNumber } />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.eMail} secondary="E-post"/>
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>E-Post:</ListItemText>
-                            <ListItemText primary={ userInfo.eMail } />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.dateOfBirth} secondary="Fødselsdato"/>
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>Fødselsdato:</ListItemText>
-                            <ListItemText primary={ userInfo.dateOfBirth }/>
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.userName} secondary="Brukernavn"/>
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>Brukernavn:</ListItemText>
-                            <ListItemText primary={ userInfo.userName } />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.gender} secondary="Kjønn"/>
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>Kjønn:</ListItemText>
-                            <ListItemText primary={userInfo.gender} />
-                        </ListItem>
-
-                        <ListItem>
-                            <ListItemText>Allergisk:</ListItemText>
-                            <ListItemText primary={userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'} />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'} secondary="Allergisk"/>
                         </ListItem>
 
                         {userInfo.isAllergic && 
-                            <ListItem>
-                                <ListItemText>Allergibeskrivelse:</ListItemText>
-                                <ListItemText primary={userInfo.allergyDescription} />
+                            <ListItem divider>
+                            <ListItemText primary={userInfo.allergyDescription} secondary="Allergibeskrivelse"/>
                             </ListItem>
                         }
 
-                        <ListItem>
-                            <ListItemText>Lag/klan:</ListItemText>
-                            <ListItemText primary={userInfo.team} />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.team} secondary="Lag/klan"/>
                         </ListItem>
 
-                        <ListItem>
-                            <ListItemText>Tilleggsinformasjon</ListItemText>
-                            <ListItemText primary={userInfo.comments} />
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.comments} secondary="Tilleggsinformasjon"/>
                         </ListItem>
 
                     </List>
