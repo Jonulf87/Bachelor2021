@@ -1,13 +1,11 @@
 ﻿import React from 'react';
-import ParticipantInfo from './ParticipantInfo';
+import ParticipantList from './ParticipantList';
 import ParticipantAdmin from './ParticipantAdmin';
 
 export default function ParticipantMain() {
     return (
         <>
-
-            
-            <ParticipantInfo />
+            <ParticipantList />
             <ParticipantAdmin />
         </>
 

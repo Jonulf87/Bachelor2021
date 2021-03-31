@@ -5,8 +5,6 @@ import CrewAdmin from './CrewAdmin';
 export default function CrewMain() {
     return (
         <>
-
-            
             <CrewInfo />
             <CrewAdmin />
         </>

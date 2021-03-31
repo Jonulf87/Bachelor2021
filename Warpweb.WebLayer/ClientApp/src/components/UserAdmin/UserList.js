@@ -1,7 +1,9 @@
-﻿import { Typography, Grid, Divider, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
+﻿import {
+    Typography, Grid, Divider, Accordion, AccordionSummary, AccordionDetails,
+    Button, Checkbox, FormGroup, FormControlLabel, CircularProgress
+} from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import react, { useState, useEffect } from 'react';
-import authService from '../../providers/AuthProvider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useAuth from '../../hooks/useAuth';
 
@@ -246,7 +248,7 @@ export default function UserList() {
             </>
             )}
 
-            {!getUsersIsReady && (<p>Laster brukerliste...</p>)}
+            {!getUsersIsReady && (<CircularProgress />)}
 
         </>
 
