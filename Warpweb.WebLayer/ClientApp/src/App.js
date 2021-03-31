@@ -26,6 +26,8 @@ import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import VenueMain from './components/Venue/VenueMain';
 import UserRegister from "./components/User/UserRegister";
 import UserLogin from "./components/User/UserLogin";
+import SeatMapMain from './components/SeatMap/SeatMapMain';
+import LogOut from './components/MainPageNavBar/LogOut';
 
 export default function App(props) {
 
@@ -147,6 +149,9 @@ export default function App(props) {
                             <Route path='/ticket' component={TicketMain} />
                             <Route path='/register' component={UserRegister} />
                             <Route path='/login' component={UserLogin} />
+                            <Route path='/logout' component={LogOut} />
+                            <Route exact path='/' component={EventMain} />
+                            <Route path='/seatmap' component={SeatMapMain} />
                         </Switch>
                     </main>
                 </div>

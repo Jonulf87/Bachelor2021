@@ -1,25 +1,19 @@
 ﻿import React from 'react';
 import SeatMapRow from './SeatMapRow';
 
-export default function SeatMapFloor({ rows, deleteRow }) {
+export default function SeatMapFloor({ rows, updateRowPosition }) {
 
-    function getRows() {
-        return rows.map((row, index) => <SeatMapRow seats={row} deleteRow={() => deleteRow(index) } />);
-    };
 
-    if (rows.length <= 0) {
-        return <p>No rows of seats created yet.</p>
-    }
-    
     return (
         <div style={{
-            width: "100%",
-            height: "500px",
-            position: "relative"
+            width: "600px",
+            height: "600px",
+            position: "relative",
+            backgroundColor: "#ccc",
+            boxSizing: "border-box"
         }}>
-            {getRows()}
+            {rows.map(row => (<SeatMapRow key={row.rowName} {...row} updateRowPosition={updateRowPosition} />))}
         </div>
-
     );
 }
 

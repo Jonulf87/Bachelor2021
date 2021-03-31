@@ -40,7 +40,7 @@ export default function UserDataCard() {
         }
         getUser();
 
-    }, []);
+    }, [isAuthenticated]);
 
 
     useEffect(() => {

@@ -1,9 +1,11 @@
 ﻿import React from 'react';
 
-export default function SeatMapSeat() {
-    return (
-        <div className="seat">
-        </div>
+export default function SeatMapSeat({ seatNumber, gridSize }) {
 
+    return (
+        <div className="seat" style={{
+            float: "left", width: `${gridSize}px`, height: `${gridSize}px`
+        }}>
+        </div>
     );
 }

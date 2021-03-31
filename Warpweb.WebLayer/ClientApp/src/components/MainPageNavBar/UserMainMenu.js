@@ -7,7 +7,7 @@ import useAuth from '../../hooks/useAuth';
 
 export default function UserMainMenu() {
 
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated } = useAuth();
 
     return (
         <List>
@@ -20,7 +20,7 @@ export default function UserMainMenu() {
                         <ListItemText primary='Min side' />
                     </ListItem>
 
-                    <ListItem button onClick={logout}>
+                    <ListItem button component={Link} to='/logout'>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText primary='Logg ut' />
                     </ListItem>
