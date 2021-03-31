@@ -34,7 +34,6 @@ export default function ParticipantList() {
     const { isAuthenticated, token } = useAuth();
 
     let [expanded, setExpanded] = useState(false);
-    let [userOpen, setUserOpen] = useState(false);
 
     useEffect(() => {
         const getParticipants = async () => {
@@ -77,7 +76,7 @@ export default function ParticipantList() {
                                 <Grid item xs={6} container>
 
                                     <Grid item xs={3}>
-                                        <Typography><strong>Fornavn</strong></Typography>
+                                        <Typography><strong>Fullt navn</strong></Typography>
                                     </Grid>
                                     <Grid item xs={9}>
                                         <Typography>{participant.firstName} {participant.lastName}</Typography>

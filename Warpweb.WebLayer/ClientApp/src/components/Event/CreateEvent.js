@@ -85,7 +85,6 @@ export default function CreateEvent() {
         getOrganizers();
     }, []);
 
-
     const getVenues = async () => {
 
         if (isAuthenticated) {
@@ -100,11 +99,9 @@ export default function CreateEvent() {
     }
 
     //Henter Venues knyttet til organizeren brukeren er knyttet til
-    //Flyttes til egen komponent. Kanskje ikke allikevel
     useEffect(() => {
         getVenues();
     }, []);
-
 
     const mainEventDataToBeSent = {
         'name': name,
@@ -127,7 +124,7 @@ export default function CreateEvent() {
                 method: 'POST',
                 body: JSON.stringify(mainEventDataToBeSent)
             });
-            // Tror det skal holde med å droppe .json() fra response
+
             const result = await response.json();
             console.log(result);
             console.log("Startdate = " + mainEventDataToBeSent.StartDate + " StartTime = " + mainEventDataToBeSent.StartTime)
@@ -152,10 +149,9 @@ export default function CreateEvent() {
             startIcon={<SaveIcon />}
             onClick={() => setCreateVenue(false)}
         >
-            stopp
+            Avbryt
         </Button>
-        )
-
+    )
 
     return (
         <Paper variant="outlined" elevation={2}>
@@ -257,7 +253,20 @@ export default function CreateEvent() {
                                         ))}
                                     </TextField>
                                 </Grid>
-                                
+
+                                <Grid item>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        className={classes.button}
+                                        startIcon={<SaveIcon />}
+                                        onClick={() => setCreateVenue(true)}
+                                    >
+                                        Opprett nytt
+                                    </Button>
+                                </Grid>
+                                {createVenue ? stopButton : null}
 
                                 {/*Dropdown for arrangører*/}
                                 <Grid item xs={12}>
@@ -277,6 +286,7 @@ export default function CreateEvent() {
                                         ))}
                                     </TextField>
                                 </Grid>
+
                                 <Grid item xs={2}>
                                     <Button
                                         variant="contained"
@@ -289,26 +299,12 @@ export default function CreateEvent() {
                                         Lagre
                                     </Button>
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        size="large"
-                                        className={classes.button}
-                                        startIcon={<SaveIcon />}
-                                        onClick={() => setCreateVenue(true) }
-                                    >
-                                        Legg til nytt lokale
-                                    </Button>
-                                </Grid>
-                                {createVenue ? stopButton : null}
+
                             </Grid>
                         </Form>
                     </Grid>
                 </Grid>
-
-                { createVenue ? createVenueDiv : null}
-                
+                {createVenue ? createVenueDiv : null}
             </Grid>
         </Paper>
     );

@@ -3,7 +3,6 @@
 export default function ParticipantAdmin() {
     return (
         <div>
-            Her er deltager administrasjon.
         </div>
 
     );

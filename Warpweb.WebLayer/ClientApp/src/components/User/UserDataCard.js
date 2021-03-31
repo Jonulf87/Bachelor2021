@@ -43,7 +43,7 @@ export default function UserDataCard() {
 
     useEffect(() => {
         const showParents = () => {
-            if (userInfo.parentPhoneNumber) {
+            if (userInfo) {
                 setShowParent(true);
             }
         };
