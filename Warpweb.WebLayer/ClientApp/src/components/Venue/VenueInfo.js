@@ -48,93 +48,94 @@ export default function VenueInfo(props) {
     return (
         <>
             <Table>
-                <TableRow>
-                    <TableCell align="left">
-                        <Typography variant="overline">Id</Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        {!isEditing && (<Typography>{venue.venueId}</Typography> )}
-                        {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.Id} />)}
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell align="left">
-                        <Typography variant="overline">Navn</Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        {!isEditing && (<Typography>{venue.venueName}</Typography> )}
-                        {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueName} />)}
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell align="left">
-                        <Typography variant="overline">Adresse</Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        {!isEditing && (<Typography>{venue.venueAddress}</Typography> )}
-                        {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueAddress} />)}
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell align="left">
-                        <Typography variant="overline">Postnr</Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        {!isEditing && (<Typography>{venue.postalCode}</Typography> )}
-                        {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.postalCode} />)}
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell align="left">
-                        <Typography variant="overline">Areal</Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        {!isEditing && (<Typography>{venue.venueAreaAvailable}</Typography> )}
-                        {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueAreaAvailable} />)}
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell align="left">
-                        <Typography variant="overline">Kapasitet</Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        {!isEditing && (<Typography>{venue.venueCapacity}</Typography> )}
-                        {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueCapacity} />)}
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell align="left">
-                        <Typography variant="overline">Kontakt</Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        {!isEditing && (<Typography>{venue.contactId}</Typography> )}
-                        {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.contactId} />)}
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>
-                            {!isEditing && (
-                            <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)} disableElevation>
-                                Endre
-                            </Button>
-                            )}
-                            {isEditing && (
-                            <>
-                            <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)} disableElevation>
-                                Lagre
-                            </Button>
-                            <Button variant="contained" color="secondary" onClick={() => setIsEditing(!isEditing)} disableElevation>
-                                Avbryt
-                            </Button>
-                            </>
-                            )}
-                    </TableCell>
-                    <TableCell>
-                            <Button variant="contained" color="secondary" disableElevation>
-                                Slett
-                            </Button>
-                    </TableCell>
-                </TableRow>
+                <TableBody>
+                    <TableRow>
+                        <TableCell align="left">
+                            <Typography variant="overline">Id</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Typography>{venue.venueId}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="left">
+                            <Typography variant="overline">Navn</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            {!isEditing && (<Typography>{venue.venueName}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueName} />)}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="left">
+                            <Typography variant="overline">Adresse</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            {!isEditing && (<Typography>{venue.venueAddress}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueAddress} />)}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="left">
+                            <Typography variant="overline">Postnr</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            {!isEditing && (<Typography>{venue.postalCode}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.postalCode} />)}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="left">
+                            <Typography variant="overline">Areal</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            {!isEditing && (<Typography>{venue.venueAreaAvailable}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueAreaAvailable} />)}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="left">
+                            <Typography variant="overline">Kapasitet</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            {!isEditing && (<Typography>{venue.venueCapacity}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueCapacity} />)}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="left">
+                            <Typography variant="overline">Kontakt</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            {!isEditing && (<Typography>{venue.contactId}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.contactId} />)}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                                {!isEditing && (
+                                <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)} disableElevation>
+                                    Endre
+                                </Button>
+                                )}
+                                {isEditing && (
+                                <>
+                                <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)} disableElevation>
+                                    Lagre
+                                </Button>
+                                <Button variant="contained" color="secondary" onClick={() => setIsEditing(!isEditing)} disableElevation>
+                                    Avbryt
+                                </Button>
+                                </>
+                                )}
+                        </TableCell>
+                        <TableCell>
+                                <Button variant="contained" color="secondary" disableElevation>
+                                    Slett
+                                </Button>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
             </Table>
         </>
     );

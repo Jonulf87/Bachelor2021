@@ -35,6 +35,7 @@ function getOrder(sortOrder) {
 
 //sorterer ikke tall korrekt. link under for mulig fiks
 //https://stackoverflow.com/questions/175739/built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
+
 function sortRows(sortBy, sortOrder) {
     let order = getOrder(sortOrder);
     return function (a, b) {
@@ -43,21 +44,20 @@ function sortRows(sortBy, sortOrder) {
     }
 };
 
-export default function VenueTable(props) {
+export default function VenueTable() {
     const [order, setOrder] = useState('asc');
-    const [venueList, setVenueList] = useState([]);
-    const [tableColumns, setTableColumns] = useState([]);
-    const [filteredRows, setFilteredRows] = useState(venueList);
+    const [filteredRows, setFilteredRows] = useState([]);
     const [isReady, setIsReady] = useState(false);
+    
+    //Collapse states
     const [open, setOpen] = useState(0);
     const [openCreate, setOpenCreate] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
-    const classes = useStyles();
-
+    const [venueList, setVenueList] = useState([]);
+    //fetch venues
     useEffect(() => {
-        //fetching venues
         const getVenues = async () => {
             if (isAuthenticated) {
                 const respone = await fetch('/api/venues/venueslist', {
@@ -68,7 +68,7 @@ export default function VenueTable(props) {
 
                 const result = await respone.json();
                 setVenueList(result);
-                setTableColumns(Object.keys(result[0]))
+                setFilteredRows(result);
                 setIsReady(true);
             }
         }
@@ -77,14 +77,20 @@ export default function VenueTable(props) {
 
     }, []);
 
+    useEffect(() => {
+        console.log(JSON.stringify(venueList))
+    });
+
+
+    //Event handlers
     //search table function
     const handleChange = (e) => {
         const searchTerm = e.currentTarget.value;
         const newRows = venueList.filter(obj => {
-            return obj.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-                obj.adress.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-                obj.area.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-                obj.maxCapacity.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
+            return obj.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 /*||
+                obj.address.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
+                obj.areaAvailable.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
+                obj.capacity.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1*/
         });
         setFilteredRows(newRows);
     };
@@ -104,6 +110,8 @@ export default function VenueTable(props) {
         setOpen(SelectedVenue);
     };
 
+    const classes = useStyles();
+    
     return (
 
         <>
@@ -145,10 +153,30 @@ export default function VenueTable(props) {
                                 Navn
                             </TableSortLabel>
                         </TableCell>
+                        <TableCell align="left">
+                            <TableSortLabel id='address' onClick={handleSortClick}>
+                                Addresse
+                            </TableSortLabel>
+                        </TableCell>
+                        {/*<TableCell align="left">
+                            <TableSortLabel id='postalCode' onClick={handleSortClick}>
+                                Postnummer
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell align="left">
+                            <TableSortLabel id='areaAvailable' onClick={handleSortClick}>
+                                Tilgjengelig areal
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell align="left">
+                            <TableSortLabel id='capacity' onClick={handleSortClick}>
+                                Maks kapasitet
+                            </TableSortLabel>
+                        </TableCell>*/}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {venueList.map((venuesList) => (
+                {filteredRows.map((venuesList) => (
                     <>
                         <TableRow key={venuesList.id}>
                             <TableCell>
@@ -158,9 +186,13 @@ export default function VenueTable(props) {
                             </TableCell>
                             <TableCell align="left">{venuesList.id}</TableCell>
                             <TableCell align="left">{venuesList.name}</TableCell>
+                            <TableCell align="left">{venuesList.address}</TableCell>
+                            {/*<TableCell align="left">{venuesList.postalCode}</TableCell>
+                            <TableCell align="left">{venuesList.areaAvailable}</TableCell>
+                            <TableCell align="left">{venuesList.capacity}</TableCell>*/}
                         </TableRow>
                         <TableRow key={venuesList.id * -1}>
-                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
+                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
                                 <Collapse in={venuesList.id === open} timeout="auto" unmountOnExit>
                                     <Box p={{ xs: 1, sm: 2, md: 2 }}>
                                         <VenueInfo venue={venuesList.id} />
