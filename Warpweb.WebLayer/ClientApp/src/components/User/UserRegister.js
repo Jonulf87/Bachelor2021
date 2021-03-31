@@ -1,5 +1,5 @@
-﻿import { TextField, Button, Grid, Checkbox, FormControlLabel } from '@material-ui/core';
-import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+﻿import { TextField, Button, Grid, Checkbox, FormControlLabel, MenuItem  } from '@material-ui/core';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import 'date-fns';
@@ -25,11 +25,30 @@ export default function UserRegister() {
     const [team, setTeam] = useState("");
     const [password, setPassword] = useState("");
 
-    //staevariabler til posting av foresatte
+    //statevariabler til posting av foresatte
     const [parentFirstName, setParentFirstName] = useState("");
     const [parentLastName, setParentLastName] = useState("");
     const [parentPhoneNumber, setParentPhoneNumber] = useState("");
     const [parentEMail, setParentEMail] = useState("");
+
+    //Kjønn: gutt, jente, annet, ønsker ikke å oppgi
+    const genders = [
+        {
+            value: 'Gutt',
+            label: 'Gutt',
+        },
+        {
+            value: 'Jente',
+            label: 'Jente',
+        },
+        {
+            value: 'Annet',
+            label: 'Annet',
+        }, {
+            value: 'Vil ikke oppgi',
+            label: 'Vil ikke oppgi',
+        },
+        ,]
 
     const [error, setError] = useState();
     const [isRegistered, setIsRegistered] = useState(false);
@@ -80,7 +99,7 @@ export default function UserRegister() {
             'eMail': eMail,
             'userName': userName,
             'dateOfBirth': dateOfBirth,
-            'gender': gender, //gutt, jente, annet, ønsker ikke å oppgi
+            'gender': gender,
             'isAllergic': isAllergic,
             'allergyDescription': allergyDescription,
             'comments': comments,
@@ -91,7 +110,6 @@ export default function UserRegister() {
             'parentPhoneNumber': parentPhoneNumber,
             'parentEMail': parentEMail
         }
-
 
         const response = await fetch('/api/users/register', {
             headers: {
@@ -111,8 +129,6 @@ export default function UserRegister() {
     if (isRegistered) {
         return <Redirect to={'/login'} />
     }
-
-
 
     return (
         <>
@@ -236,10 +252,17 @@ export default function UserRegister() {
                         <TextField
                             id="gender"
                             label="Kjønn"
+                            select
                             required
                             value={gender}
                             onChange={(e) => setGender(e.target.value)}
-                        />
+                        >
+                        {genders.map((gender) => (
+                            <MenuItem key={gender.value} value={gender.value}>
+                                {gender.label}
+                            </MenuItem>
+                        ))}
+                        </TextField>
                     </Grid>
                     {/*Input fødselsdag*/}
                     <Grid
@@ -264,7 +287,7 @@ export default function UserRegister() {
                         <Grid
                             container
                             item
-                            xs={4}
+                            xs={6}
                         >
                             <Grid
                                 item
@@ -319,9 +342,6 @@ export default function UserRegister() {
                                 />
                             </Grid>
                         </Grid>
-
-
-
                     }
                     {/*Input allergi*/}
                     <Grid
@@ -346,8 +366,6 @@ export default function UserRegister() {
                             value={allergyDescription}
                             onChange={(e) => setAllergyDescription(e.target.value)}
                         />
-
-
                     </Grid>
 
                     {/*Input team/klan*/}

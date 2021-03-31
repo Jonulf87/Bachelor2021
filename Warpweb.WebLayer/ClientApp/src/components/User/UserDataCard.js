@@ -20,8 +20,6 @@ export default function UserDataCard() {
     const [showParents, setShowParent] = useState(false);
     const { isAuthenticated, token } = useAuth();
     
-
-
     useEffect(() => {
         const getUser = async () => {
             if (isAuthenticated) {
