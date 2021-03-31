@@ -46,17 +46,16 @@ function sortRows(sortBy, sortOrder) {
 
 export default function VenueTable() {
     const [order, setOrder] = useState('asc');
-    const [venueList, setVenueList] = useState([]);
-    const [filteredRows, setFilteredRows] = useState(venueList);
+    const [filteredRows, setFilteredRows] = useState([]);
     const [isReady, setIsReady] = useState(false);
+    
+    //Collapse states
     const [open, setOpen] = useState(0);
     const [openCreate, setOpenCreate] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
-    const classes = useStyles();
-
-    
+    const [venueList, setVenueList] = useState([]);
     //fetch venues
     useEffect(() => {
         const getVenues = async () => {
@@ -69,6 +68,7 @@ export default function VenueTable() {
 
                 const result = await respone.json();
                 setVenueList(result);
+                setFilteredRows(result);
                 setIsReady(true);
             }
         }
@@ -81,14 +81,16 @@ export default function VenueTable() {
         console.log(JSON.stringify(venueList))
     });
 
+
+    //Event handlers
     //search table function
     const handleChange = (e) => {
         const searchTerm = e.currentTarget.value;
         const newRows = venueList.filter(obj => {
-            return obj.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-                obj.adress.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-                obj.area.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-                obj.maxCapacity.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
+            return obj.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 /*||
+                obj.address.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
+                obj.areaAvailable.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
+                obj.capacity.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1*/
         });
         setFilteredRows(newRows);
     };
@@ -108,6 +110,8 @@ export default function VenueTable() {
         setOpen(SelectedVenue);
     };
 
+    const classes = useStyles();
+    
     return (
 
         <>
@@ -172,7 +176,7 @@ export default function VenueTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {venueList.map((venuesList) => (
+                {filteredRows.map((venuesList) => (
                     <>
                         <TableRow key={venuesList.id}>
                             <TableCell>
