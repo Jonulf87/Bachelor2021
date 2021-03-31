@@ -42,7 +42,7 @@ export default function UserList() {
     useEffect(() => {
         const getUsers = async () => {
             if (isAuthenticated) {
-                const response = await fetch('/api/users/UsersList', {
+                const response = await fetch('/api/users/userslist', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -59,7 +59,7 @@ export default function UserList() {
         const getRoles = async () => {
             if (expanded) {
                 if (isAuthenticated) {
-                    const rolesResponse = await fetch(`/api/users/UserRoles/${expanded}`, {
+                    const rolesResponse = await fetch(`/api/users/userroles/${expanded}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }

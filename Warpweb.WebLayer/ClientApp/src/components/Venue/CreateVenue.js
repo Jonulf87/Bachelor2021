@@ -60,9 +60,8 @@ export default function CreateVenue() {
             'ContactId': contactId
         }
 
-
         if (isAuthenticated) {
-            const response = await fetch('/api/Venue', {
+            const response = await fetch('/api/venue', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

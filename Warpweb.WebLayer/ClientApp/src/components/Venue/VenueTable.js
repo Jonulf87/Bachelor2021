@@ -60,7 +60,7 @@ export default function VenueTable(props) {
         //fetching venues
         const getVenues = async () => {
             if (isAuthenticated) {
-                const respone = await fetch('/api/venues/VenuesList', {
+                const respone = await fetch('/api/venues/venueslist', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

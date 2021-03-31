@@ -1,12 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import {
-    Card, CardContent, Typography, List, ListItem, ListItemText } from '@material-ui/core';
-import BusinessIcon from '@material-ui/icons/Business';
-import PhoneIcon from '@material-ui/icons/Phone';
-import EmailIcon from '@material-ui/icons/Email';
-import CakeIcon from '@material-ui/icons/Cake';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { Grid, Card, CardContent, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
@@ -22,7 +16,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function UserDataCard() {
 
-    let [userInfo, setUserInfo] = useState(null);
+    let [userInfo, setUserInfo] = useState([]);
     const [isReady, setIsReady] = useState(false);
     const [showParents, setShowParent] = useState(false);
     const { isAuthenticated, token } = useAuth();
@@ -48,17 +42,8 @@ export default function UserDataCard() {
 
     }, []);
 
-    //useEffect(() => {
-    //    const showParents = () => {
-    //        if (userInfo.parentPhoneNumber !== null) {
-    //            setShowParent(true);
-    //        }
-    //    };
-    //    showParents();
-    //}, []);
-
-
     const classes = useStyles();
+
     return (
         <Card className={classes.root}>
 
@@ -136,14 +121,10 @@ export default function UserDataCard() {
                             <ListItemText primary={userInfo.comments} />
                         </ListItem>
 
-                        {userInfo}
-                        
-
                     </List>
                 </>)}
 
                 {!isReady && (<p>Loading...</p>)}
-
                 
             </CardContent>
         </Card>

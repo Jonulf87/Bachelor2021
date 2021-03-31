@@ -23,7 +23,7 @@ export default function EventList() {
     useEffect(() => {
         const getEvents = async () => {
             if (isAuthenticated) {
-                const response = await fetch('/api/events/EventsList', {
+                const response = await fetch('/api/events/eventslist', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

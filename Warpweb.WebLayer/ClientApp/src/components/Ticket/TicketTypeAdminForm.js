@@ -31,7 +31,7 @@ export default function TicketTypeAdminForm({ updateList }) {
 
     const submitForm = async () => {
         if (isAuthenticated) {
-            const response = await fetch('/api/tickettypes/createTicketType', {
+            const response = await fetch('/api/tickettypes/createtickettype', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'

@@ -89,7 +89,7 @@ export default function CreateEvent() {
     const getVenues = async () => {
 
         if (isAuthenticated) {
-            const response = await fetch(`/api/venues/VenuesList`, {
+            const response = await fetch(`/api/venues/venueslist`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -119,7 +119,7 @@ export default function CreateEvent() {
     // NB - Må sjekke at det er gjort valg i skjema før innsending
     const submitForm = async () => {
         if (isAuthenticated) {
-            const response = await fetch('/api/events/createMainEvent', {
+            const response = await fetch('/api/events/createmainevent', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
