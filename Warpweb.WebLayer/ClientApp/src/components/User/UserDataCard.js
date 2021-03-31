@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Divider, Card, CardContent, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { Grid, Button, Card, CardContent, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
@@ -38,6 +38,16 @@ export default function UserDataCard() {
             }
         }
         getUser();
+
+    }, []);
+
+    useEffect(() => {
+        const showParents = () => {
+            if (userInfo.parentPhoneNumber !== null) {
+                setShowParent(true);
+            }
+        };
+        showParents();
 
     }, []);
 
@@ -99,12 +109,37 @@ export default function UserDataCard() {
                             </ListItem>
                         }
 
+                        {showParents && 
+                        <Grid container>
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.parentFirstName} secondary="Foresatt fornavn" />
+                        </ListItem>
+
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.parentLastName} secondary="Foresatt etternavn" />
+                        </ListItem>
+
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.parentPhoneNumber} secondary="Foresatt telefon" />
+                        </ListItem>
+
+                        <ListItem divider>
+                            <ListItemText primary={userInfo.parentEMail} secondary="Foresatt e-post" />
+                            </ListItem>
+                        </Grid>
+                        }
                         <ListItem divider>
                             <ListItemText primary={userInfo.team} secondary="Lag/klan"/>
                         </ListItem>
 
-                        <ListItem divider>
+                        <ListItem>
                             <ListItemText primary={userInfo.comments} secondary="Tilleggsinformasjon"/>
+                        </ListItem>
+
+                        <ListItem>
+                            <Button variant="contained" color="primary">
+                                Endre
+                            </Button>
                         </ListItem>
 
                     </List>
