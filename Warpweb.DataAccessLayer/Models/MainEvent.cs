@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,5 +19,7 @@ namespace Warpweb.DataAccessLayer.Models
         [ForeignKey(nameof(Venue))]
         public int? VenueId { get; set; }
         public virtual Venue Venue { get; set; }
+
+        public virtual ICollection<Row> Rows { get; set; }
     }
 }

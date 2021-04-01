@@ -1,8 +1,8 @@
-﻿import React, { useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
 import SeatMapSeat from './SeatMapSeat';
 
-export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVertical, updateRowPosition }) {
+export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVertical, updateRowPosition, setSeatInfo }) {
 
 
     const gridSize = 20;
@@ -12,14 +12,17 @@ export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVerti
     }
 
     const renderSeats = () => {
-        const seats = [];
+        const seatsToBeRendered = [];
 
         for (let i = 1; i <= numberOfSeats; i++) {
-            seats.push(<SeatMapSeat key={i} seatNumber={i} gridSize={gridSize} />)
+            seatsToBeRendered.push(<SeatMapSeat key={i} seatNumber={i} rowName={rowName} gridSize={gridSize} />)
+
+
         }
-        return seats;
+        return seatsToBeRendered;
     }
 
+    
     return (
         <Draggable bounds="parent" grid={[gridSize, gridSize]} position={{ x: xPos, y: yPos }} onDrag={handleDrag}>
             <div className="seatRow"

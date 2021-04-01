@@ -26,6 +26,8 @@ namespace Warpweb.DataAccessLayer
         public DbSet<CrewPermission> CrewPermissions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Guardian> Guardians { get; set; }
+        public DbSet<Row> Rows { get; set; }
+        public DbSet<Seat> Seats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

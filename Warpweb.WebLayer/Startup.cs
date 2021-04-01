@@ -52,6 +52,7 @@ namespace Warpweb.WebLayer
             services.AddScoped<CrewService>();
             services.AddScoped<CrewRoleService>();
             services.AddScoped<UserService>();
+            services.AddScoped<SeatMapService>();
             services.AddHttpContextAccessor();
             services.AddTransient<IMainEventProvider, MainEventProvider>();
 
