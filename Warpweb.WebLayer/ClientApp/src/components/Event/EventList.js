@@ -61,7 +61,11 @@ export default function EventList() {
         return (
             <div className={classes.accordionWrapper}>
                 {eventsList.map((mainevent) => (
-                    <Accordion key={mainevent.id} expanded={expanded === mainevent.id} onChange={(event, isExpanded) => setExpanded(isExpanded ? mainevent.id : false)}>
+                    <Accordion
+                        key={mainevent.id}
+                        expanded={expanded === mainevent.id}
+                        onChange={(event, isExpanded) => setExpanded(isExpanded ? mainevent.id : false)}
+                    >
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -74,7 +78,6 @@ export default function EventList() {
                             <Grid container>
                                 {/*Event details container*/}
                                 <Grid item xs={6} container>
-
                                     <Grid item xs={3}>
                                         <Typography><strong>Startdato</strong></Typography>
                                     </Grid>
@@ -84,12 +87,29 @@ export default function EventList() {
                                 </Grid>
 
                                 <Grid item xs={6} container>
-
                                     <Grid item xs={3}>
                                         <Typography><strong>Sluttdato</strong></Typography>
                                     </Grid>
                                     <Grid item xs={9}>
                                         <Typography>{mainevent.endDateTime}</Typography>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid item xs={6} container>
+                                    <Grid item xs={3}>
+                                        <Typography><strong>Lokale</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={9}>
+                                        <Typography>{mainevent.venue.name}</Typography>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid item xs={6} container>
+                                    <Grid item xs={3}>
+                                        <Typography><strong>Arrangør</strong></Typography>
+                                    </Grid>
+                                    <Grid item xs={9}>
+                                        <Typography>{mainevent.organizer.name}</Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>

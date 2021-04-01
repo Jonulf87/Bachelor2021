@@ -1,6 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Grid, Button, Card, CardContent, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import {
+    Grid, Button, Card, CardContent, Typography, List, ListItem,
+    ListItemText, CircularProgress
+} from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
@@ -17,7 +20,6 @@ export default function UserDataCard() {
 
     let [userInfo, setUserInfo] = useState([]);
     const [isReady, setIsReady] = useState(false);
-    const [showParents, setShowParent] = useState(false);
     const { isAuthenticated, token } = useAuth();
     
     useEffect(() => {
@@ -39,17 +41,6 @@ export default function UserDataCard() {
         getUser();
 
     }, [isAuthenticated]);
-
-
-    useEffect(() => {
-        const showParents = () => {
-            if (userInfo) {
-                setShowParent(true);
-            }
-        };
-        showParents();
-
-    }, []);
 
     const classes = useStyles();
 
@@ -109,7 +100,7 @@ export default function UserDataCard() {
                             </ListItem>
                         }
 
-                        {showParents && <>
+                        {userInfo.parentPhoneNumber &&
                             <Grid container>
                                 <ListItem divider>
                                     <ListItemText primary={userInfo.parentFirstName} secondary="Foresatt fornavn" />
@@ -127,7 +118,7 @@ export default function UserDataCard() {
                                     <ListItemText primary={userInfo.parentEMail} secondary="Foresatt e-post" />
                                 </ListItem>
                             </Grid>
-                        </>}
+                        }
 
                         <ListItem divider>
                             <ListItemText primary={userInfo.team} secondary="Lag/klan" />
@@ -146,7 +137,7 @@ export default function UserDataCard() {
                     </List>
                 </>)}
 
-                {!isReady && (<p>Loading...</p>)}
+                {!isReady && ((<CircularProgress />))}
 
             </CardContent>
         </Card>
