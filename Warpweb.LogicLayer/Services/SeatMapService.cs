@@ -26,8 +26,6 @@ namespace Warpweb.LogicLayer.Services
         //hvordan fikse error handling og return når det er et array av objekter som sendes inn?
         public async Task SetRowsAsync(List<RowVm> rowInfo) 
         {
-
-
             foreach (var row in rowInfo)
             {
                 var newRow = new Row
@@ -55,13 +53,5 @@ namespace Warpweb.LogicLayer.Services
 
             await _dbContext.SaveChangesAsync();
         }
-
-        //public async Task<int> SetSeatsAsync(List<SeatVm> seatInfo)
-        //{
-        //    foreach (var seatObject in seatInfo)
-        //    {
-
-        //    }
-        //}
     }
 }
