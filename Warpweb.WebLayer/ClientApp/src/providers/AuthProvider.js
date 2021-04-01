@@ -6,6 +6,7 @@ const AuthProvider = ({ children }) => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null);
+    const [roles, setRoles] = useState([]);
     const refreshTokenTimeoutId = useRef(null);
 
     const refreshToken = (delay) => {
@@ -94,6 +95,9 @@ const AuthProvider = ({ children }) => {
             const expires = new Date(jwtToken.exp * 1000);
             let timeout = expires.getTime() - Date.now() - 15 * 1000;
 
+            const role = jwtToken.role;
+            setRoles(role);
+
             if (timeout < 0) {
                 timeout = 0;
             }
@@ -109,7 +113,7 @@ const AuthProvider = ({ children }) => {
         };
     }, []);
 
-    return <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout }}>{children}</AuthContext.Provider>;
 
 };
 

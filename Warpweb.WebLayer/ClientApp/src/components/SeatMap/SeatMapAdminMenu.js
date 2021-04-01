@@ -1,4 +1,5 @@
-﻿import { Button, TextField } from '@material-ui/core';
+﻿import { Button, Grid, TextField } from '@material-ui/core';
+import { Form } from 'reactstrap';
 import React, { useState } from 'react';
 
 export default function SeatMapAdminMenu({ addRow, submit }) {
@@ -29,14 +30,60 @@ export default function SeatMapAdminMenu({ addRow, submit }) {
     }
 
     return (
+
         <div className="addingMenu">
-            <form>
-                <TextField type="number" value={numberOfSeats} placeholder="10" onChange={(e) => setNumberOfSeats(e.target.value)} />
-                <TextField required type="text" value={rowName} placeholder="Navn" onChange={(e) => setRowName(e.target.value)} /> {/*required*/}
-                <Button variant="contained" color="primary" onClick={addRowSubmit}>Legg til rad </Button>
-                <Button variant="contained" color="secondary" onClick={submit} >Lagre</Button>
-            </form>
+
+            <Form>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    justify="flex-start"
+                >
+                    <Grid
+                        item
+                        xs={3}
+                    >
+
+                        <TextField
+                            type="number"
+                            value={numberOfSeats}
+                            label="Antall seter på rad"
+                            placeholder="10"
+                            onChange={(e) => setNumberOfSeats(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid
+                        item
+                        xs={3}
+                    >
+
+                        <TextField
+                            required
+                            type="text"
+                            value={rowName}
+                            label="Navn på rad"
+                            placeholder="Navn"
+                            onChange={(e) => setRowName(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid
+                        item
+                        xs={6}
+                    >
+                        <Button variant="contained" color="primary" onClick={addRowSubmit}>Legg til rad </Button>
+                    </Grid>
+
+                    <Grid
+                        item
+                        xs={6}
+                    >
+                        <Button variant="contained" color="secondary" onClick={submit} >Lagre</Button>
+                    </Grid>
+                </Grid>
+            </Form>
         </div>
+
     )
 
 }

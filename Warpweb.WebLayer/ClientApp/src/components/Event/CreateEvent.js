@@ -299,7 +299,6 @@ export default function CreateEvent() {
                                         Lagre
                                     </Button>
                                 </Grid>
-
                             </Grid>
                         </Form>
                     </Grid>

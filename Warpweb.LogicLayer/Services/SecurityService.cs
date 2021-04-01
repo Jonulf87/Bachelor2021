@@ -102,6 +102,7 @@ namespace Warpweb.LogicLayer.Services
             {
                 throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(a => a.Description)));
             }
+            await _userManager.AddToRoleAsync(userDataToBeStored, "User");
         }
     }
 }
