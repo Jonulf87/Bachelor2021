@@ -123,23 +123,16 @@ export default function EventList() {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root}>
-
-            <CardContent>
-
-                <Typography gutterBottom variant="h5" component="h2">
-                Arrangementsoversikt
-                </Typography>
+        <>
+            <Typography>
+                <strong>Arrangementsoversikt</strong>
+            </Typography>
 
             {isReady && (<>
-                    {getEventsFromList()}
+                {getEventsFromList()}
             </>)}
 
             {!isReady && (<CircularProgress />)}
-
-            </CardContent>
-
-        </Card>
-
+        </>
     );
 }

@@ -9,7 +9,6 @@ import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-
         accordionWrapper: {
             width: '100%',
             '&> :nth-child(even)': {
@@ -61,7 +60,10 @@ export default function ParticipantList() {
         return (
             <div className={classes.accordionWrapper}>
                 {participantList.map((participant) => (
-                    <Accordion key={participant.id} expanded={expanded === participant.id} onChange={(event, isExpanded) => setExpanded(isExpanded ? participant.id : false)}>
+                    <Accordion
+                        key={participant.id}
+                        expanded={expanded === participant.id}
+                        onChange={(event, isExpanded) => setExpanded(isExpanded ? participant.id : false)}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -93,23 +95,16 @@ export default function ParticipantList() {
     const classes = useStyles();
 
     return (
+        <>
+            <Typography>
+                <strong>Deltakere</strong>
+            </Typography>
 
-        <Card className={classes.root}>
+            {isReady && (<>
+                {getParticipantsFromList()}
+            </>)}
 
-            <CardContent>
-
-                <Typography gutterBottom variant="h5" component="h2">
-                    Deltakeroversikt
-                </Typography>
-
-                {isReady && (<>
-                    {getParticipantsFromList()}
-                </>)}
-
-                {!isReady && (<CircularProgress />)}
-
-            </CardContent>
-
-        </Card>
+            {!isReady && (<CircularProgress />)}
+        </>
     );
 }

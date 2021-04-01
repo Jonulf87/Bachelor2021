@@ -122,7 +122,9 @@ export default function UserList() {
         return (
             <div className={classes.accordionWrapper}>
                 {userList.map((user) => (
-                    <Accordion key={user.id} expanded={expanded === user.id} onChange={(event, isExpanded) => setExpanded(isExpanded ? user.id : false)}>
+                    <Accordion key={user.id}
+                        expanded={expanded === user.id}
+                        onChange={(event, isExpanded) => setExpanded(isExpanded ? user.id : false)}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -242,7 +244,7 @@ export default function UserList() {
         <>
             {getUsersIsReady && (<>
                 <Typography>
-                    <strong>Brukerliste</strong>
+                    <strong>Brukere</strong>
                 </Typography>
                 {mapUsers()}
             </>
