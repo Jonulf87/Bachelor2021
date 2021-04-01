@@ -10,7 +10,7 @@ using Warpweb.DataAccessLayer;
 namespace Warpweb.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210322195448_v1")]
+    [Migration("20210401135810_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace Warpweb.DataAccessLayer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.3")
+                .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ApplicationUserOrganizer", b =>
@@ -288,9 +288,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<string>("AllergyDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
 
@@ -312,6 +309,9 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAllergic")
@@ -349,6 +349,9 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Team")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -362,9 +365,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<int?>("YearlyFee")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CurrentMainEventId");
 
@@ -451,11 +455,25 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("EMail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
-                    b.ToTable("Guardian");
+                    b.ToTable("Guardians");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.MainEvent", b =>
@@ -477,7 +495,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("VenueId")
+                    b.Property<int?>("VenueId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -487,23 +505,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.HasIndex("VenueId");
 
                     b.ToTable("MainEvents");
-                });
-
-            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Minor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Minor");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Organizer", b =>
@@ -532,6 +533,38 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.ToTable("Organizers");
                 });
 
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Row", b =>
                 {
                     b.Property<int>("Id")
@@ -539,23 +572,31 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Rotation")
+                    b.Property<int>("MainEventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SeatGroupId")
                         .HasColumnType("int");
 
-                    b.Property<string>("XCoordinate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("XCoordinate")
+                        .HasColumnType("int");
 
-                    b.Property<string>("YCoordinate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("YCoordinate")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isVertical")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MainEventId");
+
                     b.HasIndex("SeatGroupId");
 
-                    b.ToTable("Row");
+                    b.ToTable("Rows");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Seat", b =>
@@ -565,23 +606,23 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("RowId")
+                    b.Property<int>("RowId")
                         .HasColumnType("int");
 
                     b.Property<string>("SeatNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
+                    b.Property<bool>("isBought")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isReserved")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RowId");
 
-                    b.HasIndex("TicketId")
-                        .IsUnique();
-
-                    b.ToTable("Seat");
+                    b.ToTable("Seats");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.SeatGroup", b =>
@@ -617,6 +658,9 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SeatId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TicketTypeId")
                         .HasColumnType("int");
 
@@ -625,6 +669,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("MainEventId");
+
+                    b.HasIndex("SeatId")
+                        .IsUnique()
+                        .HasFilter("[SeatId] IS NOT NULL");
 
                     b.HasIndex("TicketTypeId");
 
@@ -749,10 +797,6 @@ namespace Warpweb.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", null)
-                        .WithMany("Guardian")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("Warpweb.DataAccessLayer.Models.MainEvent", "CurrentMainEvent")
                         .WithMany()
                         .HasForeignKey("CurrentMainEventId");
@@ -795,8 +839,8 @@ namespace Warpweb.DataAccessLayer.Migrations
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Guardian", b =>
                 {
                     b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", "Minor")
-                        .WithMany("Guardians")
-                        .HasForeignKey("ApplicationUserId");
+                        .WithOne("Guardian")
+                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Guardian", "ApplicationUserId");
 
                     b.Navigation("Minor");
                 });
@@ -810,23 +854,12 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("Warpweb.DataAccessLayer.Models.Venue", "Venue")
-                        .WithMany("MainEvent")
-                        .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("MainEvents")
+                        .HasForeignKey("VenueId");
 
                     b.Navigation("Organizer");
 
                     b.Navigation("Venue");
-                });
-
-            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Minor", b =>
-                {
-                    b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", "Guardian")
-                        .WithMany("Minors")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.Navigation("Guardian");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Organizer", b =>
@@ -838,26 +871,39 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Navigation("Contact");
                 });
 
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.RefreshToken", b =>
+                {
+                    b.HasOne("Warpweb.DataAccessLayer.Models.ApplicationUser", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Row", b =>
                 {
+                    b.HasOne("Warpweb.DataAccessLayer.Models.MainEvent", "MainEvent")
+                        .WithMany("Rows")
+                        .HasForeignKey("MainEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Warpweb.DataAccessLayer.Models.SeatGroup", null)
                         .WithMany("Rows")
                         .HasForeignKey("SeatGroupId");
+
+                    b.Navigation("MainEvent");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Seat", b =>
                 {
-                    b.HasOne("Warpweb.DataAccessLayer.Models.Row", null)
+                    b.HasOne("Warpweb.DataAccessLayer.Models.Row", "Row")
                         .WithMany("Seats")
-                        .HasForeignKey("RowId");
-
-                    b.HasOne("Warpweb.DataAccessLayer.Models.Ticket", "Ticket")
-                        .WithOne("Seat")
-                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Seat", "TicketId")
+                        .HasForeignKey("RowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ticket");
+                    b.Navigation("Row");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.SeatGroup", b =>
@@ -879,6 +925,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Warpweb.DataAccessLayer.Models.Seat", "Seat")
+                        .WithOne("Ticket")
+                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Ticket", "SeatId");
+
                     b.HasOne("Warpweb.DataAccessLayer.Models.TicketType", "Type")
                         .WithMany()
                         .HasForeignKey("TicketTypeId")
@@ -886,6 +936,8 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("MainEvent");
+
+                    b.Navigation("Seat");
 
                     b.Navigation("Type");
 
@@ -907,9 +959,7 @@ namespace Warpweb.DataAccessLayer.Migrations
 
                     b.Navigation("Guardian");
 
-                    b.Navigation("Guardians");
-
-                    b.Navigation("Minors");
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("Tickets");
                 });
@@ -919,6 +969,11 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Navigation("CrewPermissions");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.MainEvent", b =>
+                {
+                    b.Navigation("Rows");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Organizer", b =>
@@ -933,6 +988,8 @@ namespace Warpweb.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Seat", b =>
                 {
+                    b.Navigation("Ticket");
+
                     b.Navigation("TicketTypes");
                 });
 
@@ -941,14 +998,9 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Navigation("Rows");
                 });
 
-            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Ticket", b =>
-                {
-                    b.Navigation("Seat");
-                });
-
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>
                 {
-                    b.Navigation("MainEvent");
+                    b.Navigation("MainEvents");
 
                     b.Navigation("SeatGroups");
 

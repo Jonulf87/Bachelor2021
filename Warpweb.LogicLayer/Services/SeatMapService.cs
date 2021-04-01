@@ -24,9 +24,9 @@ namespace Warpweb.LogicLayer.Services
 
 
         //hvordan fikse error handling og return når det er et array av objekter som sendes inn?
-        public async Task<ActionResult<IEnumerable<int>>> SetRowsAsync(List<RowVm> rowInfo) 
+        public async Task SetRowsAsync(List<RowVm> rowInfo) 
         {
-            var resultList = new List<int>();
+
 
             foreach (var row in rowInfo)
             {
@@ -36,25 +36,24 @@ namespace Warpweb.LogicLayer.Services
                     XCoordinate = row.XPos,
                     YCoordinate = row.YPos,
                     isVertical = row.IsVertical,
-                    MainEventId = 1
+                    MainEventId = 1,
+                    Seats = new List<Seat>()
                 };
-                _dbContext.Rows.Add(newRow);
-                resultList.Add(await _dbContext.SaveChangesAsync());
-
+                    
                 foreach (var seat in row.Seats)
                 {
-                    var seatToBeStored = new Seat
+                    newRow.Seats.Add(new Seat
                     {
                         SeatNumber = seat.SeatNumber.ToString(),
-                        RowId = newRow.Id,
                         isReserved = false,
                         isBought = false
-                    };
-                    _dbContext.Seats.Add(seatToBeStored);
+                    });
                 }
+
+                _dbContext.Rows.Add(newRow);
             }
 
-            return resultList;
+            await _dbContext.SaveChangesAsync();
         }
 
         //public async Task<int> SetSeatsAsync(List<SeatVm> seatInfo)

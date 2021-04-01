@@ -610,9 +610,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<string>("SeatNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("isBought")
                         .HasColumnType("bit");
 
@@ -622,9 +619,6 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RowId");
-
-                    b.HasIndex("TicketId")
-                        .IsUnique();
 
                     b.ToTable("Seats");
                 });
@@ -662,6 +656,9 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SeatId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TicketTypeId")
                         .HasColumnType("int");
 
@@ -670,6 +667,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("MainEventId");
+
+                    b.HasIndex("SeatId")
+                        .IsUnique()
+                        .HasFilter("[SeatId] IS NOT NULL");
 
                     b.HasIndex("TicketTypeId");
 
@@ -900,15 +901,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Warpweb.DataAccessLayer.Models.Ticket", "Ticket")
-                        .WithOne("Seat")
-                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Seat", "TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Row");
-
-                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.SeatGroup", b =>
@@ -930,6 +923,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Warpweb.DataAccessLayer.Models.Seat", "Seat")
+                        .WithOne("Ticket")
+                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Ticket", "SeatId");
+
                     b.HasOne("Warpweb.DataAccessLayer.Models.TicketType", "Type")
                         .WithMany()
                         .HasForeignKey("TicketTypeId")
@@ -937,6 +934,8 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("MainEvent");
+
+                    b.Navigation("Seat");
 
                     b.Navigation("Type");
 
@@ -987,17 +986,14 @@ namespace Warpweb.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Seat", b =>
                 {
+                    b.Navigation("Ticket");
+
                     b.Navigation("TicketTypes");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.SeatGroup", b =>
                 {
                     b.Navigation("Rows");
-                });
-
-            modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Ticket", b =>
-                {
-                    b.Navigation("Seat");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>

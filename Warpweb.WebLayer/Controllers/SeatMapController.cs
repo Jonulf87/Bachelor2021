@@ -25,10 +25,10 @@ namespace Warpweb.WebLayer.Controllers
 
         [HttpPost]
         [Route("storeseatmap")]
-        public async Task<ActionResult<IEnumerable<int>>> StoreRowsAsync(List<RowVm> seatMap)
+        public async Task<ActionResult> StoreRowsAsync(List<RowVm> seatMap)
         {
-            var result = await _seatMapService.SetRowsAsync(seatMap);
-            return result;
+            await _seatMapService.SetRowsAsync(seatMap);
+            return Ok();
         }
     }
 }

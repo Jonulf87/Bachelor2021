@@ -10,8 +10,6 @@ namespace Warpweb.DataAccessLayer.Models
         public bool isReserved { get; set; }
         public bool isBought { get; set; }
 
-        [ForeignKey(nameof(Ticket))]
-        public int TicketId { get; set; }
         public virtual Ticket Ticket { get; set; }
 
         [ForeignKey(nameof(Row))]

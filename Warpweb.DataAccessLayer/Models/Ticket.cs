@@ -19,6 +19,8 @@ namespace Warpweb.DataAccessLayer.Models
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
+        [ForeignKey(nameof(Seat))]
+        public int? SeatId { get; set; }
         public virtual Seat Seat { get; set; }
 
     }
