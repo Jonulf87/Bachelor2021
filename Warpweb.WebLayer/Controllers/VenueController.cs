@@ -58,13 +58,21 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<VenueVm>> CreateVenue(VenueVm venueVm)
         {
             int venueId;
+
+            if (venueVm.VenueId > 0)
+            {
+                return BadRequest("VenueId should be empty");
+            }
+
+            // Check all fields
+
             try
             {
                 venueId = await _venueService.CreateVenueAsync(venueVm);
             }
             catch (VenueAlreadyExistsException)
             {
-                return BadRequest();
+                return Conflict("Venue with this name already exists");
             }
 
             venueVm.VenueId = venueId;

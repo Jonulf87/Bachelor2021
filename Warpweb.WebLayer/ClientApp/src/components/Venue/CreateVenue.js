@@ -17,26 +17,15 @@ export default function CreateVenue() {
 
     const classes = useStyles();
 
-    const isMounted = useRef(true);
-
     const [isSending, setIsSending] = useState(false);
-    const [name, setName] = useState('');
-    const [contactId, setContactId] = useState('');
-    const [address, setAddress] = useState('');
-    const [postalCode, setPostalCode] = useState('');
-    const [area, setArea] = useState('');
-    const [capacity, setCapacity] = useState('');
+    const [enteredName, setEnteredName] = useState('');
+    const [enteredContactId, setEnteredContactId] = useState('');
+    const [enteredAddress, setEnteredAddress] = useState('');
+    const [enteredPostalCode, setEnteredPostalCode] = useState('');
+    const [enteredArea, setEnteredArea] = useState('');
+    const [enteredCapacity, setEnteredCapacity] = useState('');
 
     const { isAuthenticated, token } = useAuth();
-
-    useEffect(
-        () => {
-            return () => {
-                isMounted.current = false
-            }
-        },
-        []
-    );
 
     const sendRequest = async () => {
         // don't send again while we are sending
@@ -44,20 +33,22 @@ export default function CreateVenue() {
             return;
         }
 
+        // Check all fields
+
         // update state
         setIsSending(true);
 
         const data = {
-            'VenueName': name,
-            'VenueAddress': address,
-            'PostalCode': postalCode,
-            'VenueAreaAvailable': area,
-            'VenueCapacity': capacity,
-            'ContactId': contactId
+            'VenueName': enteredName,
+            'VenueAddress': enteredAddress,
+            'PostalCode': enteredPostalCode,
+            'VenueAreaAvailable': enteredArea,
+            'VenueCapacity': enteredCapacity,
+            'ContactId': enteredContactId
         }
 
         if (isAuthenticated) {
-            const response = await fetch('/api/venue', {
+            const response = await fetch('/api/venues', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -65,15 +56,25 @@ export default function CreateVenue() {
                 method: 'POST',
                 body: JSON.stringify(data)
             });
-            const result = await response.json();
+
+            if (response.status !== 200) {
+                alert("Error");
+            } else {
+                const result = await response.json();
+
+                alert("Created");
+                setEnteredName('');
+                setEnteredContactId('');
+                setEnteredAddress('');
+                setEnteredPostalCode('');
+                setEnteredArea('');
+                setEnteredCapacity('');
+            }
         } else {
             alert("Not authorized");
         }
 
-        // only update if we are still mounted
-        if (isMounted.current) {
-            setIsSending(false);
-        }
+        setIsSending(false);
     };
 
     return (
@@ -85,7 +86,10 @@ export default function CreateVenue() {
                 <div>
                     <div>
                         <TextField
-                            onChange={e => setName(e.target.value)}
+                            onChange={event => {
+                                setEnteredName(event.target.value);
+                            }}
+                            value={enteredName}
                             id="name"
                             name="name"
                             label="Navn"
@@ -100,7 +104,10 @@ export default function CreateVenue() {
                         />
 
                         <TextField
-                            onChange={e => setContactId(e.target.value)}
+                            onChange={event => {
+                                setEnteredContactId(event.target.value);
+                            }}
+                            value={enteredContactId}
                             id="contactperson"
                             name="contactperson"
                             label="Kontaktperson"
@@ -117,7 +124,10 @@ export default function CreateVenue() {
                     </div>
                     <div>
                         <TextField
-                            onChange={e => setAddress(e.target.value)}
+                            onChange={event => {
+                                setEnteredAddress(event.target.value);
+                            }}
+                            value={enteredAddress}
                             id="address"
                             name="address"
                             label="Adresse"
@@ -132,7 +142,10 @@ export default function CreateVenue() {
                         />
 
                         <TextField
-                            onChange={e => setPostalCode(e.target.value)}
+                            onChange={event => {
+                                setEnteredPostalCode(event.target.value);
+                            }}
+                            value={enteredPostalCode}
                             id="postalcode"
                             name="postalcode"
                             label="Postnr"
@@ -148,7 +161,10 @@ export default function CreateVenue() {
                     </div>
                     <div>
                         <TextField
-                            onChange={e => setArea(e.target.value)}
+                            onChange={event => {
+                                setEnteredArea(event.target.value);
+                            }}
+                            value={enteredArea}
                             id="area"
                             name="area"
                             type="Number"
@@ -164,7 +180,10 @@ export default function CreateVenue() {
                         />
 
                         <TextField
-                            onChange={e => setCapacity(e.target.value)}
+                            onChange={event => {
+                                setEnteredCapacity(event.target.value);
+                            }}
+                            value={enteredCapacity}
                             id="capacity"
                             name="capacity"
                             type="Number"
