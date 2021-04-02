@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Warpweb.DataAccessLayer;
 
 namespace Warpweb.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210402192159_v3")]
+    partial class v3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -672,7 +674,8 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .IsUnique()
                         .HasFilter("[SeatId] IS NOT NULL");
 
-                    b.HasIndex("TicketTypeId");
+                    b.HasIndex("TicketTypeId")
+                        .IsUnique();
 
                     b.ToTable("Tickets");
                 });
@@ -933,8 +936,8 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .HasForeignKey("Warpweb.DataAccessLayer.Models.Ticket", "SeatId");
 
                     b.HasOne("Warpweb.DataAccessLayer.Models.TicketType", "Type")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketTypeId")
+                        .WithOne("Ticket")
+                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Ticket", "TicketTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1015,7 +1018,7 @@ namespace Warpweb.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.TicketType", b =>
                 {
-                    b.Navigation("Tickets");
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>

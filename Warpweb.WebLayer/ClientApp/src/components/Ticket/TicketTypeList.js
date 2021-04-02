@@ -36,7 +36,7 @@ export default function TicketTypeList({ triggerUpdate }) {
 
         getEvents();
 
-    }, [triggerUpdate]);
+    }, [triggerUpdate, isAuthenticated]);
 
     function getTicketTypesFromList() {
 

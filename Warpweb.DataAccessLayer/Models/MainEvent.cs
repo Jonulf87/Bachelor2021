@@ -21,5 +21,7 @@ namespace Warpweb.DataAccessLayer.Models
         public virtual Venue Venue { get; set; }
 
         public virtual ICollection<Row> Rows { get; set; }
+        public virtual ICollection<TicketType> TicketTypes { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }

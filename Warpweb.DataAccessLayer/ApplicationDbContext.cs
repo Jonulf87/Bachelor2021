@@ -2,17 +2,21 @@
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
 
 namespace Warpweb.DataAccessLayer
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
+        private readonly IMainEventProvider _mainEventProvider;
+
         public ApplicationDbContext(
             DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+            IOptions<OperationalStoreOptions> operationalStoreOptions,
+            IMainEventProvider mainEventProvider) : base(options, operationalStoreOptions)
         {
-
+            _mainEventProvider = mainEventProvider;
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
@@ -38,6 +42,16 @@ namespace Warpweb.DataAccessLayer
                 .WithMany(a => a.AdminRoleAtOrganizers)
                 .UsingEntity(a => a.ToTable("OrganizerAdmins"));
 
+            builder.Entity<MainEvent>()
+                .HasMany(a => a.Tickets)
+                .WithOne(a => a.MainEvent)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<TicketType>()
+                .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);
+
+            builder.Entity<Ticket>()
+                .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);
         }
     }
 }
