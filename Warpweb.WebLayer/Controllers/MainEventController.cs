@@ -29,6 +29,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("eventslist")]
+        [AllowAnonymous]
         public async Task<List<MainEventListVm>> GetMainEvents()
         {
             return await _mainEventService.GetMainEventsAsync();

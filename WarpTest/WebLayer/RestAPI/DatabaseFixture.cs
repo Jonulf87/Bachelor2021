@@ -29,9 +29,9 @@ namespace WarpTest.WebLayer.RestAPI
                 .UseSqlite(_connection)
                 .Options;
 
-            _dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()));
-            _dbContext.Database.EnsureDeleted();
-            _dbContext.Database.EnsureCreated();
+            //_dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()));
+            //_dbContext.Database.EnsureDeleted();
+            //_dbContext.Database.EnsureCreated();
 
             //_dbContext.CrewRoles.Add(new CrewUser { Id = 1, Description = "Test Rolle 1" });
             //_dbContext.CrewRoles.Add(new CrewUser { Id = 2, Description = "Test Rolle 2" });

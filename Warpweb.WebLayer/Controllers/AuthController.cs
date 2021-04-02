@@ -166,7 +166,8 @@ namespace Warpweb.WebLayer.Controllers
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("CurrentMainEventId", user.CurrentMainEventId?.ToString())
             });
 
             foreach (var role in await _userManager.GetRolesAsync(user))

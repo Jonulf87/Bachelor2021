@@ -24,6 +24,9 @@ const AuthProvider = ({ children }) => {
                 const expires = new Date(jwtToken.exp * 1000);
                 let timeout = expires.getTime() - Date.now() - 15 * 1000;
                 refreshToken(timeout);
+
+                const role = jwtToken.role;
+                setRoles(role);
             } else {
                 setIsAuthenticated(false);
                 setToken(null);
@@ -53,6 +56,9 @@ const AuthProvider = ({ children }) => {
             const expires = new Date(jwtToken.exp * 1000)
             let timeout = expires.getTime() - Date.now() - 15 * 1000;
 
+            const role = jwtToken.role;
+            setRoles(role);
+
             refreshToken(timeout);
         }
         else {
@@ -76,6 +82,7 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem('currentUser');
         setIsAuthenticated(false);
         setToken(null);
+        setRoles([]);
 
         if (refreshTokenTimeoutId.current) {
             clearTimeout(refreshTokenTimeoutId.current);
@@ -115,7 +122,7 @@ const AuthProvider = ({ children }) => {
         };
     }, []);
 
-    return <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout, refreshToken }}>{children}</AuthContext.Provider>;
 
 };
 

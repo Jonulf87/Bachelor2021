@@ -15,14 +15,15 @@ namespace Warpweb.WebLayer
     {
         private readonly int _mainEventId;
 
-        public MainEventProvider(IHttpContextAccessor httpContextAccessor, ApplicationDbContext dbContext)
+        public MainEventProvider(IHttpContextAccessor httpContextAccessor)
         {
-            var currentUser = httpContextAccessor.HttpContext.User;
+            var currentUser = httpContextAccessor.HttpContext?.User;
 
             if(currentUser != null && currentUser.Identity.IsAuthenticated)
             {
-                var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                _mainEventId = dbContext.ApplicationUsers.Where(a => a.Id == userId).Select(a => a.CurrentMainEventId).SingleOrDefault() ?? 0;
+                var mainEventId = currentUser.FindFirst("CurrentMainEventId")?.Value;
+
+                int.TryParse(mainEventId, out _mainEventId);
             }
         }
 

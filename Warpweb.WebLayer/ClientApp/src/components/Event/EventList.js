@@ -33,7 +33,7 @@ export default function EventList() {
 
     let [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
-    const { isAuthenticated, token } = useAuth();
+    const { isAuthenticated, token, refreshToken } = useAuth();
     const { setCurrentEvent } = useCurrentEvent();
 
     let [expanded, setExpanded] = useState(false);
@@ -41,22 +41,15 @@ export default function EventList() {
     useEffect(() => {
         const getEvents = async () => {
 
-            if (isAuthenticated) {
-
-                const response = await fetch('/api/events/eventslist', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const result = await response.json();
-                setEventsList(result);
-                setIsReady(true);
-            }
+            const response = await fetch('/api/events/eventslist');
+            const result = await response.json();
+            setEventsList(result);
+            setIsReady(true);
         }
 
         getEvents();
 
-    }, [isAuthenticated]);
+    }, []);
 
     const setSelectedEvent = async () => {
         if (isAuthenticated) {
@@ -69,6 +62,7 @@ export default function EventList() {
                 body: JSON.stringify(expanded)
             });
             setCurrentEvent(eventsList.find(a => a.id === expanded).name);
+            refreshToken(0);
         }
     }
 
@@ -128,9 +122,12 @@ export default function EventList() {
                                         <Typography>{mainevent.organizer.name}</Typography>
                                     </Grid>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Button variant="contained" color="primary" onClick={setSelectedEvent} >Velg arrangement</Button>
-                                </Grid>
+
+                                {isAuthenticated &&
+                                    (<Grid item xs={12}>
+                                        <Button variant="contained" color="primary" onClick={setSelectedEvent} >Velg arrangement</Button>
+                                    </Grid>)
+                                }
                             </Grid>
                         </AccordionDetails>
                     </Accordion>
