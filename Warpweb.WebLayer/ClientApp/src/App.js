@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import theme from './theme'
 import {
     Route,
@@ -28,6 +28,8 @@ import UserRegister from "./components/User/UserRegister";
 import UserLogin from "./components/User/UserLogin";
 import SeatMapMain from './components/SeatMap/SeatMapMain';
 import LogOut from './components/MainPageNavBar/LogOut';
+import NavBarHeader from './components/MainPageNavBar/NavBarHeader';
+import CurrentEventProvider from './providers/CurrentEventProvider';
 
 export default function App(props) {
 
@@ -75,87 +77,97 @@ export default function App(props) {
         setMobileOpen(!mobileOpen);
     };
 
+
+
+
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        <AuthProvider>
-            <ThemeProvider theme={theme}>
-                <div className={classes.root}>
-                    <CssBaseline />
-                    <AppBar position="fixed" className={classes.appBar}>
-                        <Toolbar>
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                edge="start"
-                                onClick={handleDrawerToggle}
-                                className={classes.menuButton}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography variant="h6" noWrap>
-                                WarpWeb
-                        </Typography>
-                        </Toolbar>
-                    </AppBar>
-                    <nav className={classes.drawer} aria-label="mailbox folders">
-                        <Hidden smUp implementation="css">
-                            <Drawer
-                                container={container}
-                                variant="temporary"
-                                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                                open={mobileOpen}
-                                onClose={handleDrawerToggle}
-                                classes={{
-                                    paper: classes.drawerPaper,
-                                }}
-                                ModalProps={{
-                                    keepMounted: true, // Better open performance on mobile.
-                                }}
-                            >
-                                <Divider />
-                                <UserMainMenu />
-                                <Divider />
-                                <AdminMainMenu />
-                            </Drawer>
-                        </Hidden>
-                        <Hidden xsDown implementation="css">
-                            <Drawer
-                                classes={{
-                                    paper: classes.drawerPaper,
-                                }}
-                                variant="permanent"
-                                open
-                            >
-                                <div className={classes.toolbar} background="primary" />
-                                <Divider />
-                                <UserMainMenu />
-                                <Divider />
-                                <AdminMainMenu />
-                            </Drawer>
-                        </Hidden>
-                    </nav>
 
-                    <main className={classes.content}>
-                        <div className={classes.toolbar} />
-                        <Switch>
-                            <Route path='/user' component={UserMain} />
-                            <Route path='/venue' component={VenueMain} />
-                            <Route path='/crew' component={CrewMain} />
-                            <Route path='/useradmin' component={UserAdminMain} />
-                            <Route path='/report' component={ReportMain} />
-                            <Route path='/event' component={EventMain} />
-                            <Route path='/participant' component={ParticipantMain} />
-                            <Route path='/ticket' component={TicketMain} />
-                            <Route path='/register' component={UserRegister} />
-                            <Route path='/login' component={UserLogin} />
-                            <Route path='/logout' component={LogOut} />
-                            <Route exact path='/' component={EventMain} />
-                            <Route path='/seatmap' component={SeatMapMain} />
-                        </Switch>
-                    </main>
-                </div>
-            </ThemeProvider>
+        <AuthProvider>
+            <CurrentEventProvider>
+                <ThemeProvider theme={theme}>
+                    <div className={classes.root}>
+                        <CssBaseline />
+                        <AppBar position="fixed" className={classes.appBar}>
+                            <Toolbar>
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="open drawer"
+                                    edge="start"
+                                    onClick={handleDrawerToggle}
+                                    className={classes.menuButton}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                                <NavBarHeader />
+                            </Toolbar>
+                        </AppBar>
+                        <nav className={classes.drawer} aria-label="mailbox folders">
+                            <Hidden smUp implementation="css">
+                                <Drawer
+                                    container={container}
+                                    variant="temporary"
+                                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                                    open={mobileOpen}
+                                    onClose={handleDrawerToggle}
+                                    classes={{
+                                        paper: classes.drawerPaper,
+                                    }}
+                                    ModalProps={{
+                                        keepMounted: true, // Better open performance on mobile.
+                                    }}
+                                >
+
+                                    <Divider />
+                                    <UserMainMenu />
+                                    <Divider />
+                                    <AdminMainMenu />
+                                </Drawer>
+                            </Hidden>
+                            <Hidden xsDown implementation="css">
+                                <Drawer
+                                    classes={{
+                                        paper: classes.drawerPaper,
+                                    }}
+                                    variant="permanent"
+                                    open
+                                >
+
+                                    <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                        <Typography variant="h6" noWrap >
+                                            WarpWeb
+                                    </Typography>
+                                    </div>
+                                    <Divider />
+                                    <UserMainMenu />
+                                    <Divider />
+                                    <AdminMainMenu />
+                                </Drawer>
+                            </Hidden>
+                        </nav>
+
+                        <main className={classes.content}>
+                            <div className={classes.toolbar} />
+                            <Switch>
+                                <Route path='/user' component={UserMain} />
+                                <Route path='/venue' component={VenueMain} />
+                                <Route path='/crew' component={CrewMain} />
+                                <Route path='/useradmin' component={UserAdminMain} />
+                                <Route path='/report' component={ReportMain} />
+                                <Route path='/event' component={EventMain} />
+                                <Route path='/participant' component={ParticipantMain} />
+                                <Route path='/ticket' component={TicketMain} />
+                                <Route path='/register' component={UserRegister} />
+                                <Route path='/login' component={UserLogin} />
+                                <Route path='/logout' component={LogOut} />
+                                <Route exact path='/' component={EventMain} />
+                                <Route path='/seatmap' component={SeatMapMain} />
+                            </Switch>
+                        </main>
+                    </div>
+                </ThemeProvider>
+            </CurrentEventProvider>
         </AuthProvider>
     );
 }

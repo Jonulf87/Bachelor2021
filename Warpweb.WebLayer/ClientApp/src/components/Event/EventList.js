@@ -2,11 +2,12 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
     Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails,
-    CircularProgress, Divider, Grid
+    CircularProgress, Divider, Grid, Button
 } from '@material-ui/core';
 
 import useAuth from '../../hooks/useAuth';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -33,6 +34,7 @@ export default function EventList() {
     let [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
     const { isAuthenticated, token } = useAuth();
+    const { setCurrentEvent } = useCurrentEvent();
 
     let [expanded, setExpanded] = useState(false);
 
@@ -54,7 +56,21 @@ export default function EventList() {
 
         getEvents();
 
-    }, []);
+    }, [isAuthenticated]);
+
+    const setSelectedEvent = async () => {
+        if (isAuthenticated) {
+            const response = await fetch('/api/events/setcurrentevent', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+                method: 'PUT',
+                body: JSON.stringify(expanded)
+            });
+            setCurrentEvent(eventsList.find(a => a.id === expanded).name);
+        }
+    }
 
     function getEventsFromList() {
 
@@ -111,6 +127,9 @@ export default function EventList() {
                                     <Grid item xs={9}>
                                         <Typography>{mainevent.organizer.name}</Typography>
                                     </Grid>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button variant="contained" color="primary" onClick={setSelectedEvent} >Velg arrangement</Button>
                                 </Grid>
                             </Grid>
                         </AccordionDetails>

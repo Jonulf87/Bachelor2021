@@ -45,7 +45,7 @@ const AuthProvider = ({ children }) => {
         const result = await response.json();
 
         if (response.ok) {
-            localStorage.setItem("currentUser", JSON.stringify(result.token));
+            localStorage.setItem("currentUser", result.token);
             setToken(result.token);
             setIsAuthenticated(true);
 
@@ -88,8 +88,6 @@ const AuthProvider = ({ children }) => {
         const currentUser = localStorage.getItem('currentUser');
 
         if (currentUser !== null) {
-            setIsAuthenticated(true);
-            setToken(currentUser);
 
             const jwtToken = JSON.parse(atob(currentUser.split('.')[1]));
             const expires = new Date(jwtToken.exp * 1000);
@@ -100,6 +98,10 @@ const AuthProvider = ({ children }) => {
 
             if (timeout < 0) {
                 timeout = 0;
+            }
+            else {
+            setIsAuthenticated(true);
+            setToken(currentUser);
             }
 
             refreshToken(timeout);

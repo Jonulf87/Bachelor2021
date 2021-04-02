@@ -6,7 +6,7 @@ namespace Warpweb.DataAccessLayer.Models
     public class Seat
     {
         public int Id { get; set; }
-        public string SeatNumber { get; set; }
+        public int SeatNumber { get; set; }
         public bool isReserved { get; set; }
         public bool isBought { get; set; }
 

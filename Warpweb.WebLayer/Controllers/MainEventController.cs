@@ -14,7 +14,7 @@ namespace Warpweb.WebLayer.Controllers
     [Route("api/events")]
     [ApiController]
     [Authorize]
-    public class MainEventController : ControllerBase 
+    public class MainEventController : ControllerBase
     {
         private readonly MainEventService _mainEventService;
         private readonly SecurityService _securityService;
@@ -86,7 +86,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="maineventVm"></param>  
         [HttpPut]
-        public async Task<ActionResult> UpdateMainEvent (MainEventVm maineventVm)
+        public async Task<ActionResult> UpdateMainEvent(MainEventVm maineventVm)
         {
             try
             {
@@ -100,12 +100,23 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(maineventVm);
         }
 
+        [HttpPut]
+        [Route("setcurrentevent")]
+        public async Task<ActionResult> SetCurrentEventAsync([FromBody] int eventId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            await _mainEventService.SetCurrentEventAsync(eventId, userId);
+
+            return Ok();
+        }
+
         /// <summary>
         /// Deletes a specific Event.
         /// </summary>
         /// <param name="maineventVm"></param>  
         [HttpDelete]
-        public async Task<ActionResult> DeleteMainEvent (MainEventVm maineventVm)
+        public async Task<ActionResult> DeleteMainEvent(MainEventVm maineventVm)
         {
             try
             {
@@ -115,8 +126,24 @@ namespace Warpweb.WebLayer.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok(maineventVm);
+        }
+
+        [HttpGet]
+        [Route("getcurrentmainevent")]
+        public async Task<ActionResult<CurrentMainEventVm>> GetCurrentMainEventAsync()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            try
+            {
+                return await _mainEventService.GetCurrentMainEventAsync(userId);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }

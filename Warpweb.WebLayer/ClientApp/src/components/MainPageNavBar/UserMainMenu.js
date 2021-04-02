@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { List, ListItem, ListItemText, ListItemIcon} from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -8,11 +8,21 @@ import useAuth from '../../hooks/useAuth';
 export default function UserMainMenu() {
 
     const { isAuthenticated } = useAuth();
+    const [displayLoggedIn, setDisplayLoggedIn] = useState(false);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            setDisplayLoggedIn(true)
+        }
+        else {
+            setDisplayLoggedIn(false)
+        }
+    }, [isAuthenticated])
 
     return (
         <List>
 
-            {isAuthenticated && (
+            {displayLoggedIn && (
                 <>
 
                     <ListItem button component={Link} to='/user'>
@@ -27,7 +37,7 @@ export default function UserMainMenu() {
 
                 </>)}
 
-            {!isAuthenticated && (
+            {!displayLoggedIn && (
                 <>
                     
                     <ListItem button component={Link} to={'/register'}>

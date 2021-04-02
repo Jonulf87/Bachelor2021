@@ -2,14 +2,20 @@
 import { Form } from 'reactstrap';
 import React, { useState } from 'react';
 
-export default function SeatMapAdminMenu({ addRow, submit }) {
+export default function SeatMapAdminMenu({ addRow, submit, rowNameAlreadyExists }) {
 
     const [numberOfSeats, setNumberOfSeats] = useState("");
     const [rowName, setRowName] = useState("");
+    const [error, setError] = useState();
 
     const addRowSubmit = (e) => {
         if (numberOfSeats == "") return;
-
+        if (rowName == "") return;
+        if (rowNameAlreadyExists(rowName)) {
+            setError("Rad med dette navnet eksisterer allerde.");
+            return;
+        }
+        setError(null);
         const seats = [];
 
         for (var i = 1; i <= numberOfSeats; i++) {
@@ -65,6 +71,8 @@ export default function SeatMapAdminMenu({ addRow, submit }) {
                             label="Navn på rad"
                             placeholder="Navn"
                             onChange={(e) => setRowName(e.target.value)}
+                            error={error}
+                            helperText={error}
                         />
                     </Grid>
                     <Grid

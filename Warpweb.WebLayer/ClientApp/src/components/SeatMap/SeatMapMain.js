@@ -32,9 +32,29 @@ export default function SeatMapMain() {
                 method: 'POST',
                 body: JSON.stringify(rows)
             });
-            const result = response.json();
-            console.log(result);
+            console.log(response);
         }
+    }
+
+    useEffect(() => {
+        const getSeatMap = async () => {
+
+            if (isAuthenticated) {
+                const response = await fetch('/api/seatmap', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-type': 'application/json'
+                    }
+                });
+                const result = await response.json();
+                setRows(result)
+            }
+        }
+        getSeatMap();
+    }, [isAuthenticated])
+
+    const rowNameAlreadyExists = (rowName) => {
+        return rows.some(a => a.rowName.toLowerCase() === rowName.toLowerCase());
     }
 
 
@@ -57,7 +77,7 @@ export default function SeatMapMain() {
                     xs={12}
                     lg={6}
                 >
-                    <SeatMapAdminMenu addRow={addRow} submit={submitRows} />
+                    <SeatMapAdminMenu addRow={addRow} submit={submitRows} rowNameAlreadyExists={rowNameAlreadyExists}/>
                 </Grid>
             </Grid>
         </>

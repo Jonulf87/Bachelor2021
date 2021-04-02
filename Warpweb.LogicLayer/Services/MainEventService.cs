@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
@@ -15,10 +17,12 @@ namespace Warpweb.LogicLayer.Services
     public class MainEventService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
 
-        public MainEventService(ApplicationDbContext dbContext)
+        public MainEventService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task<List<MainEventListVm>> GetMainEventsAsync()
@@ -120,6 +124,27 @@ namespace Warpweb.LogicLayer.Services
 
             return mainEventToBeDeleted.Id;
 
+        }
+
+        public async Task<ActionResult<CurrentMainEventVm>> GetCurrentMainEventAsync(string userId)
+        {
+            return await _dbContext.ApplicationUsers
+                .Where(a => a.Id == userId)
+                .Select(b => new CurrentMainEventVm
+                {
+                    Name = b.CurrentMainEvent.Name
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task SetCurrentEventAsync(int eventId, string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            user.CurrentMainEventId = eventId;
+
+            _dbContext.Update<ApplicationUser>(user);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

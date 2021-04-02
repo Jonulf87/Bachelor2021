@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Warpweb.LogicLayer.ViewModels
 {
-    public class SeatVm
+    public class CurrentMainEventVm
     {
-        public int Id { get; set; }
-        public int SeatNumber { get; set; }
+        public string Name { get; set; }
     }
 }

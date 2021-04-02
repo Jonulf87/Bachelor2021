@@ -30,5 +30,13 @@ namespace Warpweb.WebLayer.Controllers
             await _seatMapService.SetRowsAsync(seatMap);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<ActionResult<IEnumerable<RowVm>>> GetSeatMapAsync()
+        {
+            var seatMap = await _seatMapService.GetSeatMapAsync();
+            return Ok(seatMap);
+        }
     }
 }
