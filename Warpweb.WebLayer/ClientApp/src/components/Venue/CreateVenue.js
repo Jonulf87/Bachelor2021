@@ -35,6 +35,7 @@ export default function CreateVenue() {
 
         // Check all fields
 
+
         // update state
         setIsSending(true);
 

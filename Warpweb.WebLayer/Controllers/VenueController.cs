@@ -64,7 +64,30 @@ namespace Warpweb.WebLayer.Controllers
                 return BadRequest("VenueId should be empty");
             }
 
-            // Check all fields
+            if("".Equals(venueVm.VenueName))
+            {
+                return BadRequest("Venue name should not be empty");
+            }
+
+            if ("".Equals(venueVm.PostalCode))
+            {
+                return BadRequest("Venue postal code should not be empty");
+            }
+
+            if ("".Equals(venueVm.VenueAddress))
+            {
+                return BadRequest("Venue address should not be empty");
+            }
+
+            if(venueVm.VenueAreaAvailable < 1)
+            {
+                return BadRequest("Venue area should not be 0");
+            }
+
+            if(venueVm.VenueCapacity < 1)
+            {
+                return BadRequest("Venue capacity should not be 0");
+            }
 
             try
             {
