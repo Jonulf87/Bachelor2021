@@ -25,6 +25,39 @@ export default function CreateVenue() {
     const [enteredArea, setEnteredArea] = useState('');
     const [enteredCapacity, setEnteredCapacity] = useState('');
 
+    /*
+    const fields = {
+        name: "",
+        contactId: "",
+        address: "",
+        postalCode: "",
+        area: "",
+        capacity: ""
+    }
+
+    for (const key in Object.values(fields)) {
+        const [this["entered" + key], "setEntered" + key] = useState('');
+    }
+    */
+
+    const [errors, setErrors] = useState({
+        name: "",
+        contactId: "",
+        address: "",
+        postalCode: "",
+        area: "",
+        capacity: ""
+    });
+
+    const validators = {
+        name: "",
+        contactId: "",
+        address: "",
+        postalCode: "",
+        area: "",
+        capacity: ""
+    }
+
     const { isAuthenticated, token } = useAuth();
 
     const sendRequest = async () => {
@@ -34,7 +67,9 @@ export default function CreateVenue() {
         }
 
         // Check all fields
-
+        for (const value of Object.values(errors)) {
+            if (Boolean(value)) return;
+        }
 
         // update state
         setIsSending(true);
@@ -78,24 +113,37 @@ export default function CreateVenue() {
         setIsSending(false);
     };
 
+    const handleSubmit = e => {
+        e.preventDefault();
+        console.log("submit");
+    };
+
     return (
         <>
             <Typography gutterBottom variant="h5" component="h5">
                 Opprett lokale
                 </Typography>
-            <form className={classes.root} noValidate autoComplete="off">
+            <form className={classes.root} autoComplete="off" noValidate onSubmit={handleSubmit}>
                 <div>
                     <div>
                         <TextField
                             onChange={event => {
                                 setEnteredName(event.target.value);
+                                if (event.target.value.replace(/ +(?= )/g, '').trim() === "") {
+                                    setErrors({ ...errors, name: "Navn må oppgis" });
+                                } else {
+                                    setErrors({ ...errors, name: "" });
+                                }
                             }}
                             value={enteredName}
+                            required
                             id="name"
                             name="name"
                             label="Navn"
                             style={{ margin: 8 }}
                             placeholder="Navn på lokale"
+                            error={ Boolean(errors.name) }
+                            helperText={ errors.name }
                             fullWidth
                             margin="normal"
                             InputLabelProps={{
@@ -109,6 +157,7 @@ export default function CreateVenue() {
                                 setEnteredContactId(event.target.value);
                             }}
                             value={enteredContactId}
+                            required
                             id="contactperson"
                             name="contactperson"
                             label="Kontaktperson"
@@ -129,6 +178,7 @@ export default function CreateVenue() {
                                 setEnteredAddress(event.target.value);
                             }}
                             value={enteredAddress}
+                            required
                             id="address"
                             name="address"
                             label="Adresse"
@@ -147,6 +197,7 @@ export default function CreateVenue() {
                                 setEnteredPostalCode(event.target.value);
                             }}
                             value={enteredPostalCode}
+                            required
                             id="postalcode"
                             name="postalcode"
                             label="Postnr"
@@ -166,6 +217,7 @@ export default function CreateVenue() {
                                 setEnteredArea(event.target.value);
                             }}
                             value={enteredArea}
+                            required
                             id="area"
                             name="area"
                             type="Number"
@@ -185,6 +237,7 @@ export default function CreateVenue() {
                                 setEnteredCapacity(event.target.value);
                             }}
                             value={enteredCapacity}
+                            required
                             id="capacity"
                             name="capacity"
                             type="Number"
@@ -211,7 +264,7 @@ export default function CreateVenue() {
                 onClick={sendRequest}
             >
                 Lagre
-                </Button>
+            </Button>
         </>
     );
 }
