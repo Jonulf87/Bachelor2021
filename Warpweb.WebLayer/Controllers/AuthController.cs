@@ -151,25 +151,12 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Returns current users main event Id
-        /// </summary>
-        /// <param name="user"></param> 
-        [HttpGet]
-        public string getMainEventId(ApplicationUser user)
+
+        private static string GetMainEventId(ApplicationUser user)
         {
-            string currentMainEventId;
-
-            if(user.CurrentMainEventId != null)
-            {
-                currentMainEventId = user.CurrentMainEventId.ToString();
-            }
-            else
-            {
-                currentMainEventId = "0";
-            }
-
-            return currentMainEventId;
+            
+            return user.CurrentMainEventId != null ? user.CurrentMainEventId.ToString() : "0";
+            //return user.CurrentMainEventId?.ToString() ?? "0"; Denne gjør det samme som over. Hvis null, returner verdi etter ??, hvis ikke null returner før ??
         }
 
         /// <summary>
@@ -189,7 +176,7 @@ namespace Warpweb.WebLayer.Controllers
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("CurrentMainEventId", getMainEventId(user))
+                new Claim("CurrentMainEventId", GetMainEventId(user))
             
             });
 
