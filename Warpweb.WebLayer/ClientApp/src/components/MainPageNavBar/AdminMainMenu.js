@@ -48,7 +48,7 @@ export default function AdminMainMenu() {
 
             <ListItem button button component={Link} to='/crew'>
                 <ListItemIcon><GroupIcon /></ListItemIcon>
-                <ListItemText primary='Crew' />
+                <ListItemText primary='Crewadmin' />
             </ListItem>
 
             <ListItem button button component={Link} to='/participant'>
@@ -64,6 +64,11 @@ export default function AdminMainMenu() {
             <ListItem button button component={Link} to='/report'>
                 <ListItemIcon><AssignmentIcon /></ListItemIcon>
                 <ListItemText primary='Rapporter' />
+            </ListItem>
+
+            <ListItem button button component={Link} to='/organizer'>
+                <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                <ListItemText primary='Org. admin' />
             </ListItem>
 
         </List>

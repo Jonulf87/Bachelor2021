@@ -14,7 +14,7 @@ export default function EventMain() {
     const createEvent = () => {
         console.log(roles);
 
-        if (roles.some(role => role === 'Admin')) {
+        if (roles && roles.some(role => role === 'Admin')) {
             return (<CreateEvent setVenuePosted={setVenuePosted} />)
         }
 

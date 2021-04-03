@@ -27,10 +27,10 @@ namespace Warpweb.LogicLayer.Services
             _roleManager = roleManager;
         }
 
-        public async Task<List<OrganizerListVm>> GetOrganizersAsync(string userId)
+        public async Task<List<OrganizerListVm>> GetOrganizersUserIsAdminAtAsync(string userId)
         {
             return await _dbContext.Organizers
-                .Where(a => a.Contact.Id == userId)
+                .Where(a => a.Admins.Any(b => b.Id == userId))
                 .Select(a => new OrganizerListVm
                 {
                     Id = a.Id,
@@ -84,6 +84,11 @@ namespace Warpweb.LogicLayer.Services
 
             var result = await _userManager.CreateAsync(userDataToBeStored, user.Password);
 
+            if(!result.Succeeded)
+            {
+                throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(a => a.Description)));
+            }
+
             if(!user.ParentPhoneNumber.IsNullOrEmpty())
             {
                 var parentToBeStored = new Guardian
@@ -98,10 +103,7 @@ namespace Warpweb.LogicLayer.Services
                 var resultparent = _dbContext.Guardians.Add(parentToBeStored);
                 var test = _dbContext.SaveChanges();
             }
-            if(!result.Succeeded)
-            {
-                throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(a => a.Description)));
-            }
+
             await _userManager.AddToRoleAsync(userDataToBeStored, "User");
         }
     }
