@@ -53,7 +53,7 @@ export default function ParticipantList() {
 
         getParticipants();
 
-    }, []);
+    }, [isAuthenticated]);
 
     // TODO: Liste deltakere knyttet til spesifikt arrangement
     function getParticipantsFromList() {
