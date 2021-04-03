@@ -30,6 +30,7 @@ import SeatMapMain from './components/SeatMap/SeatMapMain';
 import LogOut from './components/MainPageNavBar/LogOut';
 import NavBarHeader from './components/MainPageNavBar/NavBarHeader';
 import CurrentEventProvider from './providers/CurrentEventProvider';
+import OrganizerAdminMain from './components/OrganizerAdmin/OrganizerAdminMain';
 
 export default function App(props) {
 
@@ -163,6 +164,7 @@ export default function App(props) {
                                 <Route path='/logout' component={LogOut} />
                                 <Route exact path='/' component={EventMain} />
                                 <Route path='/seatmap' component={SeatMapMain} />
+                                <Route path='/organizer' component={OrganizerAdminMain} />
                             </Switch>
                         </main>
                     </div>

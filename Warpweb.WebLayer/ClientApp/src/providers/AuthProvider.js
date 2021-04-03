@@ -26,10 +26,18 @@ const AuthProvider = ({ children }) => {
                 refreshToken(timeout);
 
                 const role = jwtToken.role;
-                setRoles(role);
+
+                if (Array.isArray(role)) {
+                    setRoles(role);
+                } else if (role) {
+                    setRoles([role])
+                } else {
+                    setRoles([])
+                }
             } else {
                 setIsAuthenticated(false);
                 setToken(null);
+                setRoles([]);
                 localStorage.removeItem('currentUser');
             }
         }, delay);
@@ -57,7 +65,13 @@ const AuthProvider = ({ children }) => {
             let timeout = expires.getTime() - Date.now() - 15 * 1000;
 
             const role = jwtToken.role;
-            setRoles(role);
+            if (Array.isArray(role)) {
+                setRoles(role);
+            } else if (role) {
+                setRoles([role])
+            } else {
+                setRoles([])
+            }
 
             refreshToken(timeout);
         }
@@ -65,6 +79,7 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem("currentUser");
             setIsAuthenticated(false);
             setToken(null);
+            setRoles([]);
         }
         return result;
     };
@@ -101,7 +116,13 @@ const AuthProvider = ({ children }) => {
             let timeout = expires.getTime() - Date.now() - 15 * 1000;
 
             const role = jwtToken.role;
-            setRoles(role);
+            if (Array.isArray(role)) {
+                setRoles(role);
+            } else if (role) {
+                setRoles([role])
+            } else {
+                setRoles([])
+            }
 
             if (timeout < 0) {
                 timeout = 0;

@@ -60,15 +60,13 @@ namespace Warpweb.WebLayer.Controllers
         [Route("createmainevent")]
         public async Task<ActionResult> CreateMainEvent(MainEventVm mainEventVm)
         {
-            // Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.
-            //var organizers = await _securityService.GetOrganizersAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            //Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.
+            var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            // Returnerer alltid Forbid - feil Id?
-            //if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId)) 
-            //{
-            //    return Forbid();
-            //}
-
+            if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId))
+            {
+                return Forbid();
+            }
 
             try
             {
@@ -85,20 +83,27 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Updates a specific Event.
         /// </summary>
-        /// <param name="maineventVm"></param>  
+        /// <param name="mainEventVm"></param>  
         [HttpPut]
-        public async Task<ActionResult> UpdateMainEvent(MainEventVm maineventVm)
+        public async Task<ActionResult> UpdateMainEvent(MainEventVm mainEventVm)
         {
+            var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId))
+            {
+                return Forbid();
+            }
+
             try
             {
-                await _mainEventService.UpdateMainEventAsync(maineventVm);
+                await _mainEventService.UpdateMainEventAsync(mainEventVm);
             }
             catch (MainEventDoesNotExistException)
             {
                 return BadRequest();
             }
 
-            return Ok(maineventVm);
+            return Ok(mainEventVm);
         }
 
         [HttpPut]
