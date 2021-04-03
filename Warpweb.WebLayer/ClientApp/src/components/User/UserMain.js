@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import UserDataCard from './UserDataCard';
+import UserInfoCompact from './UserInfoCompact';
 import UserTicketTable from './UserTicketTable';
 import UserCrewTable from './UserCrewTable';
 import Grid from '@material-ui/core/Grid';
@@ -24,7 +25,7 @@ export default function PaperSheet() {
     return (
         <Grid container spacing={3}>
             <Grid item xs>
-                <UserDataCard />
+                <UserInfoCompact />
             </Grid>
             <Grid item xs>
                 <UserTicketTable />
