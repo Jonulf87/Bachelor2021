@@ -110,7 +110,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Refresh token
+        /// Refresh JWT token
         /// </summary>
         [HttpPost]
         [Route("refreshtoken")]
@@ -151,6 +151,11 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Returns current users main event Id
+        /// </summary>
+        /// <param name="user"></param> 
+        [HttpGet]
         public string getMainEventId(ApplicationUser user)
         {
             string currentMainEventId;
@@ -171,14 +176,12 @@ namespace Warpweb.WebLayer.Controllers
         /// Generate JWT Token
         /// </summary>
         /// <param name="user"></param> 
+        [HttpPost]
         private async Task<AuthResultVm> GenerateJwtToken(ApplicationUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
             var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
-
-
-
 
             var claimsIdentity = new ClaimsIdentity(new[]
             {
@@ -226,6 +229,11 @@ namespace Warpweb.WebLayer.Controllers
             };
         }
 
+        /// <summary>
+        /// Verify and generate JWT Token
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        [HttpPost]
         private async Task<AuthResultVm> VerifyAndGenerateToken(string refreshToken)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
