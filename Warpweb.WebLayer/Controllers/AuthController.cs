@@ -151,6 +151,22 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(result);
         }
 
+        public string getMainEventId(ApplicationUser user)
+        {
+            string currentMainEventId;
+
+            if(user.CurrentMainEventId != null)
+            {
+                currentMainEventId = user.CurrentMainEventId.ToString();
+            }
+            else
+            {
+                currentMainEventId = "0";
+            }
+
+            return currentMainEventId;
+        }
+
         /// <summary>
         /// Generate JWT Token
         /// </summary>
@@ -161,13 +177,17 @@ namespace Warpweb.WebLayer.Controllers
 
             var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
 
+
+
+
             var claimsIdentity = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("CurrentMainEventId", user.CurrentMainEventId?.ToString())
+                new Claim("CurrentMainEventId", getMainEventId(user))
+            
             });
 
             foreach (var role in await _userManager.GetRolesAsync(user))

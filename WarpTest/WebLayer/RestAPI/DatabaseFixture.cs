@@ -17,7 +17,7 @@ namespace WarpTest.WebLayer.RestAPI
     {
         protected DbConnection _connection;
         protected DbContextOptions _options;
-        protected ApplicationDbContext _dbContext;
+        //protected ApplicationDbContext _dbContext;
 
         public DatabaseFixture()
         {
@@ -37,7 +37,7 @@ namespace WarpTest.WebLayer.RestAPI
             //_dbContext.CrewRoles.Add(new CrewUser { Id = 2, Description = "Test Rolle 2" });
             //_dbContext.CrewRoles.Add(new CrewUser { Id = 3, Description = "Test Rolle 3" });
 
-            _dbContext.SaveChangesAsync();
+            //_dbContext.SaveChangesAsync();
         }
 
         public void Dispose()
