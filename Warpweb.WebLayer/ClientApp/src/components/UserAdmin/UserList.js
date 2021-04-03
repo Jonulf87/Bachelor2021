@@ -55,7 +55,7 @@ export default function UserList() {
             }
         }
         getUsers();
-    }, []);
+    }, [isAuthenticated]);
 
     useEffect(() => {
         const getRoles = async () => {

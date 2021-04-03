@@ -54,6 +54,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="organizerVm"></param> 
         [HttpPost]
+        [Route("addorganizer")]
         public async Task<ActionResult> CreateOrganizer(OrganizerVm organizerVm)
         {
             int orgId;
