@@ -30,7 +30,7 @@ export default function UserRegister() {
     const [zipCode, setZipCode] = useState("");
     const [eMail, setEMail] = useState("");
     const [userName, setUserName] = useState("");
-    const [dateOfBirth, setDateOfBirth] = useState(new Date('01-01-2000'));
+    const [dateOfBirth, setDateOfBirth] = useState(new Date("2010-01-01T00:00:00"));
     const [gender, setGender] = useState("");
     const [isAllergic, setIsAllergic] = useState(false);
     const [allergyDescription, setAllergyDescription] = useState("");
