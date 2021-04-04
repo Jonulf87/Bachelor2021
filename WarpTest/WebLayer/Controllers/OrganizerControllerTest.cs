@@ -56,7 +56,7 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_orgName1, returnedOrganizer1.Name);
             Assert.AreEqual(_orgNummer1, returnedOrganizer1.OrgNumber);
             Assert.AreEqual(_decsr1, returnedOrganizer1.Description);
-            Assert.AreEqual(_user1.Entity.Id, returnedOrganizer1.ContactId);
+            Assert.AreEqual(_user1.Entity.Id, returnedOrganizer1.ContactName);
 
             ActionResult<OrganizerVm> result2 = await organizerController.GetOrganizer(2);
             OrganizerVm returnedOrganizer2 = result2.Value;
@@ -64,7 +64,7 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_orgName2, returnedOrganizer2.Name);
             Assert.AreEqual(_orgNummer2, returnedOrganizer2.OrgNumber);
             Assert.AreEqual(_decsr2, returnedOrganizer2.Description);
-            Assert.AreEqual(_user2.Entity.Id, returnedOrganizer2.ContactId);
+            Assert.AreEqual(_user2.Entity.Id, returnedOrganizer2.ContactName);
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace WarpTest.WebLayer.Controllers
             OrganizerService organizerService = new OrganizerService(_dbContext);
             OrganizerController organizerController = new OrganizerController(organizerService);
 
-            OrganizerVm organizerVm = new OrganizerVm { Name = orgName, OrgNumber = orgNummer, Description = decsr, ContactId = user.Entity.Id };
+            OrganizerVm organizerVm = new OrganizerVm { Name = orgName, OrgNumber = orgNummer, Description = decsr, ContactName = user.Entity.Id };
 
             ActionResult<OrganizerVm> result = await organizerController.CreateOrganizer(organizerVm);
 
@@ -102,7 +102,7 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(orgName, createdOrganizer.Name);
             Assert.AreEqual(orgNummer, createdOrganizer.OrgNumber);
             Assert.AreEqual(decsr, createdOrganizer.Description);
-            Assert.AreEqual(user.Entity.Id, createdOrganizer.ContactId);
+            Assert.AreEqual(user.Entity.Id, createdOrganizer.ContactName);
 
             // Check what we really have in the DB
             Organizer organizer1 = _dbContext.Organizers.Find(3);
@@ -137,7 +137,7 @@ namespace WarpTest.WebLayer.Controllers
             OrganizerService organizerService = new OrganizerService(_dbContext);
             OrganizerController organizerController = new OrganizerController(organizerService);
 
-            OrganizerVm organizerVm = new OrganizerVm { Id = 1, Name = newName, OrgNumber = newOrgNummer, Description = decsr, ContactId = user4.Entity.Id };
+            OrganizerVm organizerVm = new OrganizerVm { Id = 1, Name = newName, OrgNumber = newOrgNummer, Description = decsr, ContactName = user4.Entity.Id };
 
             await organizerController.UpdateOrganizer(organizerVm);
 

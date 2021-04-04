@@ -53,7 +53,7 @@ export default function OrganizerAdminMenu() {
     return (
         <Paper variant="outlined" elevation={2} >
             <Grid
-                conatiner
+                container
                 spacing={2}
             >
                 <Grid

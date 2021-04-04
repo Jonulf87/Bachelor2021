@@ -27,9 +27,11 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns all tentants/organizers
         /// </summary>
         [HttpGet]
-        public async Task<List<OrganizerListVm>> GetOrganizers()
+        [Route("gettenants")]
+        public async Task<List<OrganizerListVm>> GetOrganizersAsync()
         {
-            return await _organizerService.GetOrganizersAsync();
+            var organizers = await _organizerService.GetOrganizersAsync();
+            return organizers;
         }
 
         /// <summary>

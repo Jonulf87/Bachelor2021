@@ -6,6 +6,8 @@
         public string Name { get; set; }
         public string OrgNumber { get; set; }
         public string Description { get; set; }
-        public string ContactId { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhone { get; set; }
+        public string ContactMail { get; set; }
     }
 }

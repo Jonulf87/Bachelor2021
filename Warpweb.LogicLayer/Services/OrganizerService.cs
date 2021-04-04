@@ -25,7 +25,8 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    OrgNumber = a.OrgNumber
+                    OrgNumber = a.OrgNumber,
+                    Description = a.Description                    
                 })
                 .ToListAsync();
         }
@@ -40,7 +41,7 @@ namespace Warpweb.LogicLayer.Services
                     Name = a.Name,
                     OrgNumber = a.OrgNumber,
                     Description = a.Description,
-                    ContactId = a.ContactId
+                    ContactName = a.ContactId
                 })
                 .SingleOrDefaultAsync();
         }
@@ -60,7 +61,7 @@ namespace Warpweb.LogicLayer.Services
             {
                 Name = organizerVm.Name,
                 Description = organizerVm.Description,
-                ContactId = organizerVm.ContactId,
+                ContactId = organizerVm.ContactName,
                 OrgNumber = organizerVm.OrgNumber
             };
 
@@ -84,7 +85,7 @@ namespace Warpweb.LogicLayer.Services
             existingOrganizer.Name = organizerVm.Name;
             existingOrganizer.OrgNumber = organizerVm.OrgNumber;
             existingOrganizer.Description = organizerVm.Description;
-            existingOrganizer.ContactId = organizerVm.ContactId;
+            existingOrganizer.ContactId = organizerVm.ContactName;
 
             _dbContext.Update<Organizer>(existingOrganizer);
             await _dbContext.SaveChangesAsync();
