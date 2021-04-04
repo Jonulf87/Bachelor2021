@@ -4,14 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import UserPicker from '../User/UserPicker';
 import useAuth from '../../hooks/useAuth';
 
+// Styling
 const useStyles = makeStyles((theme) => ({
     root: {
-        '& > *': {
-            margin: theme.spacing(1),
-            width: '25ch',
-        },
+        margin: theme.spacing(3),
     },
 }));
+
 
 export default function OrganizerAdminMenu() {
 
@@ -49,88 +48,61 @@ export default function OrganizerAdminMenu() {
         }
     }
 
-
     return (
-        <Paper variant="outlined" elevation={2} >
-            <Grid
-                container
-                spacing={2}
-            >
-                <Grid
-                    item
-                    xs={12}
+        <Paper variant="outlined" elevation={3}>
+
+            <Typography className={classes.root}>
+                Legg til ny organisasjon
+            </Typography>
+
+            <form onSubmit={submit} >
+                <Grid className={classes.root}
+                    container
                 >
-                    <Typography gutterBottom>
-                        Legg til ny organisasjon
-                    </Typography>
+                    <Grid
+                        item
+                        xs={12}
+                        spacing={3}
+                    >
+                            <TextField
+                                variant="outlined"
+                                id="organizerName"
+                                label="Navn"
+                                required
+                                value={organizerName}
+                                onChange={(e) => setOrganizerName(e.target.value)}
+                            />
+
+                            <TextField
+                                variant="outlined"
+                                id="organizerNumber"
+                                label="Org.nummer"
+                                required
+                                value={organizerNumber}
+                                onChange={(e) => setOrganizerNumber(e.target.value)}
+                            />
+
+                            <TextField
+                                variant="outlined"
+                                id="organizerDescription"
+                                label="Beskrivelse"
+                                required
+                                value={organizerDescription}
+                                onChange={(e) => setOrganizerDescription(e.target.value)}
+                            />       
+                    </Grid>
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        size="large"
+                        color="primary"
+                        type="submit"
+                    >
+                        Opprett
+                    </Button>
                 </Grid>
-                <Grid
-                    item
-                    xs={12}
-                >
-                    <form onSubmit={submit}>
-                        <Grid
-                            container
-                            spacing={1}
-                        >
-                            <Grid
-                                item
-                                xs={2}
-                            >
-                                <TextField
-                                    className={classes.root}
-                                    id="organizerName"
-                                    label="Organisasjonsnavn"
-                                    required
-                                    value={organizerName}
-                                    onChange={(e) => setOrganizerName(e.target.value)}
-                                    margin="dense"
-                                />
-                            </Grid>
-                            <Grid
-                                item
-                                xs={2}
-                            >
-                                <TextField
-                                    className={classes.root}
-                                    id="organizerNumber"
-                                    label="Organisasjonsnummer"
-                                    required
-                                    value={organizerNumber}
-                                    onChange={(e) => setOrganizerNumber(e.target.value)}
-                                    margin="dense"
-                                />
-                            </Grid>
-                            <Grid
-                                item
-                                xs={2}
-                            >
-                                <TextField
-                                    className={classes.root}
-                                    id="organizerDescription"
-                                    label="Beskrivelse"
-                                    required
-                                    value={organizerDescription}
-                                    onChange={(e) => setOrganizerDescription(e.target.value)}
-                                    margin="dense"
-                                    multiline
-                                    rows={3}
-                                />
-                            </Grid>
-                            <Button
-                                className={classes.button}
-                                variant="contained"
-                                size="small"
-                                color="primary"
-                                type="submit"
-                            >
-                                Legg til org
-                            </Button>
-                        </Grid>
-                    </form>
-                </Grid>
-            </Grid>
-            <UserPicker open={open} />
+            </form>
+        <UserPicker open={open} />
         </Paper>
 
     )

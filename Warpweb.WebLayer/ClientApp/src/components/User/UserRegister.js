@@ -228,15 +228,15 @@ export default function UserRegister() {
                             onChange={(e) => setEMail(e.target.value)}
                         />
                         {/*Input telefon*/}
-                            <TextField
-                                variant="outlined"
-                                id="phoneNumber"
-                                label="Telefon"
-                                type="tel"
-                                required
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                            />
+                        <TextField
+                            variant="outlined"
+                            id="phoneNumber"
+                            label="Telefon"
+                            type="tel"
+                            required
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                        />
                     </Grid>
                     {/*Input adresse*/}
                     <Grid
@@ -284,7 +284,7 @@ export default function UserRegister() {
                                 ))}
                             </Select>
                         </FormControl>
-                    {/*Input fødselsdag*/}
+                        {/*Input fødselsdag*/}
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 id="dateOfBirth"
@@ -309,8 +309,8 @@ export default function UserRegister() {
                                 item
                                 xs={12}
                             >
-                            <TextField
-                                variant="outlined"
+                                <TextField
+                                    variant="outlined"
                                     id="firstName"
                                     label="Foresatte fornavn"
                                     type="text"
@@ -319,8 +319,8 @@ export default function UserRegister() {
                                     onChange={(e) => setParentFirstName(e.target.value)}
                                 />
 
-                            <TextField
-                                variant="outlined"
+                                <TextField
+                                    variant="outlined"
                                     id="lastName"
                                     label="Foresatte etternavn"
                                     type="text"
@@ -333,8 +333,8 @@ export default function UserRegister() {
                                 item
                                 xs={12}
                             >
-                            <TextField
-                                variant="outlined"
+                                <TextField
+                                    variant="outlined"
                                     id="parentPhoneNumber"
                                     label="Foresatte telefon"
                                     type="tel"
@@ -342,8 +342,8 @@ export default function UserRegister() {
                                     value={parentPhoneNumber}
                                     onChange={(e) => setParentPhoneNumber(e.target.value)}
                                 />
-                            <TextField
-                                variant="outlined"
+                                <TextField
+                                    variant="outlined"
                                     id="parentEMail"
                                     label="Foresatte e-post"
                                     type="email"
@@ -393,7 +393,7 @@ export default function UserRegister() {
                             value={team}
                             onChange={(e) => setTeam(e.target.value)}
                         />
-                    {/*Input kommentarer*/}
+                        {/*Input kommentarer*/}
                         <TextField
                             id="comments"
                             variant="outlined"
@@ -411,7 +411,7 @@ export default function UserRegister() {
                         onClick={submitForm}
                     >
                         Lagre
-                </Button>
+                    </Button>
                 </Grid>
             </form>
         </>
