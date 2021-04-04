@@ -303,11 +303,11 @@ export default function UserRegister() {
                         <Grid
                             container
                             item
-                            xs={6}
+                            xs={12}
                         >
                             <Grid
                                 item
-                                xs={6}
+                                xs={12}
                             >
                             <TextField
                                 variant="outlined"
@@ -318,11 +318,7 @@ export default function UserRegister() {
                                     value={parentFirstName}
                                     onChange={(e) => setParentFirstName(e.target.value)}
                                 />
-                            </Grid>
-                            <Grid
-                                item
-                                xs={6}
-                            >
+
                             <TextField
                                 variant="outlined"
                                     id="lastName"
@@ -335,7 +331,7 @@ export default function UserRegister() {
                             </Grid>
                             <Grid
                                 item
-                                xs={6}
+                                xs={12}
                             >
                             <TextField
                                 variant="outlined"
@@ -346,15 +342,10 @@ export default function UserRegister() {
                                     value={parentPhoneNumber}
                                     onChange={(e) => setParentPhoneNumber(e.target.value)}
                                 />
-                            </Grid>
-                            <Grid
-                                item
-                                xs={6}
-                            >
                             <TextField
                                 variant="outlined"
                                     id="parentEMail"
-                                    label="Foresatte s-post"
+                                    label="Foresatte e-post"
                                     type="email"
                                     required
                                     value={parentEMail}

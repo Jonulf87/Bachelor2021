@@ -18,6 +18,8 @@ export default function CreateVenue() {
     const classes = useStyles();
 
     const [isSending, setIsSending] = useState(false);
+
+    // Create constants for each field
     const [enteredName, setEnteredName] = useState('');
     const [enteredContactId, setEnteredContactId] = useState('');
     const [enteredAddress, setEnteredAddress] = useState('');
@@ -25,55 +27,78 @@ export default function CreateVenue() {
     const [enteredArea, setEnteredArea] = useState('');
     const [enteredCapacity, setEnteredCapacity] = useState('');
 
-    /*
-    const fields = {
-        name: "",
-        contactId: "",
-        address: "",
-        postalCode: "",
-        area: "",
-        capacity: ""
-    }
+    // Create an object that can hold errors for the fields
+    const [errors, setErrors] = useState({});
 
-    for (const key in Object.values(fields)) {
-        const [this["entered" + key], "setEntered" + key] = useState('');
-    }
-    */
-
-    const [errors, setErrors] = useState({
-        name: "",
-        contactId: "",
-        address: "",
-        postalCode: "",
-        area: "",
-        capacity: ""
-    });
-
+    // Create validators for the fields
     const validators = {
-        name: "",
-        contactId: "",
-        address: "",
-        postalCode: "",
-        area: "",
-        capacity: ""
+        enteredName: value => {
+            if (!value || value.replace(/ +(?= )/g, '').trim() === "") {
+                setErrors({ ...errors, name: "Navn må oppgis" });
+                return false;
+            } else {
+                setErrors({ ...errors, name: "" });
+                return true;
+            }
+        },
+        enteredContactId: () => { },
+        enteredAddress: () => { },
+        enteredPostalCode: value => {
+            if (!value || !/^\d{4}$/.test(value)) {
+                setErrors({ ...errors, postalCode: "Postnummer må oppgis" });
+                return false;
+            } else {
+                setErrors({ ...errors, postalCode: "" });
+                return true;
+            }
+        },
+        enteredArea: value => {
+            if (!value || !/^\d+$/.test(value)) {
+                setErrors({ ...errors, area: "Areal må oppgis" });
+                return false;
+            } else {
+                setErrors({ ...errors, area: "" });
+                return true;
+            }
+        },
+        enteredCapacity: value => {
+            if (!value || !/^\d+$/.test(value)) {
+                setErrors({ ...errors, capacity: "Kapasitet må oppgis" });
+                return false;
+            } else {
+                setErrors({ ...errors, capacity: "" });
+                return true;
+            }
+        }
     }
 
     const { isAuthenticated, token } = useAuth();
 
     const sendRequest = async () => {
-        // don't send again while we are sending
+        // Check that we are already sending data
+        // If sending - don`t do it again
         if (isSending) {
             return;
         }
 
-        // Check all fields
-        for (const value of Object.values(errors)) {
-            if (Boolean(value)) return;
+        if (!isAuthenticated) {
+            alert("Not authorized");
+            return;
         }
 
-        // update state
+        // Check all fields
+        // If any validator returns false (error) then stop
+        let errorCount = 0;
+        for (const field in validators) {
+            console.log(field);
+            if (!validators[field](eval(field))) errorCount++;
+        }
+        if (errorCount > 0) return;
+
+        // Set sending flag to true
         setIsSending(true);
 
+        // Create data object
         const data = {
             'VenueName': enteredName,
             'VenueAddress': enteredAddress,
@@ -83,31 +108,27 @@ export default function CreateVenue() {
             'ContactId': enteredContactId
         }
 
-        if (isAuthenticated) {
-            const response = await fetch('/api/venues', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(data)
-            });
+        const response = await fetch('/api/venues', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
 
-            if (response.status !== 200) {
-                alert("Error");
-            } else {
-                const result = await response.json();
-
-                alert("Created");
-                setEnteredName('');
-                setEnteredContactId('');
-                setEnteredAddress('');
-                setEnteredPostalCode('');
-                setEnteredArea('');
-                setEnteredCapacity('');
-            }
+        if (response.status !== 200) {
+            alert(response);
         } else {
-            alert("Not authorized");
+            const result = await response.json();
+
+            alert("Created");
+            setEnteredName('');
+            setEnteredContactId('');
+            setEnteredAddress('');
+            setEnteredPostalCode('');
+            setEnteredArea('');
+            setEnteredCapacity('');
         }
 
         setIsSending(false);
@@ -129,11 +150,7 @@ export default function CreateVenue() {
                         <TextField
                             onChange={event => {
                                 setEnteredName(event.target.value);
-                                if (event.target.value.replace(/ +(?= )/g, '').trim() === "") {
-                                    setErrors({ ...errors, name: "Navn må oppgis" });
-                                } else {
-                                    setErrors({ ...errors, name: "" });
-                                }
+                                validators.enteredName(event.target.value);
                             }}
                             value={enteredName}
                             required
@@ -195,14 +212,17 @@ export default function CreateVenue() {
                         <TextField
                             onChange={event => {
                                 setEnteredPostalCode(event.target.value);
+                                validators.enteredPostalCode(event.target.value);
                             }}
                             value={enteredPostalCode}
                             required
-                            id="postalcode"
-                            name="postalcode"
+                            id="postalCode"
+                            name="postalCode"
                             label="Postnr"
                             style={{ margin: 8 }}
                             placeholder="Postnummer"
+                            error={Boolean(errors.postalCode)}
+                            helperText={errors.postalCode}
                             fullWidth
                             margin="normal"
                             InputLabelProps={{
@@ -215,6 +235,7 @@ export default function CreateVenue() {
                         <TextField
                             onChange={event => {
                                 setEnteredArea(event.target.value);
+                                validators.enteredArea(event.target.value);
                             }}
                             value={enteredArea}
                             required
@@ -224,6 +245,8 @@ export default function CreateVenue() {
                             label="Areal"
                             style={{ margin: 8 }}
                             placeholder="Tilgjengelig areal"
+                            error={Boolean(errors.area)}
+                            helperText={errors.area}
                             fullWidth
                             margin="normal"
                             InputLabelProps={{
@@ -235,6 +258,7 @@ export default function CreateVenue() {
                         <TextField
                             onChange={event => {
                                 setEnteredCapacity(event.target.value);
+                                validators.enteredCapacity(event.target.value);
                             }}
                             value={enteredCapacity}
                             required
@@ -244,6 +268,8 @@ export default function CreateVenue() {
                             label="Kapasitet"
                             style={{ margin: 8 }}
                             placeholder="Kapasitet (plasser)"
+                            error={Boolean(errors.capacity)}
+                            helperText={errors.capacity}
                             fullWidth
                             margin="normal"
                             InputLabelProps={{
