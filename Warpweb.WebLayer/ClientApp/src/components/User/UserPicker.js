@@ -27,7 +27,6 @@ export default function UserPicker() {
 
     return (
         <Dialog>
-            /*
             <FixedSizeList>
                 {usersList.map((user) => (
                     <ListItem key={user.id}>
@@ -41,7 +40,6 @@ export default function UserPicker() {
                 ))}
 
             </FixedSizeList>
-            */
         </Dialog>
     )
 }
