@@ -114,7 +114,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpGet]
-        [Route("getcontact")]
+        [Route("getcontact/{orgId}")]
         public async Task<ActionResult<OrganizerVm>> GetOrganizerContactAsync(int orgId)
         {
             OrganizerVm contact;

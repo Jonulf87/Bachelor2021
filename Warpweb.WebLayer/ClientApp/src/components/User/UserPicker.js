@@ -22,12 +22,13 @@ export default function UserPicker() {
                 setUsersListIsReady(true);
             }
         }
+        //getUsers();
     }, [isAuthenticated])
 
 
     return (
         <>
-            <Dialog>
+            {/* <Dialog>
                 <FixedSizeList>
                     {usersList.map((user) => (
                         <ListItem key={user.id}>
@@ -41,7 +42,7 @@ export default function UserPicker() {
                     ))}
 
                 </FixedSizeList>
-            </Dialog>
+            </Dialog> */}
         </>
     )
 }

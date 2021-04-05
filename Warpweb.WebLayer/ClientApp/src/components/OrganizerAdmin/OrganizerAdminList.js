@@ -67,16 +67,52 @@ export default function OrganizerAdminList({ triggerUpdate }) {
             //if (dataIndex === 3 || dataIndex === 4) return false;
 
             // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
-            if (expandedRows.data.length >= 4 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
+            if (expandedRows.data.length >= 1 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
             return true;
         },
         //rowsExpanded: [0],
         renderExpandableRow: (rowData, rowMeta) => {
 
-            console.log(rowData);
+
+            console.log(organizerContact);
+            return (
+                <TableRow>
+                    <TableCell>
+                        <Grid
+                            container
+                            spacing={2}
+                        >
+                            <Grid
+                                item
+                                xs={6}
+                            >
+
+                                <p><strong>Fullt navn:&nbsp;</strong>{organizerContact.firstName}&nbsp;{organizerContact.lastName}</p>
+
+
+                                <p><strong>E-post:&nbsp;</strong>{organizerContact.eMail}</p>
+
+
+                                <p><strong>Telefon:&nbsp;</strong>{organizerContact.phoneNumber}</p>
+
+                            </Grid>
+                            <Grid
+                                item
+                                xs={6}
+                            >
+                            </Grid>
+                        </Grid>
+                    </TableCell>
+                </TableRow>
+
+            );
+        },
+        onRowExpansionChange: (curExpanded) => {
+
+            const orgIdCurrentRow = organizerDataList[curExpanded[0].dataIndex].id;
             const getContact = async () => {
                 if (isAuthenticated) {
-                    const response = await fetch('/api/tenants/getcontact', {
+                    const response = await fetch(`/api/tenants/getcontact/${orgIdCurrentRow}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -88,38 +124,8 @@ export default function OrganizerAdminList({ triggerUpdate }) {
             }
             getContact();
 
-            console.log(organizerContact);
-            return (
-                <Grid
-                    container
-                    spacing={2}
-                >
-                    <Grid
-                        item
-                        xs={6}
-                    >
-
-                        <p><strong>Fullt navn:&nbsp;</strong>{organizerContact.firstName}&nbsp;{organizerContact.lastName}</p>
-
-
-                        <p><strong>E-post:&nbsp;</strong>{organizerContact.eMail}</p>
-
-
-                        <p><strong>Telefon:&nbsp;</strong>{organizerContact.phoneNumber}</p>
-
-                    </Grid>
-                    <Grid
-                        item
-                        xs={6}
-                    >
-                    </Grid>
-                </Grid>
-
-            );
-        },
-        onRowExpansionChange: () => {
         }
-        //onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(curExpanded, allExpanded, rowsExpanded)
+        //onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => { console.log(curExpanded, allExpanded, rowsExpanded) }
     };
 
     //Koden under skjuler knappene for å utvide på index 3 og 4. Må ha MUI theme override og wrappes i det for å fungere.

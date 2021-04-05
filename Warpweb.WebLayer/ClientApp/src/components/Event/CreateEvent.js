@@ -71,7 +71,7 @@ export default function CreateEvent() {
         const getOrganizers = async () => {
 
             if (isAuthenticated) {
-                const response = await fetch('/api/tenants', {
+                const response = await fetch('/api/tenants/gettenants', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
