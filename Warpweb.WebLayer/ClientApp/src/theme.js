@@ -15,6 +15,21 @@ const theme = createMuiTheme({
             contrastText: '#000',
         },
     },
+    overrides: {
+        MUIDataTable: {
+          root: {
+            backgroundColor: "#F00"
+          },
+          paper: {
+            boxShadow: "none"
+          }
+        },
+        MUIDataTableBodyCell: {
+          root: {
+            backgroundColor: "none"
+          }
+        }
+      }
 });
 
 export default theme;
