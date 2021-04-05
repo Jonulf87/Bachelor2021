@@ -2,8 +2,7 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
     IconButton, Input, InputAdornment, InputLabel, FormControl, Typography, Table, TableBody,
-    TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Button, TextField,
-    Collapse, Box
+    TableCell, TableContainer, TableHead, TableRow,
 } from '@material-ui/core';
 import VenueInfo from './VenueInfo';
 import useAuth from "../../hooks/useAuth";
@@ -29,10 +28,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function VenueTable() {
     const [isReady, setIsReady] = useState(false);
-    
-
     const { isAuthenticated, token } = useAuth();
-
     const [venueList, setVenueList] = useState([]);
     //fetch venues
     useEffect(() => {
@@ -52,12 +48,23 @@ export default function VenueTable() {
 
         getVenues();
 
-    }, []);
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        console.log(JSON.stringify(venueList))
+    })
 
     const classes = useStyles();
 
 
     const columns = [
+        {
+            name: 'id',
+            label: 'ID',
+            options: {
+                display: false,
+            }
+        },
         {
             name: 'name',
             label: 'Navn'
@@ -85,18 +92,18 @@ export default function VenueTable() {
             return true;
         },
         rowsExpanded: [0],
-        renderExpandableRow: (rowData, rowMeta) => {
+        renderExpandableRow: ( rowData, rowMeta) => {
             const colSpan = rowData.length + 1;
             return (
                 <TableRow>
                     <TableCell colSpan={colSpan}>
-                        {JSON.stringify(rowData)}
+                        <VenueInfo venue={rowData[0]} />
                     </TableCell>
                 </TableRow>
             );
         },
         //Denne ser ut til å kunne trigge noe ved  åpning. Bruke til å hente roller?
-        onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(`curExpanded:   ${ curExpanded }  allExpanded: ${allExpanded}  rowsExpanded: ${rowsExpanded}`)
+        onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(`curExpanded:   ${ JSON.stringify(curExpanded) }  allExpanded: ${JSON.stringify(allExpanded)}  rowsExpanded: ${JSON.stringify(rowsExpanded)}`)
     };
 
     const components = {

@@ -15,6 +15,7 @@ import { ChevronLeftIcon, ChevronRigthIcon } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
+import ParticipantMainMenu from './components/MainPageNavBar/ParticipantMainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
 import CrewMain from './components/Crew/CrewMain';
 import EventMain from './components/Event/EventMain';
@@ -42,20 +43,20 @@ export default function App(props) {
             display: 'flex',
         },
         drawer: {
-            [theme.breakpoints.up('sm')]: {
+            [theme.breakpoints.up('md')]: {
                 width: drawerWidth,
                 flexShrink: 0,
             },
         },
         appBar: {
-            [theme.breakpoints.up('sm')]: {
+            [theme.breakpoints.up('md')]: {
                 width: `calc(100% - ${drawerWidth}px)`,
                 marginLeft: drawerWidth,
             },
         },
         menuButton: {
             marginRight: theme.spacing(2),
-            [theme.breakpoints.up('sm')]: {
+            [theme.breakpoints.up('md')]: {
                 display: 'none',
             },
         },
@@ -105,7 +106,7 @@ export default function App(props) {
                             </Toolbar>
                         </AppBar>
                         <nav className={classes.drawer} aria-label="mailbox folders">
-                            <Hidden smUp implementation="css">
+                            <Hidden mdUp>
                                 <Drawer
                                     container={container}
                                     variant="temporary"
@@ -126,7 +127,7 @@ export default function App(props) {
                                     <AdminMainMenu />
                                 </Drawer>
                             </Hidden>
-                            <Hidden xsDown implementation="css">
+                            <Hidden smDown>
                                 <Drawer
                                     classes={{
                                         paper: classes.drawerPaper,
@@ -137,13 +138,15 @@ export default function App(props) {
 
                                     <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <Typography variant="h6" noWrap >
-                                            <Link href="/" >Warpweb</Link>
+                                            <Link to="/" >Warpweb</Link>
                                     </Typography>
                                     </div>
                                     <Divider />
                                     <UserMainMenu />
                                     <Divider />
                                     <AdminMainMenu />
+                                    <Divider />
+                                    <ParticipantMainMenu />
                                 </Drawer>
                             </Hidden>
                         </nav>
