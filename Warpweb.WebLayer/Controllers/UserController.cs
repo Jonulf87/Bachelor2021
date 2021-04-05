@@ -23,7 +23,8 @@ namespace Warpweb.WebLayer.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UserController(UserService userService, SecurityService securityService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UserController(UserService userService, SecurityService securityService, 
+            UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userService = userService;
             _securityService = securityService;
@@ -46,15 +47,26 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("currentuser")]
-        public async Task<UserVm> GetUserAsync()
+        public async Task<UserVm> GetCurrentUserAsync()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier);
 
-            return await _userService.GetUserAsync(userId.Value);
+            return await _userService.GetCurrentUserAsync(userId.Value);
         }
 
         /// <summary>
         /// Returns specific user
+        /// </summary>
+        /// <param name="id"></param>  
+        [HttpGet]
+        [Route("user/{id}")]
+        public async Task<UserVm> GetUserAsync(string id)
+        {
+            return await _userService.GetUserAsync(id);
+        }
+
+        /// <summary>
+        /// Returns specific user role
         /// </summary>
         /// <param name="id"></param>  
         [HttpGet]
