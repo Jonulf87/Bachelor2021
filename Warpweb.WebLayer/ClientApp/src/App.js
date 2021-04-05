@@ -10,7 +10,7 @@ import './custom.css';
 import AuthProvider from './providers/AuthProvider';
 
 import { makeStyles, useTheme, ThemeProvider } from '@material-ui/core/styles';
-import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar } from '@material-ui/core';
+import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar, Link } from '@material-ui/core';
 import { ChevronLeftIcon, ChevronRigthIcon } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -137,7 +137,7 @@ export default function App(props) {
 
                                     <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <Typography variant="h6" noWrap >
-                                            WarpWeb
+                                            <Link href="/" >Warpweb</Link>
                                     </Typography>
                                     </div>
                                     <Divider />
