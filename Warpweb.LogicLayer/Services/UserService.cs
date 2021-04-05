@@ -34,7 +34,35 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
-        
+        public async Task<UserVm> GetCurrentUserAsync(string id)
+        {
+            return await _dbContext.ApplicationUsers
+                .Where(a => a.Id == id)
+                .Select(a => new UserVm
+                {
+                    Id = a.Id,
+                    FirstName = a.FirstName,
+                    MiddleName = a.MiddleName,
+                    LastName = a.LastName,
+                    Address = a.Address,
+                    ZipCode = a.ZipCode,
+                    EMail = a.Email,
+                    PhoneNumber = a.PhoneNumber,
+                    UserName = a.UserName,
+                    DateOfBirth = a.DateOfBirth,
+                    AllergyDescription = a.AllergyDescription,
+                    Comments = a.Comments,
+                    Gender = a.Gender,
+                    IsAllergic = a.IsAllergic,
+                    ParentEMail = a.Guardian.EMail,
+                    ParentFirstName = a.Guardian.FirstName,
+                    ParentLastName = a.Guardian.LastName,
+                    ParentPhoneNumber = a.Guardian.PhoneNumber,
+                    Team = a.Team
+
+                }).SingleOrDefaultAsync();
+        }
+
         public async Task<UserVm> GetUserAsync(string id)
         {
             return await _dbContext.ApplicationUsers

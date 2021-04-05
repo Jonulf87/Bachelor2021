@@ -39,7 +39,7 @@ export default function VenueInfo(props) {
 
         }
         getVenue();
-    }, []);
+    }, [isAuthenticated]);
 
 
 
