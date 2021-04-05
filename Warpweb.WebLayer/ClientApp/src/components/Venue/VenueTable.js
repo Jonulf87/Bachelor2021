@@ -30,8 +30,6 @@ const useStyles = makeStyles((theme) =>
 export default function VenueTable() {
     const [isReady, setIsReady] = useState(false);
     
-    //Collapse states
-    const [openCreate, setOpenCreate] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -110,20 +108,8 @@ export default function VenueTable() {
 
     return (
         <>
-            <Typography gutterBottom variant="h5" component="h2">
-                Lokaleoversikt
-            </Typography>
-            <Button variant="contained" color="primary" onClick={() => setOpenCreate(!openCreate)} disableElevation>
-                Legg til
-            </Button>
-            <Collapse in={openCreate} unmountOnExit>
-                <Box margin={1}>
-                    <CreateVenue />
-                </Box>
-            </Collapse>
-            
             <MUIDataTable
-                title={'Brukere'}
+                title={'Lokaler'}
                 data={venueList}
                 columns={columns}
                 options={options}
