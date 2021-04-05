@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -111,5 +112,22 @@ namespace Warpweb.WebLayer.Controllers
 
             return Ok(organizerVm);
         }
+
+        [HttpGet]
+        [Route("getcontact")]
+        public async Task<ActionResult<OrganizerVm>> GetOrganizerContactAsync(int orgId)
+        {
+            OrganizerVm contact;
+            try
+            {
+                contact = await _organizerService.GetOrganizerContactAsync(orgId);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+            return Ok(contact);
+        }
+
     }
 }

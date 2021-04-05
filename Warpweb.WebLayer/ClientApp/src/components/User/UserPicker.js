@@ -27,22 +27,21 @@ export default function UserPicker() {
 
     return (
         <>
+            <Dialog>
+                <FixedSizeList>
+                    {usersList.map((user) => (
+                        <ListItem key={user.id}>
+                            <ListItemText primary={`${user.firstName} ${user.lastName}`} />
+                            <ListItemSecondaryAction>
+                                <Button>
+                                    Velg
+                            </Button>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
+
+                </FixedSizeList>
+            </Dialog>
         </>
-
-        //<Dialog>
-        //    <FixedSizeList>
-        //        {usersList.map((user) => (
-        //            <ListItem key={user.id}>
-        //                <ListItemText primary={`${user.firstName} ${user.lastName}`} />
-        //                <ListItemSecondaryAction>
-        //                    <Button>
-        //                        Velg
-        //                    </Button>
-        //                </ListItemSecondaryAction>
-        //            </ListItem>
-        //        ))}
-
-        //    </FixedSizeList>
-        //</Dialog>
     )
 }

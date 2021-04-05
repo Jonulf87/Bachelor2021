@@ -110,5 +110,22 @@ namespace Warpweb.LogicLayer.Services
             return organizerToBeDeleted.Id;
 
         }
+
+        public async Task<OrganizerVm> GetOrganizerContactAsync(int orgId)
+        {
+            var contact = await _dbContext.Organizers
+                .Where(a => a.Id == orgId)
+                .Select(a => new OrganizerVm
+                {
+                    Name = a.Name,
+                    OrgNumber = a.OrgNumber,
+                    Description = a.Description,
+                    ContactName = a.Contact.FirstName + " " + a.Contact.LastName,
+                    ContactPhone = a.Contact.PhoneNumber,
+                    ContactMail = a.Contact.Email
+                }).FirstOrDefaultAsync();
+
+            return contact;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿import { createMuiTheme, MuiThemeProvider, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+﻿import { createMuiTheme, Grid, MuiThemeProvider, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
@@ -7,8 +7,9 @@ export default function OrganizerAdminList({ triggerUpdate }) {
 
     const { isAuthenticated, token } = useAuth();
     const [organizerDataList, setOrganizerDataList] = useState([]);
+    const [organizerContact, setOrganizerContact] = useState("");
     //const classes = useStyles();
-    
+
     const theme = createMuiTheme({
         overrides: {
             MUIDataTableSelectCell: {
@@ -57,6 +58,7 @@ export default function OrganizerAdminList({ triggerUpdate }) {
         filterType: 'dropdown',
         responsive: 'vertical',
         selectableRows: "none",
+        selectableRowsOnClick: true,
         expandableRows: true,
         expandableRowsHeader: false,
         expandableRowsOnClick: true,
@@ -68,47 +70,82 @@ export default function OrganizerAdminList({ triggerUpdate }) {
             if (expandedRows.data.length >= 4 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
             return true;
         },
-        rowsExpanded: [0],
+        //rowsExpanded: [0],
         renderExpandableRow: (rowData, rowMeta) => {
-            const colSpan = rowData.length + 1;
+
+            console.log(rowData);
+            const getContact = async () => {
+                if (isAuthenticated) {
+                    const response = await fetch('/api/tenants/getcontact', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const result = await response.json();
+                    console.log(result);
+                    setOrganizerContact(result);
+                }
+            }
+            getContact();
+
+            console.log(organizerContact);
             return (
-                <TableRow>
-                    <TableCell colSpan={colSpan}>
-                        Navn: {JSON.stringify(rowData[0])}
-                        Orgnummer: {JSON.stringify(rowData[1])}
-                        Beskrivelse: {JSON.stringify(rowData[2])}
-                        {console.log(JSON.stringify(rowData[0]))}
-                    </TableCell>
-                </TableRow>
+                <Grid
+                    container
+                    spacing={2}
+                >
+                    <Grid
+                        item
+                        xs={6}
+                    >
+
+                        <p><strong>Fullt navn:&nbsp;</strong>{organizerContact.firstName}&nbsp;{organizerContact.lastName}</p>
+
+
+                        <p><strong>E-post:&nbsp;</strong>{organizerContact.eMail}</p>
+
+
+                        <p><strong>Telefon:&nbsp;</strong>{organizerContact.phoneNumber}</p>
+
+                    </Grid>
+                    <Grid
+                        item
+                        xs={6}
+                    >
+                    </Grid>
+                </Grid>
+
             );
         },
-        onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(curExpanded, allExpanded, rowsExpanded)
+        onRowExpansionChange: () => {
+        }
+        //onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(curExpanded, allExpanded, rowsExpanded)
     };
 
     //Koden under skjuler knappene for å utvide på index 3 og 4. Må ha MUI theme override og wrappes i det for å fungere.
-    const components = {
-        ExpandButton: function (props) {
-            if (props.dataIndex === 3 || props.dataIndex === 4) return <div style={{ width: '24px' }} />;
-            return <ExpandButton {...props} />;
-        }
-    };
+    //const components = {
+    //    ExpandButton: function (props) {
+    //        if (props.dataIndex === 3 || props.dataIndex === 4) return <div style={{ width: '24px' }} />;
+    //        return <ExpandButton {...props} />;
+    //    }
+    //};
 
     if (!organizerDataList) {
         return (<p>Loading...</p>);
     };
-    
+
 
     return (
         <>
-            
-                <MUIDataTable
-                    title={"Organisasjoner"}
-                    data={organizerDataList}
-                    columns={columns}
-                    options={options}
-                    components={components}
-                />
-            
+
+            <MUIDataTable
+                title={"Organisasjoner"}
+                data={organizerDataList}
+                columns={columns}
+                options={options}
+            //components={components}
+            />
+
         </>
     )
 }
