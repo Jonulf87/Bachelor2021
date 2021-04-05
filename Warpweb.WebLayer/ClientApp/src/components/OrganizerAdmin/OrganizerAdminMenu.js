@@ -1,4 +1,4 @@
-﻿import { Button, Grid, Paper, TextField, Typography } from '@material-ui/core';
+﻿import { Container, Button, Grid, Paper, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import UserPicker from '../User/UserPicker';
@@ -8,32 +8,34 @@ import useAuth from '../../hooks/useAuth';
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: theme.spacing(3),
+        display: 'flex',
+        flexWrap: 'wrap',
+        margin: 10
     },
 }));
 
 
-export default function OrganizerAdminMenu() {
+export default function OrganizerAdminMenu({ updateList }) {
+
+    let [organizerName, setOrganizerName] = useState("");
+    let [organizerNumber, setOrganizerNumber] = useState("");
+    let [organizerDescription, setOrganizerDescription] = useState("");
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
 
-    const [organizerName, setOrganizerName] = useState("");
-    const [organizerNumber, setOrganizerNumber] = useState("");
-    const [organizerDescription, setOrganizerDescription] = useState("");
-    const [orgnaizerAdmin, setOrganizerAdmin] = useState([]);
+    const [organizerAdmin, setOrganizerAdmin] = useState([]);
     const [open, setOpen] = useState();
     const [userId, setUserId] = useState();
 
+    const dataToBeSent = {
+        'name': organizerName,
+        'orgNumber': organizerNumber,
+        'description': organizerDescription
+    }
+
     const submit = async (e) => {
         e.preventDefault();
-
-        const dataToBeSent = {
-            'name': organizerName,
-            'orgNumber': organizerNumber,
-            'description': organizerDescription
-        }
-
-
         if (isAuthenticated) {
             const response = await fetch('api/tenants/addorganizer', {
                 headers: {
@@ -44,12 +46,18 @@ export default function OrganizerAdminMenu() {
                 body: JSON.stringify(dataToBeSent)
             });
             const result = await response.json();
+            if (response.status === 200) {
+                updateList();
+                setOrganizerName("");
+                setOrganizerNumber("");
+                setOrganizerDescription("");
+            }
             console.log(result);
         }
     }
 
     return (
-        <Paper variant="outlined" elevation={3}>
+        <Paper variant="outlined" elevation={3} >
 
             <Typography className={classes.root}>
                 Legg til ny organisasjon
@@ -62,34 +70,36 @@ export default function OrganizerAdminMenu() {
                     <Grid
                         item
                         xs={12}
-                        spacing={3}
                     >
-                            <TextField
-                                variant="outlined"
-                                id="organizerName"
-                                label="Navn"
-                                required
-                                value={organizerName}
-                                onChange={(e) => setOrganizerName(e.target.value)}
-                            />
+                        <TextField
+                            variant="outlined"
+                            id="organizerName"
+                            label="Navn"
+                            style={{ margin: 8 }}
+                            required
+                            value={organizerName}
+                            onChange={(e) => setOrganizerName(e.target.value)}
+                        />
 
-                            <TextField
-                                variant="outlined"
-                                id="organizerNumber"
-                                label="Org.nummer"
-                                required
-                                value={organizerNumber}
-                                onChange={(e) => setOrganizerNumber(e.target.value)}
-                            />
+                        <TextField
+                            variant="outlined"
+                            id="organizerNumber"
+                            label="Org.nummer"
+                            style={{ margin: 8 }}
+                            required
+                            value={organizerNumber}
+                            onChange={(e) => setOrganizerNumber(e.target.value)}
+                        />
 
-                            <TextField
-                                variant="outlined"
-                                id="organizerDescription"
-                                label="Beskrivelse"
-                                required
-                                value={organizerDescription}
-                                onChange={(e) => setOrganizerDescription(e.target.value)}
-                            />       
+                        <TextField
+                            variant="outlined"
+                            id="organizerDescription"
+                            label="Beskrivelse"
+                            style={{ margin: 8 }}
+                            required
+                            value={organizerDescription}
+                            onChange={(e) => setOrganizerDescription(e.target.value)}
+                        />
                     </Grid>
                     <Button
                         className={classes.button}
@@ -102,8 +112,7 @@ export default function OrganizerAdminMenu() {
                     </Button>
                 </Grid>
             </form>
-        <UserPicker open={open} />
+            <UserPicker open={open} />
         </Paper>
-
     )
 }

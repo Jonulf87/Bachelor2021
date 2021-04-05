@@ -28,7 +28,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("gettenants")]
-        public async Task<List<OrganizerListVm>> GetOrganizersAsync()
+        public async Task<List<OrganizerListVm>> GetOrganizers()
         {
             var organizers = await _organizerService.GetOrganizersAsync();
             return organizers;
