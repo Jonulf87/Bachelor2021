@@ -3,7 +3,7 @@ import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 
-export default function OrganizerAdminList() {
+export default function OrganizerAdminList({ triggerUpdate }) {
 
     const { isAuthenticated, token } = useAuth();
     const [organizerDataList, setOrganizerDataList] = useState([]);
@@ -20,7 +20,6 @@ export default function OrganizerAdminList() {
         },
     });
 
-
     useEffect(() => {
         const getOrganizers = async () => {
             if (isAuthenticated) {
@@ -36,7 +35,7 @@ export default function OrganizerAdminList() {
         }
         getOrganizers();
         console.log(organizerDataList);
-    }, [isAuthenticated])
+    }, [isAuthenticated, triggerUpdate])
 
     const columns = [
         {

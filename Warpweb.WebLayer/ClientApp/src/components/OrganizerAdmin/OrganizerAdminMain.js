@@ -4,12 +4,16 @@ import OrganizerAdminMenu from './OrganizerAdminMenu';
 
 export default function OrganizerAdminMain() {
 
-    const [adminList, setAdminList] = useState([]);
+    let [triggerUpdate, setTriggerUpdate] = useState(false);
+
+    const updateList = () => {
+        setTriggerUpdate(oldValue => !oldValue);
+    }
 
     return (
         <>
-            <OrganizerAdminMenu />
-            <OrganizerAdminList />
+            <OrganizerAdminMenu updateList={updateList} />
+            <OrganizerAdminList triggerUpdate={triggerUpdate} />
         </>
 
     )
