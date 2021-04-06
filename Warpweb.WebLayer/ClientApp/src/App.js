@@ -10,9 +10,11 @@ import './custom.css';
 import AuthProvider from './providers/AuthProvider';
 
 import { makeStyles, useTheme, ThemeProvider } from '@material-ui/core/styles';
-import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar, Link } from '@material-ui/core';
+import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar, Button, ButtonGroup } from '@material-ui/core';
 import { ChevronLeftIcon, ChevronRigthIcon } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
+
+import { Link } from 'react-router-dom';
 
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import ParticipantMainMenu from './components/MainPageNavBar/ParticipantMainMenu';
@@ -69,6 +71,9 @@ export default function App(props) {
             flexGrow: 1,
             padding: theme.spacing(3),
         },
+        buttonRight: {
+            marginLeft: "auto"
+        },
     }));
 
     const { window } = props;
@@ -103,6 +108,9 @@ export default function App(props) {
                                     <MenuIcon />
                                 </IconButton>
                                 <NavBarHeader />
+                                <ButtonGroup className={classes.buttonRight}>
+                                <UserMainMenu />
+                                </ButtonGroup>
                             </Toolbar>
                         </AppBar>
                         <nav className={classes.drawer} aria-label="mailbox folders">
@@ -122,8 +130,6 @@ export default function App(props) {
                                 >
 
                                     <Divider />
-                                    <UserMainMenu />
-                                    <Divider />
                                     <AdminMainMenu />
                                 </Drawer>
                             </Hidden>
@@ -139,10 +145,8 @@ export default function App(props) {
                                     <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <Typography variant="h6" noWrap >
                                             <Link to="/" >Warpweb</Link>
-                                    </Typography>
+                                        </Typography>
                                     </div>
-                                    <Divider />
-                                    <UserMainMenu />
                                     <Divider />
                                     <AdminMainMenu />
                                     <Divider />
