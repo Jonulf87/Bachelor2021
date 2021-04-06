@@ -1,7 +1,21 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { Select, FormControl, InputLabel, TextField, Button, Grid, Checkbox, FormControlLabel, MenuItem } from '@material-ui/core';
+import {
+    Select, 
+    FormControl, 
+    InputLabel, 
+    TextField, 
+    Button, 
+    Grid, 
+    Checkbox, 
+    FormControlLabel, 
+    MenuItem, 
+    Divider, 
+    Typography, 
+    Paper,
+    Container,
+    Collapse } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
@@ -16,7 +30,15 @@ export default function UserRegister() {
         root: {
             '& .MuiTextField-root': {
                 margin: theme.spacing(1),
-                width: '25ch',
+                width: "100%",
+                
+            },
+            '& .MuiFormControl-root': {
+                margin: theme.spacing(1),
+                width: "100%",
+            },
+            '& .MuiFormControlLabel-root': {
+                margin: theme.spacing(1),
             },
         },
     }));
@@ -30,7 +52,7 @@ export default function UserRegister() {
     const [zipCode, setZipCode] = useState("");
     const [eMail, setEMail] = useState("");
     const [userName, setUserName] = useState("");
-    const [dateOfBirth, setDateOfBirth] = useState(new Date("2010-01-01T00:00:00"));
+    const [dateOfBirth, setDateOfBirth] = useState(new Date("1990-01-01T00:00:00"));
     const [gender, setGender] = useState("");
     const [isAllergic, setIsAllergic] = useState(false);
     const [allergyDescription, setAllergyDescription] = useState("");
@@ -61,7 +83,7 @@ export default function UserRegister() {
             value: 'Vil ikke oppgi',
             label: 'Vil ikke oppgi',
         },
-        ,]
+        ]
 
     const [error, setError] = useState();
     const [isRegistered, setIsRegistered] = useState(false);
@@ -89,11 +111,9 @@ export default function UserRegister() {
                 start: new Date(dateOfBirth),
                 end: new Date()
             })
-            console.log(diff.years)
 
             if (diff.years < 16) {
                 setShowParents(true);
-                console.log("hei");
             }
             else {
                 setShowParents(false);
@@ -146,53 +166,66 @@ export default function UserRegister() {
     }
 
     return (
-        <>
+        <Container component={Paper} maxWidth="sm" >
             <form>
-                <Grid className={classes.root}
-                    container
-                    spacing={2}
-                >
+                <Grid justify="center" className={classes.root} container spacing={2} >
+
                     {error && <pre style={{ color: "red" }}>{error}</pre>}
-                    <Grid
-                        item
-                        xs={12}
-                    >
-                        {/*Input fornavn*/}
-                        <TextField
-                            variant="outlined"
-                            id="firstName"
-                            label="Fornavn"
-                            type="text"
-                            required
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                        {/*Input mellomnavn*/}
-                        <TextField
-                            variant="outlined"
-                            id="middleName"
-                            label="Mellomnavn"
-                            type="text"
-                            required
-                            value={middleName}
-                            onChange={(e) => setMiddleName(e.target.value)}
-                        />
-                        {/*Input etternavn*/}
-                        <TextField
-                            variant="outlined"
-                            id="lastName"
-                            label="Etternavn"
-                            type="text"
-                            required
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
+
+                    <Grid item xs={12}>
+                        <Typography variant="h6" component="h3">Fullt Navn</Typography>{/*usikker på om disse skal brukes of evt hvordan grupperes */}
                     </Grid>
-                    {/*Input brukernavn*/}
-                    <Grid
-                        item
-                        xs={12}
-                    >
+                    <Grid item container xs={12} spacing={1}>{/*Input navn*/}
+                        <Grid item xs={12} lg={4} >
+                            <TextField
+                                variant="outlined"
+                                id="firstName"
+                                label="Fornavn"
+                                type="text"
+                                required
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} lg={4} >
+                            <TextField
+                                variant="outlined"
+                                id="middleName"
+                                label="Mellomnavn"
+                                type="text"
+                                required
+                                value={middleName}
+                                onChange={(e) => setMiddleName(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} lg={4} >
+                            <TextField
+                                variant="outlined"
+                                id="lastName"
+                                label="Etternavn"
+                                type="text"
+                                required
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid item container xs={12}>
+                        <Typography variant="h6" component="h3">Brukerinfo</Typography>
+                    </Grid>
+                    <Grid item xs={12}>{/*Input epost*/}
+                            <TextField
+                                variant="outlined"
+                                id="eMail"
+                                label="Epost"
+                                type="email"
+                                required
+                                value={eMail}
+                                onChange={(e) => setEMail(e.target.value)}
+                            />
+                    </Grid>
+
+                    <Grid item xs={12}>{/*Input brukernavn*/}
                         <TextField
                             variant="outlined"
                             id="userName"
@@ -202,7 +235,8 @@ export default function UserRegister() {
                             value={userName}
                             onChange={(e) => setUserName(e.target.value)}
                         />
-                        {/*Input passord*/}
+                    </Grid>
+                    <Grid item xs={12}>{/*Input passord*/}
                         <TextField
                             variant="outlined"
                             id="password"
@@ -213,21 +247,7 @@ export default function UserRegister() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </Grid>
-                    {/*Input email*/}
-                    <Grid
-                        item
-                        xs={12}
-                    >
-                        <TextField
-                            variant="outlined"
-                            id="eMail"
-                            label="Epost"
-                            type="email"
-                            required
-                            value={eMail}
-                            onChange={(e) => setEMail(e.target.value)}
-                        />
-                        {/*Input telefon*/}
+                    <Grid item xs={12} >{/*Input telefon*/}
                         <TextField
                             variant="outlined"
                             id="phoneNumber"
@@ -238,44 +258,39 @@ export default function UserRegister() {
                             onChange={(e) => setPhoneNumber(e.target.value)}
                         />
                     </Grid>
-                    {/*Input adresse*/}
-                    <Grid
-                        item
-                        xs={12}
-                    >
-                        <TextField
-                            variant="outlined"
-                            id="address"
-                            label="Adresse"
-                            type="text"
-                            required
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                        />
-                        {/*Input postnummer*/}
-                        <TextField
-                            variant="outlined"
-                            id="zipCode"
-                            label="Postnummer"
-                            type="text"
-                            required
-                            value={zipCode}
-                            onChange={(e) => setZipCode(e.target.value)}
-                        />
-                    </Grid>
-                    {/*Input kjønn*/}
-                    <Grid
-                        item
-                        xs={12}
-                    >
-                        <FormControl>
-                            <InputLabel id="demo-simple-select-label">Kjønn</InputLabel>
-                            <Select
+                    <Grid item container xs={12} spacing={1} >{/*Input adresse og postnummer*/}
+                        <Grid item xs={12} md={9}>
+                            <TextField
                                 variant="outlined"
+                                id="address"
+                                label="Adresse"
+                                type="text"
+                                required
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField
+                                variant="outlined"
+                                id="zipCode"
+                                label="Postnummer"
+                                type="text"
+                                required
+                                value={zipCode}
+                                onChange={(e) => setZipCode(e.target.value)}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} >{/*Input kjønn*/} 
+                        <FormControl variant="outlined">
+                            <InputLabel id="gender">Kjønn</InputLabel>
+                            <Select
                                 labelId="gender"
                                 id="gender"
                                 value={gender}
                                 onChange={(e) => setGender(e.target.value)}
+                                label="Kjønn"
                             >
                                 {genders.map((gender) => (
                                     <MenuItem key={gender.value} value={gender.value}>
@@ -284,13 +299,14 @@ export default function UserRegister() {
                                 ))}
                             </Select>
                         </FormControl>
-                        {/*Input fødselsdag*/}
+                    </Grid>
+                    <Grid item xs={12} >{/*Input fødselsdag*/}
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 id="dateOfBirth"
                                 label="Fødselsdato"
                                 format="dd/MM/yyyy"
-                                variant="inline"
+                                inputVariant="outlined"
                                 margin="normal"
                                 value={dateOfBirth}
                                 onChange={(dateEvent) => setDateOfBirth(dateEvent)}
@@ -300,15 +316,8 @@ export default function UserRegister() {
                     </Grid>
                     {/*Input forelder*/}
                     {showParents &&
-                        <Grid
-                            container
-                            item
-                            xs={12}
-                        >
-                            <Grid
-                                item
-                                xs={12}
-                            >
+                        <>
+                            <Grid item xs={12} >
                                 <TextField
                                     variant="outlined"
                                     id="firstName"
@@ -352,13 +361,10 @@ export default function UserRegister() {
                                     onChange={(e) => setParentEMail(e.target.value)}
                                 />
                             </Grid>
-                        </Grid>
+                        </>
                     }
                     {/*Input allergi*/}
-                    <Grid
-                        item
-                        xs={12}
-                    >
+                    <Grid item xs={12} >
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -368,42 +374,41 @@ export default function UserRegister() {
                             }
                             label="allergisk"
                         />
-                        <TextField
-                            variant="outlined"
-                            id="allergyDescription"
-                            label="Allergibeskrivelse"
-                            required
-                            multiline
-                            disabled={!isAllergic}
-                            value={allergyDescription}
-                            onChange={(e) => setAllergyDescription(e.target.value)}
-                        />
                     </Grid>
-
-                    {/*Input team/klan*/}
-                    <Grid
-                        item
-                        xs={12}
-                    >
+                    <Collapse component={Grid} item xs={12} in={isAllergic}>
+                        
+                            <TextField
+                                variant="outlined"
+                                id="allergyDescription"
+                                label="Allergibeskrivelse"
+                                required
+                                multiline
+                                disabled={!isAllergic}
+                                value={allergyDescription}
+                                onChange={(e) => setAllergyDescription(e.target.value)}
+                            />
+                        
+                    </Collapse>
+                    <Grid item xs={12} > {/*Input team/klan*/}
                         <TextField
                             variant="outlined"
                             id="team"
                             label="Lag/klan"
-                            required
                             value={team}
                             onChange={(e) => setTeam(e.target.value)}
                         />
-                        {/*Input kommentarer*/}
+                    </Grid>
+                    <Grid item xs={12} >{/*Input kommentarer*/}
                         <TextField
                             id="comments"
                             variant="outlined"
                             label="Tilleggsinformasjon"
                             multiline
-                            required
                             value={comments}
                             onChange={(e) => setComments(e.target.value)}
                         />
                     </Grid>
+                    <Grid item xs={12} >
                     <Button
                         variant="contained"
                         color="primary"
@@ -412,8 +417,9 @@ export default function UserRegister() {
                     >
                         Lagre
                     </Button>
+                    </Grid>
                 </Grid>
             </form>
-        </>
+        </Container>
     );
 }
