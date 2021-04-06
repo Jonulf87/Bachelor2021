@@ -1,14 +1,22 @@
 ﻿import { createMuiTheme, Grid, MuiThemeProvider, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 
 export default function OrganizerAdminList({ triggerUpdate }) {
 
+    const useStyles = makeStyles((theme) => ({
+        grid: {
+            position: "static"
+        }
+    }
+    ));
+
     const { isAuthenticated, token } = useAuth();
     const [organizerDataList, setOrganizerDataList] = useState([]);
     const [organizerContact, setOrganizerContact] = useState("");
-    //const classes = useStyles();
+    const classes = useStyles();
 
     const theme = createMuiTheme({
         overrides: {
@@ -76,35 +84,27 @@ export default function OrganizerAdminList({ triggerUpdate }) {
 
             console.log(organizerContact);
             return (
-                <TableRow>
-                    <TableCell>
-                        <Grid
-                            container
-                            spacing={2}
-                        >
-                            <Grid
-                                item
-                                xs={6}
-                            >
+                <>
+                    <TableRow>
+                        <TableCell colSpan={1}>
 
-                                <p><strong>Fullt navn:&nbsp;</strong>{organizerContact.firstName}&nbsp;{organizerContact.lastName}</p>
+                            <Typography>Fullt navn: </Typography>
+                            <Typography>E-post: {organizerContact.contactMail}</Typography>
+                            <Typography>Telefon: {organizerContact.contactPhone}</Typography>
 
-
-                                <p><strong>E-post:&nbsp;</strong>{organizerContact.eMail}</p>
-
-
-                                <p><strong>Telefon:&nbsp;</strong>{organizerContact.phoneNumber}</p>
-
-                            </Grid>
-                            <Grid
-                                item
-                                xs={6}
-                            >
-                            </Grid>
-                        </Grid>
-                    </TableCell>
-                </TableRow>
-
+                        </TableCell>
+                        <TableCell>
+                            {organizerContact.contactName}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell colSpan={4}>
+                            <p><strong>Fullt navn:&nbsp;</strong>{organizerContact.contactName}</p>
+                            <p><strong>E-post:&nbsp;</strong>{organizerContact.contactMail}</p>
+                            <p><strong>Telefon:&nbsp;</strong>{organizerContact.contactPhone}</p>
+                        </TableCell>
+                    </TableRow>
+                </>
             );
         },
         onRowExpansionChange: (curExpanded) => {
