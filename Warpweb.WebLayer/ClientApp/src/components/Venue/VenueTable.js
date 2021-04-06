@@ -1,12 +1,8 @@
 ﻿import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import {
-    IconButton, Input, InputAdornment, InputLabel, FormControl, Typography, Table, TableBody,
-    TableCell, TableContainer, TableHead, TableRow,
-} from '@material-ui/core';
+import { Table, TableRow, TableCell} from '@material-ui/core';
 import VenueInfo from './VenueInfo';
 import useAuth from "../../hooks/useAuth";
-import CreateVenue from "./CreateVenue";
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 
 
@@ -28,9 +24,13 @@ const useStyles = makeStyles((theme) =>
 
 export default function VenueTable() {
     const [isReady, setIsReady] = useState(false);
-    const { isAuthenticated, token } = useAuth();
+    
     const [venueList, setVenueList] = useState([]);
-    //fetch venues
+    const [venueOpen, setVenueOpen] = useState("");
+    
+
+
+    const { isAuthenticated, token } = useAuth();
     useEffect(() => {
         const getVenues = async () => {
             if (isAuthenticated) {
@@ -49,10 +49,6 @@ export default function VenueTable() {
         getVenues();
 
     }, [isAuthenticated]);
-
-    useEffect(() => {
-        console.log(JSON.stringify(venueList))
-    })
 
     const classes = useStyles();
 
@@ -80,6 +76,7 @@ export default function VenueTable() {
         filterType: 'dropdown',
         responsive: 'vertical',
         selectableRows: 'none',
+        selectableRowsOnClick: true,
         expandableRows: true,
         expandableRowsHeder: false,
         expandableRowsObClick: true,
@@ -88,22 +85,38 @@ export default function VenueTable() {
             //if (dataIndex === 3 || dataIndex === 4) return false;
 
             //forhindre expande av any rad når 4 rader allerede åpne. Men tillater lukking av de åpne
-            if (expandedRows.data.length >= 4 && expandedRows.data.filter(data => data.dataIndex === dataIndex).length === 0) return false;
+            if (expandedRows.data.length >= 1 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
             return true;
         },
-        rowsExpanded: [0],
+        //rowsExpanded: [0],
         renderExpandableRow: ( rowData, rowMeta) => {
+            
             const colSpan = rowData.length + 1;
             return (
-                <TableRow>
-                    <TableCell colSpan={colSpan}>
-                        <VenueInfo venue={rowData[0]} />
-                    </TableCell>
-                </TableRow>
+                    <TableRow>
+                        <TableCell colSpan={colSpan}>
+                            <VenueInfo venue={venueOpen.venueId} />
+                        </TableCell>
+                    </TableRow>
             );
         },
-        //Denne ser ut til å kunne trigge noe ved  åpning. Bruke til å hente roller?
-        onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(`curExpanded:   ${ JSON.stringify(curExpanded) }  allExpanded: ${JSON.stringify(allExpanded)}  rowsExpanded: ${JSON.stringify(rowsExpanded)}`)
+
+        onRowExpansionChange: (curExpanded) => {
+        const venueIdCurrentRow = venueList[curExpanded[0].dataIndex].id;
+        const getContact = async () => {
+            if (isAuthenticated) {
+                const response = await fetch(`/api/venues/${venueIdCurrentRow}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const result = await response.json();
+                console.log(result);
+                setVenueOpen(result);
+            }
+        }
+        getContact();
+        }
     };
 
     const components = {

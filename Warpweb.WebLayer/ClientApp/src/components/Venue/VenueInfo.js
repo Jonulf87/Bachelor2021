@@ -46,7 +46,7 @@ export default function VenueInfo(props) {
     const classes = useStyles();
 
     return (
-        <>
+        <div>
             <Table>
                 <TableBody>
                     <TableRow>
@@ -137,6 +137,6 @@ export default function VenueInfo(props) {
                     </TableRow>
                 </TableBody>
             </Table>
-        </>
+        </div>
     );
 }

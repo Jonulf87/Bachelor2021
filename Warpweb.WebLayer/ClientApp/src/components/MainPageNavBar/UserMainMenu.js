@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { List, ListItem, ListItemText, ListItemIcon} from '@material-ui/core';
+import { List, ListItem, ListItemText, ListItemIcon, Button} from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Link } from 'react-router-dom';
@@ -19,41 +19,26 @@ export default function UserMainMenu() {
         }
     }, [isAuthenticated])
 
+    
+
     return (
-        <List>
+        <>
 
             {displayLoggedIn && (
                 <>
-
-                    <ListItem button component={Link} to='/user'>
-                        <ListItemIcon><PersonIcon /></ListItemIcon>
-                        <ListItemText primary='Min side' />
-                    </ListItem>
-
-                    <ListItem button component={Link} to='/logout'>
-                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                        <ListItemText primary='Logg ut' />
-                    </ListItem>
+                    <Button color="inherit" ><Link to='/user'>Min Side</Link></Button>
+                    <Button color="inherit" ><Link to='/logout'>Logg ut</Link></Button>
 
                 </>)}
 
             {!displayLoggedIn && (
                 <>
-                    
-                    <ListItem button component={Link} to={'/register'}>
-                        <ListItemIcon><PersonIcon /></ListItemIcon>
-                        <ListItemText primary='Registrer' />
-                    </ListItem>
-
-
-                    <ListItem button component={Link} to={'/login'}>
-                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                        <ListItemText primary='Logg inn' />
-                    </ListItem>
+                    <Button><Link to={'/register'}>Registrer</Link></Button>
+                    <Button><Link to={'/login'}>Logg inn</Link></Button>
 
                 </>
             )}
 
-        </List>
+        </>
     );
 }
