@@ -23,5 +23,6 @@ namespace Warpweb.DataAccessLayer.Models
         public virtual ICollection<Row> Rows { get; set; }
         public virtual ICollection<TicketType> TicketTypes { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
+        public virtual ICollection<Crew> Crews { get; set; }
     }
 }

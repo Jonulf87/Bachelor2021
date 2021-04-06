@@ -52,6 +52,15 @@ namespace Warpweb.DataAccessLayer
 
             builder.Entity<Ticket>()
                 .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);
+
+            builder.Entity<Crew>()
+                .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);
+
+            builder.Entity<CrewPermission>()
+                .HasQueryFilter(a => a.Crew.MainEventId == _mainEventProvider.MainEventId);
+
+            builder.Entity<CrewUser>()
+                .HasQueryFilter(a => a.Crew.MainEventId == _mainEventProvider.MainEventId);
         }
     }
 }

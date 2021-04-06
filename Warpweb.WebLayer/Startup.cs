@@ -21,6 +21,9 @@ using Warpweb.LogicLayer.Services;
 using Warpweb.WebLayer.Configs;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
+using Warpweb.WebLayer.Requirements;
+using Microsoft.AspNetCore.Authorization;
+using Warpweb.WebLayer.AuthorizationHandlers;
 
 namespace Warpweb.WebLayer
 {
@@ -132,6 +135,18 @@ namespace Warpweb.WebLayer
                 jwt.TokenValidationParameters = tokenValidationParameters;
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CrewAdmin", policy =>
+                    policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.CrewAdmin)));
+                options.AddPolicy("CheckInAdmin", policy =>
+                    policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.CheckInAdmin)));
+                options.AddPolicy("TicketAdmin", policy =>
+                    policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.TicketAdmin)));
+
+            });
+
+            services.AddTransient<IAuthorizationHandler, CrewPermissionHandler>();
             services.AddControllers();
             
             services.Configure<IdentityOptions>(options =>

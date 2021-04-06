@@ -170,13 +170,16 @@ namespace Warpweb.WebLayer.Controllers
 
             var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
 
+            var isOrgAdmin = await _applicationDbContext.Organizers.AnyAsync(a => a.Admins.Any(b => b.Id == user.Id));
+
             var claimsIdentity = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("CurrentMainEventId", GetMainEventId(user))
+                new Claim("CurrentMainEventId", GetMainEventId(user)),
+                new Claim("IsOrgAdmin", isOrgAdmin.ToString())
             
             });
 

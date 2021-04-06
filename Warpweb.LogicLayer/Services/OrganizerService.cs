@@ -17,7 +17,7 @@ namespace Warpweb.LogicLayer.Services
         {
             _dbContext = dbContext;
         }
-        
+
         public async Task<List<OrganizerListVm>> GetOrganizersAsync()
         {
             return await _dbContext.Organizers
@@ -26,7 +26,7 @@ namespace Warpweb.LogicLayer.Services
                     Id = a.Id,
                     Name = a.Name,
                     OrgNumber = a.OrgNumber,
-                    Description = a.Description                    
+                    Description = a.Description
                 })
                 .ToListAsync();
         }
@@ -35,7 +35,7 @@ namespace Warpweb.LogicLayer.Services
         {
             return await _dbContext.Organizers
                 .Where(a => a.Id == id)
-                .Select(a => new OrganizerVm 
+                .Select(a => new OrganizerVm
                 {
                     Id = a.Id,
                     Name = a.Name,
@@ -52,9 +52,9 @@ namespace Warpweb.LogicLayer.Services
                 .Where(a => a.Id == organizerVm.Id || a.Name == organizerVm.Name)
                 .FirstOrDefault();
 
-            if(existingOrganizer != null)
+            if (existingOrganizer != null)
             {
-                throw new NotImplementedException(); 
+                throw new NotImplementedException();
             }
 
             var organizer = new Organizer
@@ -73,10 +73,10 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<int> UpdateOrganizerAsync(OrganizerVm organizerVm)
         {
-            
+
             var existingOrganizer = _dbContext.Organizers.Where(a => a.Id == organizerVm.Id).FirstOrDefault();
 
-            if(existingOrganizer == null)
+            if (existingOrganizer == null)
             {
                 throw new NotImplementedException();
             }
@@ -126,6 +126,30 @@ namespace Warpweb.LogicLayer.Services
                 }).FirstOrDefaultAsync();
 
             return contact;
+        }
+
+        public async Task<List<OrgAdminVm>> GetOrgAdminsAsync(int orgId)
+        {
+            var organizer = await _dbContext.Organizers
+                .Where(a => a.Id == orgId)
+                .Include(a => a.Admins)
+                .SingleOrDefaultAsync();
+
+            if (organizer != null)
+            {
+                var admins = organizer.Admins
+                    .Select(a => new OrgAdminVm
+                    {
+                        Name = a.FirstName + " " + a.LastName,
+                        EMail = a.Email,
+                        Id = a.Id,
+                        PhoneNumber = a.PhoneNumber
+                    }).ToList();
+
+                return admins;
+            }
+
+            return null;
         }
     }
 }

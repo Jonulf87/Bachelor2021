@@ -9,17 +9,7 @@ export default function EventMain() {
 
     let [venuePosted, setVenuePosted] = useState();
 
-    const { roles } = useAuth();
-
-    const createEvent = () => {
-        console.log(roles);
-
-        if (roles && roles.some(role => role === 'Admin')) {
-            return (<CreateEvent setVenuePosted={setVenuePosted} />)
-        }
-
-        return null;
-    }
+    const { isOrgAdmin } = useAuth();
 
     return (
         <>
@@ -28,7 +18,7 @@ export default function EventMain() {
             <EventInfo />
             <EventList venuePosted={venuePosted} />
 
-            {createEvent()}
+            {isOrgAdmin && <CreateEvent setVenuePosted={setVenuePosted} />}
         </>
 
     );

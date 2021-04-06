@@ -9,14 +9,16 @@ export default function LogOut() {
 
     useEffect(() => {
         const logOutFunction = async () => {
-        await logout();
-        setIsLoggedOut(true);
+            await logout();
+            setIsLoggedOut(true);
         }
         logOutFunction();
     }, []);
 
     if (isLoggedOut) {
-        <Redirect to={"/"} /> 
+        return (
+            <Redirect to={"/"} />
+        )
     }
     return null;
 }

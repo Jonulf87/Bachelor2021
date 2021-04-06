@@ -7,7 +7,10 @@ const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null);
     const [roles, setRoles] = useState([]);
+    const [isOrgAdmin, setOrgAdmin] = useState(false);
     const refreshTokenTimeoutId = useRef(null);
+
+
 
     const refreshToken = (delay) => {
 
@@ -18,12 +21,14 @@ const AuthProvider = ({ children }) => {
 
             if (response.ok) {
                 const result = await response.json();
+                setIsAuthenticated(true);
                 setToken(result.token);
                 localStorage.setItem('currentUser', result.token);
                 const jwtToken = JSON.parse(atob(result.token.split('.')[1]));
                 const expires = new Date(jwtToken.exp * 1000);
                 let timeout = expires.getTime() - Date.now() - 15 * 1000;
                 refreshToken(timeout);
+                setOrgAdmin(jwtToken.IsOrgAdmin === "True");
 
                 const role = jwtToken.role;
 
@@ -39,6 +44,7 @@ const AuthProvider = ({ children }) => {
                 setToken(null);
                 setRoles([]);
                 localStorage.removeItem('currentUser');
+                setOrgAdmin(false);
             }
         }, delay);
     }
@@ -60,9 +66,11 @@ const AuthProvider = ({ children }) => {
             setToken(result.token);
             setIsAuthenticated(true);
 
+
             const jwtToken = JSON.parse(atob(result.token.split('.')[1]));
             const expires = new Date(jwtToken.exp * 1000)
             let timeout = expires.getTime() - Date.now() - 15 * 1000;
+            setOrgAdmin(jwtToken.IsOrgAdmin === "True");
 
             const role = jwtToken.role;
             if (Array.isArray(role)) {
@@ -80,6 +88,7 @@ const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             setToken(null);
             setRoles([]);
+            setOrgAdmin(false);
         }
         return result;
     };
@@ -98,6 +107,7 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         setToken(null);
         setRoles([]);
+        setOrgAdmin(false);
 
         if (refreshTokenTimeoutId.current) {
             clearTimeout(refreshTokenTimeoutId.current);
@@ -114,6 +124,7 @@ const AuthProvider = ({ children }) => {
             const jwtToken = JSON.parse(atob(currentUser.split('.')[1]));
             const expires = new Date(jwtToken.exp * 1000);
             let timeout = expires.getTime() - Date.now() - 15 * 1000;
+            setOrgAdmin(jwtToken.IsOrgAdmin === "True");
 
             const role = jwtToken.role;
             if (Array.isArray(role)) {
@@ -128,8 +139,8 @@ const AuthProvider = ({ children }) => {
                 timeout = 0;
             }
             else {
-            setIsAuthenticated(true);
-            setToken(currentUser);
+                setIsAuthenticated(true);
+                setToken(currentUser);
             }
 
             refreshToken(timeout);
@@ -143,7 +154,7 @@ const AuthProvider = ({ children }) => {
         };
     }, []);
 
-    return <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout, refreshToken }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout, refreshToken, isOrgAdmin }}>{children}</AuthContext.Provider>;
 
 };
 
