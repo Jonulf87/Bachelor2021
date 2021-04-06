@@ -129,5 +129,21 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(contact);
         }
 
+        [HttpGet]
+        [Route("getadmins/{orgId}")]
+        public async Task<ActionResult<List<OrgAdminVm>>> GetOrgAdminsAsync(int orgId)
+        {
+            List<OrgAdminVm> admins;
+            try
+            {
+                admins = await _organizerService.GetOrgAdminsAsync(orgId);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+            return Ok(admins);
+        }
+
     }
 }

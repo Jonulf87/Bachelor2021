@@ -20,11 +20,9 @@ namespace Warpweb.DataAccessLayer.Models
 
     public enum CrewPermissionType
     {
-        CheckIn = 0,
+        CheckInAdmin = 0,
         CrewAdmin = 1,
         TicketAdmin = 2
     }
-
-
 }
 

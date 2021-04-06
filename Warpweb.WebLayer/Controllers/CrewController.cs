@@ -48,7 +48,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="crewVm"></param> 
         [HttpPost]
-        [Authorize(Roles = "Admins")]
+        [Authorize(Policy = "CrewAdmin")]
         public async Task<ActionResult<CrewVm>> CreateCrew(CrewVm crewVm)
         {
             int crewId;
@@ -71,7 +71,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="crewVm"></param> 
         [HttpPut]
-        [Authorize(Roles = "Admins")]
+        [Authorize(Policy = "CrewAdmin")]
         public async Task<ActionResult> UpdateCrew(CrewVm crewVm)
         {
             try
@@ -91,6 +91,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="crewVm"></param> 
         [HttpDelete]
+        [Authorize(Policy = "CrewAdmin")]
         public async Task<ActionResult> DeleteCrew(CrewVm crewVm)
         {
             try

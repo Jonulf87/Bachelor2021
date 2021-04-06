@@ -106,5 +106,13 @@ namespace Warpweb.LogicLayer.Services
 
             await _userManager.AddToRoleAsync(userDataToBeStored, "User");
         }
+
+        public async Task<bool> HasCrewPermissionAsync(string userId, CrewPermissionType crewPermissionType)
+        {
+            return await _dbContext.Crews
+                .Where(a => a.CrewPermissions.Any(b => b.PermissionType == crewPermissionType)
+                    && a.Users.Any(c => c.ApplicationUserId == userId))
+                .AnyAsync();
+        }
     }
 }

@@ -27,6 +27,8 @@ export default function VenueTable() {
     
     const [venueList, setVenueList] = useState([]);
     const [venueOpen, setVenueOpen] = useState("");
+
+    const [venueId, setVenueId] = useState("");
     
 
 
@@ -56,7 +58,7 @@ export default function VenueTable() {
     const columns = [
         {
             name: 'id',
-            label: 'ID',
+            label: 'Id',
             options: {
                 display: false,
             }
@@ -79,43 +81,40 @@ export default function VenueTable() {
         selectableRowsOnClick: true,
         expandableRows: true,
         expandableRowsHeder: false,
-        expandableRowsObClick: true,
+        expandableRowsOnClick: true,
         isRowExpandable: (dataIndex, expandedRows) => {
-            //Eksempel på hvordan sperre to rader fra å åpne
-            //if (dataIndex === 3 || dataIndex === 4) return false;
-
             //forhindre expande av any rad når 4 rader allerede åpne. Men tillater lukking av de åpne
-            if (expandedRows.data.length >= 1 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
+            if (expandedRows.data.length >= 4 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
             return true;
         },
         //rowsExpanded: [0],
         renderExpandableRow: ( rowData, rowMeta) => {
-            
+            console.log(rowData[0]);
             const colSpan = rowData.length + 1;
             return (
                     <TableRow>
                         <TableCell colSpan={colSpan}>
-                            <VenueInfo venue={venueOpen.venueId} />
+                            <VenueInfo venue={rowData[0]} />
                         </TableCell>
                     </TableRow>
             );
         },
 
         onRowExpansionChange: (curExpanded) => {
-        const venueIdCurrentRow = venueList[curExpanded[0].dataIndex].id;
-        const getContact = async () => {
-            if (isAuthenticated) {
-                const response = await fetch(`/api/venues/${venueIdCurrentRow}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const result = await response.json();
-                console.log(result);
-                setVenueOpen(result);
-            }
-        }
-        getContact();
+        //const venueIdCurrentRow = venueList[curExpanded[0].dataIndex].id;
+        //const getContact = async () => {
+        //    if (isAuthenticated) {
+        //        const response = await fetch(`/api/venues/${venueIdCurrentRow}`, {
+        //            headers: {
+        //                'Authorization': `Bearer ${token}`
+        //            }
+        //        });
+        //        const result = await response.json();
+        //        console.log(result);
+        //        setVenueOpen(result);
+        //    }
+        //}
+        //getContact();
         }
     };
 

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import AdminsList from './AdminsList';
 
 export default function OrganizerAdminList({ triggerUpdate }) {
 
@@ -47,6 +48,13 @@ export default function OrganizerAdminList({ triggerUpdate }) {
     }, [isAuthenticated, triggerUpdate])
 
     const columns = [
+        {
+            name: 'id',
+            label: 'Id',
+            options: {
+                display: false,
+            }
+        },
         {
             name: 'name',
             label: 'Organisasjon'
@@ -97,13 +105,7 @@ export default function OrganizerAdminList({ triggerUpdate }) {
                             {organizerContact.contactName}
                         </TableCell>
                     </TableRow>
-                    <TableRow>
-                        <TableCell colSpan={4}>
-                            <p><strong>Fullt navn:&nbsp;</strong>{organizerContact.contactName}</p>
-                            <p><strong>E-post:&nbsp;</strong>{organizerContact.contactMail}</p>
-                            <p><strong>Telefon:&nbsp;</strong>{organizerContact.contactPhone}</p>
-                        </TableCell>
-                    </TableRow>
+                    <AdminsList orgId={rowData[0] } />
                 </>
             );
         },
