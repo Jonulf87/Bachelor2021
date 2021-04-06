@@ -21,7 +21,7 @@ export default function VenueMain() {
                     <CreateVenue />
                 </Box>
             </Collapse>
-                <VenueTable />  
+            <VenueTable />  
         </Container>
     );
 }

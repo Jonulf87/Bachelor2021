@@ -1,7 +1,16 @@
 ﻿import React, { useState } from 'react';
-import { TextField, Button, Grid } from '@material-ui/core';
+import { TextField, Button, Grid, Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+
+import PopupWindow from '../PopupWindow/PopupWindow';
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+        padding: theme.spacing(3),
+    },
+}));
 
 export default function UserLogin() {
 
@@ -9,11 +18,13 @@ export default function UserLogin() {
     const [password, setPassword] = useState("");
 
     const [loginSuccess, setLoginSuccess] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const [errors, setErrors] = useState([]);
 
-    const { login } = useAuth();
+    const classes = useStyles();
 
+    const { login } = useAuth();
 
     const logInSubmit = async () => {
 
@@ -23,7 +34,8 @@ export default function UserLogin() {
             setLoginSuccess(true);
         }
         else {
-            setErrors(response.errors)
+            setErrors(response.errors);
+            setOpen(true);
         }
     }
 
@@ -33,21 +45,16 @@ export default function UserLogin() {
 
     return (
         <>
-            {errors.map(error => (<p>{error}</p>))}
+            <PopupWindow open={open} text={errors.map(error => (<p key="">{error}</p>))} />
+            <Container className={classes.container} maxWidth="xs">
             <form>
-                <Grid
-                    container
-                    direction="column"
-                    justify="center"
-                    alignItems="center"
-                    spacing={2}
-                >
+                    <Grid container spacing={3}>
                     {/*Input brukernavn/email*/}
-                    <Grid
-                        item
-                    >
-
-                        <TextField
+                        <Grid item xs={12}>
+                            <TextField
+                            fullWidth
+                            size="small"
+                            variant="outlined"
                             id="userName"
                             label="Brukernavn"
                             required
@@ -55,11 +62,12 @@ export default function UserLogin() {
                             onChange={(e) => setUserName(e.target.value)}
                         />
                     </Grid>
-                    <Grid
-                        item
-                    >
+                        <Grid item xs={12}>
                         {/*Input passord*/}
-                        <TextField
+                            <TextField
+                            fullWidth
+                            size="small"
+                            variant="outlined"
                             id="password"
                             label="Passord"
                             type="password"
@@ -82,7 +90,8 @@ export default function UserLogin() {
                         </Button>
                     </Grid>
                 </Grid>
-            </form>
+                </form>
+            </Container>
         </>
     )
 }

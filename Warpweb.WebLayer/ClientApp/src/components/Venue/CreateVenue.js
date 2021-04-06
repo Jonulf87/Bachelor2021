@@ -92,6 +92,24 @@ export default function CreateVenue() {
         sendRequest();
     };
 
+    /*
+    const loadContacts = async () => {
+        const res = await fetch("", {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            method: 'GET',
+        });
+        setData(await res.json());
+    };
+
+    useEffect(() => {
+        loadContacts();
+        return () => { };
+    }, []);
+    */
+
     return (
         <>
             <Typography gutterBottom variant="h5" component="h5">
