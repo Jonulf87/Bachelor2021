@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import AdminsList from './AdminsList';
 
-export default function OrganizerAdminList({ triggerUpdate }) {
+export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen }) {
 
     const useStyles = makeStyles((theme) => ({
         grid: {
@@ -17,7 +17,9 @@ export default function OrganizerAdminList({ triggerUpdate }) {
     const { isAuthenticated, token } = useAuth();
     const [organizerDataList, setOrganizerDataList] = useState([]);
     const [organizerContact, setOrganizerContact] = useState("");
+
     const classes = useStyles();
+
 
     const theme = createMuiTheme({
         overrides: {
@@ -95,17 +97,60 @@ export default function OrganizerAdminList({ triggerUpdate }) {
                 <>
                     <TableRow>
                         <TableCell colSpan={1}>
-
-                            <Typography>Fullt navn: </Typography>
-                            <Typography>E-post: {organizerContact.contactMail}</Typography>
-                            <Typography>Telefon: {organizerContact.contactPhone}</Typography>
-
                         </TableCell>
-                        <TableCell>
-                            {organizerContact.contactName}
+                        <TableCell colSpan={3}>
+                            <Typography >
+                                Kontaktperson
+                            </Typography>
+
                         </TableCell>
                     </TableRow>
-                    <AdminsList orgId={rowData[0] } />
+                    <TableRow>
+
+                        <TableCell colSpan={1}>
+                        </TableCell>
+
+                        <TableCell>
+                            <Typography>Navn: </Typography>
+                        </TableCell>
+
+                        <TableCell colSpan={2}>
+                            {organizerContact.contactName}
+                        </TableCell>
+
+                    </TableRow>
+
+                    <TableRow >
+
+                        <TableCell colSpan={1}>
+                        </TableCell>
+
+                        <TableCell>
+                            <Typography>E-post: </Typography>
+                        </TableCell>
+
+                        <TableCell colSpan={2}>
+                            {organizerContact.contactMail}
+                        </TableCell>
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TableCell colSpan={1}>
+                        </TableCell>
+
+                        <TableCell>
+                            <Typography>Telefon: </Typography>
+                        </TableCell>
+
+                        <TableCell colSpan={2}>
+                            {organizerContact.contactPhone}
+                        </TableCell>
+
+                    </TableRow>
+
+                    <AdminsList orgId={rowData[0]} handleDialogOpen={handleDialogOpen} />
                 </>
             );
         },

@@ -1,8 +1,10 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { TableCell, TableRow, Typography } from '@material-ui/core';
+import { Button, TableCell, TableRow, Typography } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
-export default function AdminsList({orgId}) {
+
+export default function AdminsList({ orgId, handleDialogOpen }) {
+
 
     const [orgAdmins, setOrgAdmins] = useState([]);
     const { isAuthenticated, token } = useAuth();
@@ -24,15 +26,43 @@ export default function AdminsList({orgId}) {
         console.log(orgAdmins);
     }, [isAuthenticated]);
 
-    
+
+
     return (
-        <TableRow>
-            <TableCell colSpan={4}>
-                <h4>Admins</h4>
-                {orgAdmins.map(admin => (
-                    <Typography>{admin.name}</Typography>
-                    ))}
-            </TableCell>
-        </TableRow>
+        <>
+            <TableRow>
+                <TableCell colSpan={1}>
+                </TableCell>
+
+                <TableCell colSpan={1}>
+                    <h4>Admins</h4>
+                </TableCell>
+
+            </TableRow>
+
+
+
+
+            {orgAdmins.map(admin => (
+                <TableRow key={admin.name}>
+                    <TableCell colSpan={1}>
+                    </TableCell>
+                    <TableCell colSpan={3}>
+                        <Typography>{admin.name}</Typography>
+                    </TableCell>
+                </TableRow>
+            ))}
+            <TableRow>
+                <TableCell colSpan={1}>
+                </TableCell>
+                <TableCell colSpan={3}>
+                    <Button color="primary" variant="contained" onClick={handleDialogOpen}>Legg til admin</Button>
+                </TableCell>
+            </TableRow>
+
+            
+
+        </>
+
     )
 };

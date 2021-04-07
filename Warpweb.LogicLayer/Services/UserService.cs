@@ -21,6 +21,8 @@ namespace Warpweb.LogicLayer.Services
         {
 
             return await _dbContext.ApplicationUsers
+                .OrderBy(a => a.FirstName)
+                .ThenBy(a => a.LastName)
                 .Select(a => new UserListVm
                 {
                     Id = a.Id,

@@ -112,7 +112,7 @@ export default function OrganizerAdminMenu({ updateList }) {
                     </Button>
                 </Grid>
             </form>
-            <UserPicker open={open} />
+            {/*<UserPicker open={open} />*/}
         </Paper>
     )
 }
