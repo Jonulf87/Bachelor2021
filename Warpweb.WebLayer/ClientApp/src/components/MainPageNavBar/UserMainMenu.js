@@ -11,23 +11,31 @@ export default function UserMainMenu() {
     
 
     return (
-        <>
-
+        <List>
             {isAuthenticated && (
                 <>
-                    <Button color="inherit" ><Link to='/user'>Min Side</Link></Button>
-                    <Button color="inherit" ><Link to='/logout'>Logg ut</Link></Button>
-
+                    <ListItem button component={Link} to='/user'>
+                        <ListItemIcon><PersonIcon /></ListItemIcon>
+                        <ListItemText primary='Min side' />
+                    </ListItem>
+                    <ListItem button component={Link} to='/logout'>
+                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                        <ListItemText primary='Logg ut' />
+                    </ListItem>
                 </>)}
-
             {!isAuthenticated && (
                 <>
-                    <Button><Link to={'/register'}>Registrer</Link></Button>
-                    <Button><Link to={'/login'}>Logg inn</Link></Button>
-
+                    
+                    <ListItem button component={Link} to={'/register'}>
+                        <ListItemIcon><PersonIcon /></ListItemIcon>
+                        <ListItemText primary='Registrer' />
+                    </ListItem>
+                    <ListItem button component={Link} to={'/login'}>
+                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                        <ListItemText primary='Logg inn' />
+                    </ListItem>
                 </>
             )}
-
-        </>
+        </List>
     );
 }

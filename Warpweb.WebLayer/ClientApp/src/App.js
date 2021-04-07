@@ -9,12 +9,11 @@ import clsx from 'clsx';
 import './custom.css';
 import AuthProvider from './providers/AuthProvider';
 
-import { makeStyles, useTheme, ThemeProvider } from '@material-ui/core/styles';
-import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar, Button, ButtonGroup } from '@material-ui/core';
-import { ChevronLeftIcon, ChevronRigthIcon } from '@material-ui/icons';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar, } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
 import ParticipantMainMenu from './components/MainPageNavBar/ParticipantMainMenu';
@@ -41,7 +40,6 @@ export default function App(props) {
 
     const useStyles = makeStyles((theme) => ({
         root: {
-
             display: 'flex',
         },
         drawer: {
@@ -70,9 +68,6 @@ export default function App(props) {
         content: {
             flexGrow: 1,
             padding: theme.spacing(3),
-        },
-        buttonRight: {
-            marginLeft: "auto"
         },
     }));
 
@@ -108,9 +103,6 @@ export default function App(props) {
                                     <MenuIcon />
                                 </IconButton>
                                 <NavBarHeader />
-                                <ButtonGroup className={classes.buttonRight}>
-                                <UserMainMenu />
-                                </ButtonGroup>
                             </Toolbar>
                         </AppBar>
                         <nav className={classes.drawer} aria-label="mailbox folders">
@@ -128,8 +120,12 @@ export default function App(props) {
                                         keepMounted: true, // Better open performance on mobile.
                                     }}
                                 >
-
-                                    <Divider />
+                                    <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                        <Typography component={Link} to="/"   variant="h4" noWrap >
+                                            Warpweb
+                                        </Typography>
+                                    </div>
+                                    <UserMainMenu />
                                     <AdminMainMenu />
                                 </Drawer>
                             </Hidden>
@@ -143,14 +139,13 @@ export default function App(props) {
                                 >
 
                                     <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <Typography variant="h6" noWrap >
-                                            <Link to="/" >Warpweb</Link>
+                                        <Typography component={Link} to="/"   variant="h4" noWrap >
+                                            Warpweb
                                         </Typography>
                                     </div>
-                                    <Divider />
+                                    <br />
+                                    <UserMainMenu />
                                     <AdminMainMenu />
-                                    <Divider />
-                                    <ParticipantMainMenu />
                                 </Drawer>
                             </Hidden>
                         </nav>
