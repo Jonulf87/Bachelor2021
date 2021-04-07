@@ -4,6 +4,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 
 
@@ -16,28 +17,25 @@ export default function PopupWindow(props) {
 
     const handleClose = () => {
         setOpen(false);
+        props.onClose();
     };
 
     return (
         <div>
-            <Dialog 
-                PaperProps={{
-                    style: {
-                        minHeight: "20vh",
-                        minWidth: "35vw"
-                    }
-                }}
+            <Dialog
                 open={open}
                 onClose={handleClose}
                 aria-describedby="alert-dialog-description"
             >
-                <DialogContent >
+                {props.title && <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>}
+                <DialogContent>
                     <DialogContentText id="alert-dialog-description" style={{ color: 'black', font: 'bold', fontSize: 'large', textAlign: 'center' }}>
                         {props.text}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}
+                    <Button
+                        onClick={handleClose}
                         variant="contained"
                         color="primary"
                         size="large">

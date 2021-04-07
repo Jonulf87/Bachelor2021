@@ -45,7 +45,7 @@ export default function UserLogin() {
 
     return (
         <>
-            <PopupWindow open={open} text={errors.map(error => (<p key="">{error}</p>))} />
+            <PopupWindow open={open} onClose={() => setOpen(false)} text={errors.map(error => (<p key="">{error}</p>))} />
             <Container className={classes.container} maxWidth="xs">
             <form>
                     <Grid container spacing={3}>
