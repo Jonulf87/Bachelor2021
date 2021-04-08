@@ -1,15 +1,15 @@
 ﻿import React, { useState } from 'react';
-import { TextField, Button, Grid, Container } from '@material-ui/core';
+import { TextField, Button, Grid, Container,Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 import PopupWindow from '../PopupWindow/PopupWindow';
 
+
+//component spesifik styling
 const useStyles = makeStyles((theme) => ({
-    container: {
-        padding: theme.spacing(3),
-    },
+    
 }));
 
 export default function UserLogin() {
@@ -48,7 +48,7 @@ export default function UserLogin() {
             <PopupWindow open={open} onClose={() => setOpen(false)} text={errors.map(error => (<p key="">{error}</p>))} />
             <Container className={classes.container} maxWidth="xs">
             <form>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={2} alignContent="center">
                     {/*Input brukernavn/email*/}
                         <Grid item xs={12}>
                             <TextField
@@ -76,9 +76,7 @@ export default function UserLogin() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </Grid>
-                    <Grid
-                        item
-                    >
+                    <Grid item xs={12}>
                         {/*Logginn knapp*/}
                         <Button
                             variant="contained"
