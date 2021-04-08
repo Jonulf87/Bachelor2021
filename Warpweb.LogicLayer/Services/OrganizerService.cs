@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
@@ -12,10 +13,12 @@ namespace Warpweb.LogicLayer.Services
     public class OrganizerService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrganizerService(ApplicationDbContext dbContext)
+        public OrganizerService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task<List<OrganizerListVm>> GetOrganizersAsync()
@@ -150,6 +153,19 @@ namespace Warpweb.LogicLayer.Services
             }
 
             return null;
+        }
+
+        public async Task SetOrgAdminAsync(OrganizerVm orgVm)
+        {
+            var existingOrg = await _dbContext.Organizers
+                .Where(a => a.Id == orgVm.Id)
+                .Include(a => a.Admins)
+                .SingleOrDefaultAsync();
+
+            var userToBeAdmin = await _userManager.FindByIdAsync(orgVm.AdminUserId);
+
+            existingOrg.Admins.Add(userToBeAdmin);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

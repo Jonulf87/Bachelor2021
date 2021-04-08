@@ -145,5 +145,21 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(admins);
         }
 
+        [HttpPost]
+        [Route("setadmin")]
+        public async Task<ActionResult> SetOrgAdminAsync([FromBody] OrganizerVm orgVm)
+        {
+            try
+            {
+                await _organizerService.SetOrgAdminAsync(orgVm);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+            return Ok();
+        }
+
     }
 }
