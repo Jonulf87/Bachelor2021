@@ -2,20 +2,20 @@
 import { Redirect } from 'react-router-dom';
 
 import {
-    Select, 
-    FormControl, 
-    InputLabel, 
-    TextField, 
-    Button, 
-    Grid, 
-    Checkbox, 
-    FormControlLabel, 
-    MenuItem, 
-    Divider, 
-    Typography, 
+    Select,
+    FormControl,
+    InputLabel,
+    TextField,
+    Button,
+    Grid,
+    Checkbox,
+    FormControlLabel,
+    MenuItem,
+    Typography,
     Paper,
     Container,
-    Collapse } from '@material-ui/core';
+    Collapse
+} from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
@@ -30,7 +30,7 @@ export default function UserRegister() {
         root: {
             '& .MuiTextField-root': {
                 width: "100%",
-                
+
             },
             '& .MuiFormControl-root': {
                 width: "100%",
@@ -41,7 +41,7 @@ export default function UserRegister() {
             },
         },
         innerGrid: {
-            
+
         }
     }));
 
@@ -85,7 +85,7 @@ export default function UserRegister() {
             value: 'Vil ikke oppgi',
             label: 'Vil ikke oppgi',
         },
-        ]
+    ]
 
     const [error, setError] = useState();
     const [isRegistered, setIsRegistered] = useState(false);
@@ -94,6 +94,7 @@ export default function UserRegister() {
 
     const classes = useStyles();
 
+    // Sjekk om allergisk
     useEffect(() => {
         const checkIsAllergic = () => {
             if (checkBox) {
@@ -106,6 +107,7 @@ export default function UserRegister() {
         checkIsAllergic();
     }, [checkBox])
 
+    // Sjekk om alder > 16 år
     useEffect(() => {
         const checkDateOfBirth = () => {
 
@@ -168,16 +170,17 @@ export default function UserRegister() {
     }
 
     return (
-        <Container  maxWidth="sm" >
-            <form>
-                <Grid alignItems="center"  className={classes.root} container spacing={2} >
+        <Paper elevation={3}>
+            <Container maxWidth="sm" >
+                <form>
+                    <Grid alignItems="center" className={classes.root} container spacing={2} >
 
-                    {error && <pre style={{ color: "red" }}>{error}</pre>}
+                        {error && <pre style={{ color: "red" }}>{error}</pre>}
 
-                    <Grid item xs={12}>
-                        <Typography variant="h6" component="h3">Fullt Navn</Typography>{/*usikker på om disse skal brukes of evt hvordan grupperes */}
-                    </Grid>
-                    <Grid item xs={12} lg={4} >
+                        <Grid item xs={12}>
+                            <Typography variant="h6" component="h3">Fullt Navn</Typography>{/*usikker på om disse skal brukes og evt hvordan grupperes */}
+                        </Grid>
+                        <Grid item xs={12} lg={4} >
                             <TextField
                                 variant="outlined"
                                 id="firstName"
@@ -187,8 +190,8 @@ export default function UserRegister() {
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                             />
-                    </Grid>
-                    <Grid item xs={12} lg={4} >
+                        </Grid>
+                        <Grid item xs={12} lg={4} >
                             <TextField
                                 variant="outlined"
                                 id="middleName"
@@ -198,8 +201,8 @@ export default function UserRegister() {
                                 value={middleName}
                                 onChange={(e) => setMiddleName(e.target.value)}
                             />
-                    </Grid>
-                    <Grid item xs={12} lg={4} >
+                        </Grid>
+                        <Grid item xs={12} lg={4} >
                             <TextField
                                 variant="outlined"
                                 id="lastName"
@@ -210,10 +213,10 @@ export default function UserRegister() {
                                 onChange={(e) => setLastName(e.target.value)}
                             />
                         </Grid>
-                    <Grid item container xs={12}>
-                        <Typography variant="h6" component="h3">Brukerinfo</Typography>
-                    </Grid>
-                    <Grid item xs={12}>{/*Input epost*/}
+                        <Grid item container xs={12}>
+                            <Typography variant="h6" component="h3">Brukerinfo</Typography>
+                        </Grid>
+                        <Grid item xs={12}>{/*Input epost*/}
                             <TextField
                                 variant="outlined"
                                 id="eMail"
@@ -223,41 +226,41 @@ export default function UserRegister() {
                                 value={eMail}
                                 onChange={(e) => setEMail(e.target.value)}
                             />
-                    </Grid>
+                        </Grid>
 
-                    <Grid item xs={12}>{/*Input brukernavn*/}
-                        <TextField
-                            variant="outlined"
-                            id="userName"
-                            label="Brukernavn"
-                            type="text"
-                            required
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>{/*Input passord*/}
-                        <TextField
-                            variant="outlined"
-                            id="password"
-                            label="Passord"
-                            type="password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12} >{/*Input telefon*/}
-                        <TextField
-                            variant="outlined"
-                            id="phoneNumber"
-                            label="Telefon"
-                            type="tel"
-                            required
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                        />
-                    </Grid>{/*Input adresse og postnummer*/}
+                        <Grid item xs={12}>{/*Input brukernavn*/}
+                            <TextField
+                                variant="outlined"
+                                id="userName"
+                                label="Brukernavn"
+                                type="text"
+                                required
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>{/*Input passord*/}
+                            <TextField
+                                variant="outlined"
+                                id="password"
+                                label="Passord"
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} >{/*Input telefon*/}
+                            <TextField
+                                variant="outlined"
+                                id="phoneNumber"
+                                label="Telefon"
+                                type="tel"
+                                required
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                            />
+                        </Grid>{/*Input adresse og postnummer*/}
                         <Grid item xs={12} md={9}>
                             <TextField
                                 variant="outlined"
@@ -280,101 +283,101 @@ export default function UserRegister() {
                                 onChange={(e) => setZipCode(e.target.value)}
                             />
                         </Grid>
-                    <Grid item xs={12} >{/*Input kjønn*/} 
-                        <FormControl variant="outlined">
-                            <InputLabel id="gender">Kjønn</InputLabel>
-                            <Select
-                                labelId="gender"
-                                id="gender"
-                                value={gender}
-                                onChange={(e) => setGender(e.target.value)}
-                                label="Kjønn"
-                            >
-                                {genders.map((gender) => (
-                                    <MenuItem key={gender.value} value={gender.value}>
-                                        {gender.label}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} >{/*Input fødselsdag*/}
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                id="dateOfBirth"
-                                label="Fødselsdato"
-                                format="dd/MM/yyyy"
-                                inputVariant="outlined"
-                                margin="normal"
-                                value={dateOfBirth}
-                                onChange={(dateEvent) => setDateOfBirth(dateEvent)}
-                            />
-                        </MuiPickersUtilsProvider>
+                        <Grid item xs={12} >{/*Input kjønn*/}
+                            <FormControl variant="outlined">
+                                <InputLabel id="gender">Kjønn</InputLabel>
+                                <Select
+                                    labelId="gender"
+                                    id="gender"
+                                    value={gender}
+                                    onChange={(e) => setGender(e.target.value)}
+                                    label="Kjønn"
+                                >
+                                    {genders.map((gender) => (
+                                        <MenuItem key={gender.value} value={gender.value}>
+                                            {gender.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} >{/*Input fødselsdag*/}
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    id="dateOfBirth"
+                                    label="Fødselsdato"
+                                    format="dd/MM/yyyy"
+                                    inputVariant="outlined"
+                                    margin="normal"
+                                    value={dateOfBirth}
+                                    onChange={(dateEvent) => setDateOfBirth(dateEvent)}
+                                />
+                            </MuiPickersUtilsProvider>
 
-                    </Grid>
-                    {/*Input forelder*/}
-                    {showParents &&
-                        <>
-                            <Grid item xs={12} >
-                                <TextField
-                                    variant="outlined"
-                                    id="firstName"
-                                    label="Foresatte fornavn"
-                                    type="text"
-                                    required
-                                    value={parentFirstName}
-                                    onChange={(e) => setParentFirstName(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} >
-                                <TextField
-                                    variant="outlined"
-                                    id="lastName"
-                                    label="Foresatte etternavn"
-                                    type="text"
-                                    required
-                                    value={parentLastName}
-                                    onChange={(e) => setParentLastName(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} >
-                                <TextField
-                                    variant="outlined"
-                                    id="parentPhoneNumber"
-                                    label="Foresatte telefon"
-                                    type="tel"
-                                    required
-                                    value={parentPhoneNumber}
-                                    onChange={(e) => setParentPhoneNumber(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} >
-                                <TextField
-                                    variant="outlined"
-                                    id="parentEMail"
-                                    label="Foresatte e-post"
-                                    type="email"
-                                    required
-                                    value={parentEMail}
-                                    onChange={(e) => setParentEMail(e.target.value)}
-                                />
-                            </Grid>
-                        </>
-                    }
-                    {/*Input allergi*/}
-                    <Grid item xs={12} >
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={isAllergic}
-                                    onChange={(e) => setCheckBox(e.target.checked)}
-                                />
-                            }
-                            label="allergisk"
-                        />
-                    </Grid>
-                    <Collapse component={Grid} item xs={12} in={isAllergic}>
-                        
+                        </Grid>
+                        {/*Input forelder*/}
+                        {showParents &&
+                            <>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        variant="outlined"
+                                        id="firstName"
+                                        label="Foresatte fornavn"
+                                        type="text"
+                                        required
+                                        value={parentFirstName}
+                                        onChange={(e) => setParentFirstName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        variant="outlined"
+                                        id="lastName"
+                                        label="Foresatte etternavn"
+                                        type="text"
+                                        required
+                                        value={parentLastName}
+                                        onChange={(e) => setParentLastName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        variant="outlined"
+                                        id="parentPhoneNumber"
+                                        label="Foresatte telefon"
+                                        type="tel"
+                                        required
+                                        value={parentPhoneNumber}
+                                        onChange={(e) => setParentPhoneNumber(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        variant="outlined"
+                                        id="parentEMail"
+                                        label="Foresatte e-post"
+                                        type="email"
+                                        required
+                                        value={parentEMail}
+                                        onChange={(e) => setParentEMail(e.target.value)}
+                                    />
+                                </Grid>
+                            </>
+                        }
+                        {/*Input allergi*/}
+                        <Grid item xs={12} >
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={isAllergic}
+                                        onChange={(e) => setCheckBox(e.target.checked)}
+                                    />
+                                }
+                                label="allergisk"
+                            />
+                        </Grid>
+                        <Collapse component={Grid} item xs={12} in={isAllergic}>
+
                             <TextField
                                 variant="outlined"
                                 id="allergyDescription"
@@ -385,39 +388,40 @@ export default function UserRegister() {
                                 value={allergyDescription}
                                 onChange={(e) => setAllergyDescription(e.target.value)}
                             />
-                        
-                    </Collapse>
-                    <Grid item xs={12} > {/*Input team/klan*/}
-                        <TextField
-                            variant="outlined"
-                            id="team"
-                            label="Lag/klan"
-                            value={team}
-                            onChange={(e) => setTeam(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12} >{/*Input kommentarer*/}
-                        <TextField
-                            id="comments"
-                            variant="outlined"
-                            label="Tilleggsinformasjon"
-                            multiline
-                            value={comments}
-                            onChange={(e) => setComments(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12} >
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        onClick={submitForm}
-                    >
-                        Lagre
+
+                        </Collapse>
+                        <Grid item xs={12} > {/*Input team/klan*/}
+                            <TextField
+                                variant="outlined"
+                                id="team"
+                                label="Lag/klan"
+                                value={team}
+                                onChange={(e) => setTeam(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} >{/*Input kommentarer*/}
+                            <TextField
+                                id="comments"
+                                variant="outlined"
+                                label="Tilleggsinformasjon"
+                                multiline
+                                value={comments}
+                                onChange={(e) => setComments(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} >
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                onClick={submitForm}
+                            >
+                                Lagre
                     </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </form>
-        </Container>
+                </form>
+            </Container>
+        </Paper>
     );
 }
