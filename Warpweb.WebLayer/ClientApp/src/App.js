@@ -13,10 +13,7 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar, } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
-import { Link, NavLink } from 'react-router-dom';
-
-import AdminMainMenu from './components/MainPageNavBar/AdminMainMenu';
-import ParticipantMainMenu from './components/MainPageNavBar/ParticipantMainMenu';
+import MainMenu from './components/MainPageNavBar/MainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
 import CrewMain from './components/Crew/CrewMain';
 import EventMain from './components/Event/EventMain';
@@ -24,7 +21,6 @@ import ParticipantMain from './components/Participant/ParticipantMain';
 import ReportMain from './components/Report/ReportMain';
 import TicketMain from './components/Ticket/TicketMain';
 import UserMain from './components/User/UserMain';
-import UserMainMenu from './components/MainPageNavBar/UserMainMenu';
 import VenueMain from './components/Venue/VenueMain';
 import UserRegister from "./components/User/UserRegister";
 import UserLogin from "./components/User/UserLogin";
@@ -123,13 +119,7 @@ export default function App(props) {
                                         keepMounted: true, // Better open performance on mobile.
                                     }}
                                 >
-                                    <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <Typography component={Link} to="/" className={classes.link}  variant="h4" noWrap >
-                                            Warpweb
-                                        </Typography>
-                                    </div>
-                                    <UserMainMenu />
-                                    <AdminMainMenu />
+                                    <MainMenu />
                                 </Drawer>
                             </Hidden>
                             <Hidden smDown>
@@ -141,14 +131,7 @@ export default function App(props) {
                                     open
                                 >
 
-                                    <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <Typography component={Link} to="/" color="primary"  variant="h4" noWrap >
-                                            Warpweb
-                                        </Typography>
-                                    </div>
-                                    <br />
-                                    <UserMainMenu />
-                                    <AdminMainMenu />
+                                    <MainMenu />
                                 </Drawer>
                             </Hidden>
                         </nav>

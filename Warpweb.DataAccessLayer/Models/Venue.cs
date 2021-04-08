@@ -9,12 +9,15 @@ namespace Warpweb.DataAccessLayer.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
-        public int AreaAvailable { get; set; } //Ikke behov, fjern etterhvert i samarbeid med Frontend.
-        public int Capacity { get; set; } //Skal etterhvert overtas av SeatGroups 
+        public string PostalCode { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhone { get; set; }
+        public string ContactEMail { get; set; }
 
-        [Display(Name ="Kontaktperson lokasjon")]
-        public virtual ICollection<ApplicationUser> Users { get; set; } //Dette er kontaktpersonen(e) til lokalet hvor arrangementet pågår
-        public virtual ICollection<SeatGroup> SeatGroups { get; set; } //Bord som er i venue
+        [ForeignKey(nameof(Organizer))]
+        public int OrganizerId { get; set; }
+        public virtual Organizer Organizer { get; set; }
+
         public virtual ICollection<MainEvent> MainEvents { get; set; }
     }
 }

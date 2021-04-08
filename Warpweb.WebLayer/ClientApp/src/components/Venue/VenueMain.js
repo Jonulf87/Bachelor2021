@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect } from "react";
 import VenueInfo from './VenueInfo';
 import VenueAdmin from './VenueAdmin';
-import VenueTable from './VenueTable';
+import VenueList from './VenueList';
 import CreateVenue from "./CreateVenue";
 import Grid from '@material-ui/core/Grid';
 import { Container, Typography, Button, Collapse, Box} from "@material-ui/core";
@@ -21,7 +21,7 @@ export default function VenueMain() {
                     <CreateVenue />
                 </Box>
             </Collapse>
-            <VenueTable />  
+            <VenueList />  
         </Container>
     );
 }

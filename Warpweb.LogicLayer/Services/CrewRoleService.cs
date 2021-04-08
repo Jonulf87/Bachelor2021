@@ -22,7 +22,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<List<CrewRoleListVm>> GetCrewRolesAsync()
         {
-            return await _dbContext.CrewRoles
+            return await _dbContext.CrewUsers
                 .Select(a => new CrewRoleListVm
                 {
                     CrewRoleId = a.Id,
@@ -34,7 +34,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<CrewRoleVm> GetCrewRoleAsync(int id)
         {
-            return await _dbContext.CrewRoles
+            return await _dbContext.CrewUsers
                 .Where(a => a.Id == id)
                 .Select(a => new CrewRoleVm
                 {
@@ -62,7 +62,7 @@ namespace Warpweb.LogicLayer.Services
                 IsLeader = crewroleVm.IsLeader
             };
 
-            _dbContext.CrewRoles.Add(crewrole);
+            _dbContext.CrewUsers.Add(crewrole);
             await _dbContext.SaveChangesAsync();
 
             return crewrole.Id;
@@ -70,7 +70,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<int> UpdateCrewRoleAsync(CrewRoleVm crewroleVm)
         {
-            var existingCrewRole = _dbContext.CrewRoles.Where(a => a.Id == crewroleVm.CrewRoleId).FirstOrDefault();
+            var existingCrewRole = _dbContext.CrewUsers.Where(a => a.Id == crewroleVm.CrewRoleId).FirstOrDefault();
 
             if (existingCrewRole == null)
             {
@@ -90,7 +90,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<int> DeleteCrewRoleAsync(CrewRoleVm crewroleVm)
         {
 
-            var crewroleToBeDeleted = _dbContext.CrewRoles.Where(a => a.Id == crewroleVm.CrewRoleId).FirstOrDefault();
+            var crewroleToBeDeleted = _dbContext.CrewUsers.Where(a => a.Id == crewroleVm.CrewRoleId).FirstOrDefault();
 
             if (crewroleToBeDeleted == null)
             {

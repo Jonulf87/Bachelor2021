@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Warpweb.DataAccessLayer;
 
 namespace Warpweb.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210408093937_v6")]
+    partial class v6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -727,12 +729,10 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizerId");
+                    b.HasIndex("OrganizerId")
+                        .IsUnique();
 
                     b.ToTable("Venues");
                 });
@@ -978,8 +978,8 @@ namespace Warpweb.DataAccessLayer.Migrations
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Venue", b =>
                 {
                     b.HasOne("Warpweb.DataAccessLayer.Models.Organizer", "Organizer")
-                        .WithMany("Venues")
-                        .HasForeignKey("OrganizerId")
+                        .WithOne("Venue")
+                        .HasForeignKey("Warpweb.DataAccessLayer.Models.Venue", "OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1021,7 +1021,7 @@ namespace Warpweb.DataAccessLayer.Migrations
                 {
                     b.Navigation("MainEvent");
 
-                    b.Navigation("Venues");
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.Row", b =>

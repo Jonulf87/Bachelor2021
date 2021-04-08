@@ -1,8 +1,12 @@
 ﻿import React, { useState } from 'react';
-import { TextField, Button, Grid, Container,Paper } from '@material-ui/core';
+import { TextField, Button, Grid, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
 import queryString from 'query-string'
 import { Redirect } from 'react-router-dom';
+
+import {  Link, Redirect } from 'react-router-dom';
+
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
@@ -17,6 +21,7 @@ export default function UserLogin(props) {
     let queryParams = queryString.parse(props.location.search)
 
     const [userName, setUserName] = useState(queryParams.userName ? queryParams.userName : "");
+
     const [password, setPassword] = useState("");
 
     const [loginSuccess, setLoginSuccess] = useState(false);
@@ -78,7 +83,7 @@ export default function UserLogin(props) {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={4}>
                         {/*Logginn knapp*/}
                         <Button
                             variant="contained"
@@ -88,6 +93,9 @@ export default function UserLogin(props) {
                         >
                             Logg inn
                         </Button>
+                    </Grid>
+                    <Grid item xs={8}>
+                    <Typography variant="body1" >Ingen bruker? <Link to="/register">Registrer deg her</Link></Typography>
                     </Grid>
                 </Grid>
                 </form>

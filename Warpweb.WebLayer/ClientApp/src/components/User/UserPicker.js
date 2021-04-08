@@ -49,7 +49,7 @@ export default function UserPicker({ dialogOpen, handleDialogClose }) {
                         {({ index, style }) => (
                             <div key={usersList[index].id} style={style}>
                                     <Typography> {`${usersList[index].firstName} ${usersList[index].lastName}`} </Typography>
-                                    <Button variant="contained" color="primary">Velg</Button>
+                                <Button variant="contained" color="primary" >Velg</Button>
                                 </div>
                             )}
                         </FixedSizeList>

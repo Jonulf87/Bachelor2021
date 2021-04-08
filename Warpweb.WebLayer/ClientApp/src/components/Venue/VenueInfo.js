@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Input, Table, TableBody, TableCell, TableContainer, TableRow, Textfield, Button, Grid, Typography } from "@material-ui/core";
+import { Input, Table, TableBody, TableCell, TableRow, Button, Typography } from "@material-ui/core";
 import useAuth from "../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) =>
@@ -8,7 +8,6 @@ const useStyles = makeStyles((theme) =>
         root: {
             display: 'flex',
             flexWrap: 'wrap',
-            //maxWidth: 500,
             padding: 10,
             marginBottom: 10,
         },
@@ -51,19 +50,11 @@ export default function VenueInfo(props) {
                 <TableBody>
                     <TableRow>
                         <TableCell align="left">
-                            <Typography variant="overline">Id</Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                            <Typography>{venue.venueId}</Typography>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell align="left">
                             <Typography variant="overline">Navn</Typography>
                         </TableCell>
                         <TableCell align="right">
-                            {!isEditing && (<Typography>{venue.venueName}</Typography> )}
-                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueName} />)}
+                            {!isEditing && (<Typography>{venue.name}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.name} />)}
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -71,8 +62,8 @@ export default function VenueInfo(props) {
                             <Typography variant="overline">Adresse</Typography>
                         </TableCell>
                         <TableCell align="right">
-                            {!isEditing && (<Typography>{venue.venueAddress}</Typography> )}
-                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueAddress} />)}
+                            {!isEditing && (<Typography>{venue.address}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.address} />)}
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -86,29 +77,29 @@ export default function VenueInfo(props) {
                     </TableRow>
                     <TableRow>
                         <TableCell align="left">
-                            <Typography variant="overline">Areal</Typography>
+                            <Typography variant="overline">Kontaktperson</Typography>
                         </TableCell>
                         <TableCell align="right">
-                            {!isEditing && (<Typography>{venue.venueAreaAvailable}</Typography> )}
-                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueAreaAvailable} />)}
+                            {!isEditing && (<Typography>{venue.contactName}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.contactName} />)}
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell align="left">
-                            <Typography variant="overline">Kapasitet</Typography>
+                            <Typography variant="overline">Kontakt e-post</Typography>
                         </TableCell>
                         <TableCell align="right">
-                            {!isEditing && (<Typography>{venue.venueCapacity}</Typography> )}
-                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.venueCapacity} />)}
+                            {!isEditing && (<Typography>{venue.contactEMail}</Typography>)}
+                            {isEditing && (<Input id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.contactEMail} />)}
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell align="left">
-                            <Typography variant="overline">Kontakt</Typography>
+                            <Typography variant="overline">Kontakt - telefon</Typography>
                         </TableCell>
                         <TableCell align="right">
-                            {!isEditing && (<Typography>{venue.contactId}</Typography> )}
-                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.contactId} />)}
+                            {!isEditing && (<Typography>{venue.contactPhone}</Typography> )}
+                            {isEditing && (<Input  id="outlined-margin-dense" variant="outlined" margin="dense" defaultValue={venue.contactPhone} />)}
                         </TableCell>
                     </TableRow>
                     <TableRow>

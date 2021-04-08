@@ -9,5 +9,6 @@
         public string ContactName { get; set; }
         public string ContactPhone { get; set; }
         public string ContactMail { get; set; }
+        public string AdminUserId { get; set; }
     }
 }
