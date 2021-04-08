@@ -2,12 +2,13 @@
 {
     public class VenueVm
     {
-        public int VenueId { get; set; }
-        public string VenueName { get; set; }
-        public string VenueAddress { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
         public string PostalCode { get; set; }
-        public int VenueAreaAvailable { get; set; }
-        public int VenueCapacity { get; set; }
-        public int ContactId { get; set; }
+        public string ContactName { get; set; }
+        public string ContactEMail { get; set; }
+        public string ContactPhone { get; set; }
+
     }
 }

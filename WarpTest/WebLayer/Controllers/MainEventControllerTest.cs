@@ -198,15 +198,15 @@ namespace WarpTest.WebLayer.Controllers
             _dbContext.SaveChanges();
         }
 
-        private void CreateVenues()
-        {
-            _dbContext.Venues.Add(new Venue { Name = "Venue Name 1", Address = "Venueveien 1", AreaAvailable = 1, Capacity = 1 });
-            _dbContext.SaveChanges();
-            _dbContext.Venues.Add(new Venue { Name = "Venue Name 2", Address = "Venueveien 2", AreaAvailable = 2, Capacity = 2 });
-            _dbContext.SaveChanges();
-        }
+        //private void CreateVenues()
+        //{
+        //    _dbContext.Venues.Add(new Venue { Name = "Venue Name 1", Address = "Venueveien 1", AreaAvailable = 1, Capacity = 1 });
+        //    _dbContext.SaveChanges();
+        //    _dbContext.Venues.Add(new Venue { Name = "Venue Name 2", Address = "Venueveien 2", AreaAvailable = 2, Capacity = 2 });
+        //    _dbContext.SaveChanges();
+        //}
 
-        //private void CreateMainEvents()
+        ////private void CreateMainEvents()
         //{
         //    CreateUser();
         //    CreateOrganizers();

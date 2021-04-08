@@ -228,50 +228,46 @@ namespace Warpweb.WebLayer
                     dbContext.Organizers.Add(organizer);
                     dbContext.SaveChanges();
                 }
+                else
+                {
+                    organizer.Id = organizerExists.Id;
+                }
             }
+
+
 
             // Legg til noen lokaler
             var venueRockefeller = new Venue
             {
                 Name = "Rockefeller",
                 Address = "Torggata Bad 1",
-                AreaAvailable = 56,
-                Capacity = 3,
-                Users = adminsListWarpcrew
+                ContactName = "Hans Jensen",
+                ContactEMail = "hans@jensen.no",
+                ContactPhone = "874542165",
+                OrganizerId = organizerHordalan.Id
             };
 
             var venueSpektrum = new Venue
             {
                 Name = "Spektrum",
                 Address = "Ikke Torggata Bad 1",
-                AreaAvailable = 1000,
-                Capacity = 1000,
-                Users = adminsListKandu
+                ContactName = "Jens Hansen",
+                ContactEMail = "jens@hansen.no",
+                ContactPhone = "22334466",
+                OrganizerId = organizerKandu.Id
             };
 
             var venueVikingskipet = new Venue
             {
                 Name = "Vikingskipet",
                 Address = "Hamargaten 1",
-                AreaAvailable = 1500,
-                Capacity = 4000,
-                Users = adminsListHordalan
+                ContactName = "Petter Dass",
+                ContactEMail = "toalettlektyrøren@dass.no",
+                ContactPhone = "3",
+                OrganizerId = organizerWarpcrew.Id
             };
 
-            var venueNullIsland = new Venue
-            {
-                Name = "Lokale ikke avklart."
-            };
 
-            var venueExists = dbContext.Venues
-                    .Where(a => a.Name == venueNullIsland.Name)
-                    .FirstOrDefault();
-
-            if (venueExists == null)
-            {
-                dbContext.Venues.Add(venueNullIsland);
-                dbContext.SaveChanges();
-            }
 
 
             // Legg til noen events

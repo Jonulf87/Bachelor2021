@@ -34,9 +34,7 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    Address = a.Address,
-                    AreaAvailable = a.AreaAvailable,
-                    Capacity = a.Capacity,
+                    Address = a.Address
 
                 }).ToListAsync();
         }
@@ -59,18 +57,17 @@ namespace Warpweb.LogicLayer.Services
                 .Where(a => a.Id == id)
                 .Select(a => new VenueVm
                 {
-                    VenueId = a.Id,
-                    VenueName = a.Name,
-                    VenueAddress = a.Address,
-                    VenueAreaAvailable = a.AreaAvailable,
-                    VenueCapacity = a.Capacity,
+                    Id = a.Id,
+                    Name = a.Name,
+                    Address = a.Address,
+                    
                 }).SingleOrDefaultAsync();
         }
 
         public async Task<int> CreateVenueAsync(VenueVm venueVm)
         {
             var existingVenue = _dbContext.Venues
-                .Where(a => a.Id == venueVm.VenueId || a.Name == venueVm.VenueName)
+                .Where(a => a.Id == venueVm.Id || a.Name == venueVm.Name)
                 .FirstOrDefault();
 
             if (existingVenue != null)
@@ -80,11 +77,12 @@ namespace Warpweb.LogicLayer.Services
 
             var venue = new Venue
             {
-                Id = venueVm.VenueId,
-                Name = venueVm.VenueName,
-                Address = venueVm.VenueAddress,
-                AreaAvailable = venueVm.VenueAreaAvailable,
-                Capacity = venueVm.VenueCapacity
+                Id = venueVm.Id,
+                Name = venueVm.Name,
+                Address = venueVm.Address,
+                ContactName = venueVm.ContactName,
+                ContactPhone = venueVm.ContactPhone,
+                ContactEMail = venueVm.ContactEMail 
             };
 
             _dbContext.Venues.Add(venue);
@@ -95,18 +93,19 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<int> UpdateVenueAsync(VenueVm venueVm)
         {
-            var existingVenue = _dbContext.Venues.Where(a => a.Id == venueVm.VenueId).FirstOrDefault();
+            var existingVenue = _dbContext.Venues.Where(a => a.Id == venueVm.Id).FirstOrDefault();
 
             if (existingVenue == null)
             {
                 throw new NotImplementedException();
             }
 
-            existingVenue.Id = venueVm.VenueId;
-            existingVenue.Name = venueVm.VenueName;
-            existingVenue.Address = venueVm.VenueAddress;
-            existingVenue.AreaAvailable = venueVm.VenueAreaAvailable;
-            existingVenue.Capacity = venueVm.VenueCapacity;
+            existingVenue.Id = venueVm.Id;
+            existingVenue.Name = venueVm.Name;
+            existingVenue.Address = venueVm.Address;
+            existingVenue.ContactName = venueVm.ContactName;
+            existingVenue.ContactEMail = venueVm.ContactEMail;
+            existingVenue.ContactPhone = venueVm.ContactPhone;
 
             _dbContext.Update<Venue>(existingVenue);
             await _dbContext.SaveChangesAsync();
@@ -118,7 +117,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<int> DeleteVenueAsync(VenueVm venueVm)
         {
 
-            var venueToBeDeleted = _dbContext.Venues.Where(a => a.Id == venueVm.VenueId).FirstOrDefault();
+            var venueToBeDeleted = _dbContext.Venues.Where(a => a.Id == venueVm.Id).FirstOrDefault();
 
             if (venueToBeDeleted == null)
             {

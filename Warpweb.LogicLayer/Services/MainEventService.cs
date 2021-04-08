@@ -34,8 +34,8 @@ namespace Warpweb.LogicLayer.Services
                     Name = a.Name,
                     StartDateTime = a.StartDateTime,
                     EndDateTime = a.EndDateTime,
-                    Venue = a.Venue,
-                    Organizer = a.Organizer
+                    VenueName = a.Venue.Name,
+                    OrganizerName = a.Organizer.Name
                 })
                 .ToListAsync();
         }
