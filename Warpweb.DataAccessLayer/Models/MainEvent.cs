@@ -11,6 +11,8 @@ namespace Warpweb.DataAccessLayer.Models
         public string Name { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
+        public int AreaAvailable { get; set; } 
+        public int Capacity { get; set; } 
 
         [ForeignKey(nameof(Organizer))]
         public int OrganizerId { get; set; }

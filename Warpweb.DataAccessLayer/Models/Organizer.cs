@@ -14,6 +14,8 @@ namespace Warpweb.DataAccessLayer.Models
         public string ContactId { get; set; }
         public virtual ApplicationUser Contact { get; set; } //Organizer contact person
 
+        public virtual ICollection<Venue> Venues { get; set; }
+
         public virtual ICollection<ApplicationUser> Admins { get; set; }
         public virtual ICollection<MainEvent> MainEvent { get; set; }
     }

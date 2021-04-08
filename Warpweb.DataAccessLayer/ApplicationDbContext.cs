@@ -22,7 +22,7 @@ namespace Warpweb.DataAccessLayer
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Organizer> Organizers { get; set; }
         public DbSet<Crew> Crews { get; set; }
-        public DbSet<CrewUser> CrewRoles { get; set; }
+        public DbSet<CrewUser> CrewUsers { get; set; }
         public DbSet<MainEvent> MainEvents { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
@@ -42,10 +42,23 @@ namespace Warpweb.DataAccessLayer
                 .WithMany(a => a.AdminRoleAtOrganizers)
                 .UsingEntity(a => a.ToTable("OrganizerAdmins"));
 
+            builder.Entity<Seat>()
+                .HasMany(a => a.TicketTypes)
+                .WithMany(a => a.Seats)
+                .UsingEntity(a => a.ToTable("TicketTypeSeats"));
+                
+
             builder.Entity<MainEvent>()
                 .HasMany(a => a.Tickets)
                 .WithOne(a => a.MainEvent)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Venue>()
+                .HasMany(a => a.MainEvents)
+                .WithOne(a => a.Venue)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             builder.Entity<TicketType>()
                 .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);

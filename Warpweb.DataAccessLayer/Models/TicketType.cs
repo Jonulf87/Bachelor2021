@@ -14,5 +14,7 @@ namespace Warpweb.DataAccessLayer.Models
         [ForeignKey(nameof(MainEvent))]
         public int MainEventId { get; set; }
         public virtual MainEvent MainEvent { get; set; }
+
+        public virtual ICollection<Seat> Seats { get; set; }
     }
 }

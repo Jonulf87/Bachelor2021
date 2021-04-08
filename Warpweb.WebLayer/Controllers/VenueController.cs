@@ -59,12 +59,12 @@ namespace Warpweb.WebLayer.Controllers
         {
             int venueId;
 
-            if (venueVm.VenueId > 0)
+            if (venueVm.Id > 0)
             {
                 return BadRequest("VenueId should be empty");
             }
 
-            if("".Equals(venueVm.VenueName))
+            if("".Equals(venueVm.Name))
             {
                 return BadRequest("Venue name should not be empty");
             }
@@ -74,19 +74,23 @@ namespace Warpweb.WebLayer.Controllers
                 return BadRequest("Venue postal code should not be empty");
             }
 
-            if ("".Equals(venueVm.VenueAddress))
+            if ("".Equals(venueVm.Address))
             {
                 return BadRequest("Venue address should not be empty");
             }
 
-            if(venueVm.VenueAreaAvailable < 1)
+            if("".Equals(venueVm.ContactName))
             {
-                return BadRequest("Venue area should not be 0");
+                return BadRequest("Contact name should not be empty");
             }
 
-            if(venueVm.VenueCapacity < 1)
+            if("".Equals(venueVm.ContactPhone))
             {
-                return BadRequest("Venue capacity should not be 0");
+                return BadRequest("Contact phone should not be empty");
+            }
+            if ("".Equals(venueVm.ContactEMail))
+            {
+                return BadRequest("Contact e-mail should not be empty");
             }
 
             try
@@ -98,7 +102,7 @@ namespace Warpweb.WebLayer.Controllers
                 return Conflict("Venue with this name already exists");
             }
 
-            venueVm.VenueId = venueId;
+            venueVm.Id = venueId;
             return Ok(venueVm);
         }
 

@@ -104,22 +104,24 @@ export default function EventList() {
                                         <Typography>{mainevent.endDateTime}</Typography>
                                     </Grid>
                                 </Grid>
+                                {mainevent.venueName &&
 
-                                <Grid item xs={6} container>
-                                    <Grid item xs={3}>
-                                        <Typography><strong>Lokale</strong></Typography>
+                                    <Grid item xs={6} container>
+                                        <Grid item xs={3}>
+                                            <Typography><strong>Lokale</strong></Typography>
+                                        </Grid>
+                                        <Grid item xs={9}>
+                                            <Typography>{mainevent.venueName}</Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={9}>
-                                        <Typography>{mainevent.venue.name}</Typography>
-                                    </Grid>
-                                </Grid>
+                                }
 
                                 <Grid item xs={6} container>
                                     <Grid item xs={3}>
                                         <Typography><strong>Arrangør</strong></Typography>
                                     </Grid>
                                     <Grid item xs={9}>
-                                        <Typography>{mainevent.organizer.name}</Typography>
+                                        <Typography>{mainevent.organizerName}</Typography>
                                     </Grid>
                                 </Grid>
 
