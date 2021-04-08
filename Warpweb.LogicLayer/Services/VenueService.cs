@@ -60,6 +60,10 @@ namespace Warpweb.LogicLayer.Services
                     Id = a.Id,
                     Name = a.Name,
                     Address = a.Address,
+                    PostalCode = a.PostalCode,
+                    ContactName = a.ContactName,
+                    ContactEMail = a.ContactEMail,
+                    ContactPhone = a.ContactPhone
                     
                 }).SingleOrDefaultAsync();
         }
@@ -113,7 +117,6 @@ namespace Warpweb.LogicLayer.Services
             return existingVenue.Id;
         }
 
-        // Restrict to SuperAdmin
         public async Task<int> DeleteVenueAsync(VenueVm venueVm)
         {
 

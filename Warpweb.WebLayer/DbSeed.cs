@@ -234,13 +234,12 @@ namespace Warpweb.WebLayer
                 }
             }
 
-
-
             // Legg til noen lokaler
             var venueRockefeller = new Venue
             {
                 Name = "Rockefeller",
                 Address = "Torggata Bad 1",
+                PostalCode = "0123 Oslo",
                 ContactName = "Hans Jensen",
                 ContactEMail = "hans@jensen.no",
                 ContactPhone = "874542165",
@@ -251,6 +250,7 @@ namespace Warpweb.WebLayer
             {
                 Name = "Spektrum",
                 Address = "Ikke Torggata Bad 1",
+                PostalCode = "2134 Strømmen",
                 ContactName = "Jens Hansen",
                 ContactEMail = "jens@hansen.no",
                 ContactPhone = "22334466",
@@ -261,14 +261,12 @@ namespace Warpweb.WebLayer
             {
                 Name = "Vikingskipet",
                 Address = "Hamargaten 1",
+                PostalCode = "3345 Hamar",
                 ContactName = "Petter Dass",
                 ContactEMail = "toalettlektyrøren@dass.no",
                 ContactPhone = "3",
                 OrganizerId = organizerWarpcrew.Id
             };
-
-
-
 
             // Legg til noen events
             var mainEventWarpzone = new MainEvent
