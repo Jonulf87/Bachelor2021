@@ -15,6 +15,7 @@
     "merge": "^2.1.0",
     "mui-datatables": "^3.7.7",
     "oidc-client": "1.11.3",
+    "query-string": "^7.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-draggable": "^4.4.3",

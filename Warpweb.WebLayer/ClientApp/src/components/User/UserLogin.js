@@ -1,9 +1,9 @@
 ﻿import React, { useState } from 'react';
 import { TextField, Button, Grid, Container,Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import queryString from 'query-string'
 import { Redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-
 import PopupWindow from '../PopupWindow/PopupWindow';
 
 
@@ -12,9 +12,11 @@ const useStyles = makeStyles((theme) => ({
     
 }));
 
-export default function UserLogin() {
+export default function UserLogin(props) {
 
-    const [userName, setUserName] = useState("");
+    let queryParams = queryString.parse(props.location.search)
+
+    const [userName, setUserName] = useState(queryParams.userName ? queryParams.userName : "");
     const [password, setPassword] = useState("");
 
     const [loginSuccess, setLoginSuccess] = useState(false);

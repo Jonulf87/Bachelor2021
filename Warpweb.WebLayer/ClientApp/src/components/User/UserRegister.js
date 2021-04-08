@@ -18,10 +18,12 @@ import {
     Collapse } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { intervalToDuration } from 'date-fns/esm/fp';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 export default function UserRegister() {
 
@@ -91,6 +93,7 @@ export default function UserRegister() {
     const [isRegistered, setIsRegistered] = useState(false);
     const [showParents, setShowParents] = useState(false);
     const [checkBox, setCheckBox] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const classes = useStyles();
 
@@ -122,7 +125,7 @@ export default function UserRegister() {
             }
         }
         checkDateOfBirth();
-    }, [dateOfBirth])
+    }, [dateOfBirth]);
 
     const submitForm = async () => {
 
@@ -160,25 +163,35 @@ export default function UserRegister() {
         }
         else {
             setError(await response.text());
+            setOpen(true);
         }
     }
 
+    const handleSubmit = e => {
+        e.preventDefault();
+        submitForm();
+    };
+
     if (isRegistered) {
-        return <Redirect to={'/login'} />
+        return <Redirect to={'/login?userName=' + userName} />
     }
 
     return (
         <Container  maxWidth="sm" >
-            <form>
-                <Grid alignItems="center"  className={classes.root} container spacing={2} >
+            <ValidatorForm
+                autoComplete="off"
+                noValidate
+                onSubmit={handleSubmit}
+            >
+                <Grid alignItems="center" className={classes.root} container spacing={2} >
 
-                    {error && <pre style={{ color: "red" }}>{error}</pre>}
+                    <PopupWindow open={open} onClose={() => setOpen(false)} text={error} />
 
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h3">Fullt Navn</Typography>{/*usikker på om disse skal brukes of evt hvordan grupperes */}
                     </Grid>
                     <Grid item xs={12} lg={4} >
-                            <TextField
+                        <TextValidator
                                 variant="outlined"
                                 id="firstName"
                                 label="Fornavn"
@@ -186,21 +199,24 @@ export default function UserRegister() {
                                 required
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
+                                validators={['matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
+                                errorMessages={['Navn må oppgis', 'Ugyldig navn', 'Ugyldig navn', 'Ugyldig navn']}
                             />
                     </Grid>
                     <Grid item xs={12} lg={4} >
-                            <TextField
+                        <TextValidator
                                 variant="outlined"
                                 id="middleName"
                                 label="Mellomnavn"
                                 type="text"
-                                required
                                 value={middleName}
                                 onChange={(e) => setMiddleName(e.target.value)}
+                                validators={['matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]*$']}
+                                errorMessages={['Ugyldig mellomnavn']}
                             />
                     </Grid>
                     <Grid item xs={12} lg={4} >
-                            <TextField
+                        <TextValidator
                                 variant="outlined"
                                 id="lastName"
                                 label="Etternavn"
@@ -208,13 +224,15 @@ export default function UserRegister() {
                                 required
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
+                                validators={['required', 'matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
+                                errorMessages={['Etternavn må oppgis', 'Ugyldig etternavn', 'Ugyldig etternavn', 'Ugyldig etternavn']}
                             />
                         </Grid>
                     <Grid item container xs={12}>
                         <Typography variant="h6" component="h3">Brukerinfo</Typography>
                     </Grid>
                     <Grid item xs={12}>{/*Input epost*/}
-                            <TextField
+                        <TextValidator
                                 variant="outlined"
                                 id="eMail"
                                 label="Epost"
@@ -222,11 +240,13 @@ export default function UserRegister() {
                                 required
                                 value={eMail}
                                 onChange={(e) => setEMail(e.target.value)}
+                                validators={['required', 'isEmail']}
+                                errorMessages={['Epost må oppgis', 'Ugyldig epost']}
                             />
                     </Grid>
 
                     <Grid item xs={12}>{/*Input brukernavn*/}
-                        <TextField
+                        <TextValidator
                             variant="outlined"
                             id="userName"
                             label="Brukernavn"
@@ -234,10 +254,12 @@ export default function UserRegister() {
                             required
                             value={userName}
                             onChange={(e) => setUserName(e.target.value)}
+                            validators={['required']}
+                            errorMessages={['Brukernavn må oppgis']}
                         />
                     </Grid>
                     <Grid item xs={12}>{/*Input passord*/}
-                        <TextField
+                        <TextValidator
                             variant="outlined"
                             id="password"
                             label="Passord"
@@ -245,10 +267,12 @@ export default function UserRegister() {
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            validators={['required', 'minStringLength:8']}
+                            errorMessages={['Passord må oppgis', 'Passord må består av minst 8 tegn ']}
                         />
                     </Grid>
                     <Grid item xs={12} >{/*Input telefon*/}
-                        <TextField
+                        <TextValidator
                             variant="outlined"
                             id="phoneNumber"
                             label="Telefon"
@@ -256,10 +280,12 @@ export default function UserRegister() {
                             required
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
+                            validators={['required', 'isNumber']}
+                            errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
                         />
                     </Grid>{/*Input adresse og postnummer*/}
                         <Grid item xs={12} md={9}>
-                            <TextField
+                        <TextValidator
                                 variant="outlined"
                                 id="address"
                                 label="Adresse"
@@ -267,10 +293,12 @@ export default function UserRegister() {
                                 required
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
+                                validators={['required']}
+                                errorMessages={['Adresse må oppgis']}
                             />
                         </Grid>
                         <Grid item xs={12} md={3}>
-                            <TextField
+                        <TextValidator
                                 variant="outlined"
                                 id="zipCode"
                                 label="Postnummer"
@@ -278,6 +306,8 @@ export default function UserRegister() {
                                 required
                                 value={zipCode}
                                 onChange={(e) => setZipCode(e.target.value)}
+                                validators={['required', 'matchRegexp:^[0-9]{4}$']}
+                                errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
                             />
                         </Grid>
                     <Grid item xs={12} >{/*Input kjønn*/} 
@@ -316,7 +346,7 @@ export default function UserRegister() {
                     {showParents &&
                         <>
                             <Grid item xs={12} >
-                                <TextField
+                                <TextValidator
                                     variant="outlined"
                                     id="firstName"
                                     label="Foresatte fornavn"
@@ -324,10 +354,13 @@ export default function UserRegister() {
                                     required
                                     value={parentFirstName}
                                     onChange={(e) => setParentFirstName(e.target.value)}
+                                    validators={['matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
+                                    errorMessages={['Navn må oppgis', 'Ugyldig navn', 'Ugyldig navn', 'Ugyldig navn']}
+
                                 />
                             </Grid>
                             <Grid item xs={12} >
-                                <TextField
+                                <TextValidator
                                     variant="outlined"
                                     id="lastName"
                                     label="Foresatte etternavn"
@@ -335,10 +368,12 @@ export default function UserRegister() {
                                     required
                                     value={parentLastName}
                                     onChange={(e) => setParentLastName(e.target.value)}
+                                    validators={['required', 'matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
+                                    errorMessages={['Etternavn må oppgis', 'Ugyldig etternavn', 'Ugyldig etternavn', 'Ugyldig etternavn']}
                                 />
                             </Grid>
                             <Grid item xs={12} >
-                                <TextField
+                                <TextValidator
                                     variant="outlined"
                                     id="parentPhoneNumber"
                                     label="Foresatte telefon"
@@ -346,10 +381,12 @@ export default function UserRegister() {
                                     required
                                     value={parentPhoneNumber}
                                     onChange={(e) => setParentPhoneNumber(e.target.value)}
+                                    validators={['required', 'isNumber']}
+                                    errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
                                 />
                             </Grid>
                             <Grid item xs={12} >
-                                <TextField
+                                <TextValidator
                                     variant="outlined"
                                     id="parentEMail"
                                     label="Foresatte e-post"
@@ -411,13 +448,14 @@ export default function UserRegister() {
                         variant="contained"
                         color="primary"
                         size="large"
-                        onClick={submitForm}
+                        type="submit"
+                        //onClick={submitForm}
                     >
                         Lagre
                     </Button>
                     </Grid>
                 </Grid>
-            </form>
+            </ValidatorForm>
         </Container>
     );
 }
