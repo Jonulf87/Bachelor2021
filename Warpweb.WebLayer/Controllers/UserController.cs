@@ -91,7 +91,7 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch (UserAlreadyExistsException)
             {
-                return BadRequest("User already exist.");
+                return BadRequest("Brukeren eksisterer allerede");
             }
             catch (Exception ex)
             {
