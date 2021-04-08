@@ -124,11 +124,13 @@ export default function App(props) {
                                     }}
                                 >
                                     <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <Typography component={Link} to="/" className={classes.link}  variant="h4" noWrap >
+                                        <Typography component={Link} to="/" color="primary" className={classes.link}  variant="h4" noWrap >
                                             Warpweb
                                         </Typography>
                                     </div>
+                                    <Divider />
                                     <UserMainMenu />
+                                    <Divider />
                                     <AdminMainMenu />
                                 </Drawer>
                             </Hidden>
@@ -146,8 +148,9 @@ export default function App(props) {
                                             Warpweb
                                         </Typography>
                                     </div>
-                                    <br />
+                                    <Divider />
                                     <UserMainMenu />
+                                    <Divider />
                                     <AdminMainMenu />
                                 </Drawer>
                             </Hidden>
