@@ -40,6 +40,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="id"></param>  
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<MainEventVm>> GetMainEvent(int id)
         {
             var mainevent = await _mainEventService.GetMainEventAsync(id);
