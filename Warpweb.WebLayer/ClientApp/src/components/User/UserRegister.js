@@ -29,18 +29,20 @@ export default function UserRegister() {
     const useStyles = makeStyles((theme) => ({
         root: {
             '& .MuiTextField-root': {
-                margin: theme.spacing(1),
                 width: "100%",
                 
             },
             '& .MuiFormControl-root': {
-                margin: theme.spacing(1),
                 width: "100%",
             },
             '& .MuiFormControlLabel-root': {
-                margin: theme.spacing(1),
+
+                width: "100%"
             },
         },
+        innerGrid: {
+            
+        }
     }));
 
     //statevariabler til posting av bruker
@@ -166,17 +168,16 @@ export default function UserRegister() {
     }
 
     return (
-        <Container component={Paper} maxWidth="sm" >
+        <Container  maxWidth="sm" >
             <form>
-                <Grid justify="center" className={classes.root} container spacing={2} >
+                <Grid alignItems="center"  className={classes.root} container spacing={2} >
 
                     {error && <pre style={{ color: "red" }}>{error}</pre>}
 
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h3">Fullt Navn</Typography>{/*usikker på om disse skal brukes of evt hvordan grupperes */}
                     </Grid>
-                    <Grid item container xs={12} spacing={1}>{/*Input navn*/}
-                        <Grid item xs={12} lg={4} >
+                    <Grid item xs={12} lg={4} >
                             <TextField
                                 variant="outlined"
                                 id="firstName"
@@ -186,8 +187,8 @@ export default function UserRegister() {
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                             />
-                        </Grid>
-                        <Grid item xs={12} lg={4} >
+                    </Grid>
+                    <Grid item xs={12} lg={4} >
                             <TextField
                                 variant="outlined"
                                 id="middleName"
@@ -197,8 +198,8 @@ export default function UserRegister() {
                                 value={middleName}
                                 onChange={(e) => setMiddleName(e.target.value)}
                             />
-                        </Grid>
-                        <Grid item xs={12} lg={4} >
+                    </Grid>
+                    <Grid item xs={12} lg={4} >
                             <TextField
                                 variant="outlined"
                                 id="lastName"
@@ -209,7 +210,6 @@ export default function UserRegister() {
                                 onChange={(e) => setLastName(e.target.value)}
                             />
                         </Grid>
-                    </Grid>
                     <Grid item container xs={12}>
                         <Typography variant="h6" component="h3">Brukerinfo</Typography>
                     </Grid>
@@ -257,8 +257,7 @@ export default function UserRegister() {
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
                         />
-                    </Grid>
-                    <Grid item container xs={12} spacing={1} >{/*Input adresse og postnummer*/}
+                    </Grid>{/*Input adresse og postnummer*/}
                         <Grid item xs={12} md={9}>
                             <TextField
                                 variant="outlined"
@@ -281,7 +280,6 @@ export default function UserRegister() {
                                 onChange={(e) => setZipCode(e.target.value)}
                             />
                         </Grid>
-                    </Grid>
                     <Grid item xs={12} >{/*Input kjønn*/} 
                         <FormControl variant="outlined">
                             <InputLabel id="gender">Kjønn</InputLabel>
@@ -327,7 +325,8 @@ export default function UserRegister() {
                                     value={parentFirstName}
                                     onChange={(e) => setParentFirstName(e.target.value)}
                                 />
-
+                            </Grid>
+                            <Grid item xs={12} >
                                 <TextField
                                     variant="outlined"
                                     id="lastName"
@@ -338,10 +337,7 @@ export default function UserRegister() {
                                     onChange={(e) => setParentLastName(e.target.value)}
                                 />
                             </Grid>
-                            <Grid
-                                item
-                                xs={12}
-                            >
+                            <Grid item xs={12} >
                                 <TextField
                                     variant="outlined"
                                     id="parentPhoneNumber"
@@ -351,6 +347,8 @@ export default function UserRegister() {
                                     value={parentPhoneNumber}
                                     onChange={(e) => setParentPhoneNumber(e.target.value)}
                                 />
+                            </Grid>
+                            <Grid item xs={12} >
                                 <TextField
                                     variant="outlined"
                                     id="parentEMail"
