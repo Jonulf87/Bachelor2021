@@ -143,7 +143,6 @@ namespace Warpweb.WebLayer
                     policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.CheckInAdmin)));
                 options.AddPolicy("TicketAdmin", policy =>
                     policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.TicketAdmin)));
-
             });
 
             services.AddTransient<IAuthorizationHandler, CrewPermissionHandler>();
@@ -151,9 +150,9 @@ namespace Warpweb.WebLayer
             
             services.Configure<IdentityOptions>(options =>
             {
-                //password settings. M? oppdateres
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 8;
+                //password settings. Må oppdateres
+                options.Password.RequireDigit = false; //settes til true senere. Alle testpassord er uten tall
+                options.Password.RequiredLength = 10; //14 er korrekt
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
@@ -164,7 +163,7 @@ namespace Warpweb.WebLayer
                 options.Lockout.MaxFailedAccessAttempts = 5000;
                 //User settings
                 options.User.RequireUniqueEmail = true;
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ1234567890-_.@+-"; //Husk å teste for æøå og + - i brukernavn
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_.@+-"; //Husk å teste for æøå og + - i brukernavn
                 options.SignIn.RequireConfirmedAccount = false; //Bør kanskje ikke være true?
             });
 

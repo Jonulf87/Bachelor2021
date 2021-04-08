@@ -146,12 +146,12 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpPost]
-        [Route("setadmin")]
-        public async Task<ActionResult> SetOrgAdminAsync([FromBody] OrganizerVm orgVm)
+        [Route("setadmin/{orgId}")]
+        public async Task<ActionResult> SetOrgAdminAsync(int orgId, [FromBody] string userId)
         {
             try
             {
-                await _organizerService.SetOrgAdminAsync(orgVm);
+                await _organizerService.SetOrgAdminAsync(orgId, userId);
             }
             catch (Exception)
             {

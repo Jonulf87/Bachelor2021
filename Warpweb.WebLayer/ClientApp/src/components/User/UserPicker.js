@@ -1,14 +1,16 @@
-﻿import { Dialog, ListItem, ListItemSecondaryAction, ListItemText, Button, DialogContent, DialogTitle, Grid, Typography } from '@material-ui/core';
+﻿import { Dialog, ListItem, ListItemSecondaryAction, ListItemText, Button, DialogContent, DialogTitle, Grid, Typography, CircularProgress } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { FixedSizeList } from 'react-window';
 import UserList from '../UserAdmin/UserList';
 
-export default function UserPicker({ dialogOpen, handleDialogClose }) {
+export default function UserPicker({ dialogOpen, handleDialogClose, setUserId }) {
 
     const [usersList, setUsersList] = useState([]);
     const [usersListIsReady, setUsersListIsReady] = useState(false);
+
     const { isAuthenticated, token } = useAuth();
+    
 
     useEffect(() => {
         const getUsers = async () => {
@@ -26,6 +28,10 @@ export default function UserPicker({ dialogOpen, handleDialogClose }) {
         getUsers();
     }, [isAuthenticated])
 
+
+    if (!usersListIsReady) {
+        return (<CircularProgress />)
+    }
 
     return (
         <>
@@ -47,9 +53,12 @@ export default function UserPicker({ dialogOpen, handleDialogClose }) {
                             width={300}
                         >
                         {({ index, style }) => (
-                            <div key={usersList[index].id} style={style}>
-                                    <Typography> {`${usersList[index].firstName} ${usersList[index].lastName}`} </Typography>
-                                <Button variant="contained" color="primary" >Velg</Button>
+                            <div key={usersList[index].id} style={style}  >
+                                <Typography> {`${usersList[index].firstName} ${usersList[index].lastName}`} </Typography>
+                                <Button variant="contained" color="primary" onClick={(e) => {
+                                    setUserId(usersList[index].id);
+                                    handleDialogClose();
+                                }} >Velg</Button>
                                 </div>
                             )}
                         </FixedSizeList>

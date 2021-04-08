@@ -2,8 +2,7 @@
 import { TextField, Button, Grid, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import queryString from 'query-string'
-import { Redirect } from 'react-router-dom';
+import queryString from 'query-string';
 
 import {  Link, Redirect } from 'react-router-dom';
 

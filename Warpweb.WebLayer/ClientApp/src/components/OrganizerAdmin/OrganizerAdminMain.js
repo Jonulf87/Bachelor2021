@@ -2,12 +2,15 @@
 import OrganizerAdminList from './OrganizerAdminList';
 import OrganizerAdminMenu from './OrganizerAdminMenu';
 import UserPicker from '../User/UserPicker';
+import useAuth from '../../hooks/useAuth';
 
 export default function OrganizerAdminMain() {
 
-    let [triggerUpdate, setTriggerUpdate] = useState(false);
-
+    const [triggerUpdate, setTriggerUpdate] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [orgId, setOrgId] = useState("");
+
+    const { isAuthenticated, token } = useAuth();
 
     const updateList = () => {
         setTriggerUpdate(oldValue => !oldValue);
@@ -21,12 +24,30 @@ export default function OrganizerAdminMain() {
         setDialogOpen(false);
     }
 
+    const addOrgAdmin = async (userId) => {
+        if (isAuthenticated) {
+            const response = await fetch(`/api/tenants/setadmin/${orgId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(userId)
+            });
+            
+            updateList();
+        }
+    }
+
+
+    
+
 
     return (
         <>
             <OrganizerAdminMenu updateList={updateList} />
-            <OrganizerAdminList triggerUpdate={triggerUpdate} handleDialogOpen={handleDialogOpen} />
-            <UserPicker dialogOpen={dialogOpen} handleDialogClose={handleDialogClose} /> 
+            <OrganizerAdminList triggerUpdate={triggerUpdate} handleDialogOpen={handleDialogOpen} setOrgId={setOrgId} />
+            <UserPicker dialogOpen={dialogOpen} handleDialogClose={handleDialogClose} setUserId={addOrgAdmin} /> 
         </>
 
     )

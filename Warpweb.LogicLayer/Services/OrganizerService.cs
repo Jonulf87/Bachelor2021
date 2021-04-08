@@ -155,14 +155,14 @@ namespace Warpweb.LogicLayer.Services
             return null;
         }
 
-        public async Task SetOrgAdminAsync(OrganizerVm orgVm)
+        public async Task SetOrgAdminAsync(int orgId, string userId)
         {
             var existingOrg = await _dbContext.Organizers
-                .Where(a => a.Id == orgVm.Id)
+                .Where(a => a.Id == orgId)
                 .Include(a => a.Admins)
                 .SingleOrDefaultAsync();
 
-            var userToBeAdmin = await _userManager.FindByIdAsync(orgVm.AdminUserId);
+            var userToBeAdmin = await _userManager.FindByIdAsync(userId);
 
             existingOrg.Admins.Add(userToBeAdmin);
             await _dbContext.SaveChangesAsync();

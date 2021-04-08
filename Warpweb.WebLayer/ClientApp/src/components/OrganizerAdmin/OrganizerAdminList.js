@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import AdminsList from './AdminsList';
 
-export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen }) {
+export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, setOrgId }) {
 
     const useStyles = makeStyles((theme) => ({
         grid: {
@@ -92,7 +92,7 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen }) 
         renderExpandableRow: (rowData, rowMeta) => {
 
 
-            console.log(organizerContact);
+            
             return (
                 <>
                     <TableRow>
@@ -157,6 +157,7 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen }) 
         onRowExpansionChange: (curExpanded) => {
 
             const orgIdCurrentRow = organizerDataList[curExpanded[0].dataIndex].id;
+            setOrgId(orgIdCurrentRow);
             const getContact = async () => {
                 if (isAuthenticated) {
                     const response = await fetch(`/api/tenants/getcontact/${orgIdCurrentRow}`, {
