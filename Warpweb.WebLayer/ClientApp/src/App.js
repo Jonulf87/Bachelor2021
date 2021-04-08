@@ -69,6 +69,9 @@ export default function App(props) {
             flexGrow: 1,
             padding: theme.spacing(3),
         },
+        link: {
+            textDecoration: 'none'
+        },
     }));
 
     const { window } = props;
@@ -121,7 +124,7 @@ export default function App(props) {
                                     }}
                                 >
                                     <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <Typography component={Link} to="/"   variant="h4" noWrap >
+                                        <Typography component={Link} to="/" className={classes.link}  variant="h4" noWrap >
                                             Warpweb
                                         </Typography>
                                     </div>
@@ -139,7 +142,7 @@ export default function App(props) {
                                 >
 
                                     <div className={classes.toolbar} background="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <Typography component={Link} to="/"   variant="h4" noWrap >
+                                        <Typography component={Link} to="/" color="primary"  variant="h4" noWrap >
                                             Warpweb
                                         </Typography>
                                     </div>
