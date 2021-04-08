@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
-import { TextField, Button, Grid, Container,Paper } from '@material-ui/core';
+import { TextField, Button, Grid, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Redirect } from 'react-router-dom';
+import {  Link, Redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 import PopupWindow from '../PopupWindow/PopupWindow';
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UserLogin() {
-
+    
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
@@ -76,7 +76,7 @@ export default function UserLogin() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={4}>
                         {/*Logginn knapp*/}
                         <Button
                             variant="contained"
@@ -86,6 +86,9 @@ export default function UserLogin() {
                         >
                             Logg inn
                         </Button>
+                    </Grid>
+                    <Grid item xs={8}>
+                    <Typography variant="body1" >Ingen bruker? <Link to="/register">Registrer deg her</Link></Typography>
                     </Grid>
                 </Grid>
                 </form>
