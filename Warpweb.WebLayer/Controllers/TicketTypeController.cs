@@ -26,7 +26,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns all ticket types
         /// </summary>
         [HttpGet]
-        public async Task<List<TicketTypeListVm>> GetTicketTypes()
+        public async Task<List<TicketTypeListVm>> GetTicketTypesAsync()
         {
             return await _ticketTypeService.GetTicketTypesAsync();
         }
@@ -36,7 +36,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="id"></param>  
         [HttpGet("{id}")]
-        public async Task<ActionResult<TicketTypeVm>> GetTicketType(int id)
+        public async Task<ActionResult<TicketTypeVm>> GetTicketTypeAsync(int id)
         {
             return await _ticketTypeService.GetTicketTypeAsync(id);
         }
@@ -48,7 +48,7 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPost]
         [Route("createtickettype")]
         //[Authorize(Roles = "Admins")]
-        public async Task<ActionResult> CreateTicketType(TicketTypeVm ticketTypeVm)
+        public async Task<ActionResult> CreateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
 
             try
@@ -68,7 +68,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="ticketTypeVm"></param> 
         [HttpPut]
-        public async Task<ActionResult> UpdateTicketType(TicketTypeVm ticketTypeVm)
+        public async Task<ActionResult> UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="ticketTypeVm"></param> 
         [HttpDelete]
-        public async Task<ActionResult> DeleteTicketType(TicketTypeVm ticketTypeVm)
+        public async Task<ActionResult> DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             try
             {

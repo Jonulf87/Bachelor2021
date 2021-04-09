@@ -25,7 +25,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns all crew roles
         /// </summary>
         [HttpGet]
-        public async Task<List<CrewRoleListVm>> GetCrewRoles()
+        public async Task<List<CrewRoleListVm>> GetCrewRolesAsync()
         {
             return await _crewroleService.GetCrewRolesAsync();
         }
@@ -35,7 +35,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="id"></param> 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CrewRoleVm>> GetCrewRole(int id)
+        public async Task<ActionResult<CrewRoleVm>> GetCrewRoleAsync(int id)
         {
             return await _crewroleService.GetCrewRoleAsync(id);
         }
@@ -45,7 +45,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="crewroleVm"></param> 
         [HttpPost]
-        public async Task<ActionResult<CrewRoleVm>> CreateCrewRole(CrewRoleVm crewroleVm)
+        public async Task<ActionResult<CrewRoleVm>> CreateCrewRoleAsync(CrewRoleVm crewroleVm)
         {
             int crewRoleId;
 
@@ -67,7 +67,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="crewroleVm"></param> 
         [HttpPut]
-        public async Task<ActionResult> UpdateCrewRole(CrewRoleVm crewroleVm)
+        public async Task<ActionResult> UpdateCrewRoleAsync(CrewRoleVm crewroleVm)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="crewroleVm"></param> 
         [HttpDelete]
-        public async Task<ActionResult> DeleteCrewRole(CrewRoleVm crewroleVm)
+        public async Task<ActionResult> DeleteCrewRoleAsync(CrewRoleVm crewroleVm)
         {
             try
             {

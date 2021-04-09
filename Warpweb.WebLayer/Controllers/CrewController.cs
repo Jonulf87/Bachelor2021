@@ -28,7 +28,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns all crews
         /// </summary>
         [HttpGet]
-        public async Task<List<CrewListVm>> GetCrews()
+        public async Task<List<CrewListVm>> GetCrewsAsync()
         {
             return await _crewService.GetCrewsAsync();
         }
@@ -38,7 +38,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="id"></param> 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CrewVm>> GetCrew(int id)
+        public async Task<ActionResult<CrewVm>> GetCrewAsync(int id)
         {
             return await _crewService.GetCrewAsync(id);
         }
@@ -49,7 +49,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="crewVm"></param> 
         [HttpPost]
         [Authorize(Policy = "CrewAdmin")]
-        public async Task<ActionResult<CrewVm>> CreateCrew(CrewVm crewVm)
+        public async Task<ActionResult<CrewVm>> CreateCrewAsync(CrewVm crewVm)
         {
             int crewId;
 
@@ -72,7 +72,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="crewVm"></param> 
         [HttpPut]
         [Authorize(Policy = "CrewAdmin")]
-        public async Task<ActionResult> UpdateCrew(CrewVm crewVm)
+        public async Task<ActionResult> UpdateCrewAsync(CrewVm crewVm)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="crewVm"></param> 
         [HttpDelete]
         [Authorize(Policy = "CrewAdmin")]
-        public async Task<ActionResult> DeleteCrew(CrewVm crewVm)
+        public async Task<ActionResult> DeleteCrewAsync(CrewVm crewVm)
         {
             try
             {
