@@ -25,4 +25,3 @@ namespace Warpweb.DataAccessLayer.Models
         TicketAdmin = 2
     }
 }
-
