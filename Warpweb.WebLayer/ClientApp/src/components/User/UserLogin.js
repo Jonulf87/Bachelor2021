@@ -49,9 +49,18 @@ export default function UserLogin(props) {
         return (<Redirect to={'/user'} />)
     }
 
+    const showErrors = (errors) => {
+        if (Array.isArray(errors)) {
+             return errors.map(error => (<p key="">{error}</p>));
+        }
+        else {
+            return "Ugyldig brukernavn eller passord";
+        }
+    }
+
     return (
         <>
-            <PopupWindow open={open} onClose={() => setOpen(false)} text={errors.map(error => (<p key="">{error}</p>))} />
+            <PopupWindow open={open} onClose={() => setOpen(false)} text={showErrors(errors)} />
             <Container className={classes.container} maxWidth="xs">
             <form>
                     <Grid container spacing={2} alignContent="center">
