@@ -7,6 +7,7 @@ import { Divider, Typography} from '@material-ui/core';
 
 import AdminMainMenu from './AdminMainMenu';
 import UserMainMenu from './UserMainMenu';
+import CrewMainMenu from './CrewMainMenu';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,6 +46,8 @@ export default function MainMenu() {
         <UserMainMenu />
         <Divider />
         <AdminMainMenu />
+        <Divider />
+        <CrewMainMenu />
         </>
     )
 }

@@ -97,12 +97,12 @@ const rows = [
                     </div>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Toolbar>
-                        <Typography variant="h6" component="h3" >
-                        Billettyper
-                        </Typography>
-                    </Toolbar>
-                    <TicketTypeTable />
+                    <Typography variant="h6" component="h3" >
+                        Billetter
+                    </Typography>
+                    <Typography variant="h7">
+                        Kjøp meg
+                    </Typography>
                 </Grid>
             </Grid>
         </>
