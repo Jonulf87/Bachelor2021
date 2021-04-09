@@ -72,7 +72,7 @@ export default function AdminMainMenu() {
 
             {pullisis.some(a => a === 1) &&
 
-            (<ListItem button button component={Link} to='/crew'>
+            (<ListItem button button component={Link} to='/crewadmin'>
                 <ListItemIcon><GroupIcon /></ListItemIcon>
                 <ListItemText primary='Crewadmin' />
             </ListItem>)
