@@ -27,11 +27,11 @@ export default function CreateVenue() {
 
     // Create constants for each field
     const [enteredName, setEnteredName] = useState('');
-    const [enteredContactId, setEnteredContactId] = useState('');
     const [enteredAddress, setEnteredAddress] = useState('');
     const [enteredPostalCode, setEnteredPostalCode] = useState('');
-    const [enteredArea, setEnteredArea] = useState('');
-    const [enteredCapacity, setEnteredCapacity] = useState('');
+    const [enteredContactName, setEnteredContactName] = useState('');
+    const [enteredContactEMail, setEnteredContactEMail] = useState('');
+    const [enteredContactPhone, setEnteredContactPhone] = useState('');
 
     const { isAuthenticated, token } = useAuth();
 
@@ -55,9 +55,9 @@ export default function CreateVenue() {
             'VenueName': enteredName,
             'VenueAddress': enteredAddress,
             'PostalCode': enteredPostalCode,
-            'VenueAreaAvailable': enteredArea,
-            'VenueCapacity': enteredCapacity,
-            'ContactId': enteredContactId
+            'ContactName': enteredContactName,
+            'ContactEMail': enteredContactEMail,
+            'ContactPhone': enteredContactPhone
         }
 
         const response = await fetch('/api/venues', {
@@ -76,11 +76,11 @@ export default function CreateVenue() {
 
             alert("Created");
             setEnteredName('');
-            setEnteredContactId('');
             setEnteredAddress('');
             setEnteredPostalCode('');
-            setEnteredArea('');
-            setEnteredCapacity('');
+            setEnteredContactName('');
+            setEnteredContactEMail('');
+            setEnteredContactPhone('');
         }
 
         setIsSending(false);
@@ -91,24 +91,6 @@ export default function CreateVenue() {
         console.log("submit");
         sendRequest();
     };
-
-    /*
-    const loadContacts = async () => {
-        const res = await fetch("", {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            method: 'GET',
-        });
-        setData(await res.json());
-    };
-
-    useEffect(() => {
-        loadContacts();
-        return () => { };
-    }, []);
-    */
 
     return (
         <>
@@ -147,12 +129,12 @@ export default function CreateVenue() {
                         <div className="cell">
                             <TextValidator
                                 onChange={event => {
-                                    setEnteredContactId(event.target.value);
+                                    setEnteredContactName(event.target.value);
                                 }}
                                 label="Kontaktperson"
                                 placeholder="Kontaktperson"
-                                name="contactId"
-                                value={enteredContactId}
+                                name="contactperson"
+                                value={enteredContactName}
                                 required
                                 validators={['required']}
                                 errorMessages={['Kontaktperson må oppgis']}
@@ -166,6 +148,52 @@ export default function CreateVenue() {
                             />
                         </div>
                     </div>
+
+                    <div className="row">
+                        <div className="cell">
+                            <TextValidator
+                                onChange={event => {
+                                    setEnteredContactEMail(event.target.value);
+                                }}
+                                label="Kontakt epost"
+                                placeholder="Kontakt epost"
+                                name="contactemail"
+                                value={enteredContactEMail}
+                                required
+                                validators={['required']}
+                                errorMessages={['Epost må oppgis']}
+                                style={{ margin: 8 }}
+                                fullWidth
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="outlined"
+                            />
+                        </div>
+                        <div className="cell">
+                            <TextValidator
+                                onChange={event => {
+                                    setEnteredContactPhone(event.target.value);
+                                }}
+                                label="Kontakt tlf."
+                                placeholder="Kontakt tlf."
+                                name="contactphone"
+                                value={enteredContactPhone}
+                                required
+                                validators={['required']}
+                                errorMessages={['Telefonnummer må oppgis']}
+                                style={{ margin: 8 }}
+                                fullWidth
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="outlined"
+                            />
+                        </div>
+                    </div>
+
                     <div className="row">
                         <div className="cell">
                             <TextValidator
@@ -209,50 +237,7 @@ export default function CreateVenue() {
                                 variant="outlined"
                             />
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="cell">
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredArea(event.target.value);
-                                }}
-                                label="Areal"
-                                placeholder="Tilgjengelig areal"
-                                name="area"
-                                value={enteredArea}
-                                required
-                                validators={['required', 'isNumber', 'minNumber:1']}
-                                errorMessages={['Areal må oppgis', 'Areal må være et positivt tall', 'Areal må være et positivt tall']}
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
-                            />
-                        </div>
-                        <div className="cell">
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredCapacity(event.target.value);
-                                }}
-                                label="Kapasitet"
-                                placeholder="Kapasitet (plasser)"
-                                name="capacity"
-                                value={enteredCapacity}
-                                required
-                                validators={['required', 'isNumber', 'minNumber:1']}
-                                errorMessages={['Kapasitet må oppgis', 'Kapasitet må være et positivt tall', 'Kapasitet må være et positivt tall']}
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
-                            />
-                        </div>
+                    
                     </div>
                 </div>
 

@@ -24,7 +24,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Return all tickets
         /// </summary>
         [HttpGet]
-        public async Task<List<TicketListVm>> GetTickets()
+        public async Task<List<TicketListVm>> GetTicketsAsync()
         {
             return await _ticketService.GetTicketsAsync();
         }
@@ -34,7 +34,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="id"></param> 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TicketVm>> GetTicket(int id)
+        public async Task<ActionResult<TicketVm>> GetTicketAsync(int id)
         {
             return await _ticketService.GetTicketAsync(id);
         }
@@ -45,7 +45,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="ticketVm"></param> 
         [HttpPost]
         [Authorize(Roles = "Users")]
-        public async Task<ActionResult<TicketVm>> CreateTicket(TicketVm ticketVm)
+        public async Task<ActionResult<TicketVm>> CreateTicketAsync(TicketVm ticketVm)
         {
             int ticketId;
             try
@@ -67,7 +67,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="ticketVm"></param> 
         [HttpPut]
         [Authorize(Roles = "Admins")]
-        public async Task<ActionResult> UpdateTicket(TicketVm ticketVm)
+        public async Task<ActionResult> UpdateTicketAsync(TicketVm ticketVm)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="ticketVm"></param> 
         [HttpDelete]
-        public async Task<ActionResult> DeleteTicket(TicketVm ticketVm)
+        public async Task<ActionResult> DeleteTicketAsync(TicketVm ticketVm)
         {
             try
             {

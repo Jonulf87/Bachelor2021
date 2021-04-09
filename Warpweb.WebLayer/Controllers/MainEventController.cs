@@ -30,7 +30,7 @@ namespace Warpweb.WebLayer.Controllers
         [HttpGet]
         [Route("eventslist")]
         [AllowAnonymous]
-        public async Task<List<MainEventListVm>> GetMainEvents()
+        public async Task<List<MainEventListVm>> GetMainEventsAsync()
         {
             return await _mainEventService.GetMainEventsAsync();
         }
@@ -41,7 +41,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="id"></param>  
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<MainEventVm>> GetMainEvent(int id)
+        public async Task<ActionResult<MainEventVm>> GetMainEventAsync(int id)
         {
             var mainevent = await _mainEventService.GetMainEventAsync(id);
 
@@ -59,7 +59,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="mainEventVm"></param>  
         [HttpPost]
         [Route("createmainevent")]
-        public async Task<ActionResult> CreateMainEvent(MainEventVm mainEventVm)
+        public async Task<ActionResult> CreateMainEventAsync(MainEventVm mainEventVm)
         {
             //Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.
             var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -86,7 +86,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="mainEventVm"></param>  
         [HttpPut]
-        public async Task<ActionResult> UpdateMainEvent(MainEventVm mainEventVm)
+        public async Task<ActionResult> UpdateMainEventAsync(MainEventVm mainEventVm)
         {
             var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -123,7 +123,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="maineventVm"></param>  
         [HttpDelete]
-        public async Task<ActionResult> DeleteMainEvent(MainEventVm maineventVm)
+        public async Task<ActionResult> DeleteMainEventAsync(MainEventVm maineventVm)
         {
             try
             {

@@ -25,7 +25,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("venueslist")]
-        public async Task<List<VenueListVm>> GetVenues()
+        public async Task<List<VenueListVm>> GetVenuesAsync()
         {
             return await _venueService.GetVenuesAsync();
         }
@@ -35,7 +35,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("organizervenueslist")]
-        public async Task<List<VenueListVm>> GetOrganizerVenues()
+        public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
             return await _venueService.GetOrganizerVenuesAsync();
         }
@@ -45,7 +45,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="id"></param>  
         [HttpGet("{id}")]
-        public async Task<ActionResult<VenueVm>> GetVenue(int id)
+        public async Task<ActionResult<VenueVm>> GetVenueAsync(int id)
         {
             return await _venueService.GetVenueAsync(id);
         }
@@ -55,7 +55,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="venueVm"></param>  
         [HttpPost]
-        public async Task<ActionResult<VenueVm>> CreateVenue(VenueVm venueVm)
+        public async Task<ActionResult<VenueVm>> CreateVenueAsync(VenueVm venueVm)
         {
             int venueId;
 
@@ -111,7 +111,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="venueVm"></param>  
         [HttpPut]
-        public async Task<ActionResult> UpdateVenue(VenueVm venueVm)
+        public async Task<ActionResult> UpdateVenueAsync(VenueVm venueVm)
         {
             try
             {

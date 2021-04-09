@@ -29,7 +29,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("gettenants")]
-        public async Task<List<OrganizerListVm>> GetOrganizers()
+        public async Task<List<OrganizerListVm>> GetOrganizersAsync()
         {
             var organizers = await _organizerService.GetOrganizersAsync();
             return organizers;
@@ -40,7 +40,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="id"></param> 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrganizerVm>> GetOrganizer(int id)
+        public async Task<ActionResult<OrganizerVm>> GetOrganizerAsync(int id)
         {
             var organizer = await _organizerService.GetOrganizerAsync(id);
             
@@ -58,7 +58,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="organizerVm"></param> 
         [HttpPost]
         [Route("addorganizer")]
-        public async Task<ActionResult> CreateOrganizer(OrganizerVm organizerVm)
+        public async Task<ActionResult> CreateOrganizerAsync(OrganizerVm organizerVm)
         {
             int orgId;
 
@@ -80,7 +80,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="organizerVm"></param> 
         [HttpPut]
-        public async Task<ActionResult> UpdateOrganizer(OrganizerVm organizerVm)
+        public async Task<ActionResult> UpdateOrganizerAsync(OrganizerVm organizerVm)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="organizerVm"></param> 
         [HttpDelete]
-        public async Task<ActionResult> DeleteOrganizer(OrganizerVm organizerVm)
+        public async Task<ActionResult> DeleteOrganizerAsync(OrganizerVm organizerVm)
         {
             try
             {
