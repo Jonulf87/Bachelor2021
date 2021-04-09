@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +27,8 @@ namespace Warpweb.LogicLayer.Services
             return await _dbContext.Crews
                 .Select(a => new CrewListVm
                 {
-                    CrewId = a.Id,
-                    CrewName = a.Name,
+                    Id = a.Id,
+                    Name = a.Name,
                 })
                 .ToListAsync();
         }
@@ -105,7 +106,33 @@ namespace Warpweb.LogicLayer.Services
             return existingCrew.Id;
         }
 
-        // Restrict to SuperAdmin
+        public async Task<List<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
+        {
+            var crew = await _dbContext.Crews
+                .Where(a => a.Id == crewId)
+                .Include(a => a.Users)
+                .ThenInclude(a => a.ApplicationUser)
+                .SingleOrDefaultAsync();
+
+            if(crew == null)
+            {
+                throw new CrewDoesNotExistException();
+            }
+
+            return crew.Users
+                .Select(a => new CrewMembersListVm
+                {
+                    Id = a.ApplicationUserId,
+                    Name = a.ApplicationUser.FirstName + " " + a.ApplicationUser.LastName,
+                    EMail = a.ApplicationUser.Email,
+                    Phone = a.ApplicationUser.PhoneNumber,
+                    Comment = a.Comment,
+                    IsLeader = a.IsLeader
+
+                }).ToList();
+        }
+
+
         public async Task<int> DeleteCrewAsync(CrewVm crewVm)
         {
 

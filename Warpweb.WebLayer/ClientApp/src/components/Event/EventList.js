@@ -33,8 +33,10 @@ export default function EventList() {
 
     let [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
+
     const { isAuthenticated, token, refreshToken } = useAuth();
-    const { setCurrentEvent } = useCurrentEvent();
+    const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
+    
 
     let [expanded, setExpanded] = useState(false);
 
@@ -62,7 +64,9 @@ export default function EventList() {
                 body: JSON.stringify(expanded)
             });
             setCurrentEvent(eventsList.find(a => a.id === expanded).name);
-            refreshToken(0);
+            refreshToken(0, () => {
+                setCurrentEventChangeCompleteTrigger(oldValue => !oldValue);
+            });
         }
     }
 

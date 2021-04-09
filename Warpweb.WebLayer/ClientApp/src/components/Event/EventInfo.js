@@ -4,8 +4,8 @@ import useCurrentEvent from '../../hooks/useCurrentEvent';
 
 import {
     Card,
-    Divider, 
-    Drawer, 
+    Divider,
+    Drawer,
     Grid,
     Table,
     TableBody,
@@ -15,22 +15,22 @@ import {
     TableRow,
     Toolbar,
     Typography,
- } from '@material-ui/core';
+} from '@material-ui/core';
 
 
- function createData(name, basePrice, amountAvailable) {
-    return {name, basePrice, amountAvailable};
+function createData(name, basePrice, amountAvailable) {
+    return { name, basePrice, amountAvailable };
 }
 
 const rows = [
-    createData('Ukespass | EarlyBird',599,100),
-    createData('Ukespass | Forhåndskjøp',599,300),
-    createData('Ukespass | Kjøp under arrangement',599,300),
-    createData('Ukespass | Hele uken',100,100),
-    createData('VeteranGamer',849,300)   
+    createData('Ukespass | EarlyBird', 599, 100),
+    createData('Ukespass | Forhåndskjøp', 599, 300),
+    createData('Ukespass | Kjøp under arrangement', 599, 300),
+    createData('Ukespass | Hele uken', 100, 100),
+    createData('VeteranGamer', 849, 300)
 ];
 
- export default function EventInfo() {
+export default function EventInfo() {
     const [event, setEvent] = useState([]);
     const [ticketTypeList, setTicketTypeList] = useState(rows)
     const [isReady, setIsReady] = useState(false);
@@ -54,37 +54,37 @@ const rows = [
     }, []);
 
     function TicketTypeTable() {
-        return(
+        return (
             <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Billettype</TableCell>
-                                    <TableCell>Pris</TableCell>
-                                    <TableCell>Tilgjengelighet</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {ticketTypeList.map((ticketType) => (
-                                    <TableRow>
-                                        <TableCell>
-                                            {ticketType.name}
-                                        </TableCell>
-                                        <TableCell>
-                                            {ticketType.basePrice}
-                                        </TableCell>
-                                        <TableCell>
-                                            {ticketType.amountAvailable}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Billettype</TableCell>
+                            <TableCell>Pris</TableCell>
+                            <TableCell>Tilgjengelighet</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {ticketTypeList.map((ticketType) => (
+                            <TableRow key={ticketType.name}>
+                                <TableCell>
+                                    {ticketType.name}
+                                </TableCell>
+                                <TableCell>
+                                    {ticketType.basePrice}
+                                </TableCell>
+                                <TableCell>
+                                    {ticketType.amountAvailable}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </TableContainer>
         )
     }
 
-    
+
     return (
         <>
             <Grid container spacing={1}>
@@ -99,7 +99,7 @@ const rows = [
                 <Grid item xs={12} md={6}>
                     <Toolbar>
                         <Typography variant="h6" component="h3" >
-                        Billettyper
+                            Billettyper
                         </Typography>
                     </Toolbar>
                     <TicketTypeTable />

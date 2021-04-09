@@ -6,6 +6,8 @@ export const CurrentEventContext = React.createContext();
 const CurrentEventProvider = ({ children }) => {
 
     const [currentEvent, setCurrentEvent] = useState("");
+    const [currentEventChangeCompleteTrigger, setCurrentEventChangeCompleteTrigger] = useState(false);
+
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
@@ -25,7 +27,7 @@ const CurrentEventProvider = ({ children }) => {
     }, [isAuthenticated]);
 
 
-    return <CurrentEventContext.Provider value={{ currentEvent, setCurrentEvent }}>{children}</CurrentEventContext.Provider>;
+    return <CurrentEventContext.Provider value={{ currentEvent, setCurrentEvent, currentEventChangeCompleteTrigger, setCurrentEventChangeCompleteTrigger }}>{children}</CurrentEventContext.Provider>;
 
 };
 

@@ -7,6 +7,7 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int Id { get; set; }
         public bool IsLeader { get; set; }
+        public string Comment { get; set; }
 
         [ForeignKey("Crew")]
         public int CrewId { get; set; }

@@ -27,6 +27,17 @@ namespace Warpweb.LogicLayer.Services
             _roleManager = roleManager;
         }
 
+        public async Task<List<CrewPermissionType>> GetPoliciesAsync(string userId)
+        {
+            return await _dbContext.CrewUsers
+                .Where(a => a.ApplicationUserId == userId)
+                .Select(a => a.Crew)
+                .SelectMany(a => a.CrewPermissions)
+                .Select(a => a.PermissionType)
+                .Distinct()
+                .ToListAsync();
+        }
+
         public async Task<List<OrganizerListVm>> GetOrganizersUserIsAdminAtAsync(string userId)
         {
             return await _dbContext.Organizers

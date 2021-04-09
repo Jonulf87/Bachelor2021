@@ -15,7 +15,7 @@ export default function EventMain() {
         <>
 
             
-            <EventInfo />
+            {/*<EventInfo />*/}
             <EventList venuePosted={venuePosted} />
 
             {isOrgAdmin && <CreateEvent setVenuePosted={setVenuePosted} />}

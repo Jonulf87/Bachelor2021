@@ -12,7 +12,7 @@ const AuthProvider = ({ children }) => {
 
 
 
-    const refreshToken = (delay) => {
+    const refreshToken = (delay, callback) => {
 
         refreshTokenTimeoutId.current = setTimeout(async () => {
             const response = await fetch('/api/auth/refreshtoken', {
@@ -21,7 +21,6 @@ const AuthProvider = ({ children }) => {
 
             if (response.ok) {
                 const result = await response.json();
-                setIsAuthenticated(true);
                 setToken(result.token);
                 localStorage.setItem('currentUser', result.token);
                 const jwtToken = JSON.parse(atob(result.token.split('.')[1]));
@@ -39,12 +38,17 @@ const AuthProvider = ({ children }) => {
                 } else {
                     setRoles([])
                 }
+                setIsAuthenticated(true);
             } else {
                 setIsAuthenticated(false);
                 setToken(null);
                 setRoles([]);
                 localStorage.removeItem('currentUser');
                 setOrgAdmin(false);
+            }
+
+            if (callback) {
+                callback();
             }
         }, delay);
     }
@@ -64,7 +68,6 @@ const AuthProvider = ({ children }) => {
         if (response.ok) {
             localStorage.setItem("currentUser", result.token);
             setToken(result.token);
-            setIsAuthenticated(true);
 
 
             const jwtToken = JSON.parse(atob(result.token.split('.')[1]));
@@ -81,6 +84,7 @@ const AuthProvider = ({ children }) => {
                 setRoles([])
             }
 
+            setIsAuthenticated(true);
             refreshToken(timeout);
         }
         else {
@@ -139,8 +143,8 @@ const AuthProvider = ({ children }) => {
                 timeout = 0;
             }
             else {
-                setIsAuthenticated(true);
                 setToken(currentUser);
+                setIsAuthenticated(true);
             }
 
             refreshToken(timeout);

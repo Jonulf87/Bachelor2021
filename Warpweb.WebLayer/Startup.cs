@@ -24,6 +24,7 @@ using Microsoft.OpenApi.Models;
 using Warpweb.WebLayer.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Warpweb.WebLayer.AuthorizationHandlers;
+using Microsoft.Extensions.Logging;
 
 namespace Warpweb.WebLayer
 {
@@ -41,8 +42,9 @@ namespace Warpweb.WebLayer
         {
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
+            services.AddDbContext<ApplicationDbContext>(options => options
+                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+                .UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
             // Needed per service
@@ -125,12 +127,14 @@ namespace Warpweb.WebLayer
 
             services.AddSingleton(tokenValidationParameters);
 
-            services.AddAuthentication(options => {
+            services.AddAuthentication(options =>
+            {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(jwt => {
+            .AddJwtBearer(jwt =>
+            {
                 jwt.SaveToken = true;
                 jwt.TokenValidationParameters = tokenValidationParameters;
             });
@@ -147,7 +151,7 @@ namespace Warpweb.WebLayer
 
             services.AddTransient<IAuthorizationHandler, CrewPermissionHandler>();
             services.AddControllers();
-            
+
             services.Configure<IdentityOptions>(options =>
             {
                 //password settings. Må oppdateres
@@ -218,7 +222,7 @@ namespace Warpweb.WebLayer
             {
                 endpoints.MapControllers();
             });
-            
+
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = Path.Join(env.ContentRootPath, "ClientApp");

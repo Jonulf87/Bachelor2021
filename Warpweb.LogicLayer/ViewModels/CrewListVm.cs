@@ -2,7 +2,7 @@
 {
     public class CrewListVm
     {
-        public int CrewId { get; set; }
-        public string CrewName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

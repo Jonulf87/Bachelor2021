@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -14,14 +14,38 @@ import EventSeatIcon from '@material-ui/icons/EventSeat';
 import SettingsIcon from '@material-ui/icons/Settings';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
+import useAuth from '../../hooks/useAuth';
 
 export default function AdminMainMenu() {
 
-    const [expanded, setExpanded] = React.useState('');
+    const [pullisis, setPullisis] = useState([]);
 
-    const handleChange = (panel) => (event, newExpanded) => {
-        setExpanded(newExpanded ? panel : true);
-    };
+    const { currentEventChangeCompleteTrigger } = useCurrentEvent();
+    const { isAuthenticated, token, roles } = useAuth();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            const getPullisis = async () => {
+
+                const response = await fetch('/api/security/policies', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const result = await response.json();
+                setPullisis(result);
+                console.log(result);
+            }
+
+            getPullisis();
+        }
+        else {
+            setPullisis([]);
+        }
+    }, [currentEventChangeCompleteTrigger, isAuthenticated])
+
 
     return (
         <List>
@@ -46,10 +70,14 @@ export default function AdminMainMenu() {
                 <ListItemText primary='Arrangement' />
             </ListItem>
 
-            <ListItem button button component={Link} to='/crew'>
+            {pullisis.some(a => a === 1) &&
+
+            (<ListItem button button component={Link} to='/crew'>
                 <ListItemIcon><GroupIcon /></ListItemIcon>
                 <ListItemText primary='Crewadmin' />
-            </ListItem>
+            </ListItem>)
+            }
+
 
             <ListItem button button component={Link} to='/participant'>
                 <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
@@ -65,11 +93,12 @@ export default function AdminMainMenu() {
                 <ListItemIcon><AssignmentIcon /></ListItemIcon>
                 <ListItemText primary='Rapporter' />
             </ListItem>
-
-            <ListItem button button component={Link} to='/organizer'>
-                <ListItemIcon><AssignmentIcon /></ListItemIcon>
-                <ListItemText primary='Org. admin' />
-            </ListItem>
+            {roles.some(a => a === "Admin") &&
+                (<ListItem button button component={Link} to='/organizer'>
+                    <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                    <ListItemText primary='Org. admin' />
+                </ListItem>)
+            }
 
         </List>
     );

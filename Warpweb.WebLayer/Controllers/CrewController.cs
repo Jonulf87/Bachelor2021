@@ -28,6 +28,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns all crews
         /// </summary>
         [HttpGet]
+        [Route("allcrews")]
         public async Task<List<CrewListVm>> GetCrewsAsync()
         {
             return await _crewService.GetCrewsAsync();
@@ -104,6 +105,22 @@ namespace Warpweb.WebLayer.Controllers
             }
 
             return Ok(crewVm);
+        }
+
+        [HttpGet]
+        [Route("crewmembers/{crewId}")]
+        public async Task<ActionResult<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
+        {
+            try
+            {
+                var membersList = await _crewService.GetCrewMembersAsync(crewId);
+                return Ok(membersList);
+            }
+            catch (CrewDoesNotExistException)
+            {
+                return BadRequest("Crew eksisterer ikke");
+            }
+
         }
     }
 }
