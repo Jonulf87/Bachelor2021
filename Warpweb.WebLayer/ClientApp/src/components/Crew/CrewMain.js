@@ -1,12 +1,12 @@
 ﻿import React from 'react';
 import CrewInfo from './CrewInfo';
-import CrewAdmin from './CrewAdmin';
+import CrewAdmin from './CrewAdminMenu';
 
 export default function CrewMain() {
     return (
         <>
-            <CrewInfo />
             <CrewAdmin />
+            <CrewInfo />
         </>
 
     );

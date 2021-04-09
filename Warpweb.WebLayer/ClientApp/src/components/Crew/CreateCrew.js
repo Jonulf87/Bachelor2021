@@ -7,30 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 
-// Mock events
-const events = [
-    {
-        value: 'Warpzone',
-    },
-    {
-        value: 'The Gathering',
-    },
-    {
-        value: 'BygdeLAN',
-    },
-];
-
-const crewleaders = [
-    {
-        value: 'Ole Brum',
-    },
-    {
-        value: 'Peppa Gris',
-    },
-    {
-        value: 'Thomas Toget',
-    },
-];
 
 const useStyles = makeStyles((theme) => ({
     root: {

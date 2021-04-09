@@ -99,7 +99,7 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, se
                         <TableCell colSpan={1}>
                         </TableCell>
                         <TableCell colSpan={3}>
-                            <Typography >
+                            <Typography variant="h4" >
                                 Kontaktperson
                             </Typography>
 

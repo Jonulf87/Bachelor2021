@@ -13,21 +13,21 @@ namespace WarpTest.WebLayer.Controllers
     {
         private const string _descr = "New description";
 
-        [Test]
-        public async Task ShouldGetCrewRoles()
-        {
-            CrewRoleService crewRoleService = new CrewRoleService(_dbContext);
-            CrewRoleController crewRoleController = new CrewRoleController(crewRoleService);
+        //[Test]
+        //public async Task ShouldGetCrewRoles()
+        //{
+        //    CrewRoleService crewRoleService = new CrewRoleService(_dbContext);
+        //    CrewRoleController crewRoleController = new CrewRoleController(crewRoleService);
 
-            // 3 roles have been added in CreateInMemoryDatabase() in BaseTest
+        //    // 3 roles have been added in CreateInMemoryDatabase() in BaseTest
 
-            List<CrewRoleListVm> result = await crewRoleController.GetCrewRoles();
+        //    List<CrewRoleListVm> result = await crewRoleController.GetCrewRoles();
 
-            Assert.AreEqual(3, result.Count);
-            Assert.AreEqual(1, result[0].CrewRoleId);
-            Assert.AreEqual(2, result[1].CrewRoleId);
-            Assert.AreEqual(3, result[2].CrewRoleId);
-        }
+        //    Assert.AreEqual(3, result.Count);
+        //    Assert.AreEqual(1, result[0].CrewRoleId);
+        //    Assert.AreEqual(2, result[1].CrewRoleId);
+        //    Assert.AreEqual(3, result[2].CrewRoleId);
+        //}
 
         //[Test]
         //public async Task ShouldGetCrewRoleById()

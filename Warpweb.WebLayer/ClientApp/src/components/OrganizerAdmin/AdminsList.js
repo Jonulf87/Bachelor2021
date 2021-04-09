@@ -35,7 +35,7 @@ export default function AdminsList({ orgId, handleDialogOpen }) {
                 </TableCell>
 
                 <TableCell colSpan={1}>
-                    <h4>Admins</h4>
+                    <Typography variant="h4" >Admins</Typography>
                 </TableCell>
 
             </TableRow>

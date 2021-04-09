@@ -16,6 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MainMenu from './components/MainPageNavBar/MainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
 import CrewMain from './components/Crew/CrewMain';
+import CrewAdminMain from './components/Crew/CrewAdminMain';
 import EventMain from './components/Event/EventMain';
 import ParticipantMain from './components/Participant/ParticipantMain';
 import ReportMain from './components/Report/ReportMain';
@@ -141,7 +142,7 @@ export default function App(props) {
                             <Switch>
                                 <Route path='/user' component={UserMain} />
                                 <Route path='/venue' component={VenueMain} />
-                                <Route path='/crew' component={CrewMain} />
+                                <Route path='/crew' component={CrewAdminMain} />
                                 <Route path='/useradmin' component={UserAdminMain} />
                                 <Route path='/report' component={ReportMain} />
                                 <Route path='/event' component={EventMain} />
