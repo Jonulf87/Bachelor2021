@@ -147,6 +147,14 @@ namespace Warpweb.WebLayer
                     policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.CheckInAdmin)));
                 options.AddPolicy("TicketAdmin", policy =>
                     policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.TicketAdmin)));
+                options.AddPolicy("SeatMapAdmin", policy =>
+                    policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.SeatMapAdmin)));
+                options.AddPolicy("UserAdmin", policy =>
+                    policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.UserAdmin)));
+                options.AddPolicy("ReportAdmin", policy =>
+                    policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.ReportAdmin)));
+                options.AddPolicy("VenueAdmin", policy =>
+                    policy.Requirements.Add(new CrewPermissionRequirement(CrewPermissionType.VenueAdmin)));
             });
 
             services.AddTransient<IAuthorizationHandler, CrewPermissionHandler>();

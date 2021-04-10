@@ -22,6 +22,10 @@ namespace Warpweb.DataAccessLayer.Models
     {
         CheckInAdmin = 0,
         CrewAdmin = 1,
-        TicketAdmin = 2
+        TicketAdmin = 2,
+        SeatMapAdmin = 3,
+        UserAdmin = 4,
+        ReportAdmin = 5,
+        VenueAdmin = 6
     }
 }
