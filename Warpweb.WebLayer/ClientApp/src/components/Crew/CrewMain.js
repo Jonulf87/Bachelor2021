@@ -29,7 +29,8 @@ export default function CrewMain() {
             <Grid item xs={12} sm={6} lg={4}>
                 <Paper>Logg</Paper>
             </Grid>
-            <Grid item xs={12} sm={12} lg={12}>
+            <Divider />
+            <Grid item xs={12} sm={6} lg={12}>
                 <Paper>Nyheter, Annonsering, husker ikke nøyaktig</Paper>
             </Grid>
         </Grid>

@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from 'react';
+
+import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText, ListSubheader } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& ':{}
+    },
+    innerGrid: {
+
+    }
+}));
 
 export default function UserMainMenu() {
     const [crewMemberships, setCrewMemberships] = useState([]);
@@ -31,13 +42,13 @@ export default function UserMainMenu() {
     return (
         <List
         subheader={
-            <ListSubheader color="primary">
+            <ListSubheader color="secondary">
                 Mine Crew
             </ListSubheader>
         }
         >
             <ListItem button component={Link} to='/crew'>
-                <ListItemText primary='Et crew' />
+                <ListItemText color="secondary" primary='Et crew' />
             </ListItem>
             <ListItem button component={Link} to='/crew'>
                 <ListItemText primary='Annet Crew' />

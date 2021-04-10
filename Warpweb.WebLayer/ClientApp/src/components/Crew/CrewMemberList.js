@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, List, ListItem, ListItemText, ListSubheader } from '@material-ui/core';
+
+import { Typography, List, ListItem, ListItemText, ListSubheader, Toolbar } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
 export default function NavBarHeader() {
-
-    const [crewName, setCrewName] = useState("Crewcrew")
     const [crewMembers, setCrewMembers] = useState([])
     
     const { isAuthenticated, token } = useAuth();
@@ -30,12 +29,23 @@ export default function NavBarHeader() {
 
     return (
         <>
-            <Typography variant="h6" noWrap>
-                {crewName}
-            </Typography>
-            <Typography variant="h6" noWrap>
-                Krumedlemmer
-            </Typography>
+            <Toolbar>
+                <Typography variant="h6" component="h3" noWrap>
+                    Krumedlemmer
+                </Typography>
+            </Toolbar>
+            <List
+            subheader={
+            <ListSubheader color="primary">
+                Crewleder
+            </ListSubheader>
+            }
+            >
+                <ListItem>
+                    <ListItemText primary='Per ledersen' />
+                </ListItem>
+            </List>
+            
             <List
             subheader={
             <ListSubheader color="primary">
@@ -43,9 +53,11 @@ export default function NavBarHeader() {
             </ListSubheader>
             }
             >
+                {["Jan","Mari", "Tore", "Ingvald", "Janne"].map((crewMember) => (
                 <ListItem>
-                    <ListItemText primary='crew medlem' />
+                    <ListItemText primary={crewMember} />
                 </ListItem>
+                ))}
             </List>
         </>
     );
