@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Services;
+using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.WebLayer.Controllers
 {
@@ -31,5 +32,15 @@ namespace Warpweb.WebLayer.Controllers
 
             return Ok(policies);
         }
+
+        //wtf is going on here? Why is this not a task?
+        //[HttpGet]
+        //[Route("allpolicies")]
+        //public List<CrewPermissionsVm> GetAllPoliciesAsync()
+        //{
+        //    var policies = _securityService.GetAllPoliciesAsync();
+
+        //    return policies;
+        //}
     }
 }

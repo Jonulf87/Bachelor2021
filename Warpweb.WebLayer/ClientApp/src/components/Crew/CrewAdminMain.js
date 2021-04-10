@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import UserPicker from '../User/UserPicker';
-//import CrewAdminList from './CrewAdminList';
+import CrewAdminList from './CrewAdminList';
 import CrewAdminMenu from './CrewAdminMenu';
 
 export default function CrewAdminMain() {
@@ -36,7 +36,7 @@ export default function CrewAdminMain() {
     return (
         <>
             <CrewAdminMenu handleDialogOpen={handleDialogOpen} userAsCrewleader={userAsCrewleader} />
-            {/*<CrewAdminList />*/}
+            <CrewAdminList />
 
             <UserPicker dialogOpen={dialogOpen} handleDialogClose={handleDialogClose} setUserId={addCrewLeader } />
         </>

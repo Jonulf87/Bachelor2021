@@ -28,4 +28,5 @@ namespace Warpweb.DataAccessLayer.Models
         ReportAdmin = 5,
         VenueAdmin = 6
     }
+
 }

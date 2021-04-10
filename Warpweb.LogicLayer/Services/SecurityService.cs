@@ -38,6 +38,46 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        //public async Task<List<CrewPermissionsVm>> GetAllPoliciesAsync(int crewId)
+        //{
+        //    var enumValuesList = new List<CrewPermissionType>();
+
+
+        //    foreach (var itemType in Enum.GetValues(typeof(CrewPermissionType)))
+        //    {
+        //        enumValuesList.Add(new CrewPermissionType());
+        //    }
+        //    //Enum.GetValues(typeof(CrewPermissionType)).Cast<List<CrewPermissionType>>();
+
+
+        //    var permissionsCrewHas =
+        //        await _dbContext.CrewPermissions
+        //        .Where(a => a.CrewId == crewId)
+        //        .Select(a => a.PermissionType)
+        //        .ToListAsync();
+
+        //    var listToSend = new List<CrewPermissionsVm>();
+
+
+        //    foreach (var enumValue in enumValuesList)
+        //    {
+        //        foreach (var permissionCrewHas in permissionsCrewHas)
+        //        {
+        //            if (permissionCrewHas.Equals(enumValue))
+        //            {
+        //                listToSend.Add(new CrewPermissionsVm
+        //                {
+        //                    Name = Enum.GetName(typeof(CrewPermissionType), itemType),
+
+        //                })
+        //            }
+        //        }
+        //    }
+
+
+        //    return enumValuesList;
+        //}
+
         public async Task<List<OrganizerListVm>> GetOrganizersUserIsAdminAtAsync(string userId)
         {
             return await _dbContext.Organizers
@@ -70,7 +110,7 @@ namespace Warpweb.LogicLayer.Services
         {
             var userExists = await _userManager.FindByEmailAsync(user.EMail);
 
-            if(userExists != null)
+            if (userExists != null)
             {
                 throw new UserAlreadyExistsException();
             }
@@ -95,12 +135,12 @@ namespace Warpweb.LogicLayer.Services
 
             var result = await _userManager.CreateAsync(userDataToBeStored, user.Password);
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(a => a.Description)));
             }
 
-            if(!user.ParentPhoneNumber.IsNullOrEmpty())
+            if (!user.ParentPhoneNumber.IsNullOrEmpty())
             {
                 var parentToBeStored = new Guardian
                 {

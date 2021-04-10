@@ -6,17 +6,12 @@ import useAuth from '../../hooks/useAuth';
 
 export default function OrganizerAdminList({ triggerUpdate }) {
 
-    const useStyles = makeStyles((theme) => ({
-        grid: {
-            position: "static"
-        }
-    }
-    ));
-
     const { isAuthenticated, token } = useAuth();
 
     const [crewList, setCrewList] = useState([]);
+    const [crewLeader, setCrewLeader] = useState([])
     const [membersList, setMembersList] = useState([]);
+    const [crewPermissions, setCrewPermissions] = useState([]);
 
 
 
@@ -33,6 +28,7 @@ export default function OrganizerAdminList({ triggerUpdate }) {
                 setCrewList(result);
             }
         }
+
         getCrews();
     }, [isAuthenticated, triggerUpdate])
 
@@ -60,74 +56,116 @@ export default function OrganizerAdminList({ triggerUpdate }) {
         expandableRowsHeader: false,
         expandableRowsOnClick: true,
         isRowExpandable: (dataIndex, expandedRows) => {
-            //Må ha muithemeoverride for å fungere. se topp og warptag.
-            //if (dataIndex === 3 || dataIndex === 4) return false;
-
-            // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
             if (expandedRows.data.length >= 1 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
             return true;
         },
-        //rowsExpanded: [0],
         renderExpandableRow: (rowData, rowMeta) => {
-
-
-
             return (
                 <>
                     <TableRow>
                         <TableCell colSpan={1}>
                         </TableCell>
                         <TableCell colSpan={3}>
-                            <Typography variant="h4" >
-                                Kontaktperson
+                            <Typography variant="h6" >
+                                Arbeidslagsleder
                             </Typography>
 
                         </TableCell>
                     </TableRow>
                     <TableRow>
-
                         <TableCell colSpan={1}>
                         </TableCell>
-
-                        <TableCell>
-                            <Typography>Navn: </Typography>
-                        </TableCell>
-
-                        <TableCell colSpan={2}>
-                            {membersList.name}
-                        </TableCell>
-
-                    </TableRow>
-
-                    <TableRow >
-
                         <TableCell colSpan={1}>
+                            <Typography variant="subtitle1" >
+                                Navn
+                            </Typography>
                         </TableCell>
-
-                        <TableCell>
-                            <Typography>E-post: </Typography>
+                        <TableCell colSpan={1}>
+                            <Typography variant="subtitle1" >
+                                E-post
+                            </Typography>
                         </TableCell>
-
-                        <TableCell colSpan={2}>
-                            {membersList.eMail}
+                        <TableCell colSpan={1}>
+                            <Typography variant="subtitle1" >
+                                Telefon
+                            </Typography>
                         </TableCell>
-
+                        
                     </TableRow>
+
+                    {crewLeader.map((leader) => (
+                        <TableRow key={leader.id}>
+
+                            <TableCell colSpan={1}>
+                            </TableCell>
+
+                            <TableCell colSpan={1}>
+                                <Typography>{leader.name}</Typography>
+                            </TableCell>
+
+                            <TableCell colSpan={1}>
+                                {leader.eMail}
+                            </TableCell>
+
+                            <TableCell colSpan={1}>
+                                {leader.phone}
+                            </TableCell>
+
+                        </TableRow>
+
+                    ))}
 
                     <TableRow>
-
                         <TableCell colSpan={1}>
                         </TableCell>
+                        <TableCell colSpan={3}>
+                            <Typography variant="h6" >
+                                Arbeidslag
+                            </Typography>
 
-                        <TableCell>
-                            <Typography>Telefon: </Typography>
                         </TableCell>
-
-                        <TableCell colSpan={2}>
-                            {membersList.phone}
+                    </TableRow>
+                    <TableRow>
+                        <TableCell colSpan={1}>
+                        </TableCell>
+                        <TableCell colSpan={1}>
+                            <Typography variant="subtitle1" >
+                                Navn
+                            </Typography>
+                        </TableCell>
+                        <TableCell colSpan={1}>
+                            <Typography variant="subtitle1" >
+                                E-post
+                            </Typography>
+                        </TableCell>
+                        <TableCell colSpan={1}>
+                            <Typography variant="subtitle1" >
+                                Telefon
+                            </Typography>
                         </TableCell>
 
                     </TableRow>
+
+                    {membersList.map((member) => (
+                        <TableRow key={member.id}>
+
+                            <TableCell colSpan={1}>
+                            </TableCell>
+
+                            <TableCell colSpan={1}>
+                                <Typography>{member.name} </Typography>
+                            </TableCell>
+
+                            <TableCell colSpan={1}>
+                                {member.eMail}
+                            </TableCell>
+
+                            <TableCell colSpan={1}>
+                                {member.phone}
+                            </TableCell>
+
+                        </TableRow>
+                    ))}
 
                     
                 </>
@@ -136,22 +174,29 @@ export default function OrganizerAdminList({ triggerUpdate }) {
         onRowExpansionChange: (curExpanded) => {
 
             const crewIdCurrentRow = crewList[curExpanded[0].dataIndex].id;
-            
-            const getContact = async () => {
+
+            const getCrewLeaderAndMembers = async () => {
                 if (isAuthenticated) {
-                    const response = await fetch(`/api/crews/crewmembers/${crewIdCurrentRow}`, {
+                    const responseCrew = await fetch(`/api/crews/crewmembers/${crewIdCurrentRow}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
                     });
-                    const result = await response.json();
-                    setMembersList(result);
+                    const resultCrew = await responseCrew.json();
+                    setMembersList(resultCrew);
+
+                    const responseLeader = await fetch(`/api/crews/crewleaders/${crewIdCurrentRow}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const resultLeader = await responseLeader.json();
+                    setCrewLeader(resultLeader);
                 }
             }
-            getContact();
 
+            getCrewLeaderAndMembers();
         }
-        
     };
 
 

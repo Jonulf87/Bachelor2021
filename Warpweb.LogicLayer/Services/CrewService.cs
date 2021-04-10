@@ -132,6 +132,32 @@ namespace Warpweb.LogicLayer.Services
                 }).ToList();
         }
 
+        public async Task<List<CrewMembersListVm>> GetCrewLeaderAsync(int crewId)
+        {
+            var crew = await _dbContext.Crews
+                .Where(a => a.Id == crewId)
+                .Include(a => a.Users)
+                .ThenInclude(a => a.ApplicationUser)
+                .SingleOrDefaultAsync();
+
+            if (crew == null)
+            {
+                throw new CrewDoesNotExistException();
+            }
+
+            return crew.Users
+                .Where(a => a.IsLeader == true)
+                .Select(a => new CrewMembersListVm
+                {
+                    Id = a.ApplicationUserId,
+                    Name = a.ApplicationUser.FirstName + " " + a.ApplicationUser.LastName,
+                    EMail = a.ApplicationUser.Email,
+                    Phone = a.ApplicationUser.PhoneNumber,
+                    Comment = a.Comment,
+                    IsLeader = a.IsLeader
+
+                }).ToList();
+        }
 
         public async Task<int> DeleteCrewAsync(CrewVm crewVm)
         {

@@ -120,7 +120,21 @@ namespace Warpweb.WebLayer.Controllers
             {
                 return BadRequest("Crew eksisterer ikke");
             }
+        }
 
+        [HttpGet]
+        [Route("crewleaders/{crewId}")]
+        public async Task<ActionResult<CrewMembersListVm>> GetCrewLeaderAsync(int crewId)
+        {
+            try
+            {
+                var leaderList = await _crewService.GetCrewLeaderAsync(crewId);
+                return Ok(leaderList);
+            }
+            catch (CrewDoesNotExistException)
+            {
+                return BadRequest("Crew eksisterer ikke");                
+            }
         }
     }
 }
