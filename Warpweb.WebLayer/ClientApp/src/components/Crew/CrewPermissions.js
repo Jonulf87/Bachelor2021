@@ -24,20 +24,25 @@ export default function CrewPermissions({ crewId }) {
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
-        if (isAuthenticated) {
-            const response = await fetch('/api/security/allpolicies', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
-                }
-            });
-            const result = await response.json();
-            setAllPermissions(result);
+        const getPolicies = async () => {
+
+            if (isAuthenticated) {
+                const response = await fetch(`/api/security/allpolicies/${crewId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const result = await response.json();
+                setAllPermissions(result);
+                console.log(allPermissions);
+            }
         }
-    })
+        getPolicies();
+    }, [isAuthenticated])
 
     const classes = useStyles();
-   
+
 
 
 
@@ -45,7 +50,7 @@ export default function CrewPermissions({ crewId }) {
         <div className={classes.root}>
             <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">Tillatelser</FormLabel>
-                <FormGroup>
+                {/*<FormGroup>
 
 
                     <FormControlLabel
@@ -60,7 +65,7 @@ export default function CrewPermissions({ crewId }) {
                         control={<Checkbox checked={antoine} onChange={handleChange} name="antoine" />}
                         label="Antoine Llorca"
                     />
-                </FormGroup>
+                </FormGroup>*/}
                 <FormHelperText>Be careful</FormHelperText>
             </FormControl>
         </div>

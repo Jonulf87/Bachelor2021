@@ -18,6 +18,7 @@ namespace Warpweb.DataAccessLayer.Models
         //public bool LeaderOnlyPermission { get; set; } //true = kun leder får permission. Sannsynligvis ikke behov. Hvis det skal skilles mellom ledere og medlemmer sine tilganger kan dette implementeres senere.
     }
 
+    //Ved fjerning av rettiheter fra enum må det legges inn comment om å ikke bruke den verdien
     public enum CrewPermissionType
     {
         CheckInAdmin = 0,

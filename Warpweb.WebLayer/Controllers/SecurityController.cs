@@ -33,14 +33,13 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(policies);
         }
 
-        //wtf is going on here? Why is this not a task?
-        //[HttpGet]
-        //[Route("allpolicies")]
-        //public List<CrewPermissionsVm> GetAllPoliciesAsync()
-        //{
-        //    var policies = _securityService.GetAllPoliciesAsync();
+        [HttpGet]
+        [Route("allpolicies")]
+        public async Task<List<CrewPermissionsVm>> GetAllPoliciesAsync(int crewId)
+        {
+            var policies = await  _securityService.GetAllPoliciesAsync(crewId);
 
-        //    return policies;
-        //}
+            return policies;
+        }
     }
 }

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import CrewPermissions from './CrewPermissions';
 
 export default function OrganizerAdminList({ triggerUpdate }) {
 
@@ -167,7 +168,7 @@ export default function OrganizerAdminList({ triggerUpdate }) {
                         </TableRow>
                     ))}
 
-                    
+                    <CrewPermissions crewId={rowData[0]} />
                 </>
             );
         },

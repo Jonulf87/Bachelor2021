@@ -38,45 +38,27 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
-        //public async Task<List<CrewPermissionsVm>> GetAllPoliciesAsync(int crewId)
-        //{
-        //    var enumValuesList = new List<CrewPermissionType>();
+        public async Task<List<CrewPermissionsVm>> GetAllPoliciesAsync(int crewId)
+        {
 
+            var crewPermissionTypes = Enum.GetValues(typeof(CrewPermissionType)).Cast<CrewPermissionType>().ToList();
 
-        //    foreach (var itemType in Enum.GetValues(typeof(CrewPermissionType)))
-        //    {
-        //        enumValuesList.Add(new CrewPermissionType());
-        //    }
-        //    //Enum.GetValues(typeof(CrewPermissionType)).Cast<List<CrewPermissionType>>();
+            var permissionsCrewHas =
+                await _dbContext.CrewPermissions
+                .Where(a => a.CrewId == crewId)
+                .Select(a => a.PermissionType)
+                .ToListAsync();
 
+            var listToSend = crewPermissionTypes
+                .Select(a => new CrewPermissionsVm
+                {
+                    Name = a.ToString(),
+                    Value = (int)a,
+                    CrewHasPermission = permissionsCrewHas.Contains(a)
+                }).ToList();
 
-        //    var permissionsCrewHas =
-        //        await _dbContext.CrewPermissions
-        //        .Where(a => a.CrewId == crewId)
-        //        .Select(a => a.PermissionType)
-        //        .ToListAsync();
-
-        //    var listToSend = new List<CrewPermissionsVm>();
-
-
-        //    foreach (var enumValue in enumValuesList)
-        //    {
-        //        foreach (var permissionCrewHas in permissionsCrewHas)
-        //        {
-        //            if (permissionCrewHas.Equals(enumValue))
-        //            {
-        //                listToSend.Add(new CrewPermissionsVm
-        //                {
-        //                    Name = Enum.GetName(typeof(CrewPermissionType), itemType),
-
-        //                })
-        //            }
-        //        }
-        //    }
-
-
-        //    return enumValuesList;
-        //}
+            return listToSend;
+        }
 
         public async Task<List<OrganizerListVm>> GetOrganizersUserIsAdminAtAsync(string userId)
         {
