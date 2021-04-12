@@ -34,12 +34,20 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         [HttpGet]
-        [Route("allpolicies")]
+        [Route("allpolicies/{crewId}")]
         public async Task<List<CrewPermissionsVm>> GetAllPoliciesAsync(int crewId)
         {
-            var policies = await  _securityService.GetAllPoliciesAsync(crewId);
+            var policies = await _securityService.GetAllPoliciesAsync(crewId);
 
             return policies;
+        }
+
+        [HttpPost]
+        [Route("setpolicies/{crewId}")]
+        public async Task<ActionResult> SetPoliciesAsync([FromBody] List<CrewPermissionsVm> permissions, int crewId)
+        {
+            await _securityService.SetPoliciesAsync(permissions, crewId);
+            return Ok();
         }
     }
 }
