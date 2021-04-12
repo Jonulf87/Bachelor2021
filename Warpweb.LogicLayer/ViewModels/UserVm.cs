@@ -19,8 +19,9 @@ namespace Warpweb.LogicLayer.ViewModels
         public string LastName { get; set; }
 
         [Required]
-
+        [RegularExpression(@"^[0-9]{8}$", ErrorMessage = "Ugyldig telefonnummer")]
         public string PhoneNumber { get; set; }
+
         [Required]
         public string Address { get; set; }
 
@@ -53,6 +54,7 @@ namespace Warpweb.LogicLayer.ViewModels
         [RegularExpression(@"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$", ErrorMessage = "Ugyldig etternavn")]
         public string ParentLastName { get; set; }
 
+        [RegularExpression(@"^[0-9]{8}$", ErrorMessage = "Ugyldig telefonnummer")]
         public string ParentPhoneNumber { get; set; }
 
         [DataType(DataType.EmailAddress)]

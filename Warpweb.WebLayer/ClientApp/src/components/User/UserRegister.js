@@ -270,7 +270,7 @@ export default function UserRegister() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 validators={['required', 'minStringLength:10', 'matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})']}
                                 errorMessages={['Passord må oppgis', 'Passord må bestå av minst 10 tegn', 'Passord må bestå av minst 10 tegn']}
-                                // matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{14,}) - Regex for 14 tegn, både store og små bokstaver og symboler
+                                // matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{14,}) - Regex for 14 tegn - sifre, både store og små bokstaver og symboler
                             />
                         </Grid>
                         <Grid item xs={12} >{/*Input telefon*/}
@@ -282,7 +282,7 @@ export default function UserRegister() {
                                 required
                                 value={phoneNumber}
                                 onChange={(e) => setPhoneNumber(e.target.value)}
-                                validators={['required', 'isNumber']}
+                                validators={['required', 'isNumber', 'max']}
                                 errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
                             />
                         </Grid>{/*Input adresse og postnummer*/}
@@ -383,8 +383,8 @@ export default function UserRegister() {
                                         required
                                         value={parentPhoneNumber}
                                         onChange={(e) => setParentPhoneNumber(e.target.value)}
-                                        validators={['required', 'isNumber']}
-                                        errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
+                                        validators={['required', 'matchRegexp:^[0-9]{8}$']}
+                                    errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
                                     />
                                 </Grid>
                                 <Grid item xs={12} >
