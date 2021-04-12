@@ -282,7 +282,7 @@ export default function UserRegister() {
                                 required
                                 value={phoneNumber}
                                 onChange={(e) => setPhoneNumber(e.target.value)}
-                                validators={['required', 'isNumber', 'max']}
+                                validators={['required', 'matchRegexp:^[0-9]{8}$']}
                                 errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
                             />
                         </Grid>{/*Input adresse og postnummer*/}
