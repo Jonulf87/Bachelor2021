@@ -1,40 +1,42 @@
 ﻿import React from 'react';
-import { Divider, Grid, Paper, Typography} from '@material-ui/core';
+import { Divider, Grid, Paper, Toolbar, Typography} from '@material-ui/core';
 
 import CrewInfo from './CrewInfo';
 import CrewAdmin from './CrewAdminMenu';
 import CrewMemberList from './CrewMemberList';
+import CrewPermissionList from './CrewPermissionList';
+import CrewLog from './CrewLog';
+import CrewNews from './CrewNews'
 
 
 export default function CrewMain() {
     return (
-        <>
-        <Grid
-        container
-        spacing={2}
-        >
-            <Grid item xs={12}>
-                <Typography variant="h4" component="h2">
-                    Crewnavn
-                </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} lg={4}> 
-                <Paper>
+        <Paper>
+            <Grid
+            container
+            spacing={2}
+            >
+                <Grid item xs={12}>
+                    <Toolbar>
+                        <Typography variant="h4" component="h2">
+                            Crewnavn
+                        </Typography>
+                    </Toolbar>
+                </Grid>
+                <Grid item xs={12} sm={6} lg={4}> 
                     <CrewMemberList />
-                </Paper>
+                </Grid>
+                <Grid item xs={12} sm={6} lg={3}>
+                    <CrewPermissionList />
+                </Grid>
+                {/*<Grid item xs={12} sm={6} lg={5}>
+                    <CrewLog />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={12}>
+                    <CrewNews />
+                </Grid>*/}
             </Grid>
-            <Grid item xs={12} sm={6} lg={4}>
-                <Paper>Liste over rettigheter</Paper>
-            </Grid>
-            <Grid item xs={12} sm={6} lg={4}>
-                <Paper>Logg</Paper>
-            </Grid>
-            <Divider />
-            <Grid item xs={12} sm={6} lg={12}>
-                <Paper>Nyheter, Annonsering, husker ikke nøyaktig</Paper>
-            </Grid>
-        </Grid>
-        </>
+        </Paper>
 
     );
 }
