@@ -50,20 +50,27 @@ export default function AdminMainMenu() {
     return (
         <List>
 
-            <ListItem button button component={Link} to='/venue'>
-                <ListItemIcon><HomeWorkIcon /></ListItemIcon>
-                <ListItemText primary='Lokaler' />
-            </ListItem>
+            {pullisis.some(a => a === 6) &&
+                <ListItem button button component={Link} to='/venue'>
+                    <ListItemIcon><HomeWorkIcon /></ListItemIcon>
+                    <ListItemText primary='Lokaler' />
+                </ListItem>
+            }
 
-            <ListItem button button component={Link} to='/ticket'>
-                <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
-                <ListItemText primary='Billetter' />
-            </ListItem>
+            {pullisis.some(a => a === 2) &&
+                <ListItem button button component={Link} to='/ticket'>
+                    <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
+                    <ListItemText primary='Billetter' />
+                </ListItem>
+            }
 
-            <ListItem button button component={Link} to='/seatmap'>
-                <ListItemIcon><EventSeatIcon /></ListItemIcon>
-                <ListItemText primary='Setekart' />
-            </ListItem>
+
+            {pullisis.some(a => a === 3) &&
+                <ListItem button button component={Link} to='/seatmap'>
+                    <ListItemIcon><EventSeatIcon /></ListItemIcon>
+                    <ListItemText primary='Setekart' />
+                </ListItem>
+            }
 
             <ListItem button component={Link} to='/event'>
                 <ListItemIcon><EventIcon /></ListItemIcon>
@@ -78,21 +85,30 @@ export default function AdminMainMenu() {
             </ListItem>)
             }
 
+            {pullisis.some(a => a === 7) &&
 
-            <ListItem button button component={Link} to='/participant'>
-                <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
-                <ListItemText primary='Deltagere' />
-            </ListItem>
+                <ListItem button button component={Link} to='/participant'>
+                    <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
+                    <ListItemText primary='Deltagere' />
+                </ListItem>
+            }
 
-            <ListItem button button component={Link} to='/useradmin'>
-                <ListItemIcon><SettingsIcon /></ListItemIcon>
-                <ListItemText primary='Brukeradmin' />
-            </ListItem>
+            {pullisis.some(a => a === 4) &&
 
-            <ListItem button button component={Link} to='/report'>
-                <ListItemIcon><AssignmentIcon /></ListItemIcon>
-                <ListItemText primary='Rapporter' />
-            </ListItem>
+                <ListItem button button component={Link} to='/useradmin'>
+                    <ListItemIcon><SettingsIcon /></ListItemIcon>
+                    <ListItemText primary='Brukeradmin' />
+                </ListItem>
+
+            }
+            {pullisis.some(a => a === 5) &&
+
+                <ListItem button button component={Link} to='/report'>
+                    <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                    <ListItemText primary='Rapporter' />
+                </ListItem>
+            }
+
             {roles.some(a => a === "Admin") &&
                 (<ListItem button button component={Link} to='/organizer'>
                     <ListItemIcon><AssignmentIcon /></ListItemIcon>

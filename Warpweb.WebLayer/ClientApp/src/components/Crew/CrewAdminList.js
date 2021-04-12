@@ -1,11 +1,12 @@
-﻿import { createMuiTheme, Grid, MuiThemeProvider, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+﻿import { createMuiTheme, Grid, MuiThemeProvider, Table, TableBody, TableCell, TableRow, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import UserPicker from '../User/UserPicker';
 import CrewPermissions from './CrewPermissions';
 
-export default function OrganizerAdminList({ triggerUpdate }) {
+export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen }) {
 
     const { isAuthenticated, token } = useAuth();
 
@@ -39,16 +40,31 @@ export default function OrganizerAdminList({ triggerUpdate }) {
             label: 'Id',
             options: {
                 display: false,
+                filter: false
             }
         },
         {
             name: 'name',
             label: 'Crew'
+        },
+        {
+            name: '',
+            options: {
+                filter: false
+            }
+        },
+        {
+            name: '',
+            options: {
+                filter: false
+            }
         }
     ];
 
     const options = {
-        filter: true,
+        viewColumns: false,
+        sort: false,
+        filter: false,
         filterType: 'dropdown',
         responsive: 'vertical',
         selectableRows: "none",
@@ -64,9 +80,9 @@ export default function OrganizerAdminList({ triggerUpdate }) {
             return (
                 <>
                     <TableRow>
-                        <TableCell colSpan={1}>
+                        <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                         </TableCell>
-                        <TableCell colSpan={3}>
+                        <TableCell colSpan={3} style={{ backgroundColor: "#becadb" }}>
                             <Typography variant="h6" >
                                 Arbeidslagsleder
                             </Typography>
@@ -91,7 +107,7 @@ export default function OrganizerAdminList({ triggerUpdate }) {
                                 Telefon
                             </Typography>
                         </TableCell>
-                        
+
                     </TableRow>
 
                     {crewLeader.map((leader) => (
@@ -117,13 +133,15 @@ export default function OrganizerAdminList({ triggerUpdate }) {
                     ))}
 
                     <TableRow>
-                        <TableCell colSpan={1}>
+                        <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                         </TableCell>
-                        <TableCell colSpan={3}>
+                        <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
                             <Typography variant="h6" >
                                 Arbeidslag
                             </Typography>
-
+                        </TableCell>
+                        <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
+                            <Button variant="contained" color="primary" onClick={handleDialogOpen}>Legg til medlem</Button>
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -168,7 +186,31 @@ export default function OrganizerAdminList({ triggerUpdate }) {
                         </TableRow>
                     ))}
 
-                    <CrewPermissions crewId={rowData[0]} />
+                    <TableRow>
+                        <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
+                        </TableCell>
+                        <TableCell colSpan={3} style={{ backgroundColor: "#becadb" }}>
+                            <Typography variant="h6" >
+                                Rettigheter
+                            </Typography>
+
+                        </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TableCell colSpan={1}>
+                        </TableCell>
+
+                        <TableCell colSpan={2}>
+                            <CrewPermissions crewId={rowData[0]} />
+                        </TableCell>
+
+                        <TableCell colSpan={1}>
+
+                        </TableCell>
+
+                    </TableRow>
                 </>
             );
         },

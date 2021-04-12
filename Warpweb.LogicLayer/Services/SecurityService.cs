@@ -62,7 +62,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task SetPoliciesAsync(List<CrewPermissionsVm> permissions, int crewId)
         {
-       
+
             var permissionsCrewHas =
                 await _dbContext.CrewPermissions
                 .Where(a => a.CrewId == crewId)
@@ -76,28 +76,29 @@ namespace Warpweb.LogicLayer.Services
                     PermissionType = Enum.Parse<CrewPermissionType>(a.Name)
                 }).ToList();
 
-            if(permissionsCrewHas == null)
+            if (permissionsCrewHas == null)
             {
                 await _dbContext.AddRangeAsync(permissionsToStore);
             }
-
-            //Disse slettes
-            var listOfPermissionsToDelete = permissionsCrewHas.Except(permissionsToStore).ToList();
-            //Disse legges til
-            var listOfPermissionsToAdd = permissionsToStore.Except(permissionsCrewHas).ToList();
-
-            if(listOfPermissionsToDelete.Count > 0)
+            else
             {
-                _dbContext.CrewPermissions.RemoveRange(listOfPermissionsToDelete);
-            }
+                //Disse slettes
+                var listOfPermissionsToDelete = permissionsCrewHas.Except(permissionsToStore).ToList();
+                //Disse legges til
+                var listOfPermissionsToAdd = permissionsToStore.Except(permissionsCrewHas).ToList();
 
-            if(listOfPermissionsToAdd.Count > 0)
-            {
-                await _dbContext.CrewPermissions.AddRangeAsync(listOfPermissionsToAdd);
+                if (listOfPermissionsToDelete.Count > 0)
+                {
+                    _dbContext.CrewPermissions.RemoveRange(listOfPermissionsToDelete);
+                }
+
+                if (listOfPermissionsToAdd.Count > 0)
+                {
+                    await _dbContext.CrewPermissions.AddRangeAsync(listOfPermissionsToAdd);
+                }
             }
 
             await _dbContext.SaveChangesAsync();
-         
         }
 
         public async Task<List<OrganizerListVm>> GetOrganizersUserIsAdminAtAsync(string userId)

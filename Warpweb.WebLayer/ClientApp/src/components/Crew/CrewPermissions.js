@@ -53,7 +53,7 @@ export default function CrewPermissions({ crewId }) {
                     method: 'POST',
                     body: JSON.stringify(allPermissions)
                 });
-                
+
             }
         }
         setPermissions();
@@ -67,7 +67,6 @@ export default function CrewPermissions({ crewId }) {
         const oldPermission = allPermissions.find(a => a.name === e.target.name);
         oldPermission.crewHasPermission = !oldPermission.crewHasPermission;
         setAllPermissions(oldValue => [...oldValue.filter(a => a.name !== e.target.name), oldPermission]);
-        [...allPermissions].sort((a, b) => a.value > b.value);
     }
 
 
@@ -75,19 +74,20 @@ export default function CrewPermissions({ crewId }) {
     return (
         <>
             <FormControl>
-                <FormLabel component="legend">Tillatelser</FormLabel>
-                {allPermissions.map((crewPermission) => (
+
+                {allPermissions.sort((a, b) => a.name > b.name ? 1 : ((b.name > a.name) ? -1 : 0)).map((crewPermission) => (
                     <FormControlLabel
+                        key={crewPermission.value}
                         control={<Checkbox
                             key={crewPermission.value}
                             checked={crewPermission.crewHasPermission}
                             onChange={updatePermissionsList}
                             name={crewPermission.name} />}
                         label={crewPermission.name}
-                        
+
                     />
                 ))}
-                <FormHelperText>Be careful</FormHelperText>
+
             </FormControl>
         </>
     );
