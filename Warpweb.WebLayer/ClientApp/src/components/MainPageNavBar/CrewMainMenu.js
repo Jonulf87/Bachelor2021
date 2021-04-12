@@ -42,13 +42,13 @@ export default function UserMainMenu() {
     return (
         <List
         subheader={
-            <ListSubheader color="secondary">
+            <ListSubheader color="primary">
                 Mine Crew
             </ListSubheader>
         }
         >
             <ListItem button component={Link} to='/crew'>
-                <ListItemText color="secondary" primary='Et crew' />
+                <ListItemText color="primary" primary='Et crew' />
             </ListItem>
             <ListItem button component={Link} to='/crew'>
                 <ListItemText primary='Annet Crew' />

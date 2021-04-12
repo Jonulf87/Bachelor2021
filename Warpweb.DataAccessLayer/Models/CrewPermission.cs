@@ -27,7 +27,8 @@ namespace Warpweb.DataAccessLayer.Models
         SeatMapAdmin = 3,
         UserAdmin = 4,
         ReportAdmin = 5,
-        VenueAdmin = 6
+        VenueAdmin = 6,
+        ParticipantAdmin = 7
     }
 
 }

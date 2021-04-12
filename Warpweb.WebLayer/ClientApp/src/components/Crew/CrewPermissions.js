@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CrewPermissions({ crewId }) {
 
-    const [allPermissions, setAllPermissions] = useState();
+    const [allPermissions, setAllPermissions] = useState([]);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -36,38 +36,59 @@ export default function CrewPermissions({ crewId }) {
                 const result = await response.json();
                 setAllPermissions(result);
                 console.log(allPermissions);
+
             }
         }
         getPolicies();
-    }, [isAuthenticated])
+    }, [isAuthenticated, crewId])
+
+    useEffect(() => {
+        const setPermissions = async () => {
+            if (isAuthenticated) {
+                await fetch(`/api/security/setpolicies/${crewId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(allPermissions)
+                });
+
+            }
+        }
+        setPermissions();
+    }, [allPermissions])
 
     const classes = useStyles();
 
 
 
+    const updatePermissionsList = (e) => {
+        const oldPermission = allPermissions.find(a => a.name === e.target.name);
+        oldPermission.crewHasPermission = !oldPermission.crewHasPermission;
+        setAllPermissions(oldValue => [...oldValue.filter(a => a.name !== e.target.name), oldPermission]);
+    }
+
+
 
     return (
-        <div className={classes.root}>
-            <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">Tillatelser</FormLabel>
-                {/*<FormGroup>
+        <>
+            <FormControl>
 
+                {allPermissions.sort((a, b) => a.name > b.name ? 1 : ((b.name > a.name) ? -1 : 0)).map((crewPermission) => (
+                    <FormControlLabel
+                        key={crewPermission.value}
+                        control={<Checkbox
+                            key={crewPermission.value}
+                            checked={crewPermission.crewHasPermission}
+                            onChange={updatePermissionsList}
+                            name={crewPermission.name} />}
+                        label={crewPermission.name}
 
-                    <FormControlLabel
-                        control={<Checkbox checked={gilad} onChange={handleChange} name="gilad" />}
-                        label="Gilad Gray"
                     />
-                    <FormControlLabel
-                        control={<Checkbox checked={jason} onChange={handleChange} name="jason" />}
-                        label="Jason Killian"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox checked={antoine} onChange={handleChange} name="antoine" />}
-                        label="Antoine Llorca"
-                    />
-                </FormGroup>*/}
-                <FormHelperText>Be careful</FormHelperText>
+                ))}
+
             </FormControl>
-        </div>
+        </>
     );
 }
