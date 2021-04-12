@@ -44,40 +44,101 @@ namespace Warpweb.LogicLayer.Services
                 .Select(a => new TicketVm
                 {
                     Id = a.Id,
-                    MainEvent = a.MainEvent,
                     Price = a.Price,
-                    Seat = a.Seat,
-                    Type = a.Type,
-                    User = a.User
                 }).SingleOrDefaultAsync();
         }
 
-        public async Task<int> CreateTicketAsync(TicketVm ticketVm)
+        public async Task<TicketVm> CreateTicketAsync(int ticketTypeId, string userId)
         {
-            var existingTicket = _dbContext.Tickets
-                .Where(a => (a.Id == ticketVm.Id || a.Seat == ticketVm.Seat) && a.MainEventId == _mainEventProvider.MainEventId)
-                .FirstOrDefault();
 
-            if (existingTicket != null)
+            var ticketCount = await _dbContext.Tickets
+                .Where(a => a.TicketTypeId == ticketTypeId)
+                .CountAsync();
+            var ticketType = await _dbContext.TicketTypes
+                .Where(a => a.Id == ticketTypeId)
+                .SingleOrDefaultAsync();
+            var user = await _dbContext.ApplicationUsers
+                .FindAsync(userId);
+
+            if (ticketCount >= ticketType.AmountAvailable)
             {
-                throw new TicketAlreadyExistsException();
+                throw new TicketTypeSoldOutException();
+            }
+
+            if (user.DateOfBirth > DateTime.Now.AddYears(-16) && user?.Guardian.EMail == null && user?.Guardian.PhoneNumber == null)
+            {
+                throw new NoGuardianSetForMinorException();
             }
 
             var ticket = new Ticket
             {
-                Id = ticketVm.Id,
-                Seat = ticketVm.Seat,
-                MainEvent = ticketVm.MainEvent,
-                Price = ticketVm.Price,
-                Type = ticketVm.Type,
-                User = ticketVm.User
+                MainEventId = ticketType.MainEventId,
+                Price = ticketType.BasePrice,
+                TicketTypeId = ticketType.Id,
+                ApplicationUserId = userId
             };
 
             _dbContext.Tickets.Add(ticket);
             await _dbContext.SaveChangesAsync();
 
-            return ticket.Id;      
+            var ticketVm = new TicketVm
+            {
+                Id = ticket.Id,
+                Price = ticket.Price,
+                TicketTypeId = ticket.TicketTypeId
+            };
+
+            return ticketVm;      
         }
+
+        public async Task PurchaseTicketAsync(int ticketId, string userId, int provider)
+        {
+            var ticket = await _dbContext.Tickets
+                .Where(a => a.Id == ticketId && a.ApplicationUserId == userId)
+                .SingleOrDefaultAsync();
+
+            ticket.IsPaid = true;
+            ticket.AmountPaid = ticket.Price;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task ReserveSeatAsync(int ticketId, int seatId, string userId)
+        {
+            var seat = await _dbContext.Seats
+                .Include(a => a.Row)
+                .Where(a => a.Id == seatId)
+                .SingleOrDefaultAsync();
+
+            var ticket = await _dbContext.Tickets
+                .Where(a => a.Id == ticketId && a.ApplicationUserId == userId)
+                .SingleOrDefaultAsync();
+
+            if(seat == null)
+            {
+                throw new SeatDoesNotExsistException();
+            }
+            
+            if(seat.Row.TicketTypes.All(a => a.Id != ticket.TicketTypeId))
+            {
+                throw new NoAccessToSeatClassException();
+            }
+
+            if(seat.IsReserved)
+            {
+                throw new SeatAlreadyReservedException();
+            }
+
+            if(!ticket.IsPaid)
+            {
+                throw new TicketNotPaidException();
+            }
+
+            ticket.SeatId = seatId;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<int> UpdateTicketAsync(TicketVm ticketVm)
         {
 
@@ -89,11 +150,8 @@ namespace Warpweb.LogicLayer.Services
             }
 
             existingTicket.Id = ticketVm.Id;
-            existingTicket.Seat = ticketVm.Seat;
-            existingTicket.MainEvent = ticketVm.MainEvent;
             existingTicket.Price = ticketVm.Price;
-            existingTicket.Type = ticketVm.Type;
-            existingTicket.User = ticketVm.User;
+
 
             _dbContext.Update<Ticket>(existingTicket);
             await _dbContext.SaveChangesAsync();

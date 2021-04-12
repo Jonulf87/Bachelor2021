@@ -16,5 +16,6 @@ namespace Warpweb.DataAccessLayer.Models
         public virtual MainEvent MainEvent { get; set; }
 
         public virtual ICollection<Seat> Seats { get; set; }
+        public virtual ICollection<TicketType> TicketTypes { get; set; }
     }
 }

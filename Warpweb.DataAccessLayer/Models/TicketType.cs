@@ -15,6 +15,6 @@ namespace Warpweb.DataAccessLayer.Models
         public int MainEventId { get; set; }
         public virtual MainEvent MainEvent { get; set; }
 
-        public virtual ICollection<Seat> Seats { get; set; }
+        public virtual ICollection<Row> Rows { get; set; }
     }
 }

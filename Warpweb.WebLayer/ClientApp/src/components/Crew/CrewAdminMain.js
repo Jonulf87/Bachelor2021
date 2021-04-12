@@ -31,15 +31,13 @@ export default function CrewAdminMain() {
             setUserAsCrewleader(result);
         }
     };
-    const addCrewMember = async (userId) => {
-
-    }
+    
 
 
     return (
         <>
             <CrewAdminMenu handleDialogOpen={handleDialogOpen} userAsCrewleader={userAsCrewleader} />
-            <CrewAdminList handleDialogOpen={handleDialogOpen} />
+            <CrewAdminList />
 
             <UserPicker dialogOpen={dialogOpen} handleDialogClose={handleDialogClose} setUserId={addCrewLeader} />
         </>

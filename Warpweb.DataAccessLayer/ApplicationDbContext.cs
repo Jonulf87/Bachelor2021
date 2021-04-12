@@ -42,11 +42,11 @@ namespace Warpweb.DataAccessLayer
                 .WithMany(a => a.AdminRoleAtOrganizers)
                 .UsingEntity(a => a.ToTable("OrganizerAdmins"));
 
-            builder.Entity<Seat>()
+            builder.Entity<Row>()
                 .HasMany(a => a.TicketTypes)
-                .WithMany(a => a.Seats)
-                .UsingEntity(a => a.ToTable("TicketTypeSeats"));
-                
+                .WithMany(a => a.Rows)
+                .UsingEntity(a => a.ToTable("TicketTypeRows"));
+
 
             builder.Entity<MainEvent>()
                 .HasMany(a => a.Tickets)
@@ -65,6 +65,9 @@ namespace Warpweb.DataAccessLayer
 
             builder.Entity<Ticket>()
                 .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);
+
+            builder.Entity<TicketLog>()
+                .HasQueryFilter(a => a.Ticket.MainEventId == _mainEventProvider.MainEventId);
 
             builder.Entity<Crew>()
                 .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);

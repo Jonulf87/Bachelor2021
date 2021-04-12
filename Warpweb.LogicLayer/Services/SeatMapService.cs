@@ -53,9 +53,7 @@ namespace Warpweb.LogicLayer.Services
                     {
                         newRow.Seats.Add(new Seat
                         {
-                            SeatNumber = seat.SeatNumber,
-                            isReserved = false,
-                            isBought = false
+                            SeatNumber = seat.SeatNumber
                         });
                     }
 

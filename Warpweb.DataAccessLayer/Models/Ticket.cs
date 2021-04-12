@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
@@ -6,6 +8,10 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int Id { get; set; }
         public int Price { get; set; }
+        public bool IsCheckedIn { get; set; }
+        public bool IsPaid { get; set; }
+        public int AmountPaid { get; set; }
+
 
         [ForeignKey(nameof(Type))]
         public int TicketTypeId { get; set; }
@@ -23,5 +29,6 @@ namespace Warpweb.DataAccessLayer.Models
         public int? SeatId { get; set; }
         public virtual Seat Seat { get; set; }
 
+        public virtual ICollection<TicketLog> Logs { get; set; }
     }
 }

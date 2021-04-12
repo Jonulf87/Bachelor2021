@@ -34,6 +34,10 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen }) 
         getCrews();
     }, [isAuthenticated, triggerUpdate])
 
+    const addCrewMember = async (userId) => {
+
+    }
+
     const columns = [
         {
             name: 'id',

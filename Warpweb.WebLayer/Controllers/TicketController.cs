@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,25 +42,64 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Create ticket
+        /// Create new ticket
         /// </summary>
-        /// <param name="ticketVm"></param> 
+        /// <param name="ticketTypeId"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles = "Users")]
-        public async Task<ActionResult<TicketVm>> CreateTicketAsync(TicketVm ticketVm)
+        [Route("createticket/{ticketTypeId}")]
+        public async Task<ActionResult<TicketVm>> CreateTicketAsync(int ticketTypeId)
         {
-            int ticketId;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try
             {
-                ticketId = await _ticketService.CreateTicketAsync(ticketVm);
+                var ticket = await _ticketService.CreateTicketAsync(ticketTypeId, userId);
+                return Ok(ticket);
             }
             catch (TicketAlreadyExistsException)
             {
                 return BadRequest(); 
             }
+        }
 
-            ticketVm.Id = ticketId;
-            return Ok(ticketVm);
+        /// <summary>
+        /// Simulates purchase of ticket
+        /// </summary>
+        /// <param name="ticketId"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("purchaseticket/{ticketId}/{provider}")]
+        public async Task<ActionResult> PurchaseTicketAsync(int ticketId, int provider)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            try
+            {
+                await _ticketService.PurchaseTicketAsync(ticketId, userId, provider);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest("HAHA! NO MONEY!");
+            }
+        }
+
+        [HttpPost]
+        [Route("reserveseat/{ticketId}/{seatId}")]
+        public async Task<ActionResult> ReserveSeatAsync(int ticketId, int seatId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            try
+            {
+                await _ticketService.ReserveSeatAsync(ticketId, seatId, userId);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest("Kunne ikke reservere sete");
+            }
         }
 
         /// <summary>

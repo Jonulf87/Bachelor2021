@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Warpweb.DataAccessLayer;
 
 namespace Warpweb.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210412182904_AddedTicketlog")]
+    partial class AddedTicketlog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -272,19 +274,19 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("RowTicketType", b =>
+            modelBuilder.Entity("SeatTicketType", b =>
                 {
-                    b.Property<int>("RowsId")
+                    b.Property<int>("SeatsId")
                         .HasColumnType("int");
 
                     b.Property<int>("TicketTypesId")
                         .HasColumnType("int");
 
-                    b.HasKey("RowsId", "TicketTypesId");
+                    b.HasKey("SeatsId", "TicketTypesId");
 
                     b.HasIndex("TicketTypesId");
 
-                    b.ToTable("TicketTypeRows");
+                    b.ToTable("TicketTypeSeats");
                 });
 
             modelBuilder.Entity("Warpweb.DataAccessLayer.Models.ApplicationUser", b =>
@@ -629,6 +631,12 @@ namespace Warpweb.DataAccessLayer.Migrations
                     b.Property<int>("SeatNumber")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isBought")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isReserved")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RowId");
@@ -840,11 +848,11 @@ namespace Warpweb.DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RowTicketType", b =>
+            modelBuilder.Entity("SeatTicketType", b =>
                 {
-                    b.HasOne("Warpweb.DataAccessLayer.Models.Row", null)
+                    b.HasOne("Warpweb.DataAccessLayer.Models.Seat", null)
                         .WithMany()
-                        .HasForeignKey("RowsId")
+                        .HasForeignKey("SeatsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

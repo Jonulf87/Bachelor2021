@@ -148,7 +148,7 @@ export default function App(props) {
                                 <Route path='/report' component={ReportMain} />
                                 <Route path='/event' component={EventMain} />
                                 <Route path='/participant' component={ParticipantMain} />
-                                <Route path='/ticket' component={TicketMain} />
+                                <Route path='/ticketadmin' component={TicketMain} />
                                 <Route path='/register' component={UserRegister} />
                                 <Route path='/login' component={UserLogin} />
                                 <Route path='/logout' component={LogOut} />

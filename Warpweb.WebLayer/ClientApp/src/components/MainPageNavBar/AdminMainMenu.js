@@ -58,9 +58,9 @@ export default function AdminMainMenu() {
             }
 
             {pullisis.some(a => a === 2) &&
-                <ListItem button button component={Link} to='/ticket'>
+                <ListItem button button component={Link} to='/ticketadmin'>
                     <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
-                    <ListItemText primary='Billetter' />
+                    <ListItemText primary='Billettadmin' />
                 </ListItem>
             }
 
@@ -72,6 +72,10 @@ export default function AdminMainMenu() {
                 </ListItem>
             }
 
+            <ListItem button component={Link} to='/event'>
+                <ListItemIcon><EventIcon /></ListItemIcon>
+                <ListItemText primary='Kjøp billett' />
+            </ListItem>
             <ListItem button component={Link} to='/event'>
                 <ListItemIcon><EventIcon /></ListItemIcon>
                 <ListItemText primary='Arrangement' />

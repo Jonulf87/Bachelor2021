@@ -7,15 +7,18 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int Id { get; set; }
         public int SeatNumber { get; set; }
-        public bool isReserved { get; set; }
-        public bool isBought { get; set; }
+        public bool IsReserved
+        {
+            get
+            {
+                return Ticket != null;
+            }
+        }
 
         public virtual Ticket Ticket { get; set; }
 
         [ForeignKey(nameof(Row))]
         public int RowId { get; set; }
         public virtual Row Row { get; set; }
-
-        public virtual ICollection<TicketType> TicketTypes { get; set; }
     }
 }
