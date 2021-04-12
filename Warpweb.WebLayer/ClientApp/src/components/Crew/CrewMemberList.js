@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import { Typography, List, ListItem, ListItemText, ListSubheader, Toolbar } from '@material-ui/core';
+import { Divider, Typography, List, ListItem, ListItemText, ListSubheader, Toolbar } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
-export default function NavBarHeader() {
+export default function CrewMmberList() {
     const [crewMembers, setCrewMembers] = useState([])
     
     const { isAuthenticated, token } = useAuth();
@@ -34,6 +34,7 @@ export default function NavBarHeader() {
                     Krumedlemmer
                 </Typography>
             </Toolbar>
+           
             <List
             subheader={
             <ListSubheader color="primary">
@@ -41,7 +42,7 @@ export default function NavBarHeader() {
             </ListSubheader>
             }
             >
-                <ListItem>
+                <ListItem key="Per ledersen">
                     <ListItemText primary='Per ledersen' />
                 </ListItem>
             </List>
@@ -54,7 +55,7 @@ export default function NavBarHeader() {
             }
             >
                 {["Jan","Mari", "Tore", "Ingvald", "Janne"].map((crewMember) => (
-                <ListItem>
+                <ListItem key={crewMember}>
                     <ListItemText primary={crewMember} />
                 </ListItem>
                 ))}
