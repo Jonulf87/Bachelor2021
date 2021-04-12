@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Divider, Grid, Paper, Toolbar, Typography} from '@material-ui/core';
 
 import CrewInfo from './CrewInfo';
@@ -10,11 +10,14 @@ import CrewNews from './CrewNews'
 
 
 export default function CrewMain() {
+    const [crew, setCrew] = useState([])
+    
     return (
         <Paper>
             <Grid
             container
             spacing={2}
+            justify="center"
             >
                 <Grid item xs={12}>
                     <Toolbar>
