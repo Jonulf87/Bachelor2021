@@ -4,6 +4,7 @@ import { Typography, List, ListItem, ListItemText, ListSubheader, Toolbar } from
 import useAuth from '../../hooks/useAuth';
 
 export default function CrewPermissionList({ id }) {
+
     const [crewPermissions, setCrewPermissions] = useState([])
     
     const { isAuthenticated, token } = useAuth();

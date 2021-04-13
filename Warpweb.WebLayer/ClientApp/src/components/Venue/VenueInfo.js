@@ -34,13 +34,9 @@ export default function VenueInfo(props) {
                 const result = await response.json();
                 setVenue(result);
             }
-
-
         }
         getVenue();
     }, [isAuthenticated]);
-
-
 
     const classes = useStyles();
 

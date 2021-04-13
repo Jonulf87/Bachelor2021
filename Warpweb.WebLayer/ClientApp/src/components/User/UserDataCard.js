@@ -18,8 +18,9 @@ const useStyles = makeStyles((theme) =>
 
 export default function UserDataCard() {
 
-    let [userInfo, setUserInfo] = useState([]);
+    const [userInfo, setUserInfo] = useState([]);
     const [isReady, setIsReady] = useState(false);
+
     const { isAuthenticated, token } = useAuth();
     
     useEffect(() => {
@@ -101,7 +102,7 @@ export default function UserDataCard() {
                         }
 
                         {userInfo.parentPhoneNumber &&
-                            <Grid container>
+                            <Grid container spacing={2}>
                                 <ListItem divider>
                                     <ListItemText primary={userInfo.parentFirstName} secondary="Foresatt fornavn" />
                                 </ListItem>

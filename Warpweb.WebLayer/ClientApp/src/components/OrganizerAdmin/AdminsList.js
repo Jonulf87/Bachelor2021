@@ -5,8 +5,8 @@ import useAuth from '../../hooks/useAuth';
 
 export default function AdminsList({ orgId, handleDialogOpen }) {
 
-
     const [orgAdmins, setOrgAdmins] = useState([]);
+
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
@@ -26,8 +26,6 @@ export default function AdminsList({ orgId, handleDialogOpen }) {
         console.log(orgAdmins);
     }, [isAuthenticated]);
 
-
-
     return (
         <>
             <TableRow>
@@ -43,9 +41,6 @@ export default function AdminsList({ orgId, handleDialogOpen }) {
 
             </TableRow>
 
-
-
-
             {orgAdmins.map(admin => (
                 <TableRow key={admin.name}>
                     <TableCell colSpan={1}>
@@ -55,11 +50,6 @@ export default function AdminsList({ orgId, handleDialogOpen }) {
                     </TableCell>
                 </TableRow>
             ))}
-
-
-            
-
         </>
-
     )
 };

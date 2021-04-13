@@ -22,6 +22,7 @@ export default function AdminMainMenu() {
     const [pullisis, setPullisis] = useState([]);
 
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
+
     const { isAuthenticated, token, roles } = useAuth();
 
     useEffect(() => {

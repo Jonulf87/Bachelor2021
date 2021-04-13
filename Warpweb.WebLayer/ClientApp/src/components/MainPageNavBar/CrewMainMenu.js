@@ -14,9 +14,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function UserMainMenu() {
+export default function UserMainMenu() {  
+
+    const [crewMemberships, setCrewMemberships] = useState([]); 
     
-    const [crewMemberships, setCrewMemberships] = useState([]);  
     const { isAuthenticated, token } = useAuth();
     
     //trenger å endres til å bare hente enkelte brukers

@@ -28,11 +28,11 @@ const useStyles = makeStyles((theme) =>
 
 export default function ParticipantList() {
 
-    let [participantList, setParticipantList] = useState([]);
+    const [participantList, setParticipantList] = useState([]);
     const [isReady, setIsReady] = useState(false);
-    const { isAuthenticated, token } = useAuth();
+    const [expanded, setExpanded] = useState(false);
 
-    let [expanded, setExpanded] = useState(false);
+    const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
         const getParticipants = async () => {
@@ -73,7 +73,7 @@ export default function ParticipantList() {
                         </AccordionSummary>
                         <Divider />
                         <AccordionDetails>
-                            <Grid container>
+                            <Grid container spacing={2}>
                                 {/*Personalia container*/}
                                 <Grid item xs={6} container>
 

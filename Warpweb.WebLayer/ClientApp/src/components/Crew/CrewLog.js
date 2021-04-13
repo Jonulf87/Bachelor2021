@@ -25,6 +25,7 @@ const rows = [
 ];
 
 export default function CrewPermissionList() {
+
     const [logs, setLogs] = useState(rows)
     
     const { isAuthenticated, token } = useAuth();

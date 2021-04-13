@@ -177,7 +177,7 @@ export default function UserRegister() {
     }
 
     return (
-        <Paper elevation={3}>
+        <Paper elevation={0} variant="outlined">
             <Container maxWidth="sm" >
                 <ValidatorForm
                     autoComplete="off"

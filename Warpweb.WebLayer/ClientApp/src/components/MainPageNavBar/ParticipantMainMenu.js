@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 export default function ParticipantMainMenu() {
+
     return(
         <List>
             <ListItem button component={Link} to='/'>

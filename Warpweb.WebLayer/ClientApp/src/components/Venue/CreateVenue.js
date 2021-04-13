@@ -74,7 +74,6 @@ export default function CreateVenue() {
         } else {
             const result = await response.json();
 
-            alert("Created");
             setEnteredName('');
             setEnteredAddress('');
             setEnteredPostalCode('');

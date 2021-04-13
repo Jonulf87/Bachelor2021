@@ -21,7 +21,6 @@ export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVerti
         }
         return seatsToBeRendered;
     }
-
     
     return (
         <Draggable bounds="parent" grid={[gridSize, gridSize]} position={{ x: xPos, y: yPos }} onDrag={handleDrag}>

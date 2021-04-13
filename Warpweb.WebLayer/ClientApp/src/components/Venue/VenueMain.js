@@ -8,6 +8,7 @@ import { Container, Typography, Button, Collapse, Box} from "@material-ui/core";
 
 export default function VenueMain() {
     const [openCreate, setOpenCreate] = useState(false);
+
     return (
         <Container maxWidth="xl">
             <Typography gutterBottom variant="h5" component="h2">

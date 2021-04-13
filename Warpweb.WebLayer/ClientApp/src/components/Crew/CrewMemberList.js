@@ -10,6 +10,7 @@ import { Card, Divider, Typography, List, ListItem, ListItemText, ListSubheader,
 import useAuth from '../../hooks/useAuth';
 
 export default function CrewMemberList({ id }) {
+
     const [crewMembers, setCrewMembers] = useState([]);
     const [crewLeaders, setCrewLeaders] = useState([]);
 

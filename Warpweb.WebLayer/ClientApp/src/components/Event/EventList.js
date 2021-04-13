@@ -31,14 +31,14 @@ const useStyles = makeStyles((theme) =>
 
 export default function EventList() {
 
-    let [eventsList, setEventsList] = useState([]);
+    const [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
+    const [expanded, setExpanded] = useState(false);
+
+    const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
 
     const { isAuthenticated, token, refreshToken } = useAuth();
-    const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
     
-
-    let [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
         const getEvents = async () => {
@@ -89,7 +89,7 @@ export default function EventList() {
                         </AccordionSummary>
                         <Divider />
                         <AccordionDetails>
-                            <Grid container>
+                            <Grid container spacing={2}>
                                 {/*Event details container*/}
                                 <Grid item xs={6} container>
                                     <Grid item xs={3}>
@@ -148,13 +148,13 @@ export default function EventList() {
         <>
             <Typography>
                 <strong>Arrangementsoversikt</strong>
-            </Typography>
+                    </Typography>
 
             {isReady && (<>
                 {getEventsFromList()}
             </>)}
 
-            {!isReady && (<CircularProgress />)}
+                {!isReady && (<CircularProgress />)}
         </>
     );
 }

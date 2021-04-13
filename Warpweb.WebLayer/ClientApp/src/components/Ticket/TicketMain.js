@@ -6,7 +6,7 @@ import TicketTypeList from './TicketTypeList';
 
 export default function TicketMain() {
 
-    let [triggerUpdate, setTriggerUpdate] = useState(false);
+    const [triggerUpdate, setTriggerUpdate] = useState(false);
 
     const updateList = () => {
         setTriggerUpdate(oldValue => !oldValue);
@@ -16,6 +16,7 @@ export default function TicketMain() {
         <>
             <Grid
                 container
+                spacing={2}
             >
                 {/*Grid container som inneholder admin for billettyper*/}
                 <Grid
@@ -47,7 +48,7 @@ export default function TicketMain() {
                 </Grid>
 
                 {/*Grid container som inneholder en liste over alle solgte billetter. expandable*/}
-                <Grid>
+                <Grid spacing={2}>
                 </Grid>
             </Grid>
         </>

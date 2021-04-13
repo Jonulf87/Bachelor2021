@@ -31,6 +31,7 @@ const rows = [
 ];
 
 export default function EventInfo() {
+
     const [event, setEvent] = useState([]);
     const [ticketTypeList, setTicketTypeList] = useState(rows)
     const [isReady, setIsReady] = useState(false);
@@ -87,7 +88,7 @@ export default function EventInfo() {
 
     return (
         <>
-            <Grid container spacing={1}>
+            <Grid container spacing={2}>
                 <Grid item xs={12} >
                     {JSON.stringify(event)}
                 </Grid>
@@ -106,6 +107,5 @@ export default function EventInfo() {
                 </Grid>
             </Grid>
         </>
-
     );
 }

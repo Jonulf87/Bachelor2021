@@ -51,18 +51,18 @@ export default function CreateEvent() {
     const classes = useStyles();
 
     //Her følger variablene til VM for mainEvent til posting
-    let [name, setName] = useState("");
-    let [startDate, setStartDate] = useState(new Date());
-    let [startTime, setStartTime] = useState(new Date('2020-05-05T11:54:00'));
-    let [endDate, setEndDate] = useState(new Date());
-    let [endTime, setEndTime] = useState(new Date('2020-01-01T12:00:00'))
-    let [organizerId, setOrganizerId] = useState("");
-    let [venueId, setVenueId] = useState("");
+    const [name, setName] = useState("");
+    const [startDate, setStartDate] = useState(new Date());
+    const [startTime, setStartTime] = useState(new Date('2020-05-05T11:54:00'));
+    const [endDate, setEndDate] = useState(new Date());
+    const [endTime, setEndTime] = useState(new Date('2020-01-01T12:00:00'))
+    const [organizerId, setOrganizerId] = useState("");
+    const [venueId, setVenueId] = useState("");
 
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
-    let [organizers, setOrganizers] = useState([]);
-    let [venues, setVenues] = useState([]);
-    let [createVenue, setCreateVenue] = useState(false);
+    const [organizers, setOrganizers] = useState([]);
+    const [venues, setVenues] = useState([]);
+    const [createVenue, setCreateVenue] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -157,6 +157,7 @@ export default function CreateEvent() {
         <Paper variant="outlined" elevation={2}>
             <Grid
                 container
+                spacing={2}
                 className={classes.root}
             >
                 <Grid item xs={12}>
@@ -173,7 +174,10 @@ export default function CreateEvent() {
                 >
                     <Grid item xs={12}>
                         <Form>
-                            <Grid container>
+                            <Grid
+                                container
+                                spacing={2}
+                            >
                                 <Grid item xs={12}>
                                     <TextField
                                         className={classes.textField}
@@ -181,6 +185,7 @@ export default function CreateEvent() {
                                         label="Navn på arrangement"
                                         required
                                         fullWidth
+                                        variant="outlined"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                     />
@@ -239,6 +244,7 @@ export default function CreateEvent() {
                                 <Grid item xs={12}>
                                     <TextField
                                         select
+                                        variant="outlined"
                                         className={classes.textField}
                                         id="venue"
                                         label="Lokale"
@@ -272,6 +278,7 @@ export default function CreateEvent() {
                                 <Grid item xs={12}>
                                     <TextField
                                         select
+                                        variant="outlined"
                                         className={classes.textField}
                                         id="organizer"
                                         label="Organisator"

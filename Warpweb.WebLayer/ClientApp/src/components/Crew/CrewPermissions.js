@@ -61,15 +61,11 @@ export default function CrewPermissions({ crewId }) {
 
     const classes = useStyles();
 
-
-
     const updatePermissionsList = (e) => {
         const oldPermission = allPermissions.find(a => a.name === e.target.name);
         oldPermission.crewHasPermission = !oldPermission.crewHasPermission;
         setAllPermissions(oldValue => [...oldValue.filter(a => a.name !== e.target.name), oldPermission]);
     }
-
-
 
     return (
         <>

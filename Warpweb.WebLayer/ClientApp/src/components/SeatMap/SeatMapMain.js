@@ -7,6 +7,7 @@ import { Grid } from '@material-ui/core';
 export default function SeatMapMain() {
 
     const [rows, setRows] = useState([]);
+
     const { isAuthenticated, token } = useAuth();
 
     const updateRowPosition = (name, xPos, yPos) => {

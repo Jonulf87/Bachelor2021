@@ -17,14 +17,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OrganizerAdminMenu({ updateList }) {
 
-    let [organizerName, setOrganizerName] = useState("");
-    let [organizerNumber, setOrganizerNumber] = useState("");
-    let [organizerDescription, setOrganizerDescription] = useState("");
+    const [organizerName, setOrganizerName] = useState("");
+    const [organizerNumber, setOrganizerNumber] = useState("");
+    const [organizerDescription, setOrganizerDescription] = useState("");
 
-    const { isAuthenticated, token } = useAuth();
     const classes = useStyles();
 
-
+    const { isAuthenticated, token } = useAuth();
 
     const dataToBeSent = {
         'name': organizerName,
@@ -65,6 +64,7 @@ export default function OrganizerAdminMenu({ updateList }) {
             <form onSubmit={submit} >
                 <Grid className={classes.root}
                     container
+                    spacing={2}
                 >
                     <Grid
                         item

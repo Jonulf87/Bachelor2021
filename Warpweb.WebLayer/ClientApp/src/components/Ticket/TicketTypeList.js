@@ -15,8 +15,9 @@ const useStyles = makeStyles((theme) =>
 
 export default function TicketTypeList({ triggerUpdate }) {
 
-    let [ticketTypeList, setTicketTypeList] = useState([]);
+    const [ticketTypeList, setTicketTypeList] = useState([]);
     const [isReady, setIsReady] = useState(false);
+
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {

@@ -17,8 +17,9 @@ const useStyles = makeStyles((theme) =>
 
 export default function UserDataCard() {
 
-    let [userInfo, setUserInfo] = useState([]);
+    const [userInfo, setUserInfo] = useState([]);
     const [isReady, setIsReady] = useState(false);
+
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
@@ -48,7 +49,7 @@ export default function UserDataCard() {
 
             <CardContent>
                 {isReady && (<>
-                    <Grid container>
+                    <Grid container spacing={2}>
 
                         <Typography gutterBottom variant="h5" component="h2">
                             Hei {userInfo.firstName}&nbsp;{userInfo.lastName}
@@ -89,7 +90,7 @@ export default function UserDataCard() {
                         }
 
                         {userInfo.parentPhoneNumber &&
-                            <Grid id="userParentInfo" container>
+                            <Grid id="userParentInfo" container spacing={2}>
                                 <Grid id="userParenFullName" item xs={12}>
                                     <p><strong>Foresatt:&nbsp;</strong>{userInfo.parentFirstName}&nbsp;{userInfo.parentLastName} </p>
                                 </Grid>
@@ -112,7 +113,7 @@ export default function UserDataCard() {
                             <p><strong>Tilleggsinformasjon:&nbsp;</strong>{userInfo.comments} </p>
                         </Grid>
 
-                        <Grid>
+                        <Grid spacing={2}>
                             <Button variant="contained" color="primary">
                                 Endre
                             </Button>

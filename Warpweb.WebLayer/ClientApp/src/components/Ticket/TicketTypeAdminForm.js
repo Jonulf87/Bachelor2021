@@ -17,9 +17,10 @@ const useStyles = makeStyles((theme) =>
 
 export default function TicketTypeAdminForm({ updateList }) {
 
-    let [ticketTypeName, setTicketTypeName] = useState("");
-    let [basePrice, setBasePrice] = useState(0);
-    let [amountAvailable, setAmountAvailable] = useState(0);
+    const [ticketTypeName, setTicketTypeName] = useState("");
+    const [basePrice, setBasePrice] = useState(0);
+    const [amountAvailable, setAmountAvailable] = useState(0);
+
     const { isAuthenticated, token } = useAuth();
 
     const ticketTypeDataToBeSent =
@@ -58,7 +59,7 @@ export default function TicketTypeAdminForm({ updateList }) {
 
     return (
 
-        <Grid container className={classes.root} component={Paper}>
+        <Grid container spacing={2} className={classes.root} component={Paper}>
             <Typography>
                 <strong>Opprett billettype</strong>
             </Typography>

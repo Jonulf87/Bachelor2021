@@ -13,6 +13,7 @@ import CrewNews from './CrewNews'
 
 
 export default function CrewMain() {
+
     const [crew, setCrew] = useState([])
     const [isReady, setIsReady] = useState(false);
     const {id} = useParams();
@@ -38,7 +39,8 @@ export default function CrewMain() {
     }, [isAuthenticated, id])
     
     return (
-        <Paper>
+        <Paper
+            variant="outlined">
             <Grid
             container
             spacing={2}

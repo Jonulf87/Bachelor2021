@@ -4,8 +4,9 @@ import useAuth from '../../hooks/useAuth';
 
 export default function LogOut() {
 
-    const { logout } = useAuth();
     const [isLoggedOut, setIsLoggedOut] = useState(false);
+
+    const { logout } = useAuth();
 
     useEffect(() => {
         const logOutFunction = async () => {

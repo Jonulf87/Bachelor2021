@@ -7,7 +7,8 @@ import { VariableSizeList as List } from 'react-window';
 import useAuth from '../../hooks/useAuth';
 
 
-export default function CrewNews({crewId}) {
+export default function CrewNews({ crewId }) {
+
     const [crew, setCrew] = useState([])
     
     const { isAuthenticated, token } = useAuth();

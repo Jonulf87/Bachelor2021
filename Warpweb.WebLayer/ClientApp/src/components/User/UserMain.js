@@ -23,7 +23,7 @@ export default function PaperSheet() {
     const classes = useStyles(); 
 
     return (
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
             <Grid item xs>
                 <UserInfoCompact />
             </Grid>
