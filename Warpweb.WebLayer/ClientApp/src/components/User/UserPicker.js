@@ -4,7 +4,7 @@ import useAuth from '../../hooks/useAuth';
 import { FixedSizeList } from 'react-window';
 import UserList from '../UserAdmin/UserList';
 
-export default function UserPicker({ dialogOpen, handleDialogClose, setUserId }) {
+export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, excludedUsers=[] }) {
 
     const [usersList, setUsersList] = useState([]);
     const [usersListIsReady, setUsersListIsReady] = useState(false);
@@ -55,10 +55,12 @@ export default function UserPicker({ dialogOpen, handleDialogClose, setUserId })
                         {({ index, style }) => (
                             <div key={usersList[index].id} style={style}  >
                                 <Typography> {`${usersList[index].firstName} ${usersList[index].lastName}`} </Typography>
+                                {excludedUsers.indexOf(usersList[index].id) === -1 && (
                                 <Button variant="contained" color="primary" onClick={(e) => {
                                     setUserId(usersList[index].id);
                                     handleDialogClose();
                                 }} >Velg</Button>
+                                    )}
                                 </div>
                             )}
                         </FixedSizeList>

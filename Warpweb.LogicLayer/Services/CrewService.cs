@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
@@ -15,11 +16,13 @@ namespace Warpweb.LogicLayer.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<CrewService> _log; //Denne må ordnes. Den er i bruk nede, men vil alltid være null av en eller annen grunn. Foreløpig ukjent
+        private readonly IMainEventProvider _mainEventProvider;
 
-        public CrewService(ApplicationDbContext dbContext, ILogger<CrewService> log)
+        public CrewService(ApplicationDbContext dbContext, ILogger<CrewService> log, IMainEventProvider mainEventProvider)
         {
             _dbContext = dbContext;
             _log = log;
+            _mainEventProvider = mainEventProvider;
         }
 
         public async Task<List<CrewListVm>> GetCrewsAsync()
@@ -45,36 +48,32 @@ namespace Warpweb.LogicLayer.Services
         }
 
         // TODO: Try - catch w/logging
-        public async Task<int> CreateCrewAsync(CrewVm crewVm)
+        public async Task CreateCrewAsync(string crewName)
         {
-            try
+            var existingCrew = _dbContext.Crews
+            .Where(a => a.Name == crewName)
+            .FirstOrDefault();
+
+            if (existingCrew != null)
             {
-                var existingCrew = _dbContext.Crews
-                .Where(a => a.Id == crewVm.CrewId || a.Name == crewVm.CrewName)
-                .FirstOrDefault();
-
-                var crew = new Crew
-                {
-                    Name = crewVm.CrewName
-                };
-
-                _dbContext.Crews.Add(crew);
-                await _dbContext.SaveChangesAsync();
-
-                return crew.Id;
+                throw new Exception();
             }
-            catch (CrewDoesNotExistException e)
+
+            var crew = new Crew
             {
-                _log.LogInformation(e.Message);
-                return 0;
-            }        
+                Name = crewName,
+                MainEventId = _mainEventProvider.MainEventId
+            };
+
+            _dbContext.Crews.Add(crew);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<int> UpdateCrewAsync(CrewVm crewVm)
         {
             var existingCrew = _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).SingleOrDefault();
 
-            if(existingCrew == null)
+            if (existingCrew == null)
             {
                 throw new CrewDoesNotExistException("Det finnes ingen crew med denne IDen.");
             }
@@ -98,16 +97,26 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task AddCrewMemberAsync(int crewId, string userId)
         {
+            if (userId == null || crewId <= 0)
+            {
+                throw new Exception();
+            }
+
+            var existingCrewUser = await _dbContext.CrewUsers
+                .Where(a => a.CrewId == crewId && a.ApplicationUserId == userId)
+                .SingleOrDefaultAsync();
+
+            if (existingCrewUser != null)
+            {
+                throw new Exception();
+            }
+
             var crewUser = new CrewUser
             {
                 ApplicationUserId = userId,
                 IsLeader = false,
                 CrewId = crewId
             };
-            if (userId == null || crewId <= 0)
-            {
-                throw new Exception();
-            }
 
             _dbContext.CrewUsers.Add(crewUser);
             await _dbContext.SaveChangesAsync();
@@ -121,12 +130,13 @@ namespace Warpweb.LogicLayer.Services
                 .ThenInclude(a => a.ApplicationUser)
                 .SingleOrDefaultAsync();
 
-            if(crew == null)
+            if (crew == null)
             {
                 throw new CrewDoesNotExistException();
             }
 
             return crew.Users
+                .Where(a => !a.IsLeader)
                 .Select(a => new CrewMembersListVm
                 {
                     Id = a.ApplicationUserId,
@@ -141,18 +151,31 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task AddCrewLeaderAsync(int crewId, string userId)
         {
-            var crewUser = new CrewUser
-            {
-                ApplicationUserId = userId,
-                IsLeader = true,
-                CrewId = crewId
-            };
-            if(userId == null || crewId <= 0)
+            if (userId == null || crewId <= 0)
             {
                 throw new Exception();
             }
 
-            _dbContext.CrewUsers.Add(crewUser);
+            var existingCrewUser = await _dbContext.CrewUsers
+                .Where(a => a.CrewId == crewId && a.ApplicationUserId == userId)
+                .SingleOrDefaultAsync();
+
+            if (existingCrewUser != null)
+            {
+                existingCrewUser.IsLeader = true;
+            }
+            else
+            {
+                var crewUser = new CrewUser
+                {
+                    ApplicationUserId = userId,
+                    IsLeader = true,
+                    CrewId = crewId
+                };
+
+                _dbContext.CrewUsers.Add(crewUser);
+            }
+
             await _dbContext.SaveChangesAsync();
         }
 
@@ -170,7 +193,7 @@ namespace Warpweb.LogicLayer.Services
             }
 
             return crew.Users
-                .Where(a => a.IsLeader == true)
+                .Where(a => a.IsLeader)
                 .Select(a => new CrewMembersListVm
                 {
                     Id = a.ApplicationUserId,

@@ -1,10 +1,12 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
+import { Button } from 'reactstrap/lib';
 import SeatMapSeat from './SeatMapSeat';
 
-export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVertical, updateRowPosition, setSeatInfo }) {
+export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVertical, updateRowPosition, setSeatInfo, handleOpen }) {
 
-
+    const [style, setStyle] = useState({ display: 'none' });
+    
     const gridSize = 20;
 
     const handleDrag = (e, data) => {
@@ -21,17 +23,30 @@ export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVerti
         }
         return seatsToBeRendered;
     }
-    
+
     return (
         <Draggable bounds="parent" grid={[gridSize, gridSize]} position={{ x: xPos, y: yPos }} onDrag={handleDrag}>
             <div className="seatRow"
+                onMouseOver={(e) => {
+                    e.preventDefault();
+                    setStyle({ display: 'block' });
+                }}
+                onMouseOut={(e) => {
+                    e.preventDefault();
+                    setStyle({ display: 'none' });
+                }}
                 style={{
                     width: `${gridSize * numberOfSeats}px`,
                     height: `${gridSize}px`,
                     position: "absolute"
                 }}>
                 {renderSeats()}
-                {/*<button id="deleteDiv" onClick={() => deleteRow()}>Slett</button>*/}
+                <Button
+                    style={style}
+                    onClick={(e) =>  handleOpen(rowName) }
+                >
+                    Rediger rad
+            </Button>
             </div>
         </Draggable>
     );

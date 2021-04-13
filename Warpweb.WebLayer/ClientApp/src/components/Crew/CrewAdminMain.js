@@ -6,7 +6,7 @@ export default function CrewAdminMain() {
 
     return (
         <>
-            <CrewAdminMenu  />
+            {/*<CrewAdminMenu  />*/}
             <CrewAdminList />
         </>
 

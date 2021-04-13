@@ -50,21 +50,18 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="crewVm"></param> 
         [HttpPost]
         [Authorize(Policy = "CrewAdmin")]
-        public async Task<ActionResult<CrewVm>> CreateCrewAsync(CrewVm crewVm)
+        [Route("createcrew/{crewName}")]
+        public async Task<ActionResult> CreateCrewAsync(string crewName)
         {
-            int crewId;
-
             try
             {
-                crewId = await _crewService.CreateCrewAsync(crewVm);
+                await _crewService.CreateCrewAsync(crewName);
+            return Ok();
             }
             catch (CrewAlreadyExistsException)
             {
                 return BadRequest();
             }
-
-            crewVm.CrewId = crewId;
-            return Ok(crewVm);
         }
 
         /// <summary>

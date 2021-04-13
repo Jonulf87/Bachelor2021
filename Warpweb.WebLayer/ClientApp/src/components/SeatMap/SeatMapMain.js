@@ -7,6 +7,7 @@ import { Grid } from '@material-ui/core';
 export default function SeatMapMain() {
 
     const [rows, setRows] = useState([]);
+    const [ticketTypeList, setTicketTypeList] = useState([]);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -41,18 +42,30 @@ export default function SeatMapMain() {
         const getSeatMap = async () => {
 
             if (isAuthenticated) {
-                const response = await fetch('/api/seatmap', {
+                const responseSeatMap = await fetch('/api/seatmap', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-type': 'application/json'
                     }
                 });
-                const result = await response.json();
-                setRows(result)
+                const resultSeatMap = await responseSeatMap.json();
+                setRows(resultSeatMap)
+
+                const responseTicketTypes = await fetch('/api/tickettypes', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const resultTicketTypes = await responseTicketTypes.json();
+                setTicketTypeList(resultTicketTypes);
             }
         }
         getSeatMap();
     }, [isAuthenticated])
+
+
+
 
     const rowNameAlreadyExists = (rowName) => {
         return rows.some(a => a.rowName.toLowerCase() === rowName.toLowerCase());
@@ -71,14 +84,14 @@ export default function SeatMapMain() {
                     xs={12}
                     lg={6}
                 >
-                    <SeatMapFloor rows={rows} updateRowPosition={updateRowPosition} />
+                    <SeatMapFloor rows={rows} updateRowPosition={updateRowPosition} ticketTypeList={ticketTypeList} />
                 </Grid>
                 <Grid
                     item
                     xs={12}
                     lg={6}
                 >
-                    <SeatMapAdminMenu addRow={addRow} submit={submitRows} rowNameAlreadyExists={rowNameAlreadyExists}/>
+                    <SeatMapAdminMenu addRow={addRow} submit={submitRows} rowNameAlreadyExists={rowNameAlreadyExists} />
                 </Grid>
             </Grid>
         </>
