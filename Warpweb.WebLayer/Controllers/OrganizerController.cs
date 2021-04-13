@@ -129,6 +129,21 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(contact);
         }
 
+        [HttpPost]
+        [Route("setorgcontact/{orgid}")]
+        public async Task<ActionResult<OrganizerVm>> SetOrganizerContactAsync(int orgId, [FromBody] string userId)
+        {
+            try
+            {
+                var contact = await _organizerService.SetOrganizerContactAsync(orgId, userId);
+                return Ok(contact);
+            }
+            catch(Exception)
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet]
         [Route("getadmins/{orgId}")]
         public async Task<ActionResult<List<OrgAdminVm>>> GetOrgAdminsAsync(int orgId)

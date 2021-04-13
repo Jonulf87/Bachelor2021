@@ -21,12 +21,10 @@ export default function OrganizerAdminMenu({ updateList }) {
     let [organizerNumber, setOrganizerNumber] = useState("");
     let [organizerDescription, setOrganizerDescription] = useState("");
 
-    const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
+    const classes = useStyles();
 
-    const [organizerAdmin, setOrganizerAdmin] = useState([]);
-    const [open, setOpen] = useState();
-    const [userId, setUserId] = useState();
+
 
     const dataToBeSent = {
         'name': organizerName,
@@ -56,8 +54,9 @@ export default function OrganizerAdminMenu({ updateList }) {
         }
     }
 
+
     return (
-        <Paper variant="outlined" elevation={3} >
+        <>
 
             <Typography className={classes.root}>
                 Legg til ny organisasjon
@@ -110,9 +109,10 @@ export default function OrganizerAdminMenu({ updateList }) {
                     >
                         Opprett
                     </Button>
+                    
                 </Grid>
             </form>
-            {/*<UserPicker open={open} />*/}
-        </Paper>
+
+        </>
     )
 }

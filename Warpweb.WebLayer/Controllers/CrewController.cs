@@ -122,18 +122,48 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("crewleaders/{crewId}")]
-        public async Task<ActionResult<CrewMembersListVm>> GetCrewLeaderAsync(int crewId)
+        [HttpPost]
+        [Route("addcrewmember/{crewId}")]
+        public async Task<ActionResult> AddCrewMemberAsync(int crewId, [FromBody] string userId)
         {
             try
             {
-                var leaderList = await _crewService.GetCrewLeaderAsync(crewId);
+                await _crewService.AddCrewMemberAsync(crewId, userId);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("crewleaders/{crewId}")]
+        public async Task<ActionResult<CrewMembersListVm>> GetCrewLeadersAsync(int crewId)
+        {
+            try
+            {
+                var leaderList = await _crewService.GetCrewLeadersAsync(crewId);
                 return Ok(leaderList);
             }
             catch (CrewDoesNotExistException)
             {
-                return BadRequest("Crew eksisterer ikke");                
+                return BadRequest("Crew eksisterer ikke");
+            }
+        }
+
+        [HttpPost]
+        [Route("addcrewleader/{crewId}")]
+        public async Task<ActionResult> AddCrewLeaderAsync(int crewId, [FromBody] string userId)
+        {
+            try
+            {
+                await _crewService.AddCrewLeaderAsync(crewId, userId);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
             }
         }
     }

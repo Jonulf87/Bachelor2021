@@ -31,11 +31,14 @@ export default function AdminsList({ orgId, handleDialogOpen }) {
     return (
         <>
             <TableRow>
-                <TableCell colSpan={1}>
+                <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                 </TableCell>
 
-                <TableCell colSpan={1}>
+                <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
                     <Typography variant="h4" >Admins</Typography>
+                </TableCell>
+                <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
+                    <Button color="primary" variant="contained" onClick={handleDialogOpen}>Legg til admin</Button>
                 </TableCell>
 
             </TableRow>
@@ -52,13 +55,7 @@ export default function AdminsList({ orgId, handleDialogOpen }) {
                     </TableCell>
                 </TableRow>
             ))}
-            <TableRow>
-                <TableCell colSpan={1}>
-                </TableCell>
-                <TableCell colSpan={3}>
-                    <Button color="primary" variant="contained" onClick={handleDialogOpen}>Legg til admin</Button>
-                </TableCell>
-            </TableRow>
+
 
             
 

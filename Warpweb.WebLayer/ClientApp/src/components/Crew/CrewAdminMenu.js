@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CreateCrew({ handleDialogOpen, userAsCrewleader }) {
+export default function CreateCrew() {
 
     const classes = useStyles();
     const [crewName, setCrewName] = React.useState("");
@@ -40,26 +40,8 @@ export default function CreateCrew({ handleDialogOpen, userAsCrewleader }) {
                             value={crewName}
                             onChange={(e) => setCrewName(e.target.value)}
                         />
-                        <Divider />
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            onClick={handleDialogOpen}
-                        >
-                            Velg crewleder
-                        </Button>
                     </Grid>
-                    <Grid
-                        item
-                        xs={6}
-                    >
-                        {userAsCrewleader && 
-                            <Typography>
-                                {userAsCrewleader.firstName}
-                            </Typography>
-
-                        }
-                    </Grid>
+                    
                 </Grid>
             </form>
             <Divider />

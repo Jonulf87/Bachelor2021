@@ -131,6 +131,34 @@ namespace Warpweb.LogicLayer.Services
             return contact;
         }
 
+        public async Task<OrganizerVm> SetOrganizerContactAsync(int orgId, string userId)
+        {
+            var organizer = await _dbContext.Organizers
+                .Where(a => a.Id == orgId)
+                .SingleOrDefaultAsync();
+
+            organizer.ContactId = userId;
+
+            await _dbContext.SaveChangesAsync();
+
+            var organizerToBeSent = await _dbContext.Organizers
+                .Where(a => a.Id == orgId)
+                .Select(a => new OrganizerVm
+                {
+                    Id = a.Id,
+                    ContactMail = a.Contact.Email,
+                    ContactName = a.Contact.FirstName + " " + a.Contact.LastName,
+                    ContactPhone = a.Contact.PhoneNumber,
+                    Description = a.Description,
+                    Name = a.Name,
+                    OrgNumber = a.OrgNumber
+
+                }).SingleOrDefaultAsync();
+
+
+            return organizerToBeSent;
+        }
+
         public async Task<List<OrgAdminVm>> GetOrgAdminsAsync(int orgId)
         {
             var organizer = await _dbContext.Organizers

@@ -3,6 +3,7 @@ import OrganizerAdminList from './OrganizerAdminList';
 import OrganizerAdminMenu from './OrganizerAdminMenu';
 import UserPicker from '../User/UserPicker';
 import useAuth from '../../hooks/useAuth';
+import { Paper } from '@material-ui/core';
 
 export default function OrganizerAdminMain() {
 
@@ -34,20 +35,19 @@ export default function OrganizerAdminMain() {
                 method: 'POST',
                 body: JSON.stringify(userId)
             });
-            
+
             updateList();
         }
     }
 
-
-    
-
-
     return (
         <>
-            <OrganizerAdminMenu updateList={updateList} />
+            <Paper variant="outlined">
+                <OrganizerAdminMenu updateList={updateList} />
+            </Paper>
+
             <OrganizerAdminList triggerUpdate={triggerUpdate} handleDialogOpen={handleDialogOpen} setOrgId={setOrgId} />
-            <UserPicker dialogOpen={dialogOpen} handleDialogClose={handleDialogClose} setUserId={addOrgAdmin} /> 
+            <UserPicker dialogOpen={dialogOpen} handleDialogClose={handleDialogClose} setUserId={addOrgAdmin} />
         </>
 
     )

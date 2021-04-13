@@ -1,11 +1,20 @@
-﻿import { createMuiTheme, Grid, MuiThemeProvider, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+﻿import { createMuiTheme, Grid, MuiThemeProvider, Table, TableBody, TableCell, TableRow, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import AdminsList from './AdminsList';
+import UserPicker from '../User/UserPicker';
 
 export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, setOrgId }) {
+
+    const [organizerDataList, setOrganizerDataList] = useState([]);
+    const [organizerContact, setOrganizerContact] = useState("");
+    const [organizerId, setOrganizerId] = useState("");
+    const [open, setOpen] = useState(false);
+
+    const { isAuthenticated, token } = useAuth();
+
 
     const useStyles = makeStyles((theme) => ({
         grid: {
@@ -13,13 +22,15 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, se
         }
     }
     ));
-
-    const { isAuthenticated, token } = useAuth();
-    const [organizerDataList, setOrganizerDataList] = useState([]);
-    const [organizerContact, setOrganizerContact] = useState("");
-
     const classes = useStyles();
 
+    const handleContactDialogOpen = () => {
+        setOpen(true);
+    }
+
+    const handleContactDialogClose = () => {
+        setOpen(false);
+    }
 
     const theme = createMuiTheme({
         overrides: {
@@ -48,6 +59,21 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, se
         getOrganizers();
         console.log(organizerDataList);
     }, [isAuthenticated, triggerUpdate])
+
+    const addOrgContact = async (userId) => {
+        if (isAuthenticated) {
+            const response = await fetch(`/api/tenants/setorgcontact/${organizerId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(userId)
+            });
+            const result = await response.json();
+            setOrganizerContact(result);
+        }
+    }
 
     const columns = [
         {
@@ -92,16 +118,27 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, se
         renderExpandableRow: (rowData, rowMeta) => {
 
 
-            
+
             return (
                 <>
                     <TableRow>
-                        <TableCell colSpan={1}>
+                        <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                         </TableCell>
-                        <TableCell colSpan={3}>
+                        <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
                             <Typography variant="h4" >
                                 Kontaktperson
                             </Typography>
+                        </TableCell>
+                        <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
+                            <Button
+                                className={classes.button}
+                                variant="contained"
+                                size="large"
+                                color="primary"
+                                onClick={handleContactDialogOpen}
+                            >
+                                Velg kontakt
+                            </Button>
 
                         </TableCell>
                     </TableRow>
@@ -151,6 +188,7 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, se
                     </TableRow>
 
                     <AdminsList orgId={rowData[0]} handleDialogOpen={handleDialogOpen} />
+                    <UserPicker dialogOpen={open} handleDialogClose={handleContactDialogClose} setUserId={addOrgContact} />
                 </>
             );
         },
@@ -158,6 +196,7 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, se
 
             const orgIdCurrentRow = organizerDataList[curExpanded[0].dataIndex].id;
             setOrgId(orgIdCurrentRow);
+            setOrganizerId(orgIdCurrentRow);
             const getContact = async () => {
                 if (isAuthenticated) {
                     const response = await fetch(`/api/tenants/getcontact/${orgIdCurrentRow}`, {
@@ -173,16 +212,9 @@ export default function OrganizerAdminList({ triggerUpdate, handleDialogOpen, se
             getContact();
 
         }
-        //onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => { console.log(curExpanded, allExpanded, rowsExpanded) }
     };
 
-    //Koden under skjuler knappene for å utvide på index 3 og 4. Må ha MUI theme override og wrappes i det for å fungere.
-    //const components = {
-    //    ExpandButton: function (props) {
-    //        if (props.dataIndex === 3 || props.dataIndex === 4) return <div style={{ width: '24px' }} />;
-    //        return <ExpandButton {...props} />;
-    //    }
-    //};
+
 
     if (!organizerDataList) {
         return (<p>Loading...</p>);

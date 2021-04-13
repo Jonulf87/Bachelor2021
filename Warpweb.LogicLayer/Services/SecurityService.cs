@@ -96,6 +96,11 @@ namespace Warpweb.LogicLayer.Services
                 {
                     await _dbContext.CrewPermissions.AddRangeAsync(listOfPermissionsToAdd);
                 }
+
+                if (listOfPermissionsToAdd.Count == 0 && listOfPermissionsToDelete.Count == 0)
+                {
+                    return;
+                }
             }
 
             await _dbContext.SaveChangesAsync();

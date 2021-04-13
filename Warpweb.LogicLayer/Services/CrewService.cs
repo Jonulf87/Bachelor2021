@@ -40,8 +40,7 @@ namespace Warpweb.LogicLayer.Services
                 .Select(a => new CrewVm
                 {
                     CrewId = a.Id,
-                    CrewName = a.Name,
-                    //CrewRoles = a.CrewRoles
+                    CrewName = a.Name
                 }).SingleOrDefaultAsync();
         }
 
@@ -56,9 +55,7 @@ namespace Warpweb.LogicLayer.Services
 
                 var crew = new Crew
                 {
-                    Name = crewVm.CrewName,
-                    //Roles = crewVm.CrewRoles
-
+                    Name = crewVm.CrewName
                 };
 
                 _dbContext.Crews.Add(crew);
@@ -75,35 +72,45 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<int> UpdateCrewAsync(CrewVm crewVm)
         {
-            var existingCrew = _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).FirstOrDefault();
+            var existingCrew = _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).SingleOrDefault();
 
             if(existingCrew == null)
             {
                 throw new CrewDoesNotExistException("Det finnes ingen crew med denne IDen.");
             }
 
-            // If we get null in any field of incoming object, we assume that we don't need to update this field.
-            // But at the same time we have to have some value in this field in order not to delete data from the DB.
-            // Therefore we save existing data into the null-fields of the incoming object
 
             if (crewVm.CrewName == null)
             {
                 crewVm.CrewName = existingCrew.Name;
             }
 
-            //if (crewVm.CrewRoles == null)
-            //{
-            //    crewVm.CrewRoles = existingCrew.Roles;
-            //}
 
             existingCrew.Id = crewVm.CrewId;
             existingCrew.Name = crewVm.CrewName;
-            //existingCrew.CrewRoles = crewVm.CrewRoles;
 
             _dbContext.Update<Crew>(existingCrew);
             await _dbContext.SaveChangesAsync();
 
             return existingCrew.Id;
+        }
+
+
+        public async Task AddCrewMemberAsync(int crewId, string userId)
+        {
+            var crewUser = new CrewUser
+            {
+                ApplicationUserId = userId,
+                IsLeader = false,
+                CrewId = crewId
+            };
+            if (userId == null || crewId <= 0)
+            {
+                throw new Exception();
+            }
+
+            _dbContext.CrewUsers.Add(crewUser);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
@@ -132,7 +139,24 @@ namespace Warpweb.LogicLayer.Services
                 }).ToList();
         }
 
-        public async Task<List<CrewMembersListVm>> GetCrewLeaderAsync(int crewId)
+        public async Task AddCrewLeaderAsync(int crewId, string userId)
+        {
+            var crewUser = new CrewUser
+            {
+                ApplicationUserId = userId,
+                IsLeader = true,
+                CrewId = crewId
+            };
+            if(userId == null || crewId <= 0)
+            {
+                throw new Exception();
+            }
+
+            _dbContext.CrewUsers.Add(crewUser);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<CrewMembersListVm>> GetCrewLeadersAsync(int crewId)
         {
             var crew = await _dbContext.Crews
                 .Where(a => a.Id == crewId)
