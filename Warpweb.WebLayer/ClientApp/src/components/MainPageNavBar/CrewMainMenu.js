@@ -15,28 +15,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UserMainMenu() {
-    const [crewMemberships, setCrewMemberships] = useState([]);
     
+    const [crewMemberships, setCrewMemberships] = useState([]);  
     const { isAuthenticated, token } = useAuth();
-
-    /*useEffect(() => {
-        const getCrewMemberships = async () => {
+    
+    //trenger å endres til å bare hente enkelte brukers
+    useEffect(() => {
+        const getCrews = async () => {
             if (isAuthenticated) {
-                const response = await fetch('/api/', {
+
+                const response = await fetch('/api/crews/allcrews', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Authorization': `Bearer ${token}`
                     }
                 });
-
                 const result = await response.json();
-                setUserInfo(result);
+                setCrewMemberships(result);
             }
         }
-        getCrewMemberships();
-
-    }, [isAuthenticated]);*/
+        getCrews();
+    }, [isAuthenticated])
     
 
     return (
@@ -47,12 +45,15 @@ export default function UserMainMenu() {
             </ListSubheader>
         }
         >
-            <ListItem button component={Link} to='/crew'>
-                <ListItemText color="primary" primary='Et crew' />
-            </ListItem>
-            <ListItem button component={Link} to='/crew'>
-                <ListItemText primary='Annet Crew' />
-            </ListItem>
+            {crewMemberships.map((crew) => (
+                <ListItem
+                button
+                component={Link}
+                to={{ pathname: `/crew/${crew.id}` }}>
+                    <ListItemText color="primary" primary={crew.name} />
+                </ListItem>
+            ))}
+            
 
         </List>
     );

@@ -5,57 +5,55 @@ import { Card, Divider, Typography, List, ListItem, ListItemText, ListSubheader,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow } from '@material-ui/core';
+    TableRow, 
+    Container} from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
-function createData(id, fullName, phone, eMail, isLeader, comment){
-    return {id, fullName, phone, eMail, isLeader, comment}
-}
+export default function CrewMemberList({ id }) {
+    const [crewMembers, setCrewMembers] = useState([]);
+    const [crewLeaders, setCrewLeaders] = useState([]);
 
-const rows = [
-    createData(1, "Per Person", "12345678", "qwert@mail.com", false , ""),
-    createData(1, "Jan Person", "12345678", "qwert@mail.com", true , ""),
-    createData(1, "Per Person", "12345678", "hei@mail.com", false , "har bil"),
-    createData(1, "Per Person", "12345678", "qwert@mail.com", false , "")
-]
-
-export default function CrewMmberList() {
-    const [crewMembers, setCrewMembers] = useState(rows)
     
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
-        const getCrewMembers = async () => {
+        console.log(id);
+        const getCrewLeaderAndMembers = async () => {
             if (isAuthenticated) {
-                const response = await fetch(`/api/crews/crewmember/${1}`, {
+                const responseCrew = await fetch(`/api/crews/crewmembers/${id}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `Bearer ${token}`
                     }
                 });
+                const resultCrew = await responseCrew.json();
+                setCrewMembers(resultCrew);
 
-                const result = await response.json();
-                setCrewMembers(result);
+                const responseLeader = await fetch(`/api/crews/crewleaders/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const resultLeader = await responseLeader.json();
+                setCrewLeaders(resultLeader);
             }
         }
-        getCrewMembers();
+        getCrewLeaderAndMembers();
 
     }, [isAuthenticated]);
 
     function CrewLeaderTable() {
-        const leaders = crewMembers.filter(crewMembers => crewMembers.isLeader === true)
-
         return (
             <TableBody>
-                    {leaders.map((crewLeader) => (
-                        <TableRow>
+                    {crewLeaders.map((leader) => (
+                        <TableRow key={leader.id}>
                             <TableCell>
-                                {crewLeader.fullName}
+                                {leader.name}
                             </TableCell>
                             <TableCell>
-                                {crewLeader.phone}
+                                {leader.phone}
                             </TableCell>
                             <TableCell>
-                                {crewLeader.eMail}
+                                {leader.eMail}
                             </TableCell>
                         </TableRow>
                     ))}
@@ -64,20 +62,18 @@ export default function CrewMmberList() {
     }
 
     function CrewMemberTable() {        
-        const members = crewMembers.filter(crewMembers => crewMembers.isLeader === false)
-        
         return (
             <TableBody>
-                    {members.map((crewMember) => (
-                        <TableRow>
+                    {crewMembers.map((member) => (
+                        <TableRow key={member.id}>
                             <TableCell>
-                                {crewMember.fullName}
+                                {member.name}
                             </TableCell>
                             <TableCell>
-                                {crewMember.phone}
+                                {member.phone}
                             </TableCell>
                             <TableCell>
-                                {crewMember.eMail}
+                                {member.eMail}
                             </TableCell>
                         </TableRow>
                     ))}
@@ -87,39 +83,41 @@ export default function CrewMmberList() {
 
     return (
         <>
-            <Toolbar>
+            <Container>
+                <Toolbar>
                 <Typography variant="h6" component="h3" noWrap>
                     Ledere
                 </Typography>
             </Toolbar>
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                Navn
-                            </TableCell>
-                            <TableCell>
-                                Tlf
-                            </TableCell>
-                            <TableCell>
-                                e-post
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <CrewLeaderTable />
-                </Table>
-            </TableContainer>
-            <Toolbar>
-                <Typography variant="h6" component="h3" noWrap>
-                    Medlemmer
-                </Typography>
-            </Toolbar>
-            <TableContainer>
-                <Table>
-                    <CrewMemberTable />
-                </Table>
-            </TableContainer>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>
+                                    Navn
+                                </TableCell>
+                                <TableCell>
+                                    Telefon
+                                </TableCell>
+                                <TableCell>
+                                    e-post
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <CrewLeaderTable />
+                    </Table>
+                </TableContainer>
+                <Toolbar>
+                    <Typography variant="h6" component="h3" noWrap>
+                        Lag
+                    </Typography>
+                </Toolbar>
+                <TableContainer>
+                    <Table>
+                        <CrewMemberTable/>
+                    </Table>
+                </TableContainer>
+            </Container>
         </>
     );
 }

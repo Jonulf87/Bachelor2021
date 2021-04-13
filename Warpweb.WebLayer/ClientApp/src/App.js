@@ -142,7 +142,7 @@ export default function App(props) {
                             <Switch>
                                 <Route path='/user' component={UserMain} />
                                 <Route path='/venue' component={VenueMain} />
-                                <Route path='/crew' component={CrewMain} />
+                                <Route path='/crew/:id' component={CrewMain} />
                                 <Route path='/crewadmin' component={CrewAdminMain} />
                                 <Route path='/useradmin' component={UserAdminMain} />
                                 <Route path='/report' component={ReportMain} />

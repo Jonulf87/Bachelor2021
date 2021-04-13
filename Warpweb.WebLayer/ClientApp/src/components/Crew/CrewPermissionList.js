@@ -3,29 +3,28 @@ import React, { useState, useEffect } from 'react';
 import { Typography, List, ListItem, ListItemText, ListSubheader, Toolbar } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
-export default function CrewPermissionList() {
-    const [crewPermissions, setCrewPermissions] = useState(["Lokaleadmin","Billettadmin", "Innsjekkingsadmin"])
+export default function CrewPermissionList({ id }) {
+    const [crewPermissions, setCrewPermissions] = useState([])
     
     const { isAuthenticated, token } = useAuth();
 
-    /*useEffect(() => {
-        const getcrewPermissions = async () => {
+    useEffect(() => {
+        const getPolicies = async () => {
+
             if (isAuthenticated) {
-                const response = await fetch('/api/security/....', {
+                const response = await fetch(`/api/security/allpolicies/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'content-type': 'application/json'
                     }
                 });
-
                 const result = await response.json();
                 setCrewPermissions(result);
+                console.log(result)
             }
         }
-        getcrewPermissions();
-
-    }, [isAuthenticated]);*/
+        getPolicies();
+    }, [isAuthenticated])
 
     return (
         <>
@@ -34,11 +33,13 @@ export default function CrewPermissionList() {
                     Tilgangsområder
                 </Typography>
             </Toolbar>
-            <List
-            >
-                {crewPermissions.map((persmission) => (
-                <ListItem key={persmission}>
-                    <ListItemText primary={persmission} />
+            <List>
+                {/*lister bare alle mulige permission for øyeblikket*/}
+                {crewPermissions.map((permission) => (
+                <ListItem>
+                    <ListItemText>
+                        {permission.name}
+                    </ListItemText>
                 </ListItem>
                 ))}
             </List>
