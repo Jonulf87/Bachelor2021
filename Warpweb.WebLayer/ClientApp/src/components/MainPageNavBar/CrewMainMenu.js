@@ -7,7 +7,7 @@ import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        '& ':{}
+        '& ': {}
     },
     innerGrid: {
 
@@ -15,10 +15,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UserMainMenu() {
-    
-    const [crewMemberships, setCrewMemberships] = useState([]);  
+
+    const [crewMemberships, setCrewMemberships] = useState([]);
     const { isAuthenticated, token } = useAuth();
-    
+
     //trenger å endres til å bare hente enkelte brukers
     useEffect(() => {
         const getCrews = async () => {
@@ -35,25 +35,26 @@ export default function UserMainMenu() {
         }
         getCrews();
     }, [isAuthenticated])
-    
+
 
     return (
         <List
-        subheader={
-            <ListSubheader color="primary">
-                Mine Crew
+            subheader={
+                <ListSubheader color="primary">
+                    Mine Crew
             </ListSubheader>
-        }
+            }
         >
             {crewMemberships.map((crew) => (
                 <ListItem
-                button
-                component={Link}
-                to={{ pathname: `/crew/${crew.id}` }}>
+                    key={crew.id}
+                    button
+                    component={Link}
+                    to={{ pathname: `/crew/${crew.id}` }}>
                     <ListItemText color="primary" primary={crew.name} />
                 </ListItem>
             ))}
-            
+
 
         </List>
     );

@@ -68,7 +68,7 @@ export default function App(props) {
         },
         link: {
             textDecoration: 'none'
-        },
+        }
     }));
 
     const { window } = props;

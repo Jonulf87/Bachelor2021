@@ -77,6 +77,9 @@ namespace Warpweb.DataAccessLayer
 
             builder.Entity<CrewUser>()
                 .HasQueryFilter(a => a.Crew.MainEventId == _mainEventProvider.MainEventId);
+
+            builder.Entity<Row>()
+                .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);
         }
     }
 }

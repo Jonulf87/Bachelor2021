@@ -49,6 +49,13 @@ namespace Warpweb.LogicLayer.Services
                         Seats = new List<Seat>()
                     };
 
+
+
+                    if (row.TicketTypeIds != null)
+                    {
+                        newRow.TicketTypes = await _dbContext.TicketTypes.Where(a => row.TicketTypeIds.Contains(a.Id)).ToListAsync();
+                    }
+
                     foreach (var seat in row.Seats)
                     {
                         newRow.Seats.Add(new Seat
@@ -61,10 +68,30 @@ namespace Warpweb.LogicLayer.Services
                 }
                 else
                 {
-                    var existingRow = await _dbContext.Rows.SingleOrDefaultAsync(a => a.MainEventId == _mainEventProvider.MainEventId && row.Id == a.Id);
+                    var existingRow = await _dbContext.Rows.Include(a => a.TicketTypes).SingleOrDefaultAsync(a => a.Id == row.Id);
+
 
                     if (existingRow != null)
                     {
+                        
+                        var newRowTicketTypes = row.TicketTypeIds;
+
+                        var rowTicketTypesToBeDeleted = existingRow.TicketTypes.Where(a => !newRowTicketTypes.Contains(a.Id)).ToList();
+                        var rowTicketTypeIdsToAdd = newRowTicketTypes.Where(a => !existingRow.TicketTypes.Any(b => b.Id == a)).ToList();
+
+                        foreach (var rowTicketTypeToDelete in rowTicketTypesToBeDeleted)
+                        {
+                            existingRow.TicketTypes.Remove(rowTicketTypeToDelete);
+                        }
+
+                        foreach (var rowTicketTypeIdToAdd in rowTicketTypeIdsToAdd)
+                        {
+                            var ticketType = await _dbContext.TicketTypes.Where(a => a.Id == rowTicketTypeIdToAdd).SingleOrDefaultAsync();
+                            existingRow.TicketTypes.Add(ticketType);
+                        }
+
+
+
                         existingRow.Name = row.RowName;
                         existingRow.XCoordinate = row.XPos;
                         existingRow.YCoordinate = row.YPos;
@@ -88,7 +115,8 @@ namespace Warpweb.LogicLayer.Services
                     XPos = a.XCoordinate,
                     YPos = a.YCoordinate,
                     RowName = a.Name,
-                    Seats = a.Seats.Select(b => new SeatVm { Id = b.Id, SeatNumber = b.SeatNumber }).ToList()
+                    Seats = a.Seats.Select(b => new SeatVm { Id = b.Id, SeatNumber = b.SeatNumber }).ToList(),
+                    TicketTypeIds = a.TicketTypes.Select(c => c.Id).ToList()
                 }).ToListAsync();
         }
     }

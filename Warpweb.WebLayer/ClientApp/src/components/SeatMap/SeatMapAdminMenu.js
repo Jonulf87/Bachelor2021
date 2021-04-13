@@ -30,7 +30,8 @@ export default function SeatMapAdminMenu({ addRow, submit, rowNameAlreadyExists 
             yPos: 0,
             isVertical: false,
             rowName: rowName,
-            seats: seats
+            seats: seats,
+            ticketTypeIds: []
         });
         setNumberOfSeats("");
     }

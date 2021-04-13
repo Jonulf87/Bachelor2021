@@ -15,5 +15,6 @@ namespace Warpweb.LogicLayer.ViewModels
         public int YPos { get; set; }
         public bool IsVertical { get; set; }
         public List<SeatVm> Seats { get; set; }
+        public List<int> TicketTypeIds { get; set; }
     }
 }

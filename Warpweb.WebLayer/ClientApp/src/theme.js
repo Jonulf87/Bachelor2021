@@ -17,19 +17,20 @@ const theme = createMuiTheme({
     },
     overrides: {
         MUIDataTable: {
-          root: {
-            backgroundColor: "#F00"
-          },
-          paper: {
-            boxShadow: "none"
-          }
+            root: {
+                backgroundColor: "#F00"
+            },
+            paper: {
+                boxShadow: "none"
+            }
         },
         MUIDataTableBodyCell: {
-          root: {
-            backgroundColor: "none"
-          }
+            root: {
+                backgroundColor: "none",
+                cursor: "pointer"
+            }
         }
-      }
+    }
 });
 
 export default theme;

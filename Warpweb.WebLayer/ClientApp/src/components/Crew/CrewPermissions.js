@@ -8,18 +8,11 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import useAuth from '../../hooks/useAuth';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-    },
-    formControl: {
-        margin: theme.spacing(3),
-    },
-}));
 
 export default function CrewPermissions({ crewId }) {
 
     const [allPermissions, setAllPermissions] = useState([]);
+    const [isReady, setIsReady] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -35,41 +28,35 @@ export default function CrewPermissions({ crewId }) {
                 });
                 const result = await response.json();
                 setAllPermissions(result);
-                console.log(allPermissions);
-
+                setIsReady(true);
             }
         }
         getPolicies();
     }, [isAuthenticated, crewId])
 
-    useEffect(() => {
-        const setPermissions = async () => {
-            if (isAuthenticated) {
-                await fetch(`/api/security/setpolicies/${crewId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    },
-                    method: 'POST',
-                    body: JSON.stringify(allPermissions)
-                });
+    
 
-            }
-        }
-        setPermissions();
-    }, [allPermissions])
-
-    const classes = useStyles();
-
-
-
-    const updatePermissionsList = (e) => {
+    const updatePermissionsList = async (e) => {
         const oldPermission = allPermissions.find(a => a.name === e.target.name);
         oldPermission.crewHasPermission = !oldPermission.crewHasPermission;
-        setAllPermissions(oldValue => [...oldValue.filter(a => a.name !== e.target.name), oldPermission]);
+        const newPermissions = [...allPermissions.filter(a => a.name !== e.target.name), oldPermission]
+        setAllPermissions(newPermissions);
+
+        if (isAuthenticated) {
+            await fetch(`/api/security/setpolicies/${crewId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(newPermissions)
+            });
+        }
     }
 
-
+    if (!isReady) {
+        return (<div>Is loading...</div>)
+    }
 
     return (
         <>
@@ -79,7 +66,6 @@ export default function CrewPermissions({ crewId }) {
                     <FormControlLabel
                         key={crewPermission.value}
                         control={<Checkbox
-                            key={crewPermission.value}
                             checked={crewPermission.crewHasPermission}
                             onChange={updatePermissionsList}
                             name={crewPermission.name} />}
