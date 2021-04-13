@@ -18,7 +18,6 @@ const theme = createMuiTheme({
     overrides: {
         MUIDataTable: {
           root: {
-            backgroundColor: "#F00"
           },
           paper: {
             boxShadow: "none"

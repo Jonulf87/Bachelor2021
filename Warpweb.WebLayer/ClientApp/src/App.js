@@ -31,58 +31,25 @@ import NavBarHeader from './components/MainPageNavBar/NavBarHeader';
 import CurrentEventProvider from './providers/CurrentEventProvider';
 import OrganizerAdminMain from './components/OrganizerAdmin/OrganizerAdminMain';
 
-export default function App(props) {
+const drawerWidth = 240;
 
-    const drawerWidth = 240;
-
-    const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
         root: {
             display: 'flex',
         },
-        drawer: {
-            [theme.breakpoints.up('md')]: {
-                width: drawerWidth,
-                flexShrink: 0,
-            },
-        },
-        appBar: {
-            [theme.breakpoints.up('md')]: {
-                width: `calc(100% - ${drawerWidth}px)`,
-                marginLeft: drawerWidth,
-            },
-        },
-        menuButton: {
-            marginRight: theme.spacing(2),
-            [theme.breakpoints.up('md')]: {
-                display: 'none',
-            },
-        },
         // necessary for content to be below app bar
         toolbar: theme.mixins.toolbar,
-        drawerPaper: {
-            width: drawerWidth,
-        },
         content: {
             flexGrow: 1,
             padding: theme.spacing(3),
         },
-        link: {
-            textDecoration: 'none'
-        },
     }));
 
-    const { window } = props;
+
+export default function App() {
+
     const classes = useStyles();
-    const [mobileOpen, setMobileOpen] = useState(false);
 
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
-
-
-
-
-    const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
 
@@ -91,51 +58,7 @@ export default function App(props) {
                 <ThemeProvider theme={theme}>
                     <div className={classes.root}>
                         <CssBaseline />
-                        <AppBar position="fixed" className={classes.appBar}>
-                            <Toolbar>
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="open drawer"
-                                    edge="start"
-                                    onClick={handleDrawerToggle}
-                                    className={classes.menuButton}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
-                                <NavBarHeader />
-                            </Toolbar>
-                        </AppBar>
-                        <nav className={classes.drawer} aria-label="mailbox folders">
-                            <Hidden mdUp>
-                                <Drawer
-                                    container={container}
-                                    variant="temporary"
-                                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                                    open={mobileOpen}
-                                    onClose={handleDrawerToggle}
-                                    classes={{
-                                        paper: classes.drawerPaper,
-                                    }}
-                                    ModalProps={{
-                                        keepMounted: true, // Better open performance on mobile.
-                                    }}
-                                >
-                                    <MainMenu />
-                                </Drawer>
-                            </Hidden>
-                            <Hidden smDown>
-                                <Drawer
-                                    classes={{
-                                        paper: classes.drawerPaper,
-                                    }}
-                                    variant="permanent"
-                                    open
-                                >
-
-                                    <MainMenu />
-                                </Drawer>
-                            </Hidden>
-                        </nav>
+                        <MainMenu />
 
                         <main className={classes.content}>
                             <div className={classes.toolbar} />
