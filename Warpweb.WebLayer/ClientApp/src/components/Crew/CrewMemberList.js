@@ -17,7 +17,7 @@ export default function CrewMemberList({ id }) {
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
-        console.log("id: "+ id)
+        console.log(id);
         const getCrewLeaderAndMembers = async () => {
             if (isAuthenticated) {
                 const responseCrew = await fetch(`/api/crews/crewmembers/${id}`, {
@@ -104,7 +104,7 @@ export default function CrewMemberList({ id }) {
                                 </TableCell>
                             </TableRow>
                         </TableHead>
-                        {/*<CrewLeaderTable />*/}
+                        <CrewLeaderTable />
                     </Table>
                 </TableContainer>
                 <Toolbar>
@@ -114,7 +114,7 @@ export default function CrewMemberList({ id }) {
                 </Toolbar>
                 <TableContainer>
                     <Table>
-                        {/*<CrewMemberTable/>*/}
+                        <CrewMemberTable/>
                     </Table>
                 </TableContainer>
             </Container>

@@ -14,6 +14,7 @@ import CrewNews from './CrewNews'
 
 export default function CrewMain() {
     const [crew, setCrew] = useState([])
+    const [isReady, setIsReady] = useState(false);
     const {id} = useParams();
  
     const { isAuthenticated, token } = useAuth();
@@ -29,6 +30,8 @@ export default function CrewMain() {
                 });
                 const result = await response.json();
                 setCrew(result);
+                setIsReady(true)
+                
             }
         }
         getCrews();
@@ -49,10 +52,10 @@ export default function CrewMain() {
                     </Toolbar>
                 </Grid>
                 <Grid item xs={12} sm={12} lg={8}> 
-                    { isAuthenticated && <CrewMemberList id={crew.id} />}
+                    {isReady && <CrewMemberList id={crew.crewId} />}
                 </Grid>
                 <Grid item xs={12} sm={12} lg={4}>
-                    <CrewPermissionList id={crew.id} />
+                    {isReady && <CrewPermissionList id={crew.crewId} />}
                 </Grid>
                 <Grid item xs={12} sm={12} lg={12}>
                     <CrewNews />

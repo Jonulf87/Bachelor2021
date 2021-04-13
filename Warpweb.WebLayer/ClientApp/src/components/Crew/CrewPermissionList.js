@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Typography, List, ListItem, ListItemText, ListSubheader, Toolbar } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
-export default function CrewPermissionList() {
+export default function CrewPermissionList({ id }) {
     const [crewPermissions, setCrewPermissions] = useState([])
     
     const { isAuthenticated, token } = useAuth();
@@ -12,7 +12,7 @@ export default function CrewPermissionList() {
         const getPolicies = async () => {
 
             if (isAuthenticated) {
-                const response = await fetch(`/api/security/allpolicies/1`, {
+                const response = await fetch(`/api/security/allpolicies/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
