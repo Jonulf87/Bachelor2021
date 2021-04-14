@@ -154,7 +154,7 @@ export default function CreateEvent() {
     )
 
     return (
-        <Paper variant="outlined" elevation={2}>
+        <Paper variant="outlined" elevation={0}>
             <Grid
                 container
                 spacing={2}
