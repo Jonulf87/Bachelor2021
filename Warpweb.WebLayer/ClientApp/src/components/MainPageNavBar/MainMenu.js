@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Drawer, Hidden, Divider, Toolbar, Typography, IconButton} from '@material-ui/core';
+import { AppBar, ButtonGroup, Drawer, Hidden, Divider, Toolbar, Typography, IconButton} from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
                 marginLeft: drawerWidth,
             },
             boxShadow: 'none',
-            backgroundColor: theme.palette.primary.main
+            backgroundColor: theme.palette.primary.main,
         },
         menuButton: {
             marginRight: theme.spacing(2),
@@ -39,9 +39,16 @@ const useStyles = makeStyles((theme) => ({
                 display: 'none',
             },
         },
+        buttonRight: {
+            marginLeft: "auto",
+            '&:hover': {
+                color: theme.palette.secondary,
+              },
+        },
 
-        // necessary for content to be below app bar
+        // nødvendig for innhold nendefor baren
         toolbar: theme.mixins.toolbar,
+
         drawerPaper: {
             width: drawerWidth,
             backgroundColor: theme.palette.primary.main,
@@ -86,7 +93,7 @@ export default function MainMenu(props) {
                     </Typography>
                 </div>
                 <Divider />
-                <UserMainMenu />
+                
                 <Divider />
                 <AdminMainMenu />
                 <Divider />
@@ -98,51 +105,53 @@ export default function MainMenu(props) {
 
     return (
         <>
-
-                        <AppBar position="fixed" className={classes.appBar}>
-                            <Toolbar>
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="open drawer"
-                                    edge="start"
-                                    onClick={handleDrawerToggle}
-                                    className={classes.menuButton}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
-                                <NavBarHeader />
-                            </Toolbar>
-                        </AppBar>
-                        <nav className={classes.drawer} aria-label="mailbox folders">
-                            <Hidden mdUp>
-                                <Drawer
-                                    container={container}
-                                    variant="temporary"
-                                    anchor='left'
-                                    open={mobileOpen}
-                                    onClose={handleDrawerToggle}
-                                    classes={{
-                                        paper: classes.drawerPaper,
-                                    }}
-                                    ModalProps={{
-                                        keepMounted: true, // Better open performance on mobile.
-                                    }}
-                                >
-                                    <NavContents />
-                                </Drawer>
-                            </Hidden>
-                            <Hidden smDown>
-                                <Drawer
-                                    classes={{
-                                        paper: classes.drawerPaper,
-                                    }}
-                                    variant="permanent"
-                                    open
-                                >
-                                    <NavContents />
-                                </Drawer>
-                            </Hidden>
-                        </nav>
+        <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    onClick={handleDrawerToggle}
+                    className={classes.menuButton}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <NavBarHeader />
+                <ButtonGroup className={classes.buttonRight}>
+                    <UserMainMenu />
+                    </ButtonGroup>
+            </Toolbar>
+        </AppBar>
+        <nav className={classes.drawer} aria-label="mailbox folders">
+            <Hidden mdUp>
+                <Drawer
+                    container={container}
+                    variant="temporary"
+                    anchor='left'
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                >
+                    <NavContents />
+                </Drawer>
+            </Hidden>
+            <Hidden smDown>
+                <Drawer
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    variant="permanent"
+                    open
+                >
+                    <NavContents />
+                </Drawer>
+            </Hidden>
+        </nav>
         </>
     )
 }

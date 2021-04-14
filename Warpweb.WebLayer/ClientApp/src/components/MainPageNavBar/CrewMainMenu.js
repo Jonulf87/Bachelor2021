@@ -43,7 +43,7 @@ export default function UserMainMenu() {
             subheader={
                 <ListSubheader color="primary">
                     Mine Crew
-            </ListSubheader>
+                </ListSubheader>
             }
         >
             {crewMemberships.map((crew) => (

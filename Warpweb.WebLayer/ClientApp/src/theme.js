@@ -14,9 +14,22 @@ const theme = createMuiTheme({
             dark: '#ab0300',
             contrastText: '#000',
         },
+        background: {
+        }
+
     },
     overrides: {
-        MUIDataTable: {
+        MuiButton: {
+          root: {
+            textTransform: "none"
+          }
+        },
+        MuiPaper: {
+          root: {
+
+          }
+        },
+        /*MUIDataTable: {
             root: {
             },
             paper: {
@@ -28,7 +41,12 @@ const theme = createMuiTheme({
                 backgroundColor: "none",
                 cursor: "pointer"
             }
-        }
+        }*/
+    },
+    props: {
+      MuiPaper: {
+        variant: "outlined",
+      }
     }
 });
 

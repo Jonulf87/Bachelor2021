@@ -40,7 +40,8 @@ export default function CrewMain() {
     
     return (
         <Paper
-            variant="outlined">
+            variant="outlined"
+        >
             <Grid
             container
             spacing={2}

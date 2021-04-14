@@ -2,6 +2,7 @@
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
@@ -49,7 +50,13 @@ export default function AdminMainMenu() {
 
 
     return (
-        <List>
+        <List
+        subheader={
+            <ListSubheader color="primary">
+                Administrasjon
+            </ListSubheader>
+        }
+        >
 
             {pullisis.some(a => a === 6) &&
                 <ListItem button button component={Link} to='/venue'>

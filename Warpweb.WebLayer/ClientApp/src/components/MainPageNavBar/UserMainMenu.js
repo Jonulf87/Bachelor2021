@@ -1,41 +1,65 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { List, ListItem, ListItemText, ListItemIcon, Button} from '@material-ui/core';
+
+import { makeStyles } from '@material-ui/core/styles';
+import { List, ListItem, ListItemText, ListItemIcon, Button, ButtonGroup} from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import theme from '../../theme';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        color: theme.palette.primary.contrastText
+    }
+}));
 
 export default function UserMainMenu() {
 
     const { isAuthenticated } = useAuth();
     
+    const classes = useStyles();
 
     return (
-        <List>
+        <>
             {isAuthenticated && (
                 <>
-                    <ListItem button component={Link} to='/user'>
-                        <ListItemIcon><PersonIcon /></ListItemIcon>
-                        <ListItemText primary='Min side' />
-                    </ListItem>
-                    <ListItem button component={Link} to='/logout'>
-                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                        <ListItemText primary='Logg ut' />
-                    </ListItem>
-                </>)}
+                    <Button
+                    className={classes.root}
+                    startIcon={<PersonIcon />}
+                    component={Link}
+                    to='/user'
+                    >
+                        Min side
+                    </Button>
+                    <Button
+                    className={classes.root}
+                    startIcon={<ExitToAppIcon />}
+                    component={Link}
+                    to='/logout'>
+                        Logg ut
+                    </Button>
+                </>
+                )}
             {!isAuthenticated && (
                 <>
-                    
-                    <ListItem button component={Link} to={'/register'}>
-                        <ListItemIcon><PersonIcon /></ListItemIcon>
-                        <ListItemText primary='Registrer' />
-                    </ListItem>
-                    <ListItem button component={Link} to={'/login'}>
-                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                        <ListItemText primary='Logg inn' />
-                    </ListItem>
+                    <Button
+                    className={classes.root}
+                    startIcon={<PersonIcon />}
+                    component={Link}
+                    to='/register'
+                    >
+                        Min side
+                    </Button>
+                    <Button
+                    className={classes.root}
+                    startIcon={<ExitToAppIcon />}
+                    component={Link}
+                    to='/login'>
+                        Logg inn
+                    </Button>
                 </>
             )}
-        </List>
+        </>
     );
 }
