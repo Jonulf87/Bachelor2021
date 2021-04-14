@@ -101,16 +101,16 @@ export default function VenueInfo(props) {
                     <TableRow>
                         <TableCell>
                                 {!isEditing && (
-                                <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)} disableElevation>
+                                <Button onClick={() => setIsEditing(!isEditing)} disableElevation>
                                     Endre
                                 </Button>
                                 )}
                                 {isEditing && (
                                 <>
-                                <Button variant="contained" color="primary" onClick={() => setIsEditing(!isEditing)} disableElevation>
+                                <Button onClick={() => setIsEditing(!isEditing)} disableElevation>
                                     Lagre
                                 </Button>
-                                <Button variant="contained" color="secondary" onClick={() => setIsEditing(!isEditing)} disableElevation>
+                                <Button onClick={() => setIsEditing(!isEditing)} disableElevation>
                                     Avbryt
                                 </Button>
                                 </>

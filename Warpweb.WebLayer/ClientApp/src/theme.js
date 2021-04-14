@@ -1,4 +1,6 @@
-﻿import { createMuiTheme } from '@material-ui/core/styles'
+﻿import { FormControl } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles'
+import { BorderAll } from '@material-ui/icons';
 
 const theme = createMuiTheme({
     palette: {
@@ -31,20 +33,29 @@ const theme = createMuiTheme({
         },
         MUIDataTable: {
             root: {
+              border: "none",
+              backgroundColor:"#f00"
             },
             paper: {
-                boxShadow: "none"
+                variant: "elevation",
+                boxShadow: "none",
+                borderWidth: "0px"
+                
             }
         },
         MUIDataTableBodyCell: {
             root: {
-                backgroundColor: "none",
-                cursor: "pointer"
             }
         }
     },
     props: {
       MuiPaper: {
+        variant: "outlined",
+      },
+      MUIDataTable: {
+        elevation: 0,
+      },
+      MuiTextField: {
         variant: "outlined",
       }
     }

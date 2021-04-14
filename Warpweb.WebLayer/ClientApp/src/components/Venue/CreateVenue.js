@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button } from '@material-ui/core';
+import { Container, Typography, Button, Grid, Toolbar } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import useAuth from '../../hooks/useAuth';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -8,8 +8,7 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
-            margin: theme.spacing(3),
-            width: '25ch',
+            width: '100%',
         },
 
         '& .row .cell': {
@@ -93,84 +92,59 @@ export default function CreateVenue() {
 
     return (
         <>
-            <Typography gutterBottom variant="h5" component="h5">
-                Opprett lokale
-            </Typography>
+            <Toolbar>
+                <Typography gutterBottom variant="h6" component="h3">
+                    Opprett lokale
+                </Typography>
+            </Toolbar>
             <ValidatorForm
                 className={classes.root}
                 autoComplete="off"
                 noValidate
                 onSubmit={handleSubmit}
             >
-                <div>
-                    <div className="row">
-                        <div className="cell">
+                <Grid container spacing={2}>
+                        <Grid item xs={12} lg={4}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredName(event.target.value);
                                 }}
                                 label="Navn"
-                                placeholder="Navn på lokale"
                                 name="name"
                                 value={enteredName}
                                 required
                                 validators={['required', 'minStringLength:1', 'trim']}
                                 errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
                             />
-                        </div>
-                        <div className="cell">
+                        </Grid>
+                        <Grid item xs={12} lg={4}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredContactName(event.target.value);
                                 }}
                                 label="Kontaktperson"
-                                placeholder="Kontaktperson"
                                 name="contactperson"
                                 value={enteredContactName}
                                 required
                                 validators={['required']}
                                 errorMessages={['Kontaktperson må oppgis']}
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
                             />
-                        </div>
-                    </div>
+                        </Grid>
 
-                    <div className="row">
-                        <div className="cell">
+                        <Grid item xs={12} lg={4}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredContactEMail(event.target.value);
                                 }}
                                 label="Kontakt epost"
-                                placeholder="Kontakt epost"
                                 name="contactemail"
                                 value={enteredContactEMail}
                                 required
                                 validators={['required']}
                                 errorMessages={['Epost må oppgis']}
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
                             />
-                        </div>
-                        <div className="cell">
+                        </Grid>
+                        <Grid item xs={12} lg={4}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredContactPhone(event.target.value);
@@ -182,19 +156,10 @@ export default function CreateVenue() {
                                 required
                                 validators={['required']}
                                 errorMessages={['Telefonnummer må oppgis']}
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
                             />
-                        </div>
-                    </div>
+                        </Grid>
 
-                    <div className="row">
-                        <div className="cell">
+                        <Grid item xs={12} lg={4}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredAddress(event.target.value);
@@ -206,16 +171,9 @@ export default function CreateVenue() {
                                 required
                                 validators={['required']}
                                 errorMessages={['Adresse må oppgis']}
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
                             />
-                        </div>
-                        <div className="cell">
+                        </Grid>
+                        <Grid item xs={12} lg={4}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredPostalCode(event.target.value);
@@ -227,30 +185,22 @@ export default function CreateVenue() {
                                 required
                                 validators={['required', 'matchRegexp:^[0-9]{4}$']}
                                 errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
                             />
-                        </div>
-                    
-                    </div>
-                </div>
-
-                <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    className={classes.button}
-                    startIcon={<SaveIcon />}
-                    disabled={isSending}
-                >
-                    Lagre
-                </Button>
+                        </Grid>
+                        <Grid item xs={12} lg={4}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                className={classes.button}
+                                startIcon={<SaveIcon />}
+                                disabled={isSending}
+                            >
+                                Lagre
+                            </Button>
+                        </Grid>   
+                </Grid>                
             </ValidatorForm>
         </>
     );

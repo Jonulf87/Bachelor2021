@@ -49,7 +49,7 @@ export default function UserMainMenu() {
                     component={Link}
                     to='/register'
                     >
-                        Min side
+                        Registrer
                     </Button>
                     <Button
                     className={classes.root}
