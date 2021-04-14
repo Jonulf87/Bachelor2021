@@ -42,8 +42,8 @@ export default function UserRegister() {
                 width: "100%"
             },
         },
-        innerGrid: {
-
+        paper: {
+            padding: "10px"
         }
     }));
 
@@ -177,8 +177,12 @@ export default function UserRegister() {
     }
 
     return (
-        <Paper elevation={0} variant="outlined">
-            <Container maxWidth="sm" >
+        <Container maxWidth="sm" >
+            <Paper
+                elevation={0}
+                variant="outlined"
+                className={classes.paper}
+            >
                 <ValidatorForm
                     autoComplete="off"
                     noValidate
@@ -270,7 +274,7 @@ export default function UserRegister() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 validators={['required', 'minStringLength:10', 'matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})']}
                                 errorMessages={['Passord må oppgis', 'Passord må bestå av minst 10 tegn', 'Passord må bestå av minst 10 tegn']}
-                                // matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{14,}) - Regex for 14 tegn - sifre, både store og små bokstaver og symboler
+                            // matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{14,}) - Regex for 14 tegn - sifre, både store og små bokstaver og symboler
                             />
                         </Grid>
                         <Grid item xs={12} >{/*Input telefon*/}
@@ -384,7 +388,7 @@ export default function UserRegister() {
                                         value={parentPhoneNumber}
                                         onChange={(e) => setParentPhoneNumber(e.target.value)}
                                         validators={['required', 'matchRegexp:^[0-9]{8}$']}
-                                    errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
+                                        errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
                                     />
                                 </Grid>
                                 <Grid item xs={12} >
@@ -458,7 +462,7 @@ export default function UserRegister() {
                         </Grid>
                     </Grid>
                 </ValidatorForm>
-            </Container>
-        </Paper>
+            </Paper>
+        </Container>
     );
 }

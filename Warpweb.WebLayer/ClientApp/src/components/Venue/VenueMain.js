@@ -13,8 +13,8 @@ export default function VenueMain() {
     return (
         <>
             <Paper>   
-            <Toolbar>
-                <Button disableRipple disableFocusRipple variant="text" color="primary" onClick={() => setOpenCreate(!openCreate)} disableElevation>
+                <Toolbar>
+                    <Button disableRipple disableFocusRipple variant="contained" color="primary" onClick={() => setOpenCreate(!openCreate)} disableElevation>
                     {openCreate ? <>Avbryt</> : <>Legg Til Lokale</>}
                 </Button>
             </Toolbar>

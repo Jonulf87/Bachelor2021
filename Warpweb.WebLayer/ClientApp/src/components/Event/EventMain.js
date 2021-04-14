@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import EventInfo from './EventInfo';
 import EventAdmin from './EventAdmin';
 import EventList from './EventList';
@@ -15,8 +15,20 @@ export default function EventMain() {
     return (
         <>
             {/*<EventInfo />*/}
-            <EventList venuePosted={venuePosted} />
-            {isOrgAdmin && <CreateEvent setVenuePosted={setVenuePosted} />}
+            <Grid
+                item
+                xs={12}
+                md={6}
+            >
+                <EventList venuePosted={venuePosted} />
+            </Grid>
+            <Grid
+                item
+                xs={12}
+                md={6}
+            >
+                {isOrgAdmin && <CreateEvent setVenuePosted={setVenuePosted} />}
+            </Grid>
         </>
 
     );

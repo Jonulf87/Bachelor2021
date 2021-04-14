@@ -1,16 +1,33 @@
-﻿import { Dialog, ListItem, ListItemSecondaryAction, ListItemText, Button, DialogContent, DialogTitle, Grid, Typography, CircularProgress } from '@material-ui/core';
+﻿import { Dialog, Button, DialogContent, DialogTitle, Typography, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { FixedSizeList } from 'react-window';
-import UserList from '../UserAdmin/UserList';
 
-export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, excludedUsers=[] }) {
+export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, excludedUsers = [] }) {
 
     const [usersList, setUsersList] = useState([]);
     const [usersListIsReady, setUsersListIsReady] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
-    
+
+    const useStyles = makeStyles({
+        root: {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderBottom: "1px rgba(0,0,0,0.4) solid"
+        },
+        button: {
+            marginRight: "10px"
+        },
+        dialog: {
+            marginBottom: "5px"
+        }
+    });
+
+    const classes = useStyles();
+
 
     useEffect(() => {
         const getUsers = async () => {
@@ -40,30 +57,35 @@ export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, e
                 onClose={handleDialogClose}
             >
                 <DialogTitle>
-                    Brukere:
+                    Velg bruker
                 </DialogTitle>
 
-                <DialogContent>
-
-                        <FixedSizeList
-                            className="list"
-                            height={400}
-                            itemCount={usersList.length}
-                            itemSize={60}
-                            width={300}
-                        >
+                <DialogContent
+                    className={classes.dialog}
+                >
+                    <FixedSizeList
+                        className="list"
+                        height={400}
+                        itemCount={usersList.length}
+                        itemSize={60}
+                        width={300}
+                    >
                         {({ index, style }) => (
-                            <div key={usersList[index].id} style={style}  >
+                            <div key={usersList[index].id} style={style} className={classes.root} >
                                 <Typography> {`${usersList[index].firstName} ${usersList[index].lastName}`} </Typography>
                                 {excludedUsers.indexOf(usersList[index].id) === -1 && (
-                                <Button variant="contained" color="primary" onClick={(e) => {
-                                    setUserId(usersList[index].id);
-                                    handleDialogClose();
-                                }} >Velg</Button>
-                                    )}
-                                </div>
-                            )}
-                        </FixedSizeList>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.button}
+                                        onClick={(e) => {
+                                            setUserId(usersList[index].id);
+                                            handleDialogClose();
+                                        }} >Velg</Button>
+                                )}
+                            </div>
+                        )}
+                    </FixedSizeList>
                 </DialogContent>
             </Dialog>
         </>

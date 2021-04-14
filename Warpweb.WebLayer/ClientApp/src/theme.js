@@ -4,60 +4,58 @@ import { BorderAll } from '@material-ui/icons';
 
 const theme = createMuiTheme({
     palette: {
+        type: 'light',
         primary: {
-            light: '#484848',
-            main: '#212121',
-            dark: '#000000',
-            contrastText: '#fff',
+            main: '#a9b6ff',
         },
         secondary: {
-            light: '#ff7b47',
-            main: '#e54819',
-            dark: '#ab0300',
-            contrastText: '#000',
+            main: '#f50057',
         },
+        divider: 'rgba(0,0,0,0.15)',
         background: {
-        }
-
+            paper: '#F3F5F5',
+        },
     },
     overrides: {
         MuiButton: {
-          root: {
-            textTransform: "none"
-          }
+            root: {
+                textTransform: "none"
+            }
         },
         MuiPaper: {
-          root: {
+            root: {
 
-          }
+            }
         },
         MUIDataTable: {
             root: {
-              border: "none",
-              backgroundColor:"#f00"
+                border: "none",
+                backgroundColor: "#f00"
             },
             paper: {
                 variant: "elevation",
                 boxShadow: "none",
                 borderWidth: "0px"
-                
+
             }
         },
         MUIDataTableBodyCell: {
             root: {
+                backgroundColor: "none",
+                cursor: "pointer"
             }
         }
     },
     props: {
-      MuiPaper: {
-        variant: "outlined",
-      },
-      MUIDataTable: {
-        elevation: 0,
-      },
-      MuiTextField: {
-        variant: "outlined",
-      }
+        MuiPaper: {
+            variant: "outlined",
+        },
+        MUIDataTable: {
+            elevation: 0,
+        },
+        MuiTextField: {
+            variant: "outlined",
+        }
     }
 });
 

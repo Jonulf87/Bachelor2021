@@ -4,18 +4,19 @@ import { makeStyles } from '@material-ui/core/styles';
 import UserPicker from '../User/UserPicker';
 import useAuth from '../../hooks/useAuth';
 
-// Styling
-const useStyles = makeStyles((theme) => ({
-    root: {
-        margin: theme.spacing(3),
-        display: 'flex',
-        flexWrap: 'wrap',
-        margin: 10
-    },
-}));
+
 
 
 export default function OrganizerAdminMenu({ updateList }) {
+
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            margin: theme.spacing(3),
+            display: 'flex',
+            flexWrap: 'wrap',
+            margin: 10
+        },
+    }));
 
     const [organizerName, setOrganizerName] = useState("");
     const [organizerNumber, setOrganizerNumber] = useState("");
@@ -109,7 +110,7 @@ export default function OrganizerAdminMenu({ updateList }) {
                     >
                         Opprett
                     </Button>
-                    
+
                 </Grid>
             </form>
 

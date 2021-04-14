@@ -20,18 +20,36 @@ export default function PaperSheet() {
         },
     }));
 
-    const classes = useStyles(); 
+    const classes = useStyles();
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs>
+        <Grid
+            container
+            spacing={2}
+        >
+            <Grid
+                item
+                xs={6}
+            >
                 <UserInfoCompact />
             </Grid>
-            <Grid item xs>
-                <UserTicketTable />
-            </Grid>
-            <Grid item xs>
-                <UserCrewTable />
+            <Grid
+                container
+                item
+                xs={6}
+            >
+                <Grid
+                    item
+                    xs={12}
+                >
+                    <UserCrewTable />
+                </Grid>
+                <Grid
+                    item
+                    xs={12}
+                >
+                    <UserTicketTable />
+                </Grid>
             </Grid>
         </Grid>
     );
