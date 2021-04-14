@@ -58,11 +58,18 @@ export default function UserLogin(props) {
         }
     }
 
+    const onKeyDownHandler = (event) => {
+        
+        if (event.keyCode === 13) {
+            logInSubmit();
+        }
+    };
+
     return (
         <>
             <PopupWindow open={open} onClose={() => setOpen(false)} text={showErrors(errors)} />
             <Container className={classes.container} maxWidth="xs">
-            <form>
+                <form onKeyDown={onKeyDownHandler}>
                     <Grid container spacing={2} alignContent="center">
                     {/*Input brukernavn/email*/}
                         <Grid item xs={12}>
