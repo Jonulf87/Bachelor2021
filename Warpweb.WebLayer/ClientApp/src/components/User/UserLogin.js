@@ -20,12 +20,9 @@ export default function UserLogin(props) {
     let queryParams = queryString.parse(props.location.search)
 
     const [userName, setUserName] = useState(queryParams.userName ? queryParams.userName : "");
-
     const [password, setPassword] = useState("");
-
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [open, setOpen] = useState(false);
-
     const [errors, setErrors] = useState([]);
 
     const classes = useStyles();
