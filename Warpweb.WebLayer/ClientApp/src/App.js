@@ -10,7 +10,7 @@ import './custom.css';
 import AuthProvider from './providers/AuthProvider';
 
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar, } from '@material-ui/core';
+import { Divider, Drawer, Hidden, IconButton, Toolbar, Typography, CssBaseline, AppBar, Grid} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import MainMenu from './components/MainPageNavBar/MainMenu';
@@ -59,7 +59,7 @@ export default function App() {
                     <div className={classes.root}>
                         <CssBaseline />
                         <MainMenu />
-
+                        <Grid spacing={2}>
                         <main className={classes.content}>
                             <div className={classes.toolbar} />
                             <Switch>
@@ -79,7 +79,8 @@ export default function App() {
                                 <Route path='/seatmap' component={SeatMapMain} />
                                 <Route path='/organizer' component={OrganizerAdminMain} />
                             </Switch>
-                        </main>
+                            </main>
+                            </Grid>
                     </div>
                 </ThemeProvider>
             </CurrentEventProvider>

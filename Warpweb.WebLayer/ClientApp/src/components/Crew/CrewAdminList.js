@@ -36,10 +36,6 @@ export default function OrganizerAdminList() {
         getCrews();
     }, [isAuthenticated, updateList])
 
-
-
-
-
     const addCrew = async () => {
         if (isAuthenticated) {
             await fetch(`/api/crews/createcrew/${crewName}`, {
@@ -52,8 +48,6 @@ export default function OrganizerAdminList() {
             triggerUpdate();
         }
     }
-
-
 
     const columns = [
         {
