@@ -114,7 +114,7 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
-        public async Task<OrganizerVm> GetOrganizerContactAsync(int orgId)
+        public async Task<List<OrganizerVm>> GetOrganizerContactAsync(int orgId)
         {
             var contact = await _dbContext.Organizers
                 .Where(a => a.Id == orgId)
@@ -126,7 +126,7 @@ namespace Warpweb.LogicLayer.Services
                     ContactName = a.Contact.FirstName + " " + a.Contact.LastName,
                     ContactPhone = a.Contact.PhoneNumber,
                     ContactMail = a.Contact.Email
-                }).FirstOrDefaultAsync();
+                }).ToListAsync();
 
             return contact;
         }

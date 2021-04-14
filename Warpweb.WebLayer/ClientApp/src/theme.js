@@ -29,7 +29,7 @@ const theme = createMuiTheme({
 
           }
         },
-        /*MUIDataTable: {
+        MUIDataTable: {
             root: {
             },
             paper: {
@@ -41,7 +41,7 @@ const theme = createMuiTheme({
                 backgroundColor: "none",
                 cursor: "pointer"
             }
-        }*/
+        }
     },
     props: {
       MuiPaper: {

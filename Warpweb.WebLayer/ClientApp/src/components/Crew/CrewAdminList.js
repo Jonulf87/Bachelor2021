@@ -100,8 +100,6 @@ export default function OrganizerAdminList() {
             )
         },
         onRowClick: (rowData, rowMeta) => {
-            console.log(rowData);
-            console.log(rowMeta);
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
                 setRowsExpanded([]);
             }

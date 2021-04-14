@@ -39,6 +39,7 @@ namespace Warpweb.WebLayer.Controllers
         [Route("userslist")]
         public async Task<List<UserListVm>> GetUsersAsync()
         {
+
             return await _userService.GetUsersAsync();
         }
 

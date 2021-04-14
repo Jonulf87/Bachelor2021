@@ -115,18 +115,18 @@ namespace Warpweb.WebLayer.Controllers
 
         [HttpGet]
         [Route("getcontact/{orgId}")]
-        public async Task<ActionResult<OrganizerVm>> GetOrganizerContactAsync(int orgId)
+        public async Task<ActionResult<List<OrganizerVm>>> GetOrganizerContactAsync(int orgId)
         {
-            OrganizerVm contact;
+            
             try
             {
-                contact = await _organizerService.GetOrganizerContactAsync(orgId);
+                var contact = await _organizerService.GetOrganizerContactAsync(orgId);
+                return Ok(contact);
             }
             catch (Exception)
             {
                 return BadRequest();
             }
-            return Ok(contact);
         }
 
         [HttpPost]
