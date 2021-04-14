@@ -159,6 +159,28 @@ namespace Warpweb.LogicLayer.Services
             return organizerToBeSent;
         }
 
+        public async Task RemoveOrgAdminAsync(int orgId, string userId)
+        {
+            var user = _dbContext.ApplicationUsers.Find(userId);
+
+            if(user == null)
+            {
+                throw new Exception();
+            }
+
+            var existingOrgAdmin = await _dbContext.Organizers
+                .Where(a => a.Id == orgId)
+                .Include(a => a.Admins)
+                .SingleOrDefaultAsync(a => a.Admins.Contains(user));
+
+            if(existingOrgAdmin == null)
+            {
+                throw new Exception();
+            }
+            existingOrgAdmin.Admins.Remove(user);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<List<OrgAdminVm>> GetOrgAdminsAsync(int orgId)
         {
             var organizer = await _dbContext.Organizers

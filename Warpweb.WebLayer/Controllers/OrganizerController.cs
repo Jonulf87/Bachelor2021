@@ -43,7 +43,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<OrganizerVm>> GetOrganizerAsync(int id)
         {
             var organizer = await _organizerService.GetOrganizerAsync(id);
-            
+
             if (organizer == null)
             {
                 return NotFound();
@@ -117,7 +117,7 @@ namespace Warpweb.WebLayer.Controllers
         [Route("getcontact/{orgId}")]
         public async Task<ActionResult<List<OrganizerVm>>> GetOrganizerContactAsync(int orgId)
         {
-            
+
             try
             {
                 var contact = await _organizerService.GetOrganizerContactAsync(orgId);
@@ -138,7 +138,7 @@ namespace Warpweb.WebLayer.Controllers
                 var contact = await _organizerService.SetOrganizerContactAsync(orgId, userId);
                 return Ok(contact);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -167,13 +167,27 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 await _organizerService.SetOrgAdminAsync(orgId, userId);
+                return Ok();
             }
             catch (Exception)
             {
-
                 return BadRequest();
             }
-            return Ok();
+        }
+
+        [HttpPost]
+        [Route("removeadmin/{orgId}")]
+        public async Task<ActionResult> RemoveOrgAdminAsync(int orgId, [FromBody] string userId)
+        {
+            try
+            {
+                await _organizerService.RemoveOrgAdminAsync(orgId, userId);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
     }

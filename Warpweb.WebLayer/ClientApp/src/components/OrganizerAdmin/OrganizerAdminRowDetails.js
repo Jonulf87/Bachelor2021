@@ -1,7 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Button, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Button, IconButton, TableCell, TableRow, Typography } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 import UserPicker from '../User/UserPicker';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
@@ -80,7 +81,21 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
 
     const addOrgAdmin = async (userId) => {
         if (isAuthenticated) {
-            const response = await fetch(`/api/tenants/setadmin/${openOrgId}`, {
+            await fetch(`/api/tenants/setadmin/${openOrgId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(userId)
+            });
+            updateList();
+        }
+    }
+
+    const removeAdmin = async (userId) => {
+        if (isAuthenticated) {
+            await fetch(`/api/tenants/removeadmin/${openOrgId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
@@ -165,16 +180,33 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
                     >
                         Legg til admin
                     </Button>
-                    <UserPicker dialogOpen={dialogAdminOpen} handleDialogClose={handleDialogAdminClose} setUserId={addOrgAdmin} excludedUsers={excludedAdmins}/>
+                    <UserPicker dialogOpen={dialogAdminOpen} handleDialogClose={handleDialogAdminClose} setUserId={addOrgAdmin} excludedUsers={excludedAdmins} />
                 </TableCell>
             </TableRow>
 
             {orgAdmins.map(admin => (
                 <TableRow key={admin.name}>
                     <TableCell colSpan={1}>
+                        <IconButton
+                            onClick={(e) =>  removeAdmin(admin.id) }
+                        >
+                            <DeleteIcon
+                                style={{
+                                    cursor: "pointer",
+                                    color: "#DD0000",
+                                    fontSize: "28px"
+                                }}
+                            />
+                        </IconButton>
                     </TableCell>
-                    <TableCell colSpan={3}>
+                    <TableCell colSpan={1}>
                         <Typography>{admin.name}</Typography>
+                    </TableCell>
+                    <TableCell colSpan={1}>
+                        <Typography>{admin.eMail}</Typography>
+                    </TableCell>
+                    <TableCell colSpan={1}>
+                        <Typography>{admin.phoneNumber}</Typography>
                     </TableCell>
                 </TableRow>
             ))}
