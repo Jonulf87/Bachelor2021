@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import queryString from 'query-string';
 
-import {  Link, Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
@@ -12,7 +12,7 @@ import PopupWindow from '../PopupWindow/PopupWindow';
 
 //component spesifik styling
 const useStyles = makeStyles((theme) => ({
-    
+
 }));
 
 export default function UserLogin(props) {
@@ -32,8 +32,8 @@ export default function UserLogin(props) {
 
     const { login } = useAuth();
 
-    const logInSubmit = async () => {
-
+    const logInSubmit = async (e) => {
+        e.preventDefault();
         const response = await login(userName, password);
 
         if (response.token) {
@@ -51,68 +51,62 @@ export default function UserLogin(props) {
 
     const showErrors = (errors) => {
         if (Array.isArray(errors)) {
-             return errors.map(error => (<p key="">{error}</p>));
+            return errors.map(error => (<p key="">{error}</p>));
         }
         else {
             return "Ugyldig brukernavn eller passord";
         }
     }
 
-    const onKeyDownHandler = (event) => {
-        
-        if (event.keyCode === 13) {
-            logInSubmit();
-        }
-    };
 
     return (
         <>
             <PopupWindow open={open} onClose={() => setOpen(false)} text={showErrors(errors)} />
             <Container className={classes.container} maxWidth="xs">
-                <form onKeyDown={onKeyDownHandler}>
+                <form onSubmit={logInSubmit}>
                     <Grid container spacing={2} alignContent="center">
-                    {/*Input brukernavn/email*/}
+                        {/*Input brukernavn/email*/}
                         <Grid item xs={12}>
                             <TextField
-                            fullWidth
-                            size="small"
-                            variant="outlined"
-                            id="userName"
-                            label="Brukernavn"
-                            required
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
-                        />
-                    </Grid>
+                                fullWidth
+                                size="small"
+                                variant="outlined"
+                                id="userName"
+                                label="Brukernavn"
+                                required
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                            />
+                        </Grid>
                         <Grid item xs={12}>
-                        {/*Input passord*/}
+                            {/*Input passord*/}
                             <TextField
-                            fullWidth
-                            size="small"
-                            variant="outlined"
-                            id="password"
-                            label="Passord"
-                            type="password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        {/*Logginn knapp*/}
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            onClick={logInSubmit}
-                        >
-                            Logg inn
+                                fullWidth
+                                size="small"
+                                variant="outlined"
+                                id="password"
+                                label="Passord"
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            {/*Logginn knapp*/}
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                type="submit"
+                            >
+                                Logg inn
                         </Button>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Typography variant="body1" >Ingen bruker? <Link to="/register">Registrer deg her</Link></Typography>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={8}>
-                    <Typography variant="body1" >Ingen bruker? <Link to="/register">Registrer deg her</Link></Typography>
-                    </Grid>
-                </Grid>
                 </form>
             </Container>
         </>
