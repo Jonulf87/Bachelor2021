@@ -1,65 +1,44 @@
-﻿import React, { useEffect, useState } from 'react';
-
-import { makeStyles } from '@material-ui/core/styles';
-import { List, ListItem, ListItemText, ListItemIcon, Button, ButtonGroup} from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+﻿import React from 'react';
+import { List, ListItem, ListItemText, ListItemIcon, ListSubheader } from '@material-ui/core';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import StarIcon from '@material-ui/icons/Star';
+import EventSeatIcon from '@material-ui/icons/EventSeat';
+import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import { Link } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
-import theme from '../../theme';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        color: theme.palette.primary.contrastText
-    }
+    buttonText: {
+        color: "rgba(0,0,0,0.87)",
+        
+    },
+    
 }));
 
 export default function UserMainMenu() {
 
-    const { isAuthenticated } = useAuth();
-    
     const classes = useStyles();
 
     return (
-        <>
-            {isAuthenticated && (
-                <>
-                    <Button
-                    className={classes.root}
-                    startIcon={<PersonIcon />}
-                    component={Link}
-                    to='/user'
-                    >
-                        Min side
-                    </Button>
-                    <Button
-                    className={classes.root}
-                    startIcon={<ExitToAppIcon />}
-                    component={Link}
-                    to='/logout'>
-                        Logg ut
-                    </Button>
-                </>
-                )}
-            {!isAuthenticated && (
-                <>
-                    <Button
-                    className={classes.root}
-                    startIcon={<PersonIcon />}
-                    component={Link}
-                    to='/register'
-                    >
-                        Registrer
-                    </Button>
-                    <Button
-                    className={classes.root}
-                    startIcon={<ExitToAppIcon />}
-                    component={Link}
-                    to='/login'>
-                        Logg inn
-                    </Button>
-                </>
-            )}
-        </>
+        <List
+            
+            subheader={
+                <ListSubheader color="primary" style={{}}>
+                    Meny
+                </ListSubheader>
+            }
+        >
+            <ListItem aria-label='Velg arrangement' button component={Link} to='/userevent'>
+                <ListItemIcon  ><StarIcon  /></ListItemIcon>
+                <ListItemText primary='Velg arrangement' />
+            </ListItem>
+            <ListItem aria-label='kjøp billett' button component={Link} to='/userticket'>
+                <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
+                <ListItemText primary='Kjøp billett' />
+            </ListItem>
+            <ListItem aria-label='Setekart'button component={Link} to='/userseatmap'>
+                <ListItemIcon><EventSeatIcon /></ListItemIcon>
+                <ListItemText primary='Setekart' />
+            </ListItem>
+        </List>
     );
 }

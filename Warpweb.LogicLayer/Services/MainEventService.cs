@@ -146,5 +146,20 @@ namespace Warpweb.LogicLayer.Services
             _dbContext.Update<ApplicationUser>(user);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<List<MainEventListVm>> GetMainEventsForOrgAdminAsync(string userId)
+        {
+            return await _dbContext.MainEvents
+                .Where(a => a.Organizer.Admins.Any(b => b.Id == userId))
+                .Select(a => new MainEventListVm
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime,
+                    OrganizerName = a.Organizer.Name,
+                    VenueName = a.Venue.Name
+                }).ToListAsync();
+        }
     }
 }

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function EventList() {
+export default function EventUserList() {
 
     const [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);

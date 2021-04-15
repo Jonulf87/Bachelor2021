@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -175,6 +176,22 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch {
                 return BadRequest("Kunne ikke legge til crewleder!");
+            }
+        }
+
+        [HttpGet]
+        [Route("mine")]
+        public async Task<ActionResult<List<CrewListVm>>> GetCrewsUserIsMemberOfAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try
+            {
+                var crews = await _crewService.GetCrewsUserIsMemberOfAsync(userId);
+                return Ok(crews);
+            }
+            catch
+            {
+                return BadRequest();
             }
         }
     }
