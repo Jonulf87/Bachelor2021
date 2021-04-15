@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
+import useAuth from '../../hooks/useAuth';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, ButtonGroup, Drawer, Hidden, Divider, Toolbar, Typography, IconButton, Paper } from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
+import { makeStyles } from '@material-ui/core/styles';
+import { AppBar, ButtonGroup, Drawer, Hidden, Divider, Toolbar, Typography, IconButton, Paper } from '@material-ui/core';
 
 import AdminMainMenu from './AdminMainMenu';
 import UserMainMenu from './UserMainMenu';
 import CrewMainMenu from './CrewMainMenu';
 import NavBarHeader from './NavBarHeader';
+import LoginMenu from './LoginMenu';
 
 
 const drawerWidth = 240;
@@ -27,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         [theme.breakpoints.up('md')]: {
-            width: `calc(100% - ${drawerWidth}px)`,
+            width: '100%',
+            zIndex: theme.zIndex.drawer + 1,
             marginLeft: drawerWidth,
         },
         boxShadow: 'none',
@@ -52,12 +55,12 @@ const useStyles = makeStyles((theme) => ({
     drawerPaper: {
         width: drawerWidth,
         backgroundColor: theme.palette.background.paper,
-        color: theme.palette.primary.contrastText,
+        color: theme.palette.primary,
         '& .MuiListItemIcon-root': {
-            color: theme.palette.primary.contrastText
+            color: theme.palette.primary
         },
         '& .MuiListSubheader-root': {
-            color: theme.palette.primary.contrastText
+            color: theme.palette.primary
         }
 
     },
@@ -71,31 +74,66 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function MainMenu(props) {
+export default function MainMenu({ window }) {
 
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [policies, setPolicies] = useState([]);
+    const [crews, setCrews] = useState([]);
+    const { currentEventChangeCompleteTrigger } = useCurrentEvent();
+    const { isAuthenticated, token, roles } = useAuth();
+
+    const container = window !== undefined ? () => window().document.body : undefined;
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-    const { window } = props;
 
-    const container = window !== undefined ? () => window().document.body : undefined;
 
     const classes = useStyles();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            const getPoliciesAndCrews = async () => {
+                const responsePolicies = await fetch('/api/security/policies', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const resultPolicies = await responsePolicies.json();
+                setPolicies(resultPolicies);
+
+                const responseCrews = await fetch('/api/security/policies', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const resultCrews = await responseCrews.json();
+                setCrews(resultCrews);
+                console.log(resultCrews);
+            }
+
+            getPoliciesAndCrews();
+        }
+        else {
+            setPolicies([]);
+            setCrews([]);
+        }
+    }, [currentEventChangeCompleteTrigger, isAuthenticated])
 
     const NavContents = () => {
         return (
             <>
-                <div className={classes.toolbar} style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <Typography component={Link} to="/" className={classes.link} variant="h4" noWrap >
-                        Warpweb
-                    </Typography>
-                </div>
-
+                <div className={classes.toolbar} />
+                <UserMainMenu />
                 <Divider />
-                <AdminMainMenu />
-                <Divider />
+                {(policies || roles) &&
+                    <>
+                    <AdminMainMenu policies={policies} roles={roles} />
+                        <Divider />
+                    </>
+                }
                 <CrewMainMenu />
             </>
         )
@@ -117,12 +155,12 @@ export default function MainMenu(props) {
                     </IconButton>
                     <NavBarHeader />
                     <ButtonGroup className={classes.buttonRight}>
-                        <UserMainMenu />
+                        <LoginMenu />
                     </ButtonGroup>
                 </Toolbar>
             </AppBar>
 
-            <nav className={classes.drawer} aria-label="mailbox folders">
+            <nav className={classes.drawer} aria-label="Meny">
                 <Hidden mdUp>
                     <Drawer
                         container={container}
@@ -152,7 +190,6 @@ export default function MainMenu(props) {
                     </Drawer>
                 </Hidden>
             </nav>
-
         </>
     )
 }

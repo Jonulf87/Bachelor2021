@@ -1,10 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import PersonIcon from '@material-ui/icons/Person';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { Link } from 'react-router-dom';
+import { ListItem, List, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import EventIcon from '@material-ui/icons/Event';
@@ -13,59 +9,29 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import EventSeatIcon from '@material-ui/icons/EventSeat';
 import SettingsIcon from '@material-ui/icons/Settings';
-import List from '@material-ui/core/List';
-import { Link } from 'react-router-dom';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import useAuth from '../../hooks/useAuth';
 
-export default function AdminMainMenu() {
-
-    const [pullisis, setPullisis] = useState([]);
-
-    const { currentEventChangeCompleteTrigger } = useCurrentEvent();
-
-    const { isAuthenticated, token, roles } = useAuth();
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            const getPullisis = async () => {
-
-                const response = await fetch('/api/security/policies', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
-                });
-                const result = await response.json();
-                setPullisis(result);
-                console.log(result);
-            }
-
-            getPullisis();
-        }
-        else {
-            setPullisis([]);
-        }
-    }, [currentEventChangeCompleteTrigger, isAuthenticated])
+export default function AdminMainMenu({ policies, roles}) {
 
 
     return (
         <List
-        subheader={
-            <ListSubheader color="primary">
-                Administrasjon
+            subheader={
+                <ListSubheader color="primary">
+                    Administrasjon
             </ListSubheader>
-        }
+            }
         >
 
-            {pullisis.some(a => a === 6) &&
+            {policies.some(a => a === 6) &&
                 <ListItem button button component={Link} to='/venue'>
                     <ListItemIcon><HomeWorkIcon /></ListItemIcon>
                     <ListItemText primary='Lokaler' />
                 </ListItem>
             }
 
-            {pullisis.some(a => a === 2) &&
+            {policies.some(a => a === 2) &&
                 <ListItem button button component={Link} to='/ticketadmin'>
                     <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
                     <ListItemText primary='Billettadmin' />
@@ -73,7 +39,7 @@ export default function AdminMainMenu() {
             }
 
 
-            {pullisis.some(a => a === 3) &&
+            {policies.some(a => a === 3) &&
                 <ListItem button button component={Link} to='/seatmap'>
                     <ListItemIcon><EventSeatIcon /></ListItemIcon>
                     <ListItemText primary='Setekart' />
@@ -89,15 +55,15 @@ export default function AdminMainMenu() {
                 <ListItemText primary='Arrangement' />
             </ListItem>
 
-            {pullisis.some(a => a === 1) &&
+            {policies.some(a => a === 1) &&
 
-            (<ListItem button button component={Link} to='/crewadmin'>
-                <ListItemIcon><GroupIcon /></ListItemIcon>
-                <ListItemText primary='Crewadmin' />
-            </ListItem>)
+                (<ListItem button button component={Link} to='/crewadmin'>
+                    <ListItemIcon><GroupIcon /></ListItemIcon>
+                    <ListItemText primary='Crewadmin' />
+                </ListItem>)
             }
 
-            {pullisis.some(a => a === 7) &&
+            {policies.some(a => a === 7) &&
 
                 <ListItem button button component={Link} to='/participant'>
                     <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
@@ -105,7 +71,7 @@ export default function AdminMainMenu() {
                 </ListItem>
             }
 
-            {pullisis.some(a => a === 4) &&
+            {policies.some(a => a === 4) &&
 
                 <ListItem button button component={Link} to='/useradmin'>
                     <ListItemIcon><SettingsIcon /></ListItemIcon>
@@ -113,7 +79,7 @@ export default function AdminMainMenu() {
                 </ListItem>
 
             }
-            {pullisis.some(a => a === 5) &&
+            {policies.some(a => a === 5) &&
 
                 <ListItem button button component={Link} to='/report'>
                     <ListItemIcon><AssignmentIcon /></ListItemIcon>

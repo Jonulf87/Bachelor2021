@@ -20,12 +20,11 @@ export default function UserMainMenu() {
 
     const { isAuthenticated, token } = useAuth();
 
-    //trenger å endres til å bare hente enkelte brukers
     useEffect(() => {
         const getCrews = async () => {
             if (isAuthenticated) {
 
-                const response = await fetch('/api/crews/allcrews', {
+                const response = await fetch('/api/crews/mine', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

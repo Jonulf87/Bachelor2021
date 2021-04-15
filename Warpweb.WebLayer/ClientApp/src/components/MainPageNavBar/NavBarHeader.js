@@ -9,7 +9,7 @@ export default function NavBarHeader() {
 
     return (
         <Typography variant="h6" noWrap>
-            { currentEvent} {/*Her er tittel i bar på toppen for å vise breadcrumbs og aktiv arrangement*/}
+            { currentEvent } {/*Her er tittel i bar på toppen for å vise breadcrumbs og aktiv arrangement*/}
         </Typography>
 
 

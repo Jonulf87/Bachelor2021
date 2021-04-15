@@ -39,7 +39,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns a specific Event.
         /// </summary>
         /// <param name="id"></param>  
-        [HttpGet("{id}")]
+        [HttpGet("getmainevent/{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<MainEventVm>> GetMainEventAsync(int id)
         {
@@ -149,6 +149,23 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 return await _mainEventService.GetCurrentMainEventAsync(userId);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("orgadminmainevents")]
+        public async Task<ActionResult<List<MainEventListVm>>> GetMainEventsForOrgAdminAsync()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            try
+            {
+                var events = await _mainEventService.GetMainEventsForOrgAdminAsync(userId);
+                return Ok(events);
             }
             catch (Exception)
             {

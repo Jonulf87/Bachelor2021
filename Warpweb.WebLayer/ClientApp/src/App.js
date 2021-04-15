@@ -15,7 +15,8 @@ import MainMenu from './components/MainPageNavBar/MainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
 import CrewMain from './components/Crew/CrewMain';
 import CrewAdminMain from './components/Crew/CrewAdminMain';
-import EventMain from './components/Event/EventMain';
+import EventAdminMain from './components/EventAdmin/EventAdminMain';
+import EventUserMain from './components/Event/EventUserMain';
 import ParticipantMain from './components/Participant/ParticipantMain';
 import ReportMain from './components/Report/ReportMain';
 import TicketMain from './components/Ticket/TicketMain';
@@ -27,8 +28,6 @@ import SeatMapMain from './components/SeatMap/SeatMapMain';
 import LogOut from './components/MainPageNavBar/LogOut';
 import CurrentEventProvider from './providers/CurrentEventProvider';
 import OrganizerAdminMain from './components/OrganizerAdmin/OrganizerAdminMain';
-
-const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,8 +59,6 @@ export default function App() {
                             <div className={classes.toolbar} />
                             <Grid
                                 container
-                                xs={12}
-                                maxWidth={"lg"}
                                 spacing={2}
                                 direction="column"
                                 justify="center"
@@ -75,13 +72,14 @@ export default function App() {
                                     <Route path='/crewadmin' component={CrewAdminMain} />
                                     <Route path='/useradmin' component={UserAdminMain} />
                                     <Route path='/report' component={ReportMain} />
-                                    <Route path='/event' component={EventMain} />
+                                    <Route path='/event' component={EventAdminMain} />
+                                    <Route path='/userevent' component={EventUserMain} />
                                     <Route path='/participant' component={ParticipantMain} />
                                     <Route path='/ticketadmin' component={TicketMain} />
                                     <Route path='/register' component={UserRegister} />
                                     <Route path='/login' component={UserLogin} />
                                     <Route path='/logout' component={LogOut} />
-                                    <Route exact path='/' component={EventMain} />
+                                    <Route exact path='/' component={EventUserMain} />
                                     <Route path='/seatmap' component={SeatMapMain} />
                                     <Route path='/organizer' component={OrganizerAdminMain} />
                                 </Switch>

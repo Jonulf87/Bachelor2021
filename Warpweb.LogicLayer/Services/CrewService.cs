@@ -209,7 +209,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<int> DeleteCrewAsync(CrewVm crewVm)
         {
 
-            var crewToBeDeleted = _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).FirstOrDefault();
+            var crewToBeDeleted = await _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).SingleOrDefaultAsync();
 
             if (crewToBeDeleted == null)
             {
@@ -221,6 +221,18 @@ namespace Warpweb.LogicLayer.Services
 
             return crewToBeDeleted.Id;
 
+        }
+
+        public async Task<List<CrewListVm>> GetCrewsUserIsMemberOfAsync(string userId)
+        {
+
+            return await _dbContext.CrewUsers
+                .Where(a => a.ApplicationUserId == userId)
+                .Select(a => new CrewListVm
+                {
+                    Name = a.Crew.Name,
+                    Id = a.Crew.Id
+                }).ToListAsync();
         }
     }
 }
