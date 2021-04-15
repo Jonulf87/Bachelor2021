@@ -23,6 +23,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns all Venues.
         /// </summary>
+        /// <returns>VenueListVm</returns>
         [HttpGet]
         [Route("venueslist")]
         public async Task<List<VenueListVm>> GetVenuesAsync()
@@ -33,6 +34,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns only Venues under Tenant
         /// </summary>
+        /// <returns>VenueListVm</returns>
         [HttpGet]
         [Route("organizervenueslist")]
         public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
@@ -43,7 +45,8 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns a specific Venue.
         /// </summary>
-        /// <param name="id"></param>  
+        /// <param name="id"></param>
+        /// <returns>VenueVm</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<VenueVm>> GetVenueAsync(int id)
         {
@@ -53,7 +56,8 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Create a Venue.
         /// </summary>
-        /// <param name="venueVm"></param>  
+        /// <param name="venueVm"></param>
+        /// <returns>VenueVm</returns>
         [HttpPost]
         public async Task<ActionResult<VenueVm>> CreateVenueAsync(VenueVm venueVm)
         {
@@ -116,13 +120,12 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 await _venueService.UpdateVenueAsync(venueVm);
+                return Ok(venueVm);
             }
             catch (VenueDoesNotExistException)
             {
                 return BadRequest();
             }
-
-            return Ok(venueVm);
         }
 
     }

@@ -12,9 +12,6 @@ namespace Warpweb.WebLayer.Controllers
     [ApiController]
     [Authorize]
 
-    // CRUD functionality for crew
-    // TODO : Crew deletion
-
     public class CrewController : ControllerBase
     {
         private readonly CrewService _crewService;
@@ -47,7 +44,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Create crew
         /// </summary>
-        /// <param name="crewVm"></param> 
+        /// <param name="crewName"></param> 
         [HttpPost]
         [Authorize(Policy = "CrewAdmin")]
         [Route("createcrew/{crewName}")]
@@ -104,6 +101,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(crewVm);
         }
 
+        /// <summary>
+        /// Returns crewmembers in crew with specific ID
+        /// </summary>
+        /// <param name="crewID"></param> 
         [HttpGet]
         [Route("crewmembers/{crewId}")]
         public async Task<ActionResult<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
@@ -119,6 +120,11 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Add crewmember to crew with specific ID
+        /// </summary>
+        /// <param name="crewId"></param>
+        /// <param name="userId"></param>
         [HttpPost]
         [Route("addcrewmember/{crewId}")]
         public async Task<ActionResult> AddCrewMemberAsync(int crewId, [FromBody] string userId)
@@ -130,10 +136,14 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Kunne ikke legge til crewmedlem!");
             }
         }
 
+        /// <summary>
+        /// Get crewleaders from crew with specific ID
+        /// </summary>
+        /// <param int="crewId"></param>
         [HttpGet]
         [Route("crewleaders/{crewId}")]
         public async Task<ActionResult<CrewMembersListVm>> GetCrewLeadersAsync(int crewId)
@@ -149,6 +159,11 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Add crewleader to crew with specific ID
+        /// </summary>
+        /// <param int="crewId"></param>
+        /// <param string="userId"></param>
         [HttpPost]
         [Route("addcrewleader/{crewId}")]
         public async Task<ActionResult> AddCrewLeaderAsync(int crewId, [FromBody] string userId)
@@ -160,7 +175,7 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Kunne ikke legge til crewleder!");
             }
         }
     }

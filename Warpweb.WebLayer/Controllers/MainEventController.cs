@@ -81,9 +81,6 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(mainEventVm);
         }
 
-
-
-
         /// <summary>
         /// Updates a specific Event.
         /// </summary>
@@ -110,6 +107,9 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(mainEventVm);
         }
 
+        /// <summary>
+        /// Sets the active event
+        /// <param name="eventId"></param>  
         [HttpPut]
         [Route("setcurrentevent")]
         public async Task<ActionResult> SetCurrentEventAsync([FromBody] int eventId)
@@ -140,6 +140,9 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(maineventVm);
         }
 
+        /// <summary>
+        /// Returns current active event
+        /// </summary>
         [HttpGet]
         [Route("getcurrentmainevent")]
         public async Task<ActionResult<CurrentMainEventVm>> GetCurrentMainEventAsync()
