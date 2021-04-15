@@ -455,10 +455,9 @@ export default function UserRegister() {
                                 color="primary"
                                 size="large"
                                 type="submit"
-                            //onClick={submitForm}
                             >
                                 Lagre
-                    </Button>
+                            </Button>
                         </Grid>
                     </Grid>
                 </ValidatorForm>

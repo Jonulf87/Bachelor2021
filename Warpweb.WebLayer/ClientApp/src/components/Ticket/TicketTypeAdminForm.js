@@ -1,8 +1,23 @@
-﻿import { TextField, Grid, Paper, Typography, Button } from '@material-ui/core';
+﻿import {
+    Select,
+    FormControl,
+    InputLabel,
+    TextField,
+    Button,
+    Grid,
+    Checkbox,
+    FormControlLabel,
+    MenuItem,
+    Typography,
+    Paper,
+    Container,
+    Collapse
+} from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from 'reactstrap/lib';
 import SaveIcon from '@material-ui/icons/Save';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
@@ -18,14 +33,17 @@ const useStyles = makeStyles((theme) =>
 export default function TicketTypeAdminForm({ updateList }) {
 
     const [ticketTypeName, setTicketTypeName] = useState("");
+    const [mainEventId, setMainEventId] = useState("");
     const [basePrice, setBasePrice] = useState(0);
     const [amountAvailable, setAmountAvailable] = useState(0);
+    const [options, setOptions] = useState([]);
 
     const { isAuthenticated, token } = useAuth();
 
     const ticketTypeDataToBeSent =
     {
         'descriptionName': ticketTypeName,
+        'mainEventId': mainEventId,
         'basePrice': basePrice,
         'amountAvailable': amountAvailable
     }
@@ -51,6 +69,34 @@ export default function TicketTypeAdminForm({ updateList }) {
         }
     }
 
+    const handleSubmit = e => {
+        e.preventDefault();
+        submitForm();
+    };
+
+    useEffect(() => {
+        const getEvents = async () => {
+ 
+            if (isAuthenticated) {
+                const response = await fetch('/api/events/eventslist', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const options = [];
+                const events = await response.json();
+                for (const index in events) {
+                    options.push(<MenuItem key={"event" + events[index].id} value={events[index].id}>{events[index].name}</MenuItem>);
+                }
+                setOptions(options);
+            }
+        }
+
+        getEvents();
+
+    }, [isAuthenticated]);
+
     const inputProps = {
         step: 10,
     };
@@ -64,13 +110,17 @@ export default function TicketTypeAdminForm({ updateList }) {
                 <strong>Opprett billettype</strong>
             </Typography>
 
-            <Form>
+            <ValidatorForm
+                autoComplete="off"
+                noValidate
+                onSubmit={handleSubmit}
+            >
                 {/*name input*/}
                 <Grid
                     item
                     xs={12}
                 >
-                    <TextField
+                    <TextValidator
                         className={classes.root}
                         variant="outlined"
                         id="ticketTypeName"
@@ -78,7 +128,28 @@ export default function TicketTypeAdminForm({ updateList }) {
                         required
                         value={ticketTypeName}
                         onChange={(e) => setTicketTypeName(e.target.value)}
+                        validators={['required', 'minStringLength:1', 'trim']}
+                        errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
                     />
+                </Grid>
+
+                {/*Tilknyttet arrangemant*/}
+                <Grid
+                    item
+                    xs={12}
+                >
+                    <FormControl variant="outlined">
+                        <InputLabel id="arrangement">Arrangemant</InputLabel>
+                        <Select
+                            labelId="arrangement"
+                            id="arrangement"
+                            value={mainEventId}
+                            onChange={(e) => setMainEventId(e.target.value)}
+                            label="Arrangement"
+                        >
+                            { options }
+                        </Select>
+                    </FormControl>
                 </Grid>
 
                 {/*baseprice input*/}
@@ -86,7 +157,7 @@ export default function TicketTypeAdminForm({ updateList }) {
                     item
                     xs={12}
                 >
-                    <TextField
+                    <TextValidator
                         className={classes.root}
                         variant="outlined"
                         id="basePrice"
@@ -96,6 +167,8 @@ export default function TicketTypeAdminForm({ updateList }) {
                         inputProps={inputProps}
                         value={basePrice}
                         onChange={(e) => setBasePrice(e.target.value)}
+                        validators={['required', 'isNumber']}
+                        errorMessages={['Navn må oppgis', 'Ugyldig verdi']}
                     />
                 </Grid>
 
@@ -104,7 +177,7 @@ export default function TicketTypeAdminForm({ updateList }) {
                     item
                     xs={12}
                 >
-                    <TextField
+                    <TextValidator
                         className={classes.root}
                         variant="outlined"
                         id="amountAvailable"
@@ -127,15 +200,13 @@ export default function TicketTypeAdminForm({ updateList }) {
                         variant="contained"
                         color="primary"
                         size="large"
-                        className="KommerEnStyleTing"
-                        startIcon={<SaveIcon />}
-                        onClick={submitForm}
+                        type="submit"
                     >
                         Legg til billettype
                     </Button>
                 </Grid>
-            </Form>
+            </ValidatorForm>
         </Grid>
-        
+
     );
 }
