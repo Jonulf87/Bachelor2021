@@ -35,13 +35,10 @@ const theme = createMuiTheme({
         },
         MUIDataTable: {
             root: {
-                border: "none",
-                backgroundColor: "#f00"
             },
             paper: {
                 variant: "elevation",
                 boxShadow: "none",
-                borderWidth: "0px"
 
             }
         },
