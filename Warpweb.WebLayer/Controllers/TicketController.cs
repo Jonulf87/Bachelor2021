@@ -25,6 +25,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Return all tickets
         /// </summary>
+        /// <returns>TicketListVM</returns>
         [HttpGet]
         public async Task<List<TicketListVm>> GetTicketsAsync()
         {
@@ -34,7 +35,8 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Return specific ticket
         /// </summary>
-        /// <param name="id"></param> 
+        /// <param name="id"></param>
+        /// <returns>TicketVM</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketVm>> GetTicketAsync(int id)
         {
@@ -45,7 +47,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Create new ticket
         /// </summary>
         /// <param name="ticketTypeId"></param>
-        /// <returns></returns>
+        /// <returns>TicketVM</returns>
         [HttpPost]
         [Route("createticket/{ticketTypeId}")]
         public async Task<ActionResult<TicketVm>> CreateTicketAsync(int ticketTypeId)
@@ -56,7 +58,7 @@ namespace Warpweb.WebLayer.Controllers
                 var ticket = await _ticketService.CreateTicketAsync(ticketTypeId, userId);
                 return Ok(ticket);
             }
-            catch (TicketAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest(); 
             }
@@ -67,7 +69,6 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="ticketId"></param>
         /// <param name="provider"></param>
-        /// <returns></returns>
         [HttpPost]
         [Route("purchaseticket/{ticketId}/{provider}")]
         public async Task<ActionResult> PurchaseTicketAsync(int ticketId, int provider)
@@ -85,6 +86,10 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Simulates reservation of seat in seatmap
+        /// </summary>
+        /// <param name="ticketId"></param>
         [HttpPost]
         [Route("reserveseat/{ticketId}/{seatId}")]
         public async Task<ActionResult> ReserveSeatAsync(int ticketId, int seatId)
@@ -115,7 +120,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _ticketService.UpdateTicketAsync(ticketVm);
             }
 
-            catch (TicketDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -133,7 +138,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _ticketService.DeleteTicketAsync(ticketVm);
             }
-            catch (TicketDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }

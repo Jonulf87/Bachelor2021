@@ -9,7 +9,7 @@ import './custom.css';
 import AuthProvider from './providers/AuthProvider';
 
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import { CssBaseline, Grid } from '@material-ui/core';
+import { CssBaseline, Grid, Container } from '@material-ui/core';
 
 import MainMenu from './components/MainPageNavBar/MainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
@@ -57,12 +57,9 @@ export default function App() {
                         <MainMenu />
                         <main className={classes.content}>
                             <div className={classes.toolbar} />
-                            <Grid
-                                container
-                                spacing={2}
-                                direction="column"
+                            <Container
+                                maxWidth='xl'
                                 justify="center"
-                                alignItems="center"
                             >
 
                                 <Switch>
@@ -83,7 +80,7 @@ export default function App() {
                                     <Route path='/seatmap' component={SeatMapMain} />
                                     <Route path='/organizer' component={OrganizerAdminMain} />
                                 </Switch>
-                            </Grid>
+                            </Container>
                         </main>
                     </div>
                 </ThemeProvider>

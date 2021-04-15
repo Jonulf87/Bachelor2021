@@ -53,7 +53,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 crewRoleId = await _crewroleService.CreateCrewRoleAsync(crewroleVm);
             }
-            catch (CrewRoleAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
@@ -73,7 +73,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _crewroleService.UpdateCrewRoleAsync(crewroleVm);
             }
-            catch (CrewRoleDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -92,7 +92,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _crewroleService.DeleteCrewRoleAsync(crewroleVm);
             }
-            catch (MainEventDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }

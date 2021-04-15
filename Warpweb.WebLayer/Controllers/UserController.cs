@@ -35,6 +35,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns all users
         /// </summary>
+        /// <returns>UserListVM</returns>
         [HttpGet]
         [Route("userslist")]
         public async Task<List<UserListVm>> GetUsersAsync()
@@ -46,6 +47,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns current logged in user
         /// </summary>
+        /// <returns>UserVM</returns>
         [HttpGet]
         [Route("currentuser")]
         public async Task<UserVm> GetCurrentUserAsync()
@@ -59,6 +61,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns specific user
         /// </summary>
         /// <param name="id"></param>  
+        /// <returns>UserVM</returns>
         [HttpGet]
         [Route("user/{id}")]
         public async Task<UserVm> GetUserAsync(string id)
@@ -70,6 +73,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns specific user role
         /// </summary>
         /// <param name="id"></param>  
+        /// <returns>UserRolesListVM</returns>
         [HttpGet]
         [Route("userroles/{id}")]
         public async Task<List<UserRolesListVm>> GetUserRolesAsync(string id)
@@ -81,6 +85,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Register new user
         /// </summary>
+        /// <param name="user"></param>
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
@@ -89,19 +94,13 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 await _securityService.RegisterUserAsync(user);
+                return Ok();
             }
-            catch (UserAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest("Brukeren eksisterer allerede");
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-            return Ok();
-        }
-
-        
+            
+        }  
     }
 }

@@ -13,8 +13,6 @@ namespace Warpweb.WebLayer.Controllers
     [ApiController]
     [Authorize]
 
-    // CRUD functionality for organizer
-    // Note Dependency Injection for SecurityService and MainEventService
     public class OrganizerController : ControllerBase
     {
         private readonly OrganizerService _organizerService;
@@ -66,7 +64,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 orgId = await _organizerService.CreateOrganizerAsync(organizerVm);
             }
-            catch (OrganizerAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
@@ -86,7 +84,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _organizerService.UpdateOrganizerAsync(organizerVm);
             }
-            catch (OrganizerAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
@@ -105,7 +103,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _organizerService.DeleteOrganizerAsync(organizerVm);
             }
-            catch (OrganizerDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -113,6 +111,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(organizerVm);
         }
 
+        /// <summary>
+        /// Returns active contact person for organization
+        /// </summary>
+        /// <param name="orgId"></param> 
         [HttpGet]
         [Route("getcontact/{orgId}")]
         public async Task<ActionResult<List<OrganizerVm>>> GetOrganizerContactAsync(int orgId)
@@ -129,6 +131,11 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Sets contact person for organization
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="userId"></param> 
         [HttpPost]
         [Route("setorgcontact/{orgid}")]
         public async Task<ActionResult<OrganizerVm>> SetOrganizerContactAsync(int orgId, [FromBody] string userId)
@@ -144,6 +151,10 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns organization administrators
+        /// </summary>
+        /// <param name="orgId"></param> 
         [HttpGet]
         [Route("getadmins/{orgId}")]
         public async Task<ActionResult<List<OrgAdminVm>>> GetOrgAdminsAsync(int orgId)
@@ -160,6 +171,11 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(admins);
         }
 
+        /// <summary>
+        /// Add organization administrator
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="userId"></param> 
         [HttpPost]
         [Route("setadmin/{orgId}")]
         public async Task<ActionResult> SetOrgAdminAsync(int orgId, [FromBody] string userId)
@@ -175,6 +191,11 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove organization administrator
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="userId"></param> 
         [HttpPost]
         [Route("removeadmin/{orgId}")]
         public async Task<ActionResult> RemoveOrgAdminAsync(int orgId, [FromBody] string userId)

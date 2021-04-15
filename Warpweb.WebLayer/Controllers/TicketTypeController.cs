@@ -74,7 +74,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _ticketTypeService.UpdateTicketTypeAsync(ticketTypeVm);
             }
-            catch (TicketTypeDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -93,7 +93,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _ticketTypeService.DeleteTicketTypeAsync(ticketTypeVm);
             }
-            catch (TicketDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }

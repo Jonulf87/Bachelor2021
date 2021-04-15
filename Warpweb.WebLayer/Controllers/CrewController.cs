@@ -13,9 +13,6 @@ namespace Warpweb.WebLayer.Controllers
     [ApiController]
     [Authorize]
 
-    // CRUD functionality for crew
-    // TODO : Crew deletion
-
     public class CrewController : ControllerBase
     {
         private readonly CrewService _crewService;
@@ -48,7 +45,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Create crew
         /// </summary>
-        /// <param name="crewVm"></param> 
+        /// <param name="crewName"></param> 
         [HttpPost]
         [Authorize(Policy = "CrewAdmin")]
         [Route("createcrew/{crewName}")]
@@ -59,7 +56,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.CreateCrewAsync(crewName);
             return Ok();
             }
-            catch (CrewAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
@@ -78,7 +75,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.UpdateCrewAsync(crewVm);
             }
 
-            catch (CrewDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -97,7 +94,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _crewService.DeleteCrewAsync(crewVm);
             }
-            catch (CrewDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -105,6 +102,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(crewVm);
         }
 
+        /// <summary>
+        /// Returns crewmembers in crew with specific ID
+        /// </summary>
+        /// <param name="crewId"></param> 
         [HttpGet]
         [Route("crewmembers/{crewId}")]
         public async Task<ActionResult<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
@@ -114,12 +115,17 @@ namespace Warpweb.WebLayer.Controllers
                 var membersList = await _crewService.GetCrewMembersAsync(crewId);
                 return Ok(membersList);
             }
-            catch (CrewDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest("Crew eksisterer ikke");
             }
         }
 
+        /// <summary>
+        /// Add crewmember to crew with specific ID
+        /// </summary>
+        /// <param name="crewId"></param>
+        /// <param name="userId"></param>
         [HttpPost]
         [Route("addcrewmember/{crewId}")]
         public async Task<ActionResult> AddCrewMemberAsync(int crewId, [FromBody] string userId)
@@ -131,10 +137,14 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Kunne ikke legge til crewmedlem!");
             }
         }
 
+        /// <summary>
+        /// Get crewleaders from crew with specific ID
+        /// </summary>
+        /// <param int="crewId"></param>
         [HttpGet]
         [Route("crewleaders/{crewId}")]
         public async Task<ActionResult<CrewMembersListVm>> GetCrewLeadersAsync(int crewId)
@@ -144,12 +154,17 @@ namespace Warpweb.WebLayer.Controllers
                 var leaderList = await _crewService.GetCrewLeadersAsync(crewId);
                 return Ok(leaderList);
             }
-            catch (CrewDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest("Crew eksisterer ikke");
             }
         }
 
+        /// <summary>
+        /// Add crewleader to crew with specific ID
+        /// </summary>
+        /// <param int="crewId"></param>
+        /// <param string="userId"></param>
         [HttpPost]
         [Route("addcrewleader/{crewId}")]
         public async Task<ActionResult> AddCrewLeaderAsync(int crewId, [FromBody] string userId)
@@ -159,9 +174,8 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.AddCrewLeaderAsync(crewId, userId);
                 return Ok();
             }
-            catch
-            {
-                return BadRequest();
+            catch {
+                return BadRequest("Kunne ikke legge til crewleder!");
             }
         }
 

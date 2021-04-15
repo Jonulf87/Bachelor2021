@@ -9,12 +9,18 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
             width: '100%',
+        },/*
+        [theme.breakpoints.down('sm')]: {
+            '& .MuiTextField-root': {
+                width: '100%',
+            },
         },
+        [theme.breakpoints.up('sm')]: {
+            '& .MuiTextField-root': {
+                width: '25rem',
+            },
+        },*/
 
-        '& .row .cell': {
-            display: 'inline',
-            maxWidth: '50%'
-        }
     }
 }));
 
@@ -104,7 +110,7 @@ export default function CreateVenue() {
                 onSubmit={handleSubmit}
             >
                 <Grid container spacing={2}>
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredName(event.target.value);
@@ -117,7 +123,7 @@ export default function CreateVenue() {
                                 errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
                             />
                         </Grid>
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredContactName(event.target.value);
@@ -131,7 +137,7 @@ export default function CreateVenue() {
                             />
                         </Grid>
 
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredContactEMail(event.target.value);
@@ -144,7 +150,7 @@ export default function CreateVenue() {
                                 errorMessages={['Epost må oppgis']}
                             />
                         </Grid>
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredContactPhone(event.target.value);
@@ -159,7 +165,7 @@ export default function CreateVenue() {
                             />
                         </Grid>
 
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12} sm={9}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredAddress(event.target.value);
@@ -173,7 +179,7 @@ export default function CreateVenue() {
                                 errorMessages={['Adresse må oppgis']}
                             />
                         </Grid>
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12} sm={3}>
                             <TextValidator
                                 onChange={event => {
                                     setEnteredPostalCode(event.target.value);
@@ -187,7 +193,7 @@ export default function CreateVenue() {
                                 errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
                             />
                         </Grid>
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12}>
                             <Button
                                 type="submit"
                                 variant="contained"

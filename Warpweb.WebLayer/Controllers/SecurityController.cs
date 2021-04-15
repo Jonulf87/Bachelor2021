@@ -22,6 +22,9 @@ namespace Warpweb.WebLayer.Controllers
             _securityService = securityService;
         }
 
+        /// <summary>
+        /// Returns list of permissions for logged in user
+        /// </summary>
         [HttpGet]
         [Route("policies")]
         public async Task<ActionResult<List<CrewPermissionType>>> GetPoliciesAsync()
@@ -33,6 +36,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(policies);
         }
 
+        /// <summary>
+        /// Returns list of permissions for crew with specific ID
+        /// </summary>
+        /// <param name="crewId"></param>
         [HttpGet]
         [Route("allpolicies/{crewId}")]
         public async Task<List<CrewPermissionsVm>> GetAllPoliciesAsync(int crewId)
@@ -42,6 +49,11 @@ namespace Warpweb.WebLayer.Controllers
             return policies;
         }
 
+        /// <summary>
+        /// Sets permissions for crew with specific ID
+        /// </summary>
+        /// <param name="permissions"></param>
+        /// <param name="crewId"></param>
         [HttpPost]
         [Route("setpolicies/{crewId}")]
         public async Task<ActionResult> SetPoliciesAsync([FromBody] List<CrewPermissionsVm> permissions, int crewId)

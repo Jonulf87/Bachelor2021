@@ -55,7 +55,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingTicketType != null)
             {
-                throw new TicketTypeAlreadyExistsException();
+                throw new ItemAlreadyExistsException($"Billettypen {ticketTypeVm.DescriptionName} eksisterer allerede");
             }
 
             var newTicketType = new TicketType
@@ -78,7 +78,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingTicketType == null) //Dobbelsjekk at den faktisk eksisterer i db
             {
-                throw new TicketTypeDoesNotExistException();
+                throw new ItemNotFoundException($"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
             }
 
             existingTicketType.AmountAvailable = ticketTypeVm.AmountAvailable; //Nye props i objektet som skal sendes til db
@@ -99,7 +99,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (ticketTypeToBeDeleted == null)
             {
-                throw new NotImplementedException();
+                throw new ItemNotFoundException($"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
             }
 
             _dbContext.Remove<TicketType>(ticketTypeToBeDeleted);

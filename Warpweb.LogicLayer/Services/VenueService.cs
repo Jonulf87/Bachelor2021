@@ -76,7 +76,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingVenue != null)
             {
-                throw new VenueAlreadyExistsException();
+                throw new ItemAlreadyExistsException($"Lokalet med navn: {venueVm.Name} eksisterer allerede");
             }
 
             var venue = new Venue
