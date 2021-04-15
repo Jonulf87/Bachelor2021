@@ -34,7 +34,6 @@ export default function VenueMain() {
 
     return (
         <>
-            <Container>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper>
@@ -60,7 +59,6 @@ export default function VenueMain() {
                             <VenueList /> 
                         </Grid>
                     </Grid>  
-            </Container>
         </>
     );
 }
