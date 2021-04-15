@@ -85,7 +85,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Register new user
         /// </summary>
-        /// <param name="UserVm"></param>  
+        /// <param name="user"></param>
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
@@ -94,17 +94,13 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 await _securityService.RegisterUserAsync(user);
+                return Ok();
             }
-            catch (UserAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest("Brukeren eksisterer allerede");
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-            return Ok();
+            
         }  
     }
 }

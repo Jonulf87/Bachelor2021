@@ -99,7 +99,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _mainEventService.UpdateMainEventAsync(mainEventVm);
             }
-            catch (MainEventDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -132,7 +132,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _mainEventService.RemoveMainEventAsync(maineventVm);
             }
-            catch (MainEventDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }

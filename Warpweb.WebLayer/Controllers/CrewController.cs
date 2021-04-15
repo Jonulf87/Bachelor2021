@@ -55,7 +55,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.CreateCrewAsync(crewName);
             return Ok();
             }
-            catch (CrewAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
@@ -74,7 +74,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.UpdateCrewAsync(crewVm);
             }
 
-            catch (CrewDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -93,7 +93,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _crewService.DeleteCrewAsync(crewVm);
             }
-            catch (CrewDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
@@ -104,7 +104,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns crewmembers in crew with specific ID
         /// </summary>
-        /// <param name="crewID"></param> 
+        /// <param name="crewId"></param> 
         [HttpGet]
         [Route("crewmembers/{crewId}")]
         public async Task<ActionResult<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
@@ -114,7 +114,7 @@ namespace Warpweb.WebLayer.Controllers
                 var membersList = await _crewService.GetCrewMembersAsync(crewId);
                 return Ok(membersList);
             }
-            catch (CrewDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest("Crew eksisterer ikke");
             }
@@ -153,7 +153,7 @@ namespace Warpweb.WebLayer.Controllers
                 var leaderList = await _crewService.GetCrewLeadersAsync(crewId);
                 return Ok(leaderList);
             }
-            catch (CrewDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest("Crew eksisterer ikke");
             }
@@ -173,8 +173,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.AddCrewLeaderAsync(crewId, userId);
                 return Ok();
             }
-            catch
-            {
+            catch {
                 return BadRequest("Kunne ikke legge til crewleder!");
             }
         }

@@ -140,7 +140,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (userExists != null)
             {
-                throw new UserAlreadyExistsException();
+                throw new ItemAlreadyExistsException($"Bruker med e-post: {user.EMail} eksisterer allerede");
             }
 
             var userDataToBeStored = new ApplicationUser

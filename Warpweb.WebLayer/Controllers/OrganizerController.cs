@@ -64,7 +64,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 orgId = await _organizerService.CreateOrganizerAsync(organizerVm);
             }
-            catch (OrganizerAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
@@ -84,7 +84,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _organizerService.UpdateOrganizerAsync(organizerVm);
             }
-            catch (OrganizerAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
@@ -103,7 +103,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _organizerService.DeleteOrganizerAsync(organizerVm);
             }
-            catch (OrganizerDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }

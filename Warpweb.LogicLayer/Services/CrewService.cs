@@ -47,7 +47,6 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
-        // TODO: Try - catch w/logging
         public async Task CreateCrewAsync(string crewName)
         {
             var existingCrew = _dbContext.Crews
@@ -56,7 +55,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingCrew != null)
             {
-                throw new Exception();
+                throw new ItemAlreadyExistsException($"Crewet: {crewName} eksisterer fra før av");
             }
 
             var crew = new Crew
@@ -75,7 +74,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingCrew == null)
             {
-                throw new CrewDoesNotExistException("Det finnes ingen crew med denne IDen.");
+                throw new ItemNotFoundException($"Det finnes ingen crew ved navn: {crewVm.CrewName}");
             }
 
 
@@ -108,7 +107,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingCrewUser != null)
             {
-                throw new Exception();
+                throw new ItemAlreadyExistsException($"Bruker: {existingCrewUser.ApplicationUser.FirstName} er allerede lagt til i crewet");
             }
 
             var crewUser = new CrewUser
@@ -132,7 +131,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crew == null)
             {
-                throw new CrewDoesNotExistException();
+                throw new ItemNotFoundException($"Fant ingen crew med ID: {crewId}");
             }
 
             return crew.Users
@@ -153,7 +152,7 @@ namespace Warpweb.LogicLayer.Services
         {
             if (userId == null || crewId <= 0)
             {
-                throw new Exception();
+                throw new ArgumentException($"Ugyldig userId: {userId} eller crewId: {crewId}");
             }
 
             var existingCrewUser = await _dbContext.CrewUsers
@@ -189,7 +188,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crew == null)
             {
-                throw new CrewDoesNotExistException();
+                throw new ItemNotFoundException($"Fant ingen crew med ID: {crewId}");
             }
 
             return crew.Users
@@ -213,7 +212,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crewToBeDeleted == null)
             {
-                throw new CrewDoesNotExistException();
+                throw new ItemNotFoundException($"Fant ingen crew med navnet: {crewVm.CrewName}");
             }
 
             _dbContext.Remove<Crew>(crewToBeDeleted);

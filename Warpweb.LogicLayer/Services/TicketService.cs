@@ -116,7 +116,7 @@ namespace Warpweb.LogicLayer.Services
 
             if(seat == null)
             {
-                throw new SeatDoesNotExsistException();
+                throw new ItemNotFoundException($"Fant ingen seter med setenr: {seat.SeatNumber}");
             }
             
             if(seat.Row.TicketTypes.All(a => a.Id != ticket.TicketTypeId))

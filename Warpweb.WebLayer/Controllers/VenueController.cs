@@ -101,9 +101,9 @@ namespace Warpweb.WebLayer.Controllers
             {
                 venueId = await _venueService.CreateVenueAsync(venueVm);
             }
-            catch (VenueAlreadyExistsException)
+            catch (ItemAlreadyExistsException)
             {
-                return Conflict("Venue with this name already exists");
+                return Conflict($"Lokalet med navn: {venueVm.Name} eksisterer fra før");
             }
 
             venueVm.Id = venueId;
@@ -122,7 +122,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _venueService.UpdateVenueAsync(venueVm);
                 return Ok(venueVm);
             }
-            catch (VenueDoesNotExistException)
+            catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
