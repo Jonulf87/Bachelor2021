@@ -4,7 +4,7 @@ import { Input as TextField, Table, TableBody, TableCell, TableRow, Button, Typo
 import useAuth from "../../hooks/useAuth";
 
 
-export default function VenueInfo(props) {
+export default function VenueRowDetails(props) {
 
     const [venue, setVenue] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
@@ -71,6 +71,16 @@ export default function VenueInfo(props) {
             console.log(result);
         }
     }
+
+    /*const handleClick = () => {
+        setIsEditing(!isEditing)
+            setVenueName(venue.name)
+            setVenueAddress(venue.address)
+            setVenuePostalCode(venue.postalCode)
+            setVenueContactName(venue.contactName)
+            setVenueContactEMail(venue.contactEMail)
+            setVenueContactPhone(venue.contactPhone)
+    }*/
 
     return (
         <div>

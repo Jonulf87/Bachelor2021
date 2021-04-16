@@ -37,8 +37,8 @@ const theme = createMuiTheme({
             root: {
             },
             paper: {
-                variant: "elevation",
                 boxShadow: "none",
+                borderWidth: "0px"
 
             }
         },

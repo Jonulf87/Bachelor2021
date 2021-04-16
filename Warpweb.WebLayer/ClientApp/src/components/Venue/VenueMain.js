@@ -1,12 +1,12 @@
 ﻿import React, { useState, useEffect } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import VenueInfo from './VenueInfo';
 import Paper from '@material-ui/core/Paper';
+import VenueRowDetails from './VenueRowDetails';
 import VenueAdmin from './VenueAdmin';
 import VenueList from './VenueList';
 import CreateVenue from "./CreateVenue";
 import Grid from '@material-ui/core/Grid';
-import { Toolbar, Container, Typography, Button, Collapse, Box } from "@material-ui/core";
+import { Toolbar, Container, Typography, Button, Collapse, Box, Divider } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,31 +34,31 @@ export default function VenueMain() {
 
     return (
         <>
+        <Paper>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Paper>
-                        <Toolbar>
-                            <Button
-                                disableRipple
-                                disableFocusRipple
-                                variant="contained"
-                                color="primary"
-                                onClick={() => setOpenCreate(!openCreate)} disableElevation
-                            >
-                                {openCreate ? <>Avbryt</> : <>Legg Til Lokale</>}
-                            </Button>
-                        </Toolbar>
-                        <Collapse in={openCreate} unmountOnExit>
-                            <Box className={classes.root} margin={1}>
-                                <CreateVenue />
-                            </Box>
-                        </Collapse>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12}>                    
+                    <Toolbar>
+                        <Button
+                            disableRipple
+                            disableFocusRipple
+                            variant="contained"
+                            color="primary"
+                            onClick={() => setOpenCreate(!openCreate)} disableElevation
+                        >
+                            {openCreate ? <>Avbryt</> : <>Legg Til Lokale</>}
+                        </Button>
+                    </Toolbar>
+                    <Collapse in={openCreate} unmountOnExit>
+                        <Divider />
+                        <Box className={classes.root} margin={1}>
+                            <CreateVenue />
+                        </Box>
+                        <Divider />
+                    </Collapse>
                     <VenueList />
                 </Grid>
             </Grid>
+            </Paper>
         </>
     );
 }
