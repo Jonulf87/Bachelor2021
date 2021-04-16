@@ -109,6 +109,7 @@ namespace Warpweb.WebLayer.Controllers
 
         /// <summary>
         /// Sets the active event
+        /// </summary>
         /// <param name="eventId"></param>  
         [HttpPut]
         [Route("setcurrentevent")]
