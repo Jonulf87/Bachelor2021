@@ -51,23 +51,52 @@ namespace Warpweb.LogicLayer.Services
                     StartDate = a.StartDateTime,
                     StartTime = a.StartDateTime,
                     EndDate = a.EndDateTime,
-                    EndTime = a.EndDateTime
+                    EndTime = a.EndDateTime,
+                    OrganizerId = a.OrganizerId,
+                    VenueId = a.VenueId
                 })
                 .SingleOrDefaultAsync();
         }
-        public async Task<int> CreateMainEventAsync(MainEventVm maineventVm)
+        public async Task CreateMainEventAsync(MainEventVm maineventVm, string userId)
         {
             var existingMainEvent = _dbContext.MainEvents
                 .Where(a => a.Id == maineventVm.Id || a.Name == maineventVm.Name)
-                .FirstOrDefault();
+                .SingleOrDefault();
+
 
             if (existingMainEvent != null)
             {
-                throw new NotImplementedException(); //Må endres
+                throw new Exception();
             }
 
             DateTime StartDateTime = maineventVm.StartDate.Date + maineventVm.StartTime.TimeOfDay;
             DateTime EndDateTime = maineventVm.EndDate.Date + maineventVm.EndTime.TimeOfDay;
+
+            var leaderCrew = new Crew
+            {
+                Name = "Ledelse",
+                Users = new List<CrewUser>
+                {
+                    new CrewUser
+                    {
+                        ApplicationUserId = userId,
+                        IsLeader = true,
+                        Comment = "Arrangementsleder"
+                    }
+                },
+                CrewPermissions = new List<CrewPermission>()
+            };
+
+            var crewPermissionTypes = Enum.GetValues(typeof(CrewPermissionType)).Cast<CrewPermissionType>();
+
+            foreach (var crewPermissionType in crewPermissionTypes)
+            {
+                leaderCrew.CrewPermissions
+                    .Add(new CrewPermission
+                    {
+                        PermissionType = crewPermissionType
+                    });
+            }
 
             var mainevent = new MainEvent
             {
@@ -75,13 +104,23 @@ namespace Warpweb.LogicLayer.Services
                 StartDateTime = StartDateTime,
                 EndDateTime = EndDateTime,
                 OrganizerId = maineventVm.OrganizerId,
-                VenueId = maineventVm.VenueId
+                VenueId = maineventVm.VenueId,
+                Crews = new List<Crew>
+                { 
+                    leaderCrew
+                }
             };
 
             _dbContext.MainEvents.Add(mainevent);
             await _dbContext.SaveChangesAsync();
 
-            return mainevent.Id;
+            var user = await _dbContext.ApplicationUsers
+                .Where(a => a.Id == userId)
+                .SingleOrDefaultAsync();
+            
+            user.CurrentMainEventId = mainevent.Id;
+            await _dbContext.SaveChangesAsync();
+
         }
 
         public async Task<int> UpdateMainEventAsync(MainEventVm maineventVm)
@@ -147,6 +186,7 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        //Metoden henter ut kun de arrangementer som tilhører organisasjonen som pålogget bruker er administrator i.
         public async Task<List<MainEventListVm>> GetMainEventsForOrgAdminAsync(string userId)
         {
             return await _dbContext.MainEvents

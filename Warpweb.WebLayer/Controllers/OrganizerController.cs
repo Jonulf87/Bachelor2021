@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -169,6 +170,23 @@ namespace Warpweb.WebLayer.Controllers
                 return BadRequest();
             }
             return Ok(admins);
+        }
+
+        [HttpGet]
+        [Route("getaorgsadmin")]
+        public async Task<ActionResult<List<OrganizerListVm>>> GetOrgsWhereUserIsAdminAsync()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            try
+            {
+                var orgs = await _organizerService.GetOrgsWhereUserIsAdminAsync(userId);
+                return Ok(orgs);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         /// <summary>

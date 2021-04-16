@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
             marginLeft: drawerWidth,
         },
         boxShadow: 'none',
+        height: '80px'
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -49,7 +50,9 @@ const useStyles = makeStyles((theme) => ({
     },
 
     // nødvendig for innhold nendefor baren
-    toolbar: theme.mixins.toolbar,
+    toolbar: {
+        height: '80px'
+    },
 
     drawerPaper: {
         width: drawerWidth,
@@ -78,6 +81,7 @@ export default function MainMenu({ window }) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [policies, setPolicies] = useState([]);
     const [crews, setCrews] = useState([]);
+    const [orgAdmins, setOrgAdmins] = useState([]);
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
     const { isAuthenticated, token, roles } = useAuth();
 
@@ -92,7 +96,7 @@ export default function MainMenu({ window }) {
 
     useEffect(() => {
         if (isAuthenticated) {
-            const getPoliciesAndCrews = async () => {
+            const getPoliciesAndCrewsAndOrgAdmins = async () => {
                 const responsePolicies = await fetch('/api/security/policies', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -102,7 +106,7 @@ export default function MainMenu({ window }) {
                 const resultPolicies = await responsePolicies.json();
                 setPolicies(resultPolicies);
 
-                const responseCrews = await fetch('/api/security/policies', {
+                const responseCrews = await fetch('/api/crews/mine', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
@@ -110,14 +114,24 @@ export default function MainMenu({ window }) {
                 });
                 const resultCrews = await responseCrews.json();
                 setCrews(resultCrews);
-                console.log(resultCrews);
+
+                const responseOrgAdmins = await fetch('/api/tenants/getaorgsadmin', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const resultOrgAdmins = await responseOrgAdmins.json();
+                setOrgAdmins(resultOrgAdmins);
+
             }
 
-            getPoliciesAndCrews();
+            getPoliciesAndCrewsAndOrgAdmins();
         }
         else {
             setPolicies([]);
             setCrews([]);
+            setOrgAdmins([]);
         }
     }, [currentEventChangeCompleteTrigger, isAuthenticated])
 
@@ -127,13 +141,15 @@ export default function MainMenu({ window }) {
                 <div className={classes.toolbar} />
                 <UserMainMenu />
                 <Divider />
-                {(policies || roles) &&
+                {(policies.length !== 0 || roles.some(a => a === "Admin") || orgAdmins.length !== 0) &&
                     <>
-                    <AdminMainMenu policies={policies} roles={roles} />
+                        <AdminMainMenu policies={policies} roles={roles} />
                         <Divider />
                     </>
                 }
-                <CrewMainMenu />
+                {crews.length !== 0 &&
+                    <CrewMainMenu crews={crews}/>
+                }
             </>
         )
     }
@@ -156,6 +172,9 @@ export default function MainMenu({ window }) {
                     <ButtonGroup className={classes.buttonRight}>
                         <LoginMenu />
                     </ButtonGroup>
+                </Toolbar>
+                <Toolbar>
+                    test
                 </Toolbar>
             </AppBar>
 

@@ -1,15 +1,14 @@
 ﻿import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
-import { Dialog, DialogContent, DialogTitle, Button, Typography, Paper, TextField, MenuItem } from '@material-ui/core';
+import { Dialog,  DialogTitle, Button,  Paper, TextField, MenuItem, FormControl } from '@material-ui/core';
 import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Form } from 'reactstrap';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
-import { set } from 'date-fns/esm';
-import main from '../MainPage/MainPage';
-import CreateVenue from '../Venue/CreateVenue';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -39,26 +38,31 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     const [venues, setVenues] = useState([]);
     const [createVenue, setCreateVenue] = useState(false);
 
-    const { isAuthenticated, token } = useAuth();
+    const { isAuthenticated, token, refreshToken } = useAuth();
+
+    const history = useHistory();
+    const { setCurrentEvent,  setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
 
     //Henter organizere brukeren er knyttet til
     useEffect(() => {
         const getOrganizers = async () => {
 
             if (isAuthenticated) {
-                const response = await fetch('/api/tenants/gettenants', {
+                const response = await fetch('/api/tenants/getaorgsadmin', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Content-Type': 'application/json'
                     }
                 });
                 const result = await response.json();
                 setOrganizers(result);
+                if (result.length === 1) {
+                    setOrganizerId(result[0].id);
+                }
             }
         }
         getOrganizers();
-    }, []);
+    }, [isAuthenticated]);
 
     const getVenues = async () => {
 
@@ -91,7 +95,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     // NB - Må sjekke at det er gjort valg i skjema før innsending
     const submitForm = async () => {
         if (isAuthenticated) {
-            const response = await fetch('/api/events/createmainevent', {
+            await fetch('/api/events/createmainevent', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
@@ -99,10 +103,13 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                 method: 'POST',
                 body: JSON.stringify(mainEventDataToBeSent)
             });
-
-            const result = await response.json();
+            triggerUpdate();
+            refreshToken(0, () => {
+                setCurrentEvent(name);
+                setCurrentEventChangeCompleteTrigger(oldValue => !oldValue);
+                history.push('/crewadmin');
+            });
             handleDialogClose();
-
         }
     }
 
@@ -114,13 +121,14 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
             open={dialogOpen}
             onClose={handleDialogClose}
         >
-            <DialogTitle>
-                Arrangementskjema
-            </DialogTitle>
-            <Paper variant="outlined" elevation={0}>
-                <Typography className={classes.typography} gutterBottom variant="h5" component="h2">
-                    Opprett arrangement
-                    </Typography>
+            <Paper
+                variant="outlined"
+                elevation={0}
+                style={{ padding: '10px' }}
+            >
+                <DialogTitle>
+                    Nytt arrangement
+                </DialogTitle>
                 <Form className={classes.root}>
                     <TextField
                         className={classes.textField}
@@ -194,43 +202,40 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             </MenuItem>
                         ))}
                     </TextField>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        className={classes.button}
-                        startIcon={<SaveIcon />}
-                        onClick={() => setCreateVenue(true)}
-                    >
-                        Opprett nytt
-                </Button>
+
                     {/*Dropdown for arrangører*/}
-                    <TextField
-                        select
-                        variant="outlined"
-                        className={classes.textField}
-                        id="organizer"
-                        label="Organisator"
-                        fullWidth
-                        value={organizerId}
-                        onChange={(e) => setOrganizerId(e.target.value)}
-                    >
-                        {organizers.map((organizer) => (
-                            <MenuItem key={organizer.id} value={organizer.id} >
-                                {organizer.name}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        className={classes.button}
-                        startIcon={<SaveIcon />}
-                        onClick={submitForm}
-                    >
-                        Lagre
-                </Button>
+
+                    {organizers.length > 1 && (
+
+                        <TextField
+                            select
+                            variant="outlined"
+                            className={classes.textField}
+                            id="organizer"
+                            label="Organisator"
+                            fullWidth
+                            value={organizerId}
+                            onChange={(e) => setOrganizerId(e.target.value)}
+                        >
+                            {organizers.map((organizer) => (
+                                <MenuItem key={organizer.id} value={organizer.id} >
+                                    {organizer.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    )}
+                    <FormControl style={{padding: '8px'}}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            className={classes.button}
+                            startIcon={<SaveIcon />}
+                            onClick={submitForm}
+                        >
+                            Lagre
+                        </Button>
+                    </FormControl>
                 </Form>
             </Paper>
         </Dialog>

@@ -1,8 +1,9 @@
-﻿import { Typography, Button } from '@material-ui/core';
+﻿import { Typography, Button, Toolbar } from '@material-ui/core';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import CreateEvent from './CreateEvent';
+import EventAdminRowDetails from './EventAdminRowDetails';
 
 export default function EventAdminList() {
 
@@ -48,7 +49,7 @@ export default function EventAdminList() {
         getEvents();
     }, [isAuthenticated, updateList])
 
-    
+
 
     const columns = [
         {
@@ -61,7 +62,7 @@ export default function EventAdminList() {
         },
         {
             name: 'name',
-            label: 'Crew'
+            label: ' '
         },
         {
             name: '',
@@ -91,9 +92,9 @@ export default function EventAdminList() {
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
             return (
-                <>
-                </>
-                
+                <EventAdminRowDetails rowData={rowData} rowMeta={rowMeta} />
+
+
             )
         },
         onRowClick: (rowData, rowMeta) => {
@@ -117,19 +118,21 @@ export default function EventAdminList() {
             <CreateEvent dialogOpen={dialogCreateEventOpen} handleDialogClose={handleDialogCreateEventClose} triggerUpdate={triggerUpdate} />
             <MUIDataTable
                 title={<>
-                    <Typography>
-                        Arrangementer
+                    <Toolbar>
+                        <Typography>
+                            Arrangementer
                     </Typography>
 
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        style={{ margin: "15px" }}
-                        onClick={handleDialogCreateEventOpen}
-                    >
-                        Nytt arrangement
-                    </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            style={{ margin: "15px" }}
+                            onClick={handleDialogCreateEventOpen}
+                        >
+                            Nytt arrangement
+                        </Button>
+                    </Toolbar>
                 </>}
                 data={eventList}
                 columns={columns}

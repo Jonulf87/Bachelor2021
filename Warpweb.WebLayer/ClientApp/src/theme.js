@@ -3,11 +3,17 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { BorderAll } from '@material-ui/icons';
 
 const theme = createMuiTheme({
+    mixins: {
+        toolbar: {
+            minHeight: '40px'
+        }
+    },
+
     palette: {
         type: 'light',
         primary: {
             light: '#dce8ff',
-            main: '#a9b6ff',
+            main: '#B8292F',
             dark: '#7786cc',
             contrastText: '#000',
         },

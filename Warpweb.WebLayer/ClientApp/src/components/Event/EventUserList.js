@@ -55,7 +55,7 @@ export default function EventUserList() {
 
     const setSelectedEvent = async () => {
         if (isAuthenticated) {
-            const response = await fetch('/api/events/setcurrentevent', {
+            await fetch('/api/events/setcurrentevent', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'

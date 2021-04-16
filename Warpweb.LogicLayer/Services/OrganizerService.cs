@@ -159,6 +159,19 @@ namespace Warpweb.LogicLayer.Services
             return organizerToBeSent;
         }
 
+        public async Task<List<OrganizerListVm>> GetOrgsWhereUserIsAdminAsync(string userId)
+        {
+            return await _dbContext.Organizers
+                .Where(a => a.Admins.Any(b => b.Id == userId))
+                .Select(a => new OrganizerListVm
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    Description = a.Description,
+                    OrgNumber = a.OrgNumber
+                }).ToListAsync();
+        }
+
         public async Task RemoveOrgAdminAsync(int orgId, string userId)
         {
             var user = _dbContext.ApplicationUsers.Find(userId);

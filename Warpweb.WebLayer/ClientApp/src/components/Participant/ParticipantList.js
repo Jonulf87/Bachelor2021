@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
-    Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails,
+    Typography, Accordion, AccordionSummary, AccordionDetails,
     CircularProgress, Divider, Grid
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -33,26 +33,23 @@ export default function ParticipantList() {
     const [expanded, setExpanded] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
+    const classes = useStyles();
 
     useEffect(() => {
         const getParticipants = async () => {
-
             if (isAuthenticated) {
-
                 const response = await fetch('/api/users/userslist', {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
                     }
                 });
-
                 const result = await response.json();
                 setParticipantList(result);
                 setIsReady(true);
             }
         }
-
         getParticipants();
-
     }, [isAuthenticated]);
 
     // TODO: Liste deltakere knyttet til spesifikt arrangement
@@ -92,7 +89,6 @@ export default function ParticipantList() {
         )
     };
 
-    const classes = useStyles();
 
     return (
         <>

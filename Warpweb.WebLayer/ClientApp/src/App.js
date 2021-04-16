@@ -9,7 +9,7 @@ import './custom.css';
 import AuthProvider from './providers/AuthProvider';
 
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import { CssBaseline, Grid, Container } from '@material-ui/core';
+import { CssBaseline, Container } from '@material-ui/core';
 
 import MainMenu from './components/MainPageNavBar/MainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
@@ -34,7 +34,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
     },
     // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
+    toolbar: {
+        height: '80px'
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),

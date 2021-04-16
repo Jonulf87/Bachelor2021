@@ -100,6 +100,10 @@ namespace Warpweb.WebLayer.Controllers
             {
                 return BadRequest("Brukeren eksisterer allerede");
             }
+            catch (Exception)
+            {
+                return BadRequest("Noe gikk galt.");
+            }
             
         }  
     }

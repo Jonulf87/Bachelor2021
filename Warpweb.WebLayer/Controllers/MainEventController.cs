@@ -44,6 +44,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<MainEventVm>> GetMainEventAsync(int id)
         {
             var mainevent = await _mainEventService.GetMainEventAsync(id);
+            
 
             if (mainevent == null)
             {
@@ -61,8 +62,9 @@ namespace Warpweb.WebLayer.Controllers
         [Route("createmainevent")]
         public async Task<ActionResult> CreateMainEventAsync(MainEventVm mainEventVm)
         {
-            //Check which organizer currently active user belongs to. ClaimTypes.NameIdentifier is the username of active user.
-            var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(userId);
 
             if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId))
             {
@@ -71,14 +73,13 @@ namespace Warpweb.WebLayer.Controllers
 
             try
             {
-                await _mainEventService.CreateMainEventAsync(mainEventVm);
+                await _mainEventService.CreateMainEventAsync(mainEventVm, userId);
+                return Ok();
             }
             catch (Exception)
             {
                 return BadRequest();
             }
-
-            return Ok(mainEventVm);
         }
 
         /// <summary>

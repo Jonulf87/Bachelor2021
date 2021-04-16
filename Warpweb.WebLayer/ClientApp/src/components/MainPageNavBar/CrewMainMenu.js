@@ -1,41 +1,12 @@
-import React, { useEffect, useState } from 'react';
-
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import { List, ListItem, ListItemText, ListSubheader } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& ': {}
-    },
-    innerGrid: {
 
-    }
-}));
 
-export default function UserMainMenu() {
+export default function UserMainMenu({ crews }) {
 
-    const [crewMemberships, setCrewMemberships] = useState([]);
-
-    const { isAuthenticated, token } = useAuth();
-
-    useEffect(() => {
-        const getCrews = async () => {
-            if (isAuthenticated) {
-
-                const response = await fetch('/api/crews/mine', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const result = await response.json();
-                setCrewMemberships(result);
-            }
-        }
-        getCrews();
-    }, [isAuthenticated])
-
+    
 
     return (
         <List
@@ -45,7 +16,7 @@ export default function UserMainMenu() {
                 </ListSubheader>
             }
         >
-            {crewMemberships.map((crew) => (
+            {crews.map((crew) => (
                 <ListItem
                     key={crew.id}
                     button
@@ -54,8 +25,6 @@ export default function UserMainMenu() {
                     <ListItemText color="primary" primary={crew.name} />
                 </ListItem>
             ))}
-
-
         </List>
     );
 }

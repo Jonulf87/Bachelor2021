@@ -127,8 +127,8 @@ export default function UserRegister() {
         checkDateOfBirth();
     }, [dateOfBirth]);
 
-    const submitForm = async () => {
-
+    const submitForm = async (e) => {
+        e.preventDefault();
         const userDataToBeSent = {
             'firstName': firstName,
             'middleName': middleName,
@@ -162,15 +162,16 @@ export default function UserRegister() {
             setIsRegistered(true);
         }
         else {
-            setError(await response.text());
+            const result = await response.json();
+            const errorMessages = Object.keys(result.errors).reduce((accumulator, currentValue) => {
+                return accumulator + " " + currentValue + ": " + result.errors[currentValue];
+            }, "");
+            setError(errorMessages);
             setOpen(true);
         }
     }
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        submitForm();
-    };
+ 
 
     if (isRegistered) {
         return <Redirect to={'/login?userName=' + userName} />
@@ -186,7 +187,7 @@ export default function UserRegister() {
                 <ValidatorForm
                     autoComplete="off"
                     noValidate
-                    onSubmit={handleSubmit}
+                    onSubmit={submitForm}
                 >
                     <Grid alignItems="center" className={classes.root} container spacing={2} >
 
