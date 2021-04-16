@@ -1,29 +1,14 @@
 ﻿import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Table, TableRow, TableCell} from '@material-ui/core';
-import VenueInfo from './VenueInfo';
+import VenueInfo from './VenueRowDetails';
 import useAuth from "../../hooks/useAuth";
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            padding: 10,
-            marginBottom: 10,
-        },
-        margin: {
-            margin: theme.spacing(1),
-        },
-    }),
-);
 
 export default function VenueTable() {
     const [isReady, setIsReady] = useState(false);
     const [venueList, setVenueList] = useState([]);
-    const [venueOpen, setVenueOpen] = useState("");
-    const [venueId, setVenueId] = useState("");
 
     const { isAuthenticated, token } = useAuth();
     useEffect(() => {
@@ -44,8 +29,6 @@ export default function VenueTable() {
         getVenues();
 
     }, [isAuthenticated]);
-
-    const classes = useStyles();
 
     const columns = [
         {

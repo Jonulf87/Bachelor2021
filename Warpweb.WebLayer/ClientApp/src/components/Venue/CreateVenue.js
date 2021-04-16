@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography, Button, Grid, Toolbar } from '@material-ui/core';
+import { Container, Divider, Typography, Button, Grid, Toolbar } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import useAuth from '../../hooks/useAuth';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -57,13 +57,16 @@ export default function CreateVenue() {
 
         // Create data object
         const data = {
-            'VenueName': enteredName,
-            'VenueAddress': enteredAddress,
-            'PostalCode': enteredPostalCode,
-            'ContactName': enteredContactName,
-            'ContactEMail': enteredContactEMail,
-            'ContactPhone': enteredContactPhone
+            'venueName': enteredName,
+            'venueAddress': enteredAddress,
+            'postalCode': enteredPostalCode,
+            'contactName': enteredContactName,
+            'contactEMail': enteredContactEMail,
+            'contactPhone': enteredContactPhone
         }
+
+        console.log("data")
+        console.log(data);
 
         const response = await fetch('/api/venues', {
             headers: {
@@ -99,7 +102,7 @@ export default function CreateVenue() {
     return (
         <>
             <Toolbar>
-                <Typography gutterBottom variant="h6" component="h3">
+                <Typography variant="h5" component="h3">
                     Opprett lokale
                 </Typography>
             </Toolbar>
@@ -110,6 +113,11 @@ export default function CreateVenue() {
                 onSubmit={handleSubmit}
             >
                 <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" component="h4">
+                                Lokaleinfo
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12}>
                             <TextValidator
                                 onChange={event => {
@@ -123,48 +131,6 @@ export default function CreateVenue() {
                                 errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredContactName(event.target.value);
-                                }}
-                                label="Kontaktperson"
-                                name="contactperson"
-                                value={enteredContactName}
-                                required
-                                validators={['required']}
-                                errorMessages={['Kontaktperson må oppgis']}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredContactEMail(event.target.value);
-                                }}
-                                label="Kontakt epost"
-                                name="contactemail"
-                                value={enteredContactEMail}
-                                required
-                                validators={['required']}
-                                errorMessages={['Epost må oppgis']}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredContactPhone(event.target.value);
-                                }}
-                                label="Kontakt tlf."
-                                placeholder="Kontakt tlf."
-                                name="contactphone"
-                                value={enteredContactPhone}
-                                required
-                                validators={['required']}
-                                errorMessages={['Telefonnummer må oppgis']}
-                            />
-                        </Grid>
-
                         <Grid item xs={12} sm={9}>
                             <TextValidator
                                 onChange={event => {
@@ -191,6 +157,51 @@ export default function CreateVenue() {
                                 required
                                 validators={['required', 'matchRegexp:^[0-9]{4}$']}
                                 errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" component="h4">
+                                Kontaktinfo
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextValidator
+                                onChange={event => {
+                                    setEnteredContactName(event.target.value);
+                                }}
+                                label="KontaktNavn"
+                                name="contactperson"
+                                value={enteredContactName}
+                                required
+                                validators={['required']}
+                                errorMessages={['Kontaktperson må oppgis']}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextValidator
+                                onChange={event => {
+                                    setEnteredContactEMail(event.target.value);
+                                }}
+                                label="Kontakt epost"
+                                name="contactemail"
+                                value={enteredContactEMail}
+                                required
+                                validators={['required']}
+                                errorMessages={['Epost må oppgis']}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextValidator
+                                onChange={event => {
+                                    setEnteredContactPhone(event.target.value);
+                                }}
+                                label="Kontakt tlf."
+                                placeholder="Kontakt tlf."
+                                name="contactphone"
+                                value={enteredContactPhone}
+                                required
+                                validators={['required']}
+                                errorMessages={['Telefonnummer må oppgis']}
                             />
                         </Grid>
                         <Grid item xs={12}>
