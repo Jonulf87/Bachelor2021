@@ -1,4 +1,4 @@
-﻿import { Dialog, Paper, TextField, Button, FormControl } from '@material-ui/core';
+﻿import { Dialog, Paper, TextField, Button, FormControl, DialogTitle } from '@material-ui/core';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
@@ -61,7 +61,10 @@ export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dial
                 elevation={0}
                 style={{ padding: '10px' }}
             >
-                <form>
+                <DialogTitle>
+                    Ny organisasjon
+                </DialogTitle>
+                <form className={classes.root}>
                     <TextField
                         variant="outlined"
                         id="organizerName"
@@ -82,7 +85,6 @@ export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dial
                         variant="outlined"
                         id="organizerDescription"
                         label="Beskrivelse"
-                        style={{ margin: 8 }}
                         required
                         value={organizerDescription}
                         onChange={(e) => setOrganizerDescription(e.target.value)}
@@ -102,6 +104,5 @@ export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dial
                 </form>
             </Paper>
         </Dialog>
-
     )
 }
