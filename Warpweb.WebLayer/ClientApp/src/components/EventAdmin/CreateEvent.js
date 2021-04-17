@@ -2,7 +2,7 @@
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
-import { Dialog,  DialogTitle, Button,  Paper, TextField, MenuItem, FormControl } from '@material-ui/core';
+import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, FormControl } from '@material-ui/core';
 import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Form } from 'reactstrap';
 import 'date-fns';
@@ -36,12 +36,11 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
     const [organizers, setOrganizers] = useState([]);
     const [venues, setVenues] = useState([]);
-    const [createVenue, setCreateVenue] = useState(false);
 
     const { isAuthenticated, token, refreshToken } = useAuth();
 
     const history = useHistory();
-    const { setCurrentEvent,  setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
+    const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
 
     //Henter organizere brukeren er knyttet til
     useEffect(() => {
@@ -64,23 +63,23 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
         getOrganizers();
     }, [isAuthenticated]);
 
-    const getVenues = async () => {
-
-        if (isAuthenticated) {
-            const response = await fetch(`/api/venues/venueslist`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const result = await response.json();
-            setVenues(result);
-        }
-    }
-
-    //Henter Venues knyttet til organizeren brukeren er knyttet til
     useEffect(() => {
+        const getVenues = async () => {
+
+            if (isAuthenticated) {
+                const response = await fetch(`/api/venues/venueslist`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const result = await response.json();
+                setVenues(result);
+            }
+        }
         getVenues();
-    }, []);
+    }, [isAuthenticated]);
+
 
     const mainEventDataToBeSent = {
         'name': name,
@@ -224,7 +223,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             ))}
                         </TextField>
                     )}
-                    <FormControl style={{padding: '8px'}}>
+                    <FormControl style={{ padding: '8px' }}>
                         <Button
                             variant="contained"
                             color="primary"

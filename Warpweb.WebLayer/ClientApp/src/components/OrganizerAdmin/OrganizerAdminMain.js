@@ -1,24 +1,136 @@
-﻿import React, { useState } from 'react';
-import OrganizerAdminList from './OrganizerAdminList';
-import OrganizerAdminMenu from './OrganizerAdminMenu';
-import { Paper } from '@material-ui/core';
+﻿import { Button, createMuiTheme, Toolbar, Typography } from '@material-ui/core';
+import MUIDataTable, { ExpandButton } from 'mui-datatables';
+import React, { useEffect, useState } from 'react';
+import useAuth from '../../hooks/useAuth';
+import OrganizerAdminRowDetails from './OrganizerAdminRowDetails';
+import CreateOrganizer from './CreateOrganizer';
 
 export default function OrganizerAdminMain() {
 
-    const [triggerUpdate, setTriggerUpdate] = useState(false);
+    const [organizerList, setOrganizerList] = useState([]);
+    const [rowsExpanded, setRowsExpanded] = useState([]); 
+    const [updateList, setUpdateList] = useState(false);
+    const [dialogCreateOrganizerOpen, setDialogCreateOrganizerOpen] = useState(false);
 
-    const updateList = () => {
-        setTriggerUpdate(oldValue => !oldValue);
+    const { isAuthenticated, token } = useAuth();
+
+    const triggerUpdate = () => {
+        setUpdateList(oldValue => !oldValue);
     }
+
+    const handleDialogCreateOrganizerOpen = () => {
+        setDialogCreateOrganizerOpen(true);
+    };
+
+    const handleDialogCreateOrganizerClose = () => {
+        setDialogCreateOrganizerOpen(false);
+    };
+    
+
+    useEffect(() => {
+        const getOrganizers = async () => {
+            if (isAuthenticated) {
+
+                const responseOrganizers = await fetch('/api/tenants/gettenants', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+
+                if (responseOrganizers.ok) {
+                    const resultOrganizers = await responseOrganizers.json();
+                    setOrganizerList(resultOrganizers);
+                }
+                else {
+                    setOrganizerList([]);
+                }
+            }
+        }
+        getOrganizers();
+    }, [isAuthenticated, updateList])
+
+
+
+    const columns = [
+        {
+            name: 'id',
+            label: 'Id',
+            options: {
+                display: false,
+            }
+        },
+        {
+            name: 'name',
+            label: 'Organisasjon'
+        },
+        {
+            name: 'orgNumber',
+            label: 'Orgnummer'
+        },
+        {
+            name: 'description',
+            label: 'Beskrivelse'
+        }
+    ];
+
+    const options = {
+        rowsExpanded: rowsExpanded,
+        filter: false,
+        filterType: 'dropdown',
+        responsive: 'vertical',
+        selectableRows: "none",
+        selectableRowsOnClick: false,
+        expandableRows: true,
+        expandableRowsHeader: false,
+        expandableRowsOnClick: false,
+        renderExpandableRow: (rowData, rowMeta) => {
+            return (
+                <OrganizerAdminRowDetails rowData={rowData} rowMeta={rowMeta} />
+            );
+        },
+        onRowClick: (rowData, rowMeta) => {
+            if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
+                setRowsExpanded([]);
+            }
+            else {
+                setRowsExpanded([rowMeta.dataIndex]);
+            }
+        }
+    };
+
+
+
+    if (!organizerList) {
+        return (<p>Loading...</p>);
+    };
+
 
     return (
         <>
-            <Paper variant="outlined">
-                <OrganizerAdminMenu updateList={updateList} />
-            </Paper>
+            <CreateOrganizer handleDialogCreateOrganizerClose={handleDialogCreateOrganizerClose} dialogCreateOrganizerOpen={dialogCreateOrganizerOpen} triggerUpdate={triggerUpdate} />
+            <MUIDataTable
+                title={<>
+                    <Toolbar>
+                        <Typography>
+                            Organisasjoner
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            style={{ margin: '15px' }}
+                            onClick={handleDialogCreateOrganizerOpen}
+                        >
+                            Ny Organisasjon
+                        </Button>
+                    </Toolbar>
+                    </>}
+                data={organizerList}
+                columns={columns}
+                options={options}
+            />
 
-            <OrganizerAdminList triggerUpdate={triggerUpdate} />
         </>
-
     )
 }
