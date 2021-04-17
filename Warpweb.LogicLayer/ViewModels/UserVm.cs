@@ -46,6 +46,7 @@ namespace Warpweb.LogicLayer.ViewModels
         [DataType(DataType.Password)]
         [MinLength(10)]
         //[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})$", ErrorMessage = "Passord må bestå av minst 10 tegn")]
+        //Dette er en git test
         public string Password { get; set; }
 
         [RegularExpression(@"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$", ErrorMessage = "Ugyldig navn")]
