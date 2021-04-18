@@ -50,7 +50,6 @@ export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dial
         }
     }
 
-
     return (
         <Dialog
             open={dialogCreateOrganizerOpen}

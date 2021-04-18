@@ -171,7 +171,8 @@ namespace Warpweb.LogicLayer.Services
                 .Where(a => a.Id == userId)
                 .Select(b => new CurrentMainEventVm
                 {
-                    Name = b.CurrentMainEvent.Name
+                    Name = b.CurrentMainEvent.Name,
+                    OrganizerId = b.CurrentMainEvent.OrganizerId
                 })
                 .FirstOrDefaultAsync();
         }

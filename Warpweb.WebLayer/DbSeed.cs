@@ -63,7 +63,6 @@ namespace Warpweb.WebLayer
             }
 
             //Opprett noen brukere
-
             var userPostman = new ApplicationUser
             {
                 FirstName = "Post",
@@ -239,7 +238,7 @@ namespace Warpweb.WebLayer
             {
                 Name = "Rockefeller",
                 Address = "Torggata Bad 1",
-                PostalCode = "0123 Oslo",
+                PostalCode = "0123",
                 ContactName = "Hans Jensen",
                 ContactEMail = "hans@jensen.no",
                 ContactPhone = "874542165",
@@ -250,7 +249,7 @@ namespace Warpweb.WebLayer
             {
                 Name = "Spektrum",
                 Address = "Ikke Torggata Bad 1",
-                PostalCode = "2134 Strømmen",
+                PostalCode = "2134",
                 ContactName = "Jens Hansen",
                 ContactEMail = "jens@hansen.no",
                 ContactPhone = "22334466",
@@ -261,7 +260,7 @@ namespace Warpweb.WebLayer
             {
                 Name = "Vikingskipet",
                 Address = "Hamargaten 1",
-                PostalCode = "3345 Hamar",
+                PostalCode = "3345",
                 ContactName = "Petter Dass",
                 ContactEMail = "toalettlektyrøren@dass.no",
                 ContactPhone = "3",

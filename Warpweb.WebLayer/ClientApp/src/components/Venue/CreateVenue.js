@@ -1,8 +1,9 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Divider, Typography, Button, Grid, Toolbar } from '@material-ui/core';
+import { Typography, Button, Grid, Toolbar } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import useAuth from '../../hooks/useAuth';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +39,8 @@ export default function CreateVenue() {
     const [enteredContactEMail, setEnteredContactEMail] = useState('');
     const [enteredContactPhone, setEnteredContactPhone] = useState('');
 
+    // Get organizer ID of current event
+    const { currentEvent } = useCurrentEvent();
     const { isAuthenticated, token } = useAuth();
 
     const sendRequest = async () => {
@@ -57,18 +60,18 @@ export default function CreateVenue() {
 
         // Create data object
         const data = {
-            'venueName': enteredName,
-            'venueAddress': enteredAddress,
+            'name': enteredName,
+            'address': enteredAddress,
             'postalCode': enteredPostalCode,
             'contactName': enteredContactName,
             'contactEMail': enteredContactEMail,
-            'contactPhone': enteredContactPhone
+            'contactPhone': enteredContactPhone,
+            'organizerId': currentEvent.organizerId
         }
 
-        console.log("data")
         console.log(data);
 
-        const response = await fetch('/api/venues', {
+        const response = await fetch(`/api/venues`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -169,7 +172,7 @@ export default function CreateVenue() {
                                 onChange={event => {
                                     setEnteredContactName(event.target.value);
                                 }}
-                                label="KontaktNavn"
+                                label="Kontaktperson"
                                 name="contactperson"
                                 value={enteredContactName}
                                 required

@@ -172,6 +172,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(admins);
         }
 
+        /// <summary>
+        /// Returns organizations where the user is administraor
+        /// </summary>
+        /// <param>None</param> 
         [HttpGet]
         [Route("getaorgsadmin")]
         public async Task<ActionResult<List<OrganizerListVm>>> GetOrgsWhereUserIsAdminAsync()

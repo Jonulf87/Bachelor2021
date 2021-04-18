@@ -61,53 +61,17 @@ namespace Warpweb.WebLayer.Controllers
         [HttpPost]
         public async Task<ActionResult<VenueVm>> CreateVenueAsync(VenueVm venueVm)
         {
-            int venueId;
-
-            if (venueVm.Id > 0)
-            {
-                return BadRequest("VenueId should be empty");
-            }
-
-            if("".Equals(venueVm.Name))
-            {
-                return BadRequest("Venue name should not be empty");
-            }
-
-            if ("".Equals(venueVm.PostalCode))
-            {
-                return BadRequest("Venue postal code should not be empty");
-            }
-
-            if ("".Equals(venueVm.Address))
-            {
-                return BadRequest("Venue address should not be empty");
-            }
-
-            if("".Equals(venueVm.ContactName))
-            {
-                return BadRequest("Contact name should not be empty");
-            }
-
-            if("".Equals(venueVm.ContactPhone))
-            {
-                return BadRequest("Contact phone should not be empty");
-            }
-            if ("".Equals(venueVm.ContactEMail))
-            {
-                return BadRequest("Contact e-mail should not be empty");
-            }
 
             try
             {
-                venueId = await _venueService.CreateVenueAsync(venueVm);
+                await _venueService.CreateVenueAsync(venueVm);
+                return Ok(venueVm);
             }
             catch (ItemAlreadyExistsException)
             {
                 return Conflict($"Lokalet med navn: {venueVm.Name} eksisterer fra før");
             }
 
-            venueVm.Id = venueId;
-            return Ok(venueVm);
         }
 
         /// <summary>

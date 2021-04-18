@@ -60,6 +60,7 @@ namespace Warpweb.LogicLayer.Services
                     Id = a.Id,
                     Name = a.Name,
                     Address = a.Address,
+                    OrganizerId = a.OrganizerId,
                     PostalCode = a.PostalCode,
                     ContactName = a.ContactName,
                     ContactEMail = a.ContactEMail,
@@ -70,9 +71,8 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<int> CreateVenueAsync(VenueVm venueVm)
         {
-            var existingVenue = _dbContext.Venues
-                .Where(a => a.Id == venueVm.Id || a.Name == venueVm.Name)
-                .FirstOrDefault();
+
+            var existingVenue = _dbContext.Venues.Where(a => a.Id == venueVm.Id).FirstOrDefault();
 
             if (existingVenue != null)
             {
@@ -80,19 +80,20 @@ namespace Warpweb.LogicLayer.Services
             }
 
             var venue = new Venue
-            {
-                Id = venueVm.Id,
-                Name = venueVm.Name,
-                Address = venueVm.Address,
-                ContactName = venueVm.ContactName,
-                ContactPhone = venueVm.ContactPhone,
-                ContactEMail = venueVm.ContactEMail 
-            };
+                {
+                    Name = venueVm.Name,
+                    Address = venueVm.Address,
+                    PostalCode = venueVm.PostalCode,
+                    OrganizerId = venueVm.OrganizerId,
+                    ContactName = venueVm.ContactName,
+                    ContactPhone = venueVm.ContactPhone,
+                    ContactEMail = venueVm.ContactEMail
+                };
 
-            _dbContext.Venues.Add(venue);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.Venues.Add(venue);
+                await _dbContext.SaveChangesAsync();
 
-            return venue.Id;
+                return venue.Id;
         }
 
         public async Task<int> UpdateVenueAsync(VenueVm venueVm)
@@ -107,6 +108,8 @@ namespace Warpweb.LogicLayer.Services
             existingVenue.Id = venueVm.Id;
             existingVenue.Name = venueVm.Name;
             existingVenue.Address = venueVm.Address;
+            existingVenue.PostalCode = venueVm.PostalCode;
+            existingVenue.OrganizerId = venueVm.OrganizerId;
             existingVenue.ContactName = venueVm.ContactName;
             existingVenue.ContactEMail = venueVm.ContactEMail;
             existingVenue.ContactPhone = venueVm.ContactPhone;

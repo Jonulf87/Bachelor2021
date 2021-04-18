@@ -14,13 +14,13 @@ export default function VenueTable() {
     useEffect(() => {
         const getVenues = async () => {
             if (isAuthenticated) {
-                const respone = await fetch('/api/venues/venueslist', {
+                const response = await fetch('/api/venues/venueslist', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
 
-                const result = await respone.json();
+                const result = await response.json();
                 setVenueList(result);
                 setIsReady(true);
             }

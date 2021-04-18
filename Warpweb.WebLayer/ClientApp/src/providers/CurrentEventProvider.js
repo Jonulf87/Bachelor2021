@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 
 export const CurrentEventContext = React.createContext();
@@ -20,7 +20,7 @@ const CurrentEventProvider = ({ children }) => {
                     }
                 });
                 const result = await response.json();
-                setCurrentEvent(result.name);
+                setCurrentEvent(result);
             }
         }
         getCurrentMainEvent();
