@@ -11,7 +11,6 @@ export default function EventUserMain() {
             <Grid
                 item
                 xs={12}
-                md={6}
             >
                 <EventUserList />
             </Grid>

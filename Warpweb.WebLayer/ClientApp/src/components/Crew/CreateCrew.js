@@ -1,12 +1,7 @@
 ﻿import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { TextField, Card, CardContent, Typography, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,7 +30,7 @@ export default function CreateCrew() {
         <Card className={classes.root}>
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                    Opprett crew
+                    Opprett arbeidslag
                 </Typography>
                 <form className={classes.root} noValidate autoComplete="off">
                     <div>
@@ -44,7 +39,7 @@ export default function CreateCrew() {
                                 id="outlined-full-width"
                                 label="Navn"
                                 style={{ margin: 8 }}
-                                placeholder="Navn på crew"
+                                placeholder="Navn på arbeidslag"
                                 fullWidth
                                 margin="normal"
                                 InputLabelProps={{
@@ -57,13 +52,13 @@ export default function CreateCrew() {
                         <TextField
                             id="outlined-select-organizer-native"
                             select
-                            label="Crew leder"
+                            label="Arbeidslagsleder"
                             value={crewleader}
                             onChange={handleChangeCrewleader}
                             SelectProps={{
                                 native: true,
                             }}
-                            helperText="Velg crewleader"
+                            helperText="Velg arbeidslagsleder"
                             variant="outlined"
                         >
                             {crewleaders.map((option) => (

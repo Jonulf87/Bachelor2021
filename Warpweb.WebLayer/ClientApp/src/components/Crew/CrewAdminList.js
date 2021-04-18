@@ -115,7 +115,7 @@ export default function OrganizerAdminList() {
                 title={<>
                     <TextField variant="outlined"
                         id="crewName"
-                        label="Navn nytt crew"
+                        label="Arbeidslag"
                         style={{ margin: 8 }}
                         required
                         value={crewName}
@@ -129,7 +129,7 @@ export default function OrganizerAdminList() {
                         style={{ margin: "15px" }}
                         onClick={addCrew}
                     >
-                        Opprett crew
+                        Opprett arbeidslag
                     </Button>
                 </>}
                 data={crewList}

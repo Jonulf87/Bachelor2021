@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function UserDataCard() {
+export default function UserInfo() {
 
     const [userInfo, setUserInfo] = useState([]);
     const [isReady, setIsReady] = useState(false);
@@ -49,7 +49,10 @@ export default function UserDataCard() {
 
             <CardContent>
                 {isReady && (<>
-                    <Grid container spacing={2}>
+                    <Grid
+                        container
+                        spacing={2}
+                    >
 
                         <Typography gutterBottom variant="h5" component="h2">
                             Hei {userInfo.firstName}&nbsp;{userInfo.lastName}
@@ -90,7 +93,7 @@ export default function UserDataCard() {
                         }
 
                         {userInfo.parentPhoneNumber &&
-                            <Grid id="userParentInfo" container spacing={2}>
+                            <Grid container id="userParentInfo" spacing={2}>
                                 <Grid id="userParenFullName" item xs={12}>
                                     <p><strong>Foresatt:&nbsp;</strong>{userInfo.parentFirstName}&nbsp;{userInfo.parentLastName} </p>
                                 </Grid>
