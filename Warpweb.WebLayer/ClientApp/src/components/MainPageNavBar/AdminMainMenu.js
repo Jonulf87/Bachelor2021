@@ -9,9 +9,9 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import EventSeatIcon from '@material-ui/icons/EventSeat';
 import SettingsIcon from '@material-ui/icons/Settings';
 import BusinessIcon from '@material-ui/icons/Business';
+import EventIcon from '@material-ui/icons/Event';
 
 export default function AdminMainMenu({ policies, roles}) {
-
 
     return (
         <List
@@ -24,14 +24,14 @@ export default function AdminMainMenu({ policies, roles}) {
 
             {policies.some(a => a === 6) &&
                 <ListItem button component={Link} to='/venue'>
-                    <ListItemIcon><HomeWorkIcon /></ListItemIcon>
+                <ListItemIcon><HomeWorkIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Lokaler' />
                 </ListItem>
             }
 
             {policies.some(a => a === 2) &&
                 <ListItem button component={Link} to='/ticketadmin'>
-                    <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
+                <ListItemIcon><ConfirmationNumberIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Billetter' />
                 </ListItem>
             }
@@ -39,7 +39,7 @@ export default function AdminMainMenu({ policies, roles}) {
 
             {policies.some(a => a === 3) &&
                 <ListItem button component={Link} to='/seatmap'>
-                    <ListItemIcon><EventSeatIcon /></ListItemIcon>
+                <ListItemIcon><EventSeatIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Setekart' />
                 </ListItem>
             }
@@ -48,7 +48,7 @@ export default function AdminMainMenu({ policies, roles}) {
             {policies.some(a => a === 1) &&
 
                 (<ListItem button component={Link} to='/crewadmin'>
-                    <ListItemIcon><GroupIcon /></ListItemIcon>
+                <ListItemIcon><GroupIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Arbeidslag' />
                 </ListItem>)
             }
@@ -56,7 +56,7 @@ export default function AdminMainMenu({ policies, roles}) {
             {policies.some(a => a === 7) &&
 
                 <ListItem button component={Link} to='/participant'>
-                    <ListItemIcon><AssignmentIndIcon /></ListItemIcon>
+                <ListItemIcon><AssignmentIndIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Deltagere' />
                 </ListItem>
             }
@@ -64,7 +64,7 @@ export default function AdminMainMenu({ policies, roles}) {
             {policies.some(a => a === 4) &&
 
                 <ListItem button component={Link} to='/useradmin'>
-                    <ListItemIcon><SettingsIcon /></ListItemIcon>
+                <ListItemIcon><SettingsIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Brukere' />
                 </ListItem>
 
@@ -72,21 +72,21 @@ export default function AdminMainMenu({ policies, roles}) {
             {policies.some(a => a === 5) &&
 
                 <ListItem button component={Link} to='/report'>
-                    <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                <ListItemIcon><AssignmentIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Rapporter' />
                 </ListItem>
             }
 
 
                 <ListItem button component={Link} to='/event'>
-                    <ListItemIcon><AssignmentIcon /></ListItemIcon>
+                <ListItemIcon><EventIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Arrangementer' />
                 </ListItem>
 
 
             {roles.some(a => a === "Admin") &&
                 (<ListItem button component={Link} to='/organizer'>
-                <ListItemIcon><BusinessIcon /></ListItemIcon>
+                <ListItemIcon><BusinessIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Organisasjoner' />
                 </ListItem>)
             }

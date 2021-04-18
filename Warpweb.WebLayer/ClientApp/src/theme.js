@@ -1,4 +1,7 @@
-﻿import { createMuiTheme } from '@material-ui/core/styles'
+﻿
+import { createMuiTheme } from '@material-ui/core/styles'
+
+/* Prøvde med bakgrunnsfargen fra Warpzone.no: https://imagecolorpicker.com/color-code/3a4557 */
 
 const theme = createMuiTheme({
     mixins: {
@@ -11,9 +14,11 @@ const theme = createMuiTheme({
         type: 'light',
         primary: {
             light: '#dce8ff',
-            main: '#B8292F',
+            main: '#3a4557',
+            /*main: '#B8292F',*/
             dark: '#7786cc',
-            contrastText: '#000',
+            contrastText: '#FFF',
+            /*contrastText: '#000',*/
         },
         secondary: {
             light: '#ff5983',

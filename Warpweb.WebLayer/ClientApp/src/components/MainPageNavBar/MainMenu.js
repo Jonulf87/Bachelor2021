@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import useAuth from '../../hooks/useAuth';
 
-
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, ButtonGroup, Drawer, Hidden, Divider, Toolbar, Typography, IconButton, Paper } from '@material-ui/core';
+import { AppBar, ButtonGroup, Drawer, Hidden, Divider, Toolbar, IconButton } from '@material-ui/core';
 
 import AdminMainMenu from './AdminMainMenu';
 import UserMainMenu from './UserMainMenu';
 import CrewMainMenu from './CrewMainMenu';
 import NavBarHeader from './NavBarHeader';
 import LoginMenu from './LoginMenu';
-
 
 const drawerWidth = 240;
 
@@ -75,22 +72,24 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
 export default function MainMenu({ window }) {
 
     const [mobileOpen, setMobileOpen] = useState(false);
     const [policies, setPolicies] = useState([]);
     const [crews, setCrews] = useState([]);
     const [orgAdmins, setOrgAdmins] = useState([]);
+    const [activeOrganization, setActiveOrganization] = useState("");
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
     const { isAuthenticated, token, roles } = useAuth();
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
+    // Get organizer ID of current event
+    const { currentEvent } = useCurrentEvent();
+
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-
 
     const classes = useStyles();
 
@@ -124,6 +123,16 @@ export default function MainMenu({ window }) {
                 const resultOrgAdmins = await responseOrgAdmins.json();
                 setOrgAdmins(resultOrgAdmins);
 
+                //// Get active organizer - Does not worky worky
+                //const responseCurrentOrganization = await fetch(`/api/tenants/${currentEvent.organizerId}`, {
+                //    headers: {
+                //        'Authorization': `Bearer ${token}`,
+                //        'content-type': 'application/json'
+                //    }
+                //});
+                //const resultCurrentOrganization = await responseCurrentOrganization.json();
+                //setActiveOrganization(resultCurrentOrganization);
+
             }
 
             getPoliciesAndCrewsAndOrgAdmins();
@@ -154,7 +163,6 @@ export default function MainMenu({ window }) {
         )
     }
 
-
     return (
         <>
             <AppBar position="fixed" className={classes.appBar}>
@@ -174,7 +182,7 @@ export default function MainMenu({ window }) {
                     </ButtonGroup>
                 </Toolbar>
                 <Toolbar>
-                    test
+                    Organisasjon: {currentEvent.organizerId}
                 </Toolbar>
             </AppBar>
 

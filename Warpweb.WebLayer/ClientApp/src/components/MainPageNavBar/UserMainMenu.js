@@ -28,15 +28,15 @@ export default function UserMainMenu() {
             }
         >
             <ListItem aria-label='Velg arrangement' button component={Link} to='/userevent'>
-                <ListItemIcon  ><StarIcon  /></ListItemIcon>
+                <ListItemIcon  ><StarIcon color="primary"/></ListItemIcon>
                 <ListItemText primary='Velg arrangement' />
             </ListItem>
             <ListItem aria-label='kjøp billett' button component={Link} to='/userticket'>
-                <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
+                <ListItemIcon><ConfirmationNumberIcon color="primary"/></ListItemIcon>
                 <ListItemText primary='Kjøp billett' />
             </ListItem>
             <ListItem aria-label='Setekart'button component={Link} to='/userseatmap'>
-                <ListItemIcon><EventSeatIcon /></ListItemIcon>
+                <ListItemIcon><EventSeatIcon color="primary"/></ListItemIcon>
                 <ListItemText primary='Setekart' />
             </ListItem>
         </List>
