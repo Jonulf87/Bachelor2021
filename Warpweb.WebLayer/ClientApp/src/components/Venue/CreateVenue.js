@@ -10,18 +10,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
             width: '100%',
-        },/*
-        [theme.breakpoints.down('sm')]: {
-            '& .MuiTextField-root': {
-                width: '100%',
-            },
         },
-        [theme.breakpoints.up('sm')]: {
-            '& .MuiTextField-root': {
-                width: '25rem',
-            },
-        },*/
-
     }
 }));
 
@@ -41,6 +30,7 @@ export default function CreateVenue() {
 
     // Get organizer ID of current event
     const { currentEvent } = useCurrentEvent();
+
     const { isAuthenticated, token } = useAuth();
 
     const sendRequest = async () => {
@@ -81,9 +71,10 @@ export default function CreateVenue() {
         });
 
         if (response.status !== 200) {
-            alert(response);
+            alert(response.body);
         } else {
             const result = await response.json();
+            alert(result.body)
 
             setEnteredName('');
             setEnteredAddress('');

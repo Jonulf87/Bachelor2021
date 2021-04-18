@@ -1,9 +1,8 @@
-﻿import { createMuiTheme, Grid, MuiThemeProvider, Table, TableBody, TableCell, TableRow, Typography, Button, TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import MUIDataTable, { ExpandButton } from 'mui-datatables';
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import CrewAdminRowDetails from './CrewAdminRowDetails';
+import { Button, TextField } from '@material-ui/core';
+import MUIDataTable from 'mui-datatables';
 
 export default function OrganizerAdminList() {
 
@@ -17,7 +16,6 @@ export default function OrganizerAdminList() {
     const triggerUpdate = () => {
         setUpdateList(oldValue => !oldValue);
     }
-
 
     useEffect(() => {
         const getCrews = async () => {
@@ -60,7 +58,7 @@ export default function OrganizerAdminList() {
         },
         {
             name: 'name',
-            label: 'Crew'
+            label: 'Arbeidslag'
         },
         {
             name: '',
@@ -107,7 +105,6 @@ export default function OrganizerAdminList() {
     if (!crewList) {
         return (<p>Loading...</p>);
     };
-
 
     return (
         <>

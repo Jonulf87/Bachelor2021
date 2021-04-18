@@ -48,7 +48,7 @@ export default function TicketMain() {
                 </Grid>
 
                 {/*Grid container som inneholder en liste over alle solgte billetter. expandable*/}
-                <Grid spacing={2}>
+                <Grid container spacing={2}>
                 </Grid>
             </Grid>
         </>

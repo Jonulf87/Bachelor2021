@@ -37,7 +37,7 @@ export default function CrewPermissionList({ id }) {
             <List>
                 {/*lister bare alle mulige permission for øyeblikket*/}
                 {crewPermissions.map((permission) => (
-                <ListItem>
+                    <ListItem key={permission.name}>
                     <ListItemText>
                         {permission.name}
                     </ListItemText>

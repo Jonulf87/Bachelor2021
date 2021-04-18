@@ -1,37 +1,13 @@
-﻿import { createMuiTheme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import MUIDataTable, { ExpandButton } from 'mui-datatables';
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import OrganizerAdminRowDetails from './OrganizerAdminRowDetails';
+import MUIDataTable from 'mui-datatables';
 
 export default function OrganizerAdminList({ triggerUpdate}) {
 
     const [organizerDataList, setOrganizerDataList] = useState([]);
     const [rowsExpanded, setRowsExpanded] = useState([]); //Håndterer selv åpning av rader. Tillater autocollaspe av forrige rad ved åpning av ny rad
-
     const { isAuthenticated, token } = useAuth();
-
-
-    const useStyles = makeStyles((theme) => ({
-        grid: {
-            position: "static"
-        }
-    }
-    ));
-    const classes = useStyles();
-
-
-    const theme = createMuiTheme({
-        overrides: {
-            MUIDataTableSelectCell: {
-                expandDisabled: {
-                    // Soft hide the button.
-                    visibility: 'hidden',
-                },
-            },
-        },
-    });
 
     useEffect(() => {
         const getOrganizers = async () => {
@@ -48,8 +24,6 @@ export default function OrganizerAdminList({ triggerUpdate}) {
         }
         getOrganizers();
     }, [isAuthenticated, triggerUpdate])
-
-
 
     const columns = [
         {
@@ -99,7 +73,6 @@ export default function OrganizerAdminList({ triggerUpdate}) {
     };
 
 
-
     if (!organizerDataList) {
         return (<p>Loading...</p>);
     };
@@ -113,7 +86,6 @@ export default function OrganizerAdminList({ triggerUpdate}) {
                 data={organizerDataList}
                 columns={columns}
                 options={options}
-            //components={components}
             />
 
         </>

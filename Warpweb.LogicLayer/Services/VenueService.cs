@@ -11,9 +11,6 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
 {
-    // Standard CRUD functionality for Venue class
-    // Restrict removal of Venues to SuperAdmin/Admin?
-    // TODO: Verify View Models for this service
 
     public class VenueService
     {

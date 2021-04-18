@@ -1,6 +1,4 @@
-﻿import { FormControl } from '@material-ui/core';
-import { createMuiTheme } from '@material-ui/core/styles'
-import { BorderAll } from '@material-ui/icons';
+﻿import { createMuiTheme } from '@material-ui/core/styles'
 
 const theme = createMuiTheme({
     mixins: {

@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
-import { Card, Divider, Typography, List, ListItem, ListItemText, ListSubheader, Toolbar, Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow, 
-    Container} from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
+import { Typography, Toolbar, Table, TableBody, TableCell,
+    TableContainer, TableHead, TableRow, Container} from '@material-ui/core';
 
 export default function CrewMemberList({ id }) {
 
     const [crewMembers, setCrewMembers] = useState([]);
     const [crewLeaders, setCrewLeaders] = useState([]);
-
     
     const { isAuthenticated, token } = useAuth();
 

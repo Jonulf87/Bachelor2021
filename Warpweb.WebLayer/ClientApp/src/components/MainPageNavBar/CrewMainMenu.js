@@ -2,17 +2,13 @@ import React from 'react';
 import { List, ListItem, ListItemText, ListSubheader } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
-
-
 export default function UserMainMenu({ crews }) {
-
-    
 
     return (
         <List
             subheader={
                 <ListSubheader color="primary">
-                    Mine Crew
+                    Mine arbeidslag
                 </ListSubheader>
             }
         >

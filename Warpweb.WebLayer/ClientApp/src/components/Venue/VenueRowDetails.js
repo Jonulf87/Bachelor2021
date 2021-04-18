@@ -1,8 +1,7 @@
 ﻿import React, { useState, useEffect } from "react";
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Input as TextField, Table, TableBody, TableCell, TableRow, Button, Typography, ButtonGroup} from "@material-ui/core";
 import useAuth from "../../hooks/useAuth";
-
+import useCurrentEvent from '../../hooks/useCurrentEvent';
+import { Input as TextField, Table, TableBody, TableCell, TableRow, Button, Typography, ButtonGroup} from "@material-ui/core";
 
 export default function VenueRowDetails(props) {
 
@@ -19,6 +18,7 @@ export default function VenueRowDetails(props) {
     const [venueContactEMail, setVenueContactEMail] = useState("");
     const [venueContactPhone, setVenueContactPhone] = useState("");
 
+    const { currentEvent } = useCurrentEvent();
 
     useEffect(() => {
         const getVenue = async () => {
@@ -41,6 +41,7 @@ export default function VenueRowDetails(props) {
         'name': venueName,
         'address': venueAddress,
         'postalCode': venuePostalCode,
+        'organizerId': currentEvent.organizerId,
         'contactName': venueContactName,
         'contactEMail': venueContactEMail,
         'contactPhone': venueContactPhone,

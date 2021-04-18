@@ -116,7 +116,7 @@ export default function UserInfo() {
                             <p><strong>Tilleggsinformasjon:&nbsp;</strong>{userInfo.comments} </p>
                         </Grid>
 
-                        <Grid spacing={2}>
+                        <Grid item xs={2}>
                             <Button variant="contained" color="primary">
                                 Endre
                             </Button>

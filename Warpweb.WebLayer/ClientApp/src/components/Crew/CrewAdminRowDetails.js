@@ -4,9 +4,7 @@ import useAuth from '../../hooks/useAuth';
 import UserPicker from '../User/UserPicker';
 import CrewPermissions from './CrewPermissions';
 
-
 export default function CrewAdminRowDetails({ rowData, rowMeta }) {
-
 
     const [crewLeaders, setCrewLeaders] = useState([]);
     const [membersList, setMembersList] = useState([]);

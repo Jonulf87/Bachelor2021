@@ -1,16 +1,16 @@
 ﻿import React, { useState, useEffect } from "react";
-import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Table, TableRow, TableCell} from '@material-ui/core';
 import VenueInfo from './VenueRowDetails';
 import useAuth from "../../hooks/useAuth";
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 
 
-export default function VenueTable() {
+export default function VenueTable({ triggerUpdate }) {
     const [isReady, setIsReady] = useState(false);
     const [venueList, setVenueList] = useState([]);
 
     const { isAuthenticated, token } = useAuth();
+
     useEffect(() => {
         const getVenues = async () => {
             if (isAuthenticated) {
@@ -28,7 +28,7 @@ export default function VenueTable() {
 
         getVenues();
 
-    }, [isAuthenticated]);
+    }, [isAuthenticated], triggerUpdate);
 
     const columns = [
         {
