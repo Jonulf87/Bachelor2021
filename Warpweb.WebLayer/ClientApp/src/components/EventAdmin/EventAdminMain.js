@@ -1,4 +1,4 @@
-﻿import { Typography, Button, Toolbar } from '@material-ui/core';
+﻿import { Grid, Typography, Button, Toolbar } from '@material-ui/core';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
@@ -116,10 +116,13 @@ export default function EventAdminList() {
             <CreateEvent dialogOpen={dialogCreateEventOpen} handleDialogClose={handleDialogCreateEventClose} triggerUpdate={triggerUpdate} />
             <MUIDataTable
                 title={<>
-                    <Toolbar>
-                        <Typography>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" style={{ margin: "15px" }}>
                             Arrangementer
                         </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
                         <Button
                             variant="contained"
                             color="primary"
@@ -127,9 +130,10 @@ export default function EventAdminList() {
                             style={{ margin: "15px" }}
                             onClick={handleDialogCreateEventOpen}
                         >
-                            Nytt arrangement
+                                Nytt arrangement
                         </Button>
-                    </Toolbar>
+                            </Grid>
+                    </Grid>
                 </>}
                 data={eventList}
                 columns={columns}
