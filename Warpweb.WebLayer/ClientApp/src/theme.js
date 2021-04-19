@@ -45,11 +45,6 @@ const theme = createMuiTheme({
         MUIDataTable: {
             root: {
             },
-            paper: {
-                boxShadow: "none",
-                borderWidth: "0px"
-
-            }
         },
         MUIDataTableBodyCell: {
             root: {
