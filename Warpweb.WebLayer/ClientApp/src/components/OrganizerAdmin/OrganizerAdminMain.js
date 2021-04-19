@@ -1,4 +1,4 @@
-﻿import { Button, createMuiTheme, Toolbar, Typography } from '@material-ui/core';
+﻿import { Button, Grid, GridItem, Toolbar, Typography } from '@material-ui/core';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
@@ -8,7 +8,7 @@ import CreateOrganizer from './CreateOrganizer';
 export default function OrganizerAdminMain() {
 
     const [organizerList, setOrganizerList] = useState([]);
-    const [rowsExpanded, setRowsExpanded] = useState([]); 
+    const [rowsExpanded, setRowsExpanded] = useState([]);
     const [updateList, setUpdateList] = useState(false);
     const [dialogCreateOrganizerOpen, setDialogCreateOrganizerOpen] = useState(false);
 
@@ -25,7 +25,7 @@ export default function OrganizerAdminMain() {
     const handleDialogCreateOrganizerClose = () => {
         setDialogCreateOrganizerOpen(false);
     };
-    
+
 
     useEffect(() => {
         const getOrganizers = async () => {
@@ -99,33 +99,34 @@ export default function OrganizerAdminMain() {
         }
     };
 
-
-
     if (!organizerList) {
         return (<p>Loading...</p>);
     };
-
 
     return (
         <>
             <CreateOrganizer handleDialogCreateOrganizerClose={handleDialogCreateOrganizerClose} dialogCreateOrganizerOpen={dialogCreateOrganizerOpen} triggerUpdate={triggerUpdate} />
             <MUIDataTable
                 title={<>
-                    <Toolbar>
-                        <Typography>
-                            Organisasjoner
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" style={{ margin: '15px' }}>
+                                Organisasjoner
                         </Typography>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            style={{ margin: '15px' }}
-                            onClick={handleDialogCreateOrganizerOpen}
-                        >
-                            Ny Organisasjon
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                style={{ margin: '15px' }}
+                                onClick={handleDialogCreateOrganizerOpen}
+                            >
+                                Ny Organisasjon
                         </Button>
-                    </Toolbar>
-                    </>}
+                        </Grid>
+                    </Grid>
+                </>}
                 data={organizerList}
                 columns={columns}
                 options={options}

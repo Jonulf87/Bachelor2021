@@ -128,17 +128,17 @@ export default function TicketTypeAdminForm({ updateList }) {
                         required
                         value={ticketTypeName}
                         onChange={(e) => setTicketTypeName(e.target.value)}
-                        validators={['required', 'minStringLength:1', 'trim']}
-                        errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
+                        validators={['required', 'minStringLength:1']}
+                        errorMessages={['Navn må oppgis', 'Navn må oppgis']}
                     />
                 </Grid>
 
-                {/*Tilknyttet arrangemant*/}
+                {/*Tilknyttet arrangement*/}
                 <Grid
                     item
                     xs={12}
                 >
-                    <FormControl variant="outlined">
+                    <FormControl variant="outlined" className={classes.root}>
                         <InputLabel id="arrangement">Arrangemant</InputLabel>
                         <Select
                             labelId="arrangement"

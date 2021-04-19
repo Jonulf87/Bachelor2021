@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import { TableRow, TableCell, CircularProgress, Toolbar, Typography, Button } from '@material-ui/core';
+import { Grid, GridItem, CircularProgress, Toolbar, Typography, Button } from '@material-ui/core';
 import VenueAdminRowDetails from './VenueAdminRowDetails';
 import useAuth from "../../hooks/useAuth";
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
@@ -102,20 +102,24 @@ export default function VenueMain() {
             <MUIDataTable
                 title={
                     <>
-                        <Toolbar>
-                            <Typography>
-                                Lokaler
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" style={{ margin: '15px' }}>
+                                    Lokaler
                             </Typography>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                style={{ margin: '15px' }}
-                                onClick={handleDialogCreateVenueOpen}
-                            >
-                                Nytt lokale
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    style={{ margin: '15px' }}
+                                    onClick={handleDialogCreateVenueOpen}
+                                >
+                                    Nytt lokale
                             </Button>
-                        </Toolbar>
+                            </Grid>
+                        </Grid>
                     </>
                 }
                 data={venueList}
