@@ -182,7 +182,7 @@ export default function MainMenu({ window }) {
                     </ButtonGroup>
                 </Toolbar>
                 <Toolbar>
-                    Organisasjon: {currentEvent.organizerId}
+                    crumbs
                 </Toolbar>
             </AppBar>
 

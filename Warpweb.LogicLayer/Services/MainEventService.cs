@@ -120,7 +120,7 @@ namespace Warpweb.LogicLayer.Services
             
             user.CurrentMainEventId = mainevent.Id;
             await _dbContext.SaveChangesAsync();
-
+            
         }
 
         public async Task<int> UpdateMainEventAsync(MainEventVm maineventVm)

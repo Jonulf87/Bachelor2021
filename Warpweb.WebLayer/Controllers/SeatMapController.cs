@@ -45,5 +45,6 @@ namespace Warpweb.WebLayer.Controllers
             var seatMap = await _seatMapService.GetSeatMapAsync();
             return Ok(seatMap);
         }
+
     }
 }

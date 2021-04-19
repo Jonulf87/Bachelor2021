@@ -68,7 +68,7 @@ namespace Warpweb.LogicLayer.Services
                 }
                 else
                 {
-                    var existingRow = await _dbContext.Rows.Include(a => a.TicketTypes).SingleOrDefaultAsync(a => a.Id == row.Id);
+                    var existingRow = await _dbContext.Rows.Include(a => a.TicketTypes).Include(a => a.Seats).SingleOrDefaultAsync(a => a.Id == row.Id);
 
 
                     if (existingRow != null)
@@ -90,7 +90,18 @@ namespace Warpweb.LogicLayer.Services
                             existingRow.TicketTypes.Add(ticketType);
                         }
 
+                        var newRowSeats = row.Seats.Where(a => a.Id == 0).ToList();
+                        var rowSeatsToDelete = existingRow.Seats.Where(a => !row.Seats.Any(b => b.Id == a.Id)).ToList();
 
+                        foreach (var newRowSeat in newRowSeats)
+                        {
+                            existingRow.Seats.Add(new Seat { SeatNumber = newRowSeat.SeatNumber });
+                        }
+
+                        foreach (var rowSeatToDelete in rowSeatsToDelete)
+                        {
+                            existingRow.Seats.Remove(rowSeatToDelete);
+                        }
 
                         existingRow.Name = row.RowName;
                         existingRow.XCoordinate = row.XPos;

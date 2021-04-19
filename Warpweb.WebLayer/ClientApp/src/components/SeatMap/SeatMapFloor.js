@@ -2,7 +2,7 @@
 import SeatMapRow from './SeatMapRow';
 import RowToolsDialog from './RowToolsDialog';
 
-export default function SeatMapFloor({ rows, updateRowPosition, setSeatInfo, ticketTypeList }) {
+export default function SeatMapFloor({ rows, updateRowPosition, setSeatInfo, ticketTypeList, updateRowData }) {
 
     const [open, setOpen] = useState(false);
     const [rowInEditMode, setRowInEditMode] = useState(null);
@@ -29,7 +29,7 @@ export default function SeatMapFloor({ rows, updateRowPosition, setSeatInfo, tic
             }}>
                 {rows.map(row => (<SeatMapRow key={row.rowName} {...row} updateRowPosition={updateRowPosition} handleOpen={handleOpen} />))}
             </div>
-            <RowToolsDialog open={open} handleClose={handleClose} row={rowInEditMode} ticketTypeList={ticketTypeList} />
+            <RowToolsDialog open={open} handleClose={handleClose} row={rowInEditMode} ticketTypeList={ticketTypeList} updateRowData={updateRowData} />
         </>
     );
 }

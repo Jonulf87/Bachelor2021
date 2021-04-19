@@ -5,7 +5,7 @@ import SeatMapSeat from './SeatMapSeat';
 
 export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVertical, updateRowPosition, setSeatInfo, handleOpen }) {
 
-    const [style, setStyle] = useState({ display: 'none' });
+    const [style, setStyle] = useState({ display: 'none', zIndex: '9999' });
     
     const gridSize = 20;
 
@@ -29,11 +29,11 @@ export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVerti
             <div className="seatRow"
                 onMouseOver={(e) => {
                     e.preventDefault();
-                    setStyle({ display: 'block' });
+                    setStyle({ display: 'block', zIndex: '9999' });
                 }}
                 onMouseOut={(e) => {
                     e.preventDefault();
-                    setStyle({ display: 'none' });
+                    setStyle({ display: 'none', zIndex: '9999' });
                 }}
                 style={{
                     width: `${gridSize * numberOfSeats}px`,

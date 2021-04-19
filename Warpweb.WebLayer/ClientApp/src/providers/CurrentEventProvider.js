@@ -20,7 +20,7 @@ const CurrentEventProvider = ({ children }) => {
                     }
                 });
                 const result = await response.json();
-                setCurrentEvent(result);
+                setCurrentEvent(result.name);
             }
         }
         getCurrentMainEvent();

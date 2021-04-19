@@ -1,14 +1,47 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import { MenuItem, Select, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
+import { MenuItem, Select, TextField, Checkbox, FormControlLabel, Paper, FormControl, } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button } from 'reactstrap/lib';
+import useAuth from '../../hooks/useAuth';
 
-export default function RowToolsDialog({ open, handleClose, row, ticketTypeList }) {
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& .MuiTextField-root': {
+            padding: theme.spacing(1),
+            width: "100%",
+        },
+    }
+}));
 
-    const [ticketTypeSelected, setTicketTypeSelected] = useState("");
+export default function RowToolsDialog({ open, handleClose, row, ticketTypeList, updateRowData }) {
 
+    const classes = useStyles();
+    const [name, setName] = useState("");
+    const [numberOfSeats, setNumberOfSeats] = useState("");
+    const [ticketTypesSelected, setTicketTypesSelected] = useState([])
 
-    //Flytte opp ett nivå
+    useEffect(() => {
+        if (row) {
+            setName(row.rowName);
+            setNumberOfSeats(row.numberOfSeats);
+            setTicketTypesSelected(row.ticketTypeIds);
+        }
+    }, [row]);
 
+    const updateRowTicketTypes = (ticketTypeId) => {
+        if (ticketTypesSelected.some(a => a === ticketTypeId)) {
+            setTicketTypesSelected((oldValue) => oldValue.filter(a => a !== ticketTypeId));
+        }
+        else {
+            setTicketTypesSelected((oldValue) => [...oldValue, ticketTypeId]);
+        }
+    }
+
+    const submitForm = (e) => {
+        e.preventDefault();
+        updateRowData(row.rowName, name, numberOfSeats, ticketTypesSelected);
+    }
 
     if (row === null) {
         return null;
@@ -19,20 +52,51 @@ export default function RowToolsDialog({ open, handleClose, row, ticketTypeList 
             onClose={handleClose}
             open={open}
         >
-            <div>
-                <TextField value={row.rowName} label="Radnavn" />
-                <TextField value={row.seats.length} label="Antall seter" />
-                {ticketTypeList.sort((a, b) => a.name > b.name ? 1 : ((b.name > a.name) ? -1 : 0)).map((ticketType) => (
-                    <FormControlLabel
-                        key={ticketType.id}
-                        control={<Checkbox
-                            checked={row.ticketTypeIds.some(a => a === ticketType.id)}
-                            name={ticketType.descriptionName} />}
-                        label={ticketType.descriptionName}
-
+            <Paper
+                variant="outlined"
+                elevation={0}
+                style={{ padding: '8px', width: '300px' }}
+            >
+                <form
+                    className={classes.root}
+                    onSubmit={submitForm}
+                >
+                    <TextField
+                        value={name}
+                        label="Radnavn"
+                        onChange={(e) => setName(e.target.value)}
+                        
                     />
-                ))}
-            </div>
+                    <TextField
+                        value={numberOfSeats}
+                        label="Antall seter"
+                        onChange={(e) => setNumberOfSeats(e.target.value)}
+                    />
+                    {ticketTypeList.sort((a, b) => a.name > b.name ? 1 : ((b.name > a.name) ? -1 : 0)).map((ticketType) => (
+                        <FormControlLabel
+                            key={ticketType.id}
+                            control={<Checkbox
+                                checked={ticketTypesSelected.some(a => a === ticketType.id)}
+                                onChange={() => updateRowTicketTypes(ticketType.id)}
+                                name={ticketType.descriptionName} />}
+                            label={ticketType.descriptionName}
+
+                        />
+                    ))}
+                    <FormControl
+                        style={{padding: '8px'}}
+                    >
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                        >
+                            Lagre
+                    </Button>
+                    </FormControl>
+                </form>
+            </Paper>
         </Dialog>
     )
 }

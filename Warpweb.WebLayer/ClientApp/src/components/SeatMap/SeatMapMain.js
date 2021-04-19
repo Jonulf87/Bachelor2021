@@ -23,6 +23,29 @@ export default function SeatMapMain() {
         setRows(oldValue => [...oldValue, row])
     }
 
+    const updateRowData = (oldRowName, newRowName, newNumberOfSeats, newTicketTypeIds) => {
+
+        const row = rows.find(r => r.rowName === oldRowName);
+        const oldNumberOfSeats = row.numberOfSeats;
+
+        row.rowName = newRowName;
+        row.numberOfSeats = newNumberOfSeats;
+        row.ticketTypeIds = newTicketTypeIds;
+
+        if (oldNumberOfSeats > newNumberOfSeats) {
+            row.seats = row.seats.slice(0, newNumberOfSeats)
+        }
+        else if (oldNumberOfSeats < newNumberOfSeats) {
+            for (let i = oldNumberOfSeats; i < newNumberOfSeats; i++) {
+                row.seats.push({
+                    seatNumber: i + 1
+                });
+            }
+        }
+        setRows(oldValue => [...oldValue.filter(r => r.rowName !== oldRowName), row]);
+
+    }
+
 
     const submitRows = async () => {
         if (isAuthenticated) {
@@ -51,7 +74,7 @@ export default function SeatMapMain() {
                 const resultSeatMap = await responseSeatMap.json();
                 setRows(resultSeatMap)
 
-                const responseTicketTypes = await fetch('/api/tickettypes', {
+                const responseTicketTypes = await fetch('/api/tickettypes/tickettypes', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
@@ -84,7 +107,7 @@ export default function SeatMapMain() {
                     xs={12}
                     lg={6}
                 >
-                    <SeatMapFloor rows={rows} updateRowPosition={updateRowPosition} ticketTypeList={ticketTypeList} />
+                    <SeatMapFloor rows={rows} updateRowPosition={updateRowPosition} ticketTypeList={ticketTypeList} updateRowData={updateRowData} />
                 </Grid>
                 <Grid
                     item

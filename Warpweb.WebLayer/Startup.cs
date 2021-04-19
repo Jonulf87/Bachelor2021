@@ -45,7 +45,7 @@ namespace Warpweb.WebLayer
             services.AddDbContext<ApplicationDbContext>(options => options
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
                 .UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection"), sqlOptions => sqlOptions.MaxBatchSize(100)));
 
             // Needed per service
             services.AddScoped<OrganizerService>();

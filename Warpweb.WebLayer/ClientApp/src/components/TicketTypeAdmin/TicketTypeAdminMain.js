@@ -11,6 +11,7 @@ export default function TicketTypeAdminMain() {
     const [updateList, setUpdateList] = useState(false);
     const [dialogCreateTicketTypeOpen, setDialogCreateTicketTypeOpen] = useState(false);
     const [rowsExpanded, setRowsExpanded] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -44,6 +45,7 @@ export default function TicketTypeAdminMain() {
                 else {
                     setTicketTypesList([]);
                 }
+                setIsLoading(false);
             }
         }
         getTicketTypes();
@@ -102,7 +104,7 @@ export default function TicketTypeAdminMain() {
     };
 
 
-    if (ticketTypesList.length === 0) {
+    if (isLoading) {
         return (<CircularProgress />);
     };
 
