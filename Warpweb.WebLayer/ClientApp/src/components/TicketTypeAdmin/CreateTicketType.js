@@ -1,5 +1,5 @@
 ﻿import { Dialog, DialogTitle, FormControl, makeStyles, Paper, TextField } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'reactstrap/lib';
 import useAuth from '../../hooks/useAuth';
 

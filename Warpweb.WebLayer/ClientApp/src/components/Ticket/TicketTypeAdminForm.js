@@ -2,21 +2,14 @@
     Select,
     FormControl,
     InputLabel,
-    TextField,
     Button,
     Grid,
-    Checkbox,
-    FormControlLabel,
     MenuItem,
     Typography,
     Paper,
-    Container,
-    Collapse
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect } from 'react';
-import { Form } from 'reactstrap/lib';
-import SaveIcon from '@material-ui/icons/Save';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import useAuth from '../../hooks/useAuth';
 
