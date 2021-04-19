@@ -59,9 +59,9 @@ namespace Warpweb.LogicLayer.Services
         }
         public async Task CreateMainEventAsync(MainEventVm maineventVm, string userId)
         {
-            var existingMainEvent = _dbContext.MainEvents
+            var existingMainEvent = await _dbContext.MainEvents
                 .Where(a => a.Id == maineventVm.Id || a.Name == maineventVm.Name)
-                .SingleOrDefault();
+                .SingleOrDefaultAsync();
 
 
             if (existingMainEvent != null)

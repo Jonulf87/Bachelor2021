@@ -1,22 +1,20 @@
 ﻿import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button, Grid, Toolbar } from '@material-ui/core';
+import {  Button, Dialog, Paper, DialogTitle, FormControl, TextField } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import useAuth from '../../hooks/useAuth';
-import useCurrentEvent from '../../hooks/useCurrentEvent';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
-            width: '100%',
+            padding: theme.spacing(1),
+            width: "100%",
         },
     }
 }));
 
-export default function CreateVenue() {
-
-    const classes = useStyles();
+export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreateVenueOpen, triggerUpdate }) {
 
     const [isSending, setIsSending] = useState(false);
 
@@ -28,12 +26,13 @@ export default function CreateVenue() {
     const [enteredContactEMail, setEnteredContactEMail] = useState('');
     const [enteredContactPhone, setEnteredContactPhone] = useState('');
 
-    // Get organizer ID of current event
-    const { currentEvent } = useCurrentEvent();
-
+    const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
 
-    const sendRequest = async () => {
+
+    const submitForm = async (e) => {
+
+        e.preventDefault();
         // Check that we are already sending data
         // If sending - don`t do it again
         if (isSending) {
@@ -55,13 +54,10 @@ export default function CreateVenue() {
             'postalCode': enteredPostalCode,
             'contactName': enteredContactName,
             'contactEMail': enteredContactEMail,
-            'contactPhone': enteredContactPhone,
-            'organizerId': currentEvent.organizerId
+            'contactPhone': enteredContactPhone
         }
 
-        console.log(data);
-
-        const response = await fetch(`/api/venues`, {
+        const response = await fetch(`/api/venues/createvenue`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -73,8 +69,8 @@ export default function CreateVenue() {
         if (response.status !== 200) {
             alert(response.body);
         } else {
-            const result = await response.json();
-            alert(result.body)
+
+            triggerUpdate();
 
             setEnteredName('');
             setEnteredAddress('');
@@ -83,136 +79,122 @@ export default function CreateVenue() {
             setEnteredContactEMail('');
             setEnteredContactPhone('');
         }
-
+        
+        handleDialogCreateVenueClose();
         setIsSending(false);
     };
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        console.log("submit");
-        sendRequest();
-    };
 
     return (
-        <>
-            <Toolbar>
-                <Typography variant="h5" component="h3">
-                    Opprett lokale
-                </Typography>
-            </Toolbar>
-            <ValidatorForm
-                className={classes.root}
-                autoComplete="off"
-                noValidate
-                onSubmit={handleSubmit}
+        <Dialog
+            open={dialogCreateVenueOpen}
+            onClose={handleDialogCreateVenueClose}
+        >
+            <Paper
+                variant="outlined"
+                elevation={0}
+                style={{ padding: '10px' }}
             >
-                <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Typography variant="h6" component="h4">
-                                Lokaleinfo
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredName(event.target.value);
-                                }}
-                                label="Navn"
-                                name="name"
-                                value={enteredName}
-                                required
-                                validators={['required', 'minStringLength:1', 'trim']}
-                                errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={9}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredAddress(event.target.value);
-                                }}
-                                label="Adresse"
-                                placeholder="Adresse"
-                                name="address"
-                                value={enteredAddress}
-                                required
-                                validators={['required']}
-                                errorMessages={['Adresse må oppgis']}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={3}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredPostalCode(event.target.value);
-                                }}
-                                label="Postnr"
-                                placeholder="Postnr"
-                                name="postalCode"
-                                value={enteredPostalCode}
-                                required
-                                validators={['required', 'matchRegexp:^[0-9]{4}$']}
-                                errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography variant="h6" component="h4">
-                                Kontaktinfo
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredContactName(event.target.value);
-                                }}
-                                label="Kontaktperson"
-                                name="contactperson"
-                                value={enteredContactName}
-                                required
-                                validators={['required']}
-                                errorMessages={['Kontaktperson må oppgis']}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredContactEMail(event.target.value);
-                                }}
-                                label="Kontakt epost"
-                                name="contactemail"
-                                value={enteredContactEMail}
-                                required
-                                validators={['required']}
-                                errorMessages={['Epost må oppgis']}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
-                                onChange={event => {
-                                    setEnteredContactPhone(event.target.value);
-                                }}
-                                label="Kontakt tlf."
-                                placeholder="Kontakt tlf."
-                                name="contactphone"
-                                value={enteredContactPhone}
-                                required
-                                validators={['required']}
-                                errorMessages={['Telefonnummer må oppgis']}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                className={classes.button}
-                                startIcon={<SaveIcon />}
-                                disabled={isSending}
-                            >
-                                Lagre
-                            </Button>
-                        </Grid>   
-                </Grid>                
-            </ValidatorForm>
-        </>
+                <DialogTitle>
+                    Nytt lokale
+                </DialogTitle>
+                
+                <ValidatorForm
+                    className={classes.root}
+                    autoComplete="off"
+                    noValidate
+                    onSubmit={submitForm}
+                >
+                    <TextValidator
+                        onChange={event => {
+                            setEnteredName(event.target.value);
+                        }}
+                        label="Navn"
+                        name="name"
+                        value={enteredName}
+                        required
+                        validators={['required', 'minStringLength:1', 'trim']}
+                        errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
+                    />
+
+                    <TextValidator
+                        onChange={event => {
+                            setEnteredAddress(event.target.value);
+                        }}
+                        label="Adresse"
+                        placeholder="Adresse"
+                        name="address"
+                        value={enteredAddress}
+                        required
+                        validators={['required']}
+                        errorMessages={['Adresse må oppgis']}
+                    />
+
+                    <TextValidator
+                        onChange={event => {
+                            setEnteredPostalCode(event.target.value);
+                        }}
+                        label="Postnr"
+                        placeholder="Postnr"
+                        name="postalCode"
+                        value={enteredPostalCode}
+                        required
+                        validators={['required', 'matchRegexp:^[0-9]{4}$']}
+                        errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
+                    />
+
+                    <TextValidator
+                        onChange={event => {
+                            setEnteredContactName(event.target.value);
+                        }}
+                        label="Kontaktperson"
+                        name="contactperson"
+                        value={enteredContactName}
+                        required
+                        validators={['required']}
+                        errorMessages={['Kontaktperson må oppgis']}
+                    />
+
+                    <TextValidator
+                        onChange={event => {
+                            setEnteredContactEMail(event.target.value);
+                        }}
+                        label="Kontakt epost"
+                        name="contactemail"
+                        value={enteredContactEMail}
+                        required
+                        validators={['required']}
+                        errorMessages={['Epost må oppgis']}
+                    />
+
+                    <TextValidator
+                        onChange={event => {
+                            setEnteredContactPhone(event.target.value);
+                        }}
+                        label="Kontakt tlf."
+                        placeholder="Kontakt tlf."
+                        name="contactphone"
+                        value={enteredContactPhone}
+                        required
+                        validators={['required']}
+                        errorMessages={['Telefonnummer må oppgis']}
+                    />
+
+                    <FormControl style={{ padding: '8px' }} >
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            className={classes.button}
+                            startIcon={<SaveIcon />}
+                            disabled={isSending}
+                        >
+                            Lagre
+                        </Button>
+                    </FormControl>
+                </ValidatorForm>
+            </Paper>
+        </Dialog>
     );
 }

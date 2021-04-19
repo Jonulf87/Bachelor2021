@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,12 @@ namespace Warpweb.WebLayer.Controllers
     public class VenueController : ControllerBase
     {
         private readonly VenueService _venueService;
+        private readonly SecurityService _securityService;
 
-        public VenueController(VenueService venueService)
+        public VenueController(VenueService venueService, SecurityService securityService)
         {
             _venueService = venueService;
+            _securityService = securityService;
         }
 
         /// <summary>
@@ -26,6 +30,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>VenueListVm</returns>
         [HttpGet]
         [Route("venueslist")]
+        [Authorize(Policy = "VenueAdmin")]
         public async Task<List<VenueListVm>> GetVenuesAsync()
         {
             return await _venueService.GetVenuesAsync();
@@ -37,6 +42,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>VenueListVm</returns>
         [HttpGet]
         [Route("organizervenueslist")]
+        [Authorize(Policy = "VenueAdmin")]
         public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
             return await _venueService.GetOrganizerVenuesAsync();
@@ -59,13 +65,21 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="venueVm"></param>
         /// <returns>VenueVm</returns>
         [HttpPost]
-        public async Task<ActionResult<VenueVm>> CreateVenueAsync(VenueVm venueVm)
+        [Route("createvenue")]
+        public async Task<ActionResult> CreateVenueAsync(VenueVm venueVm)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(userId);
+
+            if (!organizers.Any(a => a.Id == venueVm.OrganizerId))
+            {
+                return Forbid();
+            }
 
             try
             {
                 await _venueService.CreateVenueAsync(venueVm);
-                return Ok(venueVm);
+                return Ok();
             }
             catch (ItemAlreadyExistsException)
             {
@@ -79,6 +93,8 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="venueVm"></param>  
         [HttpPut]
+        [Authorize(Policy = "VenueAdmin")]
+        [Route("update")]
         public async Task<ActionResult> UpdateVenueAsync(VenueVm venueVm)
         {
             try

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState, Fragment } from 'react';
 import { Button, IconButton, TableCell, TableRow, Typography } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 import UserPicker from '../User/UserPicker';
@@ -130,8 +130,8 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
                 </TableCell>
             </TableRow>
             {orgContact.map((contact) => (
-                <>
-                    <TableRow key={contact.contactName}>
+                <Fragment key={contact.contactName}>
+                    <TableRow>
                         <TableCell colSpan={1}>
                         </TableCell>
                         <TableCell>
@@ -163,7 +163,7 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
                             {contact.contactPhone}
                         </TableCell>
                     </TableRow>
-                </>
+                </Fragment>
             ))}
 
             <TableRow>

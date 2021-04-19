@@ -85,7 +85,7 @@ export default function EventAdminList() {
         filter: false,
         filterType: 'dropdown',
         responsive: 'vertical',
-        selectableRows: "none",
+        selectableRows: 'none',
         selectableRowsOnClick: false,
         expandableRows: true,
         expandableRowsHeader: false,
@@ -93,8 +93,6 @@ export default function EventAdminList() {
         renderExpandableRow: (rowData, rowMeta) => {
             return (
                 <EventAdminRowDetails rowData={rowData} rowMeta={rowMeta} />
-
-
             )
         },
         onRowClick: (rowData, rowMeta) => {
@@ -121,8 +119,7 @@ export default function EventAdminList() {
                     <Toolbar>
                         <Typography>
                             Arrangementer
-                    </Typography>
-
+                        </Typography>
                         <Button
                             variant="contained"
                             color="primary"

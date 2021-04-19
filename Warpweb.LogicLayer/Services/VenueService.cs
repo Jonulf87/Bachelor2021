@@ -57,40 +57,38 @@ namespace Warpweb.LogicLayer.Services
                     Id = a.Id,
                     Name = a.Name,
                     Address = a.Address,
-                    OrganizerId = a.OrganizerId,
-                    PostalCode = a.PostalCode,
-                    ContactName = a.ContactName,
                     ContactEMail = a.ContactEMail,
-                    ContactPhone = a.ContactPhone
-                    
+                    ContactName = a.ContactName,
+                    ContactPhone = a.ContactPhone,
+                    OrganizerId = a.OrganizerId,
+                    PostalCode = a.PostalCode
+
                 }).SingleOrDefaultAsync();
         }
 
-        public async Task<int> CreateVenueAsync(VenueVm venueVm)
+        public async Task CreateVenueAsync(VenueVm venueVm)
         {
 
-            var existingVenue = _dbContext.Venues.Where(a => a.Id == venueVm.Id).FirstOrDefault();
+            var existingVenue = await _dbContext.Venues.Where(a => a.Name == venueVm.Name && a.OrganizerId == venueVm.OrganizerId).SingleOrDefaultAsync();
 
             if (existingVenue != null)
             {
                 throw new ItemAlreadyExistsException($"Lokalet med navn: {venueVm.Name} eksisterer allerede");
             }
-
+    
             var venue = new Venue
-                {
-                    Name = venueVm.Name,
-                    Address = venueVm.Address,
-                    PostalCode = venueVm.PostalCode,
-                    OrganizerId = venueVm.OrganizerId,
-                    ContactName = venueVm.ContactName,
-                    ContactPhone = venueVm.ContactPhone,
-                    ContactEMail = venueVm.ContactEMail
-                };
+            {
+                Name = venueVm.Name,
+                Address = venueVm.Address,
+                PostalCode = venueVm.PostalCode,
+                OrganizerId = venueVm.OrganizerId,
+                ContactName = venueVm.ContactName,
+                ContactPhone = venueVm.ContactPhone,
+                ContactEMail = venueVm.ContactEMail
+            };
 
-                _dbContext.Venues.Add(venue);
-                await _dbContext.SaveChangesAsync();
-
-                return venue.Id;
+            _dbContext.Venues.Add(venue);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<int> UpdateVenueAsync(VenueVm venueVm)

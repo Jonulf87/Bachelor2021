@@ -1,64 +1,127 @@
 ﻿import React, { useState, useEffect } from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import VenueRowDetails from './VenueRowDetails';
-import VenueAdmin from './VenueAdmin';
-import VenueList from './VenueList';
+import { TableRow, TableCell, CircularProgress, Toolbar, Typography, Button } from '@material-ui/core';
+import VenueAdminRowDetails from './VenueAdminRowDetails';
+import useAuth from "../../hooks/useAuth";
+import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import CreateVenue from "./CreateVenue";
-import Grid from '@material-ui/core/Grid';
-import { Toolbar, Container, Typography, Button, Collapse, Box, Divider } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        //marginLeft: '20%',
-        //marginRight: '20%',
-        [theme.breakpoints.down('sm')]: {
-            marginLeft: 'none',
-            marginRight: 'none'
-        },
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: '10%',
-            marginRight: '10%',
-        },
-        [theme.breakpoints.up('lg')]: {
-            marginLeft: '20%',
-            marginRight: '20%',
-        },
-    }
-}));
 
 export default function VenueMain() {
-    const [openCreate, setOpenCreate] = useState(false);
 
-    const classes = useStyles();
+    const [venueList, setVenueList] = useState([]);
+    const [rowsExpanded, setRowsExpanded] = useState([]);
+    const [updateList, setUpdateList] = useState(false);
+    const [dialogCreateVenueOpen, setDialogCreateVenueOpen] = useState(false);
+
+    const { isAuthenticated, token } = useAuth();
+
+    const triggerUpdate = () => {
+        setUpdateList(oldValue => !oldValue);
+    }
+
+    const handleDialogCreateVenueOpen = () => {
+        setDialogCreateVenueOpen(true);
+    }
+
+    const handleDialogCreateVenueClose = () => {
+        setDialogCreateVenueOpen(false);
+    }
+
+    useEffect(() => {
+        const getVenues = async () => {
+            if (isAuthenticated) {
+                const responseVenues = await fetch('/api/venues/venueslist', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+
+                if (responseVenues.ok) {
+                    const resultVenues = await responseVenues.json();
+                    setVenueList(resultVenues);
+                }
+                else {
+                    setVenueList([]);
+                }
+            }
+        }
+        getVenues();
+    }, [isAuthenticated, updateList]);
+
+    const columns = [
+        {
+            name: 'id',
+            label: 'Id',
+            options: {
+                display: false,
+            }
+        },
+        {
+            name: 'name',
+            label: 'Navn'
+        },
+        {
+            name: 'address',
+            label: 'Addresse'
+        },
+    ];
+
+    const options = {
+        rowsExpanded: rowsExpanded,
+        filter: false,
+        filterType: 'dropdown',
+        responsive: 'vertical',
+        selectableRows: 'none',
+        selectableRowsOnClick: false,
+        expandableRows: true,
+        expandableRowsHeder: false,
+        expandableRowsOnClick: false,
+        renderExpandableRow: (rowData, rowMeta) => {
+            return (
+                <VenueAdminRowDetails rowData={rowData} rowMeta={rowMeta} />
+            );
+        },
+        onRowClick: (rowData, rowMeta) => {
+            if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
+                setRowsExpanded([]);
+            }
+            else {
+                setRowsExpanded([rowMeta.dataIndex])
+            }
+        }
+    };
+
+    if (!venueList) {
+        return (<CircularProgress />);
+    }
 
     return (
         <>
-        <Paper>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>                    
-                    <Toolbar>
-                        <Button
-                            disableRipple
-                            disableFocusRipple
-                            variant="contained"
-                            color="primary"
-                            onClick={() => setOpenCreate(!openCreate)} disableElevation
-                        >
-                            {openCreate ? <>Avbryt</> : <>Legg Til Lokale</>}
-                        </Button>
-                    </Toolbar>
-                    <Collapse in={openCreate} unmountOnExit>
-                        <Divider />
-                        <Box className={classes.root} margin={1}>
-                            <CreateVenue />
-                        </Box>
-                        <Divider />
-                    </Collapse>
-                    <VenueList />
-                </Grid>
-            </Grid>
-            </Paper>
+            <CreateVenue handleDialogCreateVenueClose={handleDialogCreateVenueClose} dialogCreateVenueOpen={dialogCreateVenueOpen} triggerUpdate={triggerUpdate} />
+            <MUIDataTable
+                title={
+                    <>
+                        <Toolbar>
+                            <Typography>
+                                Lokaler
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                style={{ margin: '15px' }}
+                                onClick={handleDialogCreateVenueOpen}
+                            >
+                                Nytt lokale
+                            </Button>
+                        </Toolbar>
+                    </>
+                }
+                data={venueList}
+                columns={columns}
+                options={options}
+            />
         </>
     );
 }
