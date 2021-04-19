@@ -26,6 +26,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns all ticket types
         /// </summary>
         [HttpGet]
+        [Route("tickettypes")]
         public async Task<List<TicketTypeListVm>> GetTicketTypesAsync()
         {
             return await _ticketTypeService.GetTicketTypesAsync();
@@ -34,11 +35,12 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Return specific ticket type
         /// </summary>
-        /// <param name="id"></param>  
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TicketTypeVm>> GetTicketTypeAsync(int id)
+        /// <param name="ticketTypeId"></param>  
+        [HttpGet]
+        [Route("type/{ticketTypeId}")]
+        public async Task<ActionResult<TicketTypeVm>> GetTicketTypeAsync(int ticketTypeId)
         {
-            return await _ticketTypeService.GetTicketTypeAsync(id);
+            return await _ticketTypeService.GetTicketTypeAsync(ticketTypeId);
         }
 
         /// <summary>
@@ -60,7 +62,7 @@ namespace Warpweb.WebLayer.Controllers
                 return BadRequest();
             }
 
-            return Ok(ticketTypeVm);
+            return Ok();
         }
 
         /// <summary>

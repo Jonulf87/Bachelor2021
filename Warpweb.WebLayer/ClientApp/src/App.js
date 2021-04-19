@@ -19,7 +19,7 @@ import EventAdminMain from './components/EventAdmin/EventAdminMain';
 import EventUserMain from './components/Event/EventUserMain';
 import ParticipantMain from './components/Participant/ParticipantMain';
 import ReportMain from './components/Report/ReportMain';
-import TicketMain from './components/Ticket/TicketMain';
+import TicketTypeAdminMain from './components/TicketTypeAdmin/TicketTypeAdminMain';
 import UserMain from './components/User/UserMain';
 import VenueMain from './components/Venue/VenueMain';
 import UserRegister from "./components/User/UserRegister";
@@ -74,7 +74,7 @@ export default function App() {
                                     <Route path='/event' component={EventAdminMain} />
                                     <Route path='/userevent' component={EventUserMain} />
                                     <Route path='/participant' component={ParticipantMain} />
-                                    <Route path='/ticketadmin' component={TicketMain} />
+                                    <Route path='/ticketadmin' component={TicketTypeAdminMain} />
                                     <Route path='/register' component={UserRegister} />
                                     <Route path='/login' component={UserLogin} />
                                     <Route path='/logout' component={LogOut} />

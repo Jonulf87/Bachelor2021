@@ -44,14 +44,14 @@ namespace Warpweb.LogicLayer.Services
                     DescriptionName = a.DescriptionName,
                     AmountAvailable = a.AmountAvailable,
                     BasePrice = a.BasePrice
-                }).FirstOrDefaultAsync();
+                }).SingleOrDefaultAsync();
         }
 
-        public async Task<int> CreateTicketTypeAsync(TicketTypeVm ticketTypeVm)
+        public async Task CreateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             var existingTicketType = _dbContext.TicketTypes
                 .Where(a => a.DescriptionName == ticketTypeVm.DescriptionName)
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             if (existingTicketType != null)
             {
@@ -68,8 +68,6 @@ namespace Warpweb.LogicLayer.Services
 
             _dbContext.TicketTypes.Add(newTicketType);
             await _dbContext.SaveChangesAsync();
-
-            return newTicketType.Id;
         }
 
         public async Task<int> UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
