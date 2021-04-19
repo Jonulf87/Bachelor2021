@@ -1,6 +1,6 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {  Button, Dialog, Paper, DialogTitle, FormControl, TextField } from '@material-ui/core';
+import { Button, Dialog, Paper, DialogTitle, FormControl, TextField, MenuItem } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import useAuth from '../../hooks/useAuth';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -26,9 +26,31 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
     const [enteredContactEMail, setEnteredContactEMail] = useState('');
     const [enteredContactPhone, setEnteredContactPhone] = useState('');
 
+    const [organizers, setOrganizers] = useState([]);
+    const [organizerId, setOrganizerId] = useState('');
+
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
 
+    useEffect(() => {
+        const getOrganizers = async () => {
+
+            if (isAuthenticated) {
+                const response = await fetch('/api/tenants/getaorgsadmin', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const result = await response.json();
+                setOrganizers(result);
+                if (result.length === 1) {
+                    setOrganizerId(result[0].id);
+                }
+            }
+        }
+        getOrganizers();
+    }, [isAuthenticated]);
 
     const submitForm = async (e) => {
 
@@ -54,7 +76,8 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
             'postalCode': enteredPostalCode,
             'contactName': enteredContactName,
             'contactEMail': enteredContactEMail,
-            'contactPhone': enteredContactPhone
+            'contactPhone': enteredContactPhone,
+            'organizerId': organizerId
         }
 
         const response = await fetch(`/api/venues/createvenue`, {
@@ -78,8 +101,9 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
             setEnteredContactName('');
             setEnteredContactEMail('');
             setEnteredContactPhone('');
+            setOrganizerId('');
         }
-        
+
         handleDialogCreateVenueClose();
         setIsSending(false);
     };
@@ -98,7 +122,7 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
                 <DialogTitle>
                     Nytt lokale
                 </DialogTitle>
-                
+
                 <ValidatorForm
                     className={classes.root}
                     autoComplete="off"
@@ -179,6 +203,24 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
                         validators={['required']}
                         errorMessages={['Telefonnummer må oppgis']}
                     />
+
+                    {organizers.length > 1 && (
+                        <TextField
+                            select
+                            variant="outlined"
+                            id="organizerId"
+                            label="Organisasjon"
+                            fullWidth
+                            value={organizerId}
+                            onChange={(e) => setOrganizerId(e.target.value)}
+                        >
+                            {organizers.map((organizer) => (
+                                <MenuItem key={organizer.id} value={organizer.id}>
+                                    {organizer.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    )}
 
                     <FormControl style={{ padding: '8px' }} >
                         <Button
