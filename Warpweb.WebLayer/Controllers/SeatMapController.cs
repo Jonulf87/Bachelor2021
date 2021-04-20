@@ -29,6 +29,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="seatMap"></param>
         [HttpPost]
         [Route("storeseatmap")]
+        [Authorize(Policy = "SeatMapAdmin")]
         public async Task<ActionResult> StoreRowsAsync(List<RowVm> seatMap)
         {
             await _seatMapService.SetRowsAsync(seatMap);
@@ -39,7 +40,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns seatmap
         /// </summary>
         [HttpGet]
-        [Route("")]
+        [Route("getseatmap")]
         public async Task<ActionResult<IEnumerable<RowVm>>> GetSeatMapAsync()
         {
             var seatMap = await _seatMapService.GetSeatMapAsync();

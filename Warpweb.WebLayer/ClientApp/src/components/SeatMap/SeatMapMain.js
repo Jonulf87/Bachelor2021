@@ -65,7 +65,7 @@ export default function SeatMapMain() {
         const getSeatMap = async () => {
 
             if (isAuthenticated) {
-                const responseSeatMap = await fetch('/api/seatmap', {
+                const responseSeatMap = await fetch('/api/seatmap/getseatmap', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-type': 'application/json'

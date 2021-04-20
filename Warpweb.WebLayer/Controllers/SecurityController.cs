@@ -14,6 +14,7 @@ namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/security")]
     [ApiController]
+    [Authorize]
     public class SecurityController : ControllerBase
     {
         private readonly SecurityService _securityService;
@@ -57,6 +58,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="crewId"></param>
         [HttpPost]
         [Route("setpolicies/{crewId}")]
+        [Authorize(Policy = "CrewAdmin")]
         public async Task<ActionResult> SetPoliciesAsync([FromBody] List<CrewPermissionsVm> permissions, int crewId)
         {
             await _securityService.SetPoliciesAsync(permissions, crewId);

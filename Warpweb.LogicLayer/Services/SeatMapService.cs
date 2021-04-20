@@ -24,12 +24,11 @@ namespace Warpweb.LogicLayer.Services
         }
 
 
-        //hvordan fikse error handling og return når det er et array av objekter som sendes inn?
         public async Task SetRowsAsync(List<RowVm> rowInfo)
         {
             var existingRowIds = rowInfo.Where(a => a.Id != 0).Select(a => a.Id).ToList();
 
-            var rowsToDelete = await _dbContext.Rows.Where(a => a.MainEventId == _mainEventProvider.MainEventId && !existingRowIds.Contains(a.Id)).ToListAsync();
+            var rowsToDelete = await _dbContext.Rows.Where(a => !existingRowIds.Contains(a.Id)).ToListAsync();
 
             _dbContext.Rows.RemoveRange(rowsToDelete);
 
@@ -117,7 +116,6 @@ namespace Warpweb.LogicLayer.Services
         public async Task<IEnumerable<RowVm>> GetSeatMapAsync()
         {
             return await _dbContext.Rows
-                .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
                 .Select(a => new RowVm
                 {
                     Id = a.Id,
