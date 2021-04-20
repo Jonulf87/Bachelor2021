@@ -31,15 +31,16 @@ namespace Warpweb.LogicLayer.Services
                     LastName = a.LastName,
                     EMail = a.Email,
                     PhoneNumber = a.PhoneNumber,
-                    UserName = a.UserName
+                    UserName = a.UserName,
+                    DateOfBirth = a.DateOfBirth
                 })
                 .ToListAsync();
         }
 
-        public async Task<UserVm> GetCurrentUserAsync(string id)
+        public async Task<UserVm> GetCurrentUserAsync(string userId)
         {
             return await _dbContext.ApplicationUsers
-                .Where(a => a.Id == id)
+                .Where(a => a.Id == userId)
                 .Select(a => new UserVm
                 {
                     Id = a.Id,
@@ -65,10 +66,10 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
-        public async Task<UserVm> GetUserAsync(string id)
+        public async Task<UserVm> GetUserAsync(string userId)
         {
             return await _dbContext.ApplicationUsers
-                .Where(a => a.Id == id)
+                .Where(a => a.Id == userId)
                 .Select(a => new UserVm
                 {
                     Id = a.Id,

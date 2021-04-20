@@ -24,7 +24,7 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
         const getVenue = async () => {
 
             if (isAuthenticated) {
-                const response = await fetch(`/api/venues/${venueId}`, {
+                const response = await fetch(`/api/venues/getvenue/${venueId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
@@ -40,7 +40,7 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
     const submitForm = async (e) => {
         e.preventDefault();
         if (isAuthenticated) {
-            const response = await fetch('api/venues/update', {
+            const response = await fetch('/api/venues/updatevenue', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'

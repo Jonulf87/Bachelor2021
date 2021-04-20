@@ -23,7 +23,6 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
-        // Returner alle venues
         public async Task<List<VenueListVm>> GetVenuesAsync()
         {
             return await _dbContext.Venues
@@ -36,7 +35,6 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
-        // Returner venues knyttet til arrangement
         public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
             return await _dbContext.Venues
@@ -91,9 +89,9 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateVenueAsync(VenueVm venueVm)
+        public async Task UpdateVenueAsync(VenueVm venueVm)
         {
-            var existingVenue = _dbContext.Venues.Where(a => a.Id == venueVm.Id).FirstOrDefault();
+            var existingVenue = _dbContext.Venues.Where(a => a.Id == venueVm.Id).SingleOrDefault();
 
             if (existingVenue == null)
             {
@@ -111,25 +109,6 @@ namespace Warpweb.LogicLayer.Services
 
             _dbContext.Update<Venue>(existingVenue);
             await _dbContext.SaveChangesAsync();
-
-            return existingVenue.Id;
-        }
-
-        public async Task<int> DeleteVenueAsync(VenueVm venueVm)
-        {
-
-            var venueToBeDeleted = _dbContext.Venues.Where(a => a.Id == venueVm.Id).FirstOrDefault();
-
-            if (venueToBeDeleted == null)
-            {
-                throw new NotImplementedException();
-            }
-
-            _dbContext.Remove<Venue>(venueToBeDeleted);
-            await _dbContext.SaveChangesAsync();
-
-            return venueToBeDeleted.Id;
-
         }
     }
 }

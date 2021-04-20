@@ -51,12 +51,14 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns a specific Venue.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="venueId"></param>
         /// <returns>VenueVm</returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<VenueVm>> GetVenueAsync(int id)
+        [HttpGet()]
+        [Route("getvenue/{venueId}")]
+        [Authorize(Policy = "VenueAdmin")]
+        public async Task<ActionResult<VenueVm>> GetVenueAsync(int venueId)
         {
-            return await _venueService.GetVenueAsync(id);
+            return await _venueService.GetVenueAsync(venueId);
         }
 
         /// <summary>
@@ -93,14 +95,14 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="venueVm"></param>  
         [HttpPut]
+        [Route("updatevenue")]
         [Authorize(Policy = "VenueAdmin")]
-        [Route("update")]
         public async Task<ActionResult> UpdateVenueAsync(VenueVm venueVm)
         {
             try
             {
                 await _venueService.UpdateVenueAsync(venueVm);
-                return Ok(venueVm);
+                return Ok();
             }
             catch (ItemNotFoundException)
             {

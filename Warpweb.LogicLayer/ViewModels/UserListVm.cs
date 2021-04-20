@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Warpweb.DataAccessLayer.Models;
 
 namespace Warpweb.LogicLayer.ViewModels
@@ -12,7 +13,6 @@ namespace Warpweb.LogicLayer.ViewModels
         public string PhoneNumber { get; set; }
         public string EMail { get; set; }
         public string UserName { get; set; }
-        public ICollection<string> Roles { get; set; }
-        public ICollection<CrewUser> CrewUsers { get; set; }
+        public DateTime DateOfBirth { get; set; }
     }
 }

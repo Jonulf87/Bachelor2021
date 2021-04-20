@@ -28,7 +28,7 @@ export default function VenueAdminRowDetails({ rowData, rowMeta }) {
         const getVenue = async () => {
 
             if (isAuthenticated) {
-                const response = await fetch(`/api/venues/${openVenueId}`, {
+                const response = await fetch(`/api/venues/getvenue/${openVenueId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'

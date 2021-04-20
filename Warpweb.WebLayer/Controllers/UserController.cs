@@ -38,6 +38,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>UserListVM</returns>
         [HttpGet]
         [Route("userslist")]
+        [Authorize(Roles = "Admin")]
         public async Task<List<UserListVm>> GetUsersAsync()
         {
 
@@ -60,25 +61,27 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns specific user
         /// </summary>
-        /// <param name="id"></param>  
+        /// <param name="userId"></param>  
         /// <returns>UserVM</returns>
         [HttpGet]
-        [Route("user/{id}")]
-        public async Task<UserVm> GetUserAsync(string id)
+        [Route("user/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<UserVm> GetUserAsync(string userId)
         {
-            return await _userService.GetUserAsync(id);
+            return await _userService.GetUserAsync(userId);
         }
 
         /// <summary>
         /// Returns specific user role
         /// </summary>
-        /// <param name="id"></param>  
+        /// <param name="userId"></param>  
         /// <returns>UserRolesListVM</returns>
         [HttpGet]
-        [Route("userroles/{id}")]
-        public async Task<List<UserRolesListVm>> GetUserRolesAsync(string id)
+        [Route("userroles/{userId}")]
+        [Authorize(Policy = "UserAdmin")]
+        public async Task<List<UserRolesListVm>> GetUserRolesAsync(string userId)
         {
-            return await _securityService.GetUserRolesAsync(id);
+            return await _securityService.GetUserRolesAsync(userId);
 
         }
 
