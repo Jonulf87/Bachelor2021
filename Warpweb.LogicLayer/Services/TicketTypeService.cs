@@ -70,30 +70,28 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
+        public async Task UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
-            var existingTicketType = _dbContext.TicketTypes.Find(ticketTypeVm.Id); //Henter eksisterende fra db
+            var existingTicketType = _dbContext.TicketTypes.Find(ticketTypeVm.Id); 
 
-            if (existingTicketType == null) //Dobbelsjekk at den faktisk eksisterer i db
+            if (existingTicketType == null) 
             {
                 throw new ItemNotFoundException($"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
             }
 
-            existingTicketType.AmountAvailable = ticketTypeVm.AmountAvailable; //Nye props i objektet som skal sendes til db
+            existingTicketType.AmountAvailable = ticketTypeVm.AmountAvailable; 
             existingTicketType.BasePrice = ticketTypeVm.BasePrice;
             existingTicketType.DescriptionName = ticketTypeVm.DescriptionName;
 
             _dbContext.Update(existingTicketType);
-            await _dbContext.SaveChangesAsync(); //Setter inn modell med nye props
-
-            return existingTicketType.Id;
+            await _dbContext.SaveChangesAsync(); 
         }
 
-        // Restrict to SuperAdmin
-        public async Task<int> DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
+
+        public async Task DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
 
-            var ticketTypeToBeDeleted = _dbContext.TicketTypes.Where(a => a.Id == ticketTypeVm.Id).FirstOrDefault();
+            var ticketTypeToBeDeleted = _dbContext.TicketTypes.Where(a => a.Id == ticketTypeVm.Id).SingleOrDefault();
 
             if (ticketTypeToBeDeleted == null)
             {
@@ -103,7 +101,6 @@ namespace Warpweb.LogicLayer.Services
             _dbContext.Remove<TicketType>(ticketTypeToBeDeleted);
             await _dbContext.SaveChangesAsync();
 
-            return ticketTypeToBeDeleted.Id;
 
         }
     }

@@ -12,7 +12,7 @@ export default function TicketTypeAdminRowDetails({ rowData, rowMeta }) {
     useEffect(() => {
         const getTicketType = async () => {
             if (isAuthenticated) {
-                const responseTicketType = await fetch(`/api/ticketTypes/type/${ticketTypeId}`, {
+                const responseTicketType = await fetch(`/api/tickettypes/type/${ticketTypeId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'

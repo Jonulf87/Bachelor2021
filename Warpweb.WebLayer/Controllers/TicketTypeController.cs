@@ -38,9 +38,19 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="ticketTypeId"></param>  
         [HttpGet]
         [Route("type/{ticketTypeId}")]
+        [Authorize(Policy = "TicketAdmin")]
         public async Task<ActionResult<TicketTypeVm>> GetTicketTypeAsync(int ticketTypeId)
         {
-            return await _ticketTypeService.GetTicketTypeAsync(ticketTypeId);
+            try
+            {
+                var ticketType = await _ticketTypeService.GetTicketTypeAsync(ticketTypeId);
+                return Ok(ticketType);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         /// <summary>
@@ -49,20 +59,20 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="ticketTypeVm"></param> 
         [HttpPost]
         [Route("createtickettype")]
-        //[Authorize(Roles = "Admins")]
+        [Authorize(Policy = "TicketAdmin")]
         public async Task<ActionResult> CreateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
 
             try
             {
                 await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
+                return Ok();
             }
             catch (Exception)
             {
                 return BadRequest();
             }
 
-            return Ok();
         }
 
         /// <summary>
@@ -70,18 +80,20 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="ticketTypeVm"></param> 
         [HttpPut]
+        [Route("updatetickettype")]
+        [Authorize(Policy = "TicketAdmin")]
         public async Task<ActionResult> UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             try
             {
                 await _ticketTypeService.UpdateTicketTypeAsync(ticketTypeVm);
+                return Ok();
             }
             catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
 
-            return Ok(ticketTypeVm);
         }
 
         /// <summary>
@@ -89,17 +101,19 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="ticketTypeVm"></param> 
         [HttpDelete]
+        [Route("deletetickettype")]
+        [Authorize(Policy = "TicketAdmin")]
         public async Task<ActionResult> DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             try
             {
                 await _ticketTypeService.DeleteTicketTypeAsync(ticketTypeVm);
+                return Ok();
             }
             catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
-            return Ok(ticketTypeVm);
         }
     }
 }
