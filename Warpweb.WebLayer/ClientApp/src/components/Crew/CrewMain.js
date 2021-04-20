@@ -1,14 +1,11 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Divider, Grid, Paper, Toolbar, Typography} from '@material-ui/core';
+import { Grid, Paper, Toolbar, Typography} from '@material-ui/core';
 import { useParams } from "react-router-dom";
 
 import useAuth from '../../hooks/useAuth';
 
-import CrewInfo from './CrewInfo';
-import CrewAdmin from './CrewAdminMenu';
 import CrewMemberList from './CrewMemberList';
 import CrewPermissionList from './CrewPermissionList';
-import CrewLog from './CrewLog';
 import CrewNews from './CrewNews'
 
 
@@ -24,7 +21,7 @@ export default function CrewMain() {
         const getCrews = async () => {
             if (isAuthenticated) {
 
-                const response = await fetch(`/api/crews/${id}`, {
+                const response = await fetch(`/api/crews/getcrew/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -65,6 +62,5 @@ export default function CrewMain() {
                 </Grid>
             </Grid>
         </Paper>
-
     );
 }

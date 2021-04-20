@@ -35,11 +35,12 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Return specific crew
         /// </summary>
-        /// <param name="id"></param> 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CrewVm>> GetCrewAsync(int id)
+        /// <param name="crewId"></param> 
+        [HttpGet]
+        [Route("getcrew/{crewId}")]
+        public async Task<ActionResult<CrewVm>> GetCrewAsync(int crewId)
         {
-            return await _crewService.GetCrewAsync(id);
+            return await _crewService.GetCrewAsync(crewId);
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 await _crewService.CreateCrewAsync(crewName);
-            return Ok();
+                return Ok();
             }
             catch (ItemAlreadyExistsException)
             {
@@ -67,19 +68,20 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="crewVm"></param> 
         [HttpPut]
+        [Route("updatecrew")]
         [Authorize(Policy = "CrewAdmin")]
         public async Task<ActionResult> UpdateCrewAsync(CrewVm crewVm)
         {
             try
             {
                 await _crewService.UpdateCrewAsync(crewVm);
+                return Ok();
             }
 
             catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
-            return Ok(crewVm);
         }
 
         /// <summary>
@@ -87,19 +89,20 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="crewVm"></param> 
         [HttpDelete]
+        [Route("deletecrew")]
         [Authorize(Policy = "CrewAdmin")]
         public async Task<ActionResult> DeleteCrewAsync(CrewVm crewVm)
         {
             try
             {
                 await _crewService.DeleteCrewAsync(crewVm);
+                return Ok();
             }
             catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
 
-            return Ok(crewVm);
         }
 
         /// <summary>
@@ -127,6 +130,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="crewId"></param>
         /// <param name="userId"></param>
         [HttpPost]
+        [Authorize(Policy = "CrewAdmin")]
         [Route("addcrewmember/{crewId}")]
         public async Task<ActionResult> AddCrewMemberAsync(int crewId, [FromBody] string userId)
         {
@@ -166,6 +170,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param int="crewId"></param>
         /// <param string="userId"></param>
         [HttpPost]
+        [Authorize(Policy = "CrewAdmin")]
         [Route("addcrewleader/{crewId}")]
         public async Task<ActionResult> AddCrewLeaderAsync(int crewId, [FromBody] string userId)
         {
@@ -174,7 +179,8 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.AddCrewLeaderAsync(crewId, userId);
                 return Ok();
             }
-            catch {
+            catch
+            {
                 return BadRequest("Kunne ikke legge til crewleder!");
             }
         }

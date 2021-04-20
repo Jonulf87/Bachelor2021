@@ -51,7 +51,7 @@ namespace Warpweb.LogicLayer.Services
         {
             var existingCrew = _dbContext.Crews
             .Where(a => a.Name == crewName)
-            .FirstOrDefault();
+            .SingleOrDefault();
 
             if (existingCrew != null)
             {
@@ -68,7 +68,7 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateCrewAsync(CrewVm crewVm)
+        public async Task UpdateCrewAsync(CrewVm crewVm)
         {
             var existingCrew = _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).SingleOrDefault();
 
@@ -90,7 +90,6 @@ namespace Warpweb.LogicLayer.Services
             _dbContext.Update<Crew>(existingCrew);
             await _dbContext.SaveChangesAsync();
 
-            return existingCrew.Id;
         }
 
 
@@ -205,7 +204,7 @@ namespace Warpweb.LogicLayer.Services
                 }).ToList();
         }
 
-        public async Task<int> DeleteCrewAsync(CrewVm crewVm)
+        public async Task DeleteCrewAsync(CrewVm crewVm)
         {
 
             var crewToBeDeleted = await _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).SingleOrDefaultAsync();
@@ -217,8 +216,6 @@ namespace Warpweb.LogicLayer.Services
 
             _dbContext.Remove<Crew>(crewToBeDeleted);
             await _dbContext.SaveChangesAsync();
-
-            return crewToBeDeleted.Id;
 
         }
 

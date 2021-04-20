@@ -156,7 +156,7 @@ namespace Warpweb.WebLayer.Controllers
         {
             
             return user.CurrentMainEventId != null ? user.CurrentMainEventId.ToString() : "0";
-            //return user.CurrentMainEventId?.ToString() ?? "0"; Denne gjør det samme som over. Hvis null, returner verdi etter ??, hvis ikke null returner før ??
+            //return user.CurrentMainEventId?.ToString() ?? "0"; //Denne gjør det samme som over. Hvis null, returner verdi etter ??, hvis ikke null returner før ??
         }
 
         /// <summary>
