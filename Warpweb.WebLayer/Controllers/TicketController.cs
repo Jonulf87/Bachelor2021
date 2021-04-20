@@ -90,6 +90,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Simulates reservation of seat in seatmap
         /// </summary>
         /// <param name="ticketId"></param>
+        /// <param name="seatId"></param>
         [HttpPost]
         [Route("reserveseat/{ticketId}/{seatId}")]
         public async Task<ActionResult> ReserveSeatAsync(int ticketId, int seatId)

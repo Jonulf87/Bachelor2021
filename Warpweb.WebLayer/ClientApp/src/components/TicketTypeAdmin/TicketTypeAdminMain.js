@@ -90,7 +90,7 @@ export default function TicketTypeAdminMain() {
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
             return (
-                <TicketTypeAdminRowDetails rowData={rowData} rowMeta={rowMeta} />
+                <TicketTypeAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />
             )
         },
         onRowClick: (rowData, rowMeta) => {

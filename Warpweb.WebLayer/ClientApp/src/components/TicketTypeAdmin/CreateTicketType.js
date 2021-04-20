@@ -40,6 +40,9 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                 body: JSON.stringify(dataToBeSent)
             });
             triggerUpdate();
+            setName('');
+            setBasePrice('');
+            setAmountAvailable('');
             handleDialogClose();
         }
     }
