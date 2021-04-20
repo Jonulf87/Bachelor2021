@@ -44,7 +44,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<MainEventVm>> GetMainEventAsync(int id)
         {
             var mainevent = await _mainEventService.GetMainEventAsync(id);
-            
+
 
             if (mainevent == null)
             {
@@ -64,7 +64,7 @@ namespace Warpweb.WebLayer.Controllers
         {
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(userId);
+            var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(userId); //Sjekker hvis bruker er orgadmin i org de prøver å opprette arrangement i
 
             if (!organizers.Any(a => a.Id == mainEventVm.OrganizerId))
             {
@@ -99,13 +99,13 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 await _mainEventService.UpdateMainEventAsync(mainEventVm);
+                return Ok();
             }
             catch (ItemNotFoundException)
             {
                 return BadRequest();
             }
 
-            return Ok(mainEventVm);
         }
 
         /// <summary>
@@ -123,24 +123,6 @@ namespace Warpweb.WebLayer.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Deletes a specific Event.
-        /// </summary>
-        /// <param name="maineventVm"></param>  
-        [HttpDelete]
-        public async Task<ActionResult> DeleteMainEventAsync(MainEventVm maineventVm)
-        {
-            try
-            {
-                await _mainEventService.RemoveMainEventAsync(maineventVm);
-            }
-            catch (ItemNotFoundException)
-            {
-                return BadRequest();
-            }
-
-            return Ok(maineventVm);
-        }
 
         /// <summary>
         /// Returns current active event

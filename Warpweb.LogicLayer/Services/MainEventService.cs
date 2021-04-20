@@ -123,7 +123,7 @@ namespace Warpweb.LogicLayer.Services
             
         }
 
-        public async Task<int> UpdateMainEventAsync(MainEventVm maineventVm)
+        public async Task UpdateMainEventAsync(MainEventVm maineventVm)
         {
 
             var existingMainEvent = _dbContext.MainEvents.Find(maineventVm.Id);
@@ -144,26 +144,8 @@ namespace Warpweb.LogicLayer.Services
             _dbContext.Update<MainEvent>(existingMainEvent);
             await _dbContext.SaveChangesAsync();
 
-            return existingMainEvent.Id;
         }
 
-        // Restrict to SuperAdmin
-        public async Task<int> RemoveMainEventAsync(MainEventVm mainEventVm)
-        {
-
-            var mainEventToBeDeleted = _dbContext.MainEvents.Where(a => a.Id == mainEventVm.Id).FirstOrDefault();
-
-            if (mainEventToBeDeleted == null)
-            {
-                throw new NotImplementedException();
-            }
-
-            _dbContext.Remove<MainEvent>(mainEventToBeDeleted);
-            await _dbContext.SaveChangesAsync();
-
-            return mainEventToBeDeleted.Id;
-
-        }
 
         public async Task<ActionResult<CurrentMainEventVm>> GetCurrentMainEventAsync(string userId)
         {
@@ -174,7 +156,7 @@ namespace Warpweb.LogicLayer.Services
                     Name = b.CurrentMainEvent.Name,
                     OrganizerId = b.CurrentMainEvent.OrganizerId
                 })
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
         }
 
         public async Task SetCurrentEventAsync(int eventId, string userId)
