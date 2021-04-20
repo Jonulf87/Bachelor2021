@@ -78,14 +78,11 @@ export default function MainMenu({ window }) {
     const [policies, setPolicies] = useState([]);
     const [crews, setCrews] = useState([]);
     const [orgAdmins, setOrgAdmins] = useState([]);
-    const [activeOrganization, setActiveOrganization] = useState("");
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
     const { isAuthenticated, token, roles } = useAuth();
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
-    // Get organizer ID of current event
-    const { currentEvent } = useCurrentEvent();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -123,15 +120,6 @@ export default function MainMenu({ window }) {
                 const resultOrgAdmins = await responseOrgAdmins.json();
                 setOrgAdmins(resultOrgAdmins);
 
-                //// Get active organizer - Does not worky worky
-                //const responseCurrentOrganization = await fetch(`/api/tenants/${currentEvent.organizerId}`, {
-                //    headers: {
-                //        'Authorization': `Bearer ${token}`,
-                //        'content-type': 'application/json'
-                //    }
-                //});
-                //const resultCurrentOrganization = await responseCurrentOrganization.json();
-                //setActiveOrganization(resultCurrentOrganization);
 
             }
 

@@ -38,7 +38,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>UserListVM</returns>
         [HttpGet]
         [Route("userslist")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "UserAdmin")]
         public async Task<List<UserListVm>> GetUsersAsync()
         {
 
@@ -65,7 +65,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>UserVM</returns>
         [HttpGet]
         [Route("user/{userId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "UserAdmin")]
         public async Task<UserVm> GetUserAsync(string userId)
         {
             return await _userService.GetUserAsync(userId);

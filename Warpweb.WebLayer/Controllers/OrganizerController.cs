@@ -28,6 +28,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("gettenants")]
+        [Authorize(Roles = "Admin")]
         public async Task<List<OrganizerListVm>> GetOrganizersAsync()
         {
             var organizers = await _organizerService.GetOrganizersAsync();
@@ -37,11 +38,12 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Return specific tentant/organizer
         /// </summary>
-        /// <param name="id"></param> 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<OrganizerVm>> GetOrganizerAsync(int id)
+        /// <param name="orgId"></param> 
+        [HttpGet("getorganizer/{orgId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<OrganizerVm>> GetOrganizerAsync(int orgId)
         {
-            var organizer = await _organizerService.GetOrganizerAsync(id);
+            var organizer = await _organizerService.GetOrganizerAsync(orgId);
 
             if (organizer == null)
             {
@@ -57,21 +59,21 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="organizerVm"></param> 
         [HttpPost]
         [Route("addorganizer")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateOrganizerAsync(OrganizerVm organizerVm)
         {
-            int orgId;
 
             try
             {
-                orgId = await _organizerService.CreateOrganizerAsync(organizerVm);
+                await _organizerService.CreateOrganizerAsync(organizerVm);
+                return Ok();
             }
             catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
 
-            organizerVm.Id = orgId;
-            return Ok(organizerVm);
+
         }
 
         /// <summary>
@@ -79,38 +81,23 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="organizerVm"></param> 
         [HttpPut]
+        [Route("updateorganizer")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateOrganizerAsync(OrganizerVm organizerVm)
         {
             try
             {
                 await _organizerService.UpdateOrganizerAsync(organizerVm);
+                return Ok();
             }
             catch (ItemAlreadyExistsException)
             {
                 return BadRequest();
             }
 
-            return Ok(organizerVm);
         }
 
-        /// <summary>
-        /// Delete tenant/organizer
-        /// </summary>
-        /// <param name="organizerVm"></param> 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteOrganizerAsync(OrganizerVm organizerVm)
-        {
-            try
-            {
-                await _organizerService.DeleteOrganizerAsync(organizerVm);
-            }
-            catch (ItemNotFoundException)
-            {
-                return BadRequest();
-            }
 
-            return Ok(organizerVm);
-        }
 
         /// <summary>
         /// Returns active contact person for organization
@@ -139,6 +126,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="userId"></param> 
         [HttpPost]
         [Route("setorgcontact/{orgid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<OrganizerVm>> SetOrganizerContactAsync(int orgId, [FromBody] string userId)
         {
             try
@@ -200,6 +188,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="userId"></param> 
         [HttpPost]
         [Route("setadmin/{orgId}")]
+        [Authorize(Roles = "Admin")] //Skal endres til enten role admin eller orgadmin skal adde andre orgadmins
         public async Task<ActionResult> SetOrgAdminAsync(int orgId, [FromBody] string userId)
         {
             try
@@ -220,6 +209,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="userId"></param> 
         [HttpPost]
         [Route("removeadmin/{orgId}")]
+        [Authorize(Roles = "Admin")] // samme som setorgadminasync()
         public async Task<ActionResult> RemoveOrgAdminAsync(int orgId, [FromBody] string userId)
         {
             try

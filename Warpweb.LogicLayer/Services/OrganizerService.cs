@@ -49,7 +49,7 @@ namespace Warpweb.LogicLayer.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<int> CreateOrganizerAsync(OrganizerVm organizerVm)
+        public async Task CreateOrganizerAsync(OrganizerVm organizerVm)
         {
             var existingOrganizer = _dbContext.Organizers
                 .Where(a => a.Id == organizerVm.Id || a.Name == organizerVm.Name)
@@ -70,11 +70,9 @@ namespace Warpweb.LogicLayer.Services
 
             _dbContext.Organizers.Add(organizer);
             await _dbContext.SaveChangesAsync();
-
-            return organizer.Id;
         }
 
-        public async Task<int> UpdateOrganizerAsync(OrganizerVm organizerVm)
+        public async Task UpdateOrganizerAsync(OrganizerVm organizerVm)
         {
 
             var existingOrganizer = _dbContext.Organizers.Where(a => a.Id == organizerVm.Id).FirstOrDefault();
@@ -92,27 +90,9 @@ namespace Warpweb.LogicLayer.Services
 
             _dbContext.Update<Organizer>(existingOrganizer);
             await _dbContext.SaveChangesAsync();
-
-            return existingOrganizer.Id;
         }
 
-        // Restrict to SuperAdmin
-        public async Task<int> DeleteOrganizerAsync(OrganizerVm organizerVm)
-        {
-
-            var organizerToBeDeleted = _dbContext.Organizers.Where(a => a.Id == organizerVm.Id).FirstOrDefault();
-
-            if (organizerToBeDeleted == null)
-            {
-                throw new NotImplementedException();
-            }
-
-            _dbContext.Remove<Organizer>(organizerToBeDeleted);
-            await _dbContext.SaveChangesAsync();
-
-            return organizerToBeDeleted.Id;
-
-        }
+        
 
         public async Task<List<OrganizerVm>> GetOrganizerContactAsync(int orgId)
         {
