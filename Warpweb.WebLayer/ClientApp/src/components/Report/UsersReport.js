@@ -1,59 +1,28 @@
-﻿
-import React, { useState, useEffect } from 'react';
-import useAuth from '../../hooks/useAuth';
+﻿import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
-export default function UserList() {
+export default function UsersReport({ data }) {
 
-    const [userList, setUserList] = useState([]);
-    const { isAuthenticated, token } = useAuth();
-
-    const useStyles = makeStyles({
-        table: {
-            maxwidth: 850,
-        },
-    });
-
-    useEffect(() => {
-        const getUsers = async () => {
-            if (isAuthenticated) {
-                const response = await fetch('/api/users/userslist', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const result = await response.json();
-                setUserList(result);
-            }
+    const styles = StyleSheet.create({
+        page: {
+            backgroundColor: '#ffffff'
         }
-        getUsers();
-    }, [isAuthenticated]);
-
-    const classes = useStyles();
+    })
 
     return (
-        <TableContainer>
-            <Table className={classes.table} size="small" aria-label="a dense table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="left">Fornavn</TableCell>
-                        <TableCell align="left">Etternavn</TableCell>
-                        <TableCell align="left">Brukernavn</TableCell>
-                        <TableCell align="left">Epost</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {userList.map((user) => (
-                        <TableRow key={user.id}>
-                            <TableCell align="left">{user.firstName}</TableCell>
-                            <TableCell align="left">{user.lastName}</TableCell>
-                            <TableCell align="left">{user.userName}</TableCell>
-                            <TableCell align="left">{user.eMail}</TableCell>
-                        </TableRow>
+        <Document>
+        {console.log(data)}
+            <Page style={styles.page}>
+                {data.map((user) => (
+                    <View key={user.id}>
+                        <Text>
+                            {user.firstName}
+                        </Text>
+                    </View>
                     ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+            </Page>
+        </Document>
     );
 }
