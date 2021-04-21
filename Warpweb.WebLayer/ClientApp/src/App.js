@@ -29,6 +29,7 @@ import LogOut from './components/MainPageNavBar/LogOut';
 import CurrentEventProvider from './providers/CurrentEventProvider';
 import OrganizerAdminMain from './components/OrganizerAdmin/OrganizerAdminMain';
 import TicketMain from './components/Ticket/TicketMain';
+import PageNotFound from './components/ErrorPages/PageNotFound'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,7 +83,8 @@ export default function App() {
                                     <Route exact path='/' component={EventUserMain} />
                                     <Route path='/seatmap' component={SeatMapMain} />
                                     <Route path='/organizer' component={OrganizerAdminMain} />
-                                    <Route path='/userticket' component={TicketMain} /> 
+                                    <Route path='/userticket' component={TicketMain} />
+                                    <Route component={PageNotFound}/>
                                 </Switch>
                             </Container>
                         </main>
