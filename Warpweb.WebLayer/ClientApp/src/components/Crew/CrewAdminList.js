@@ -110,7 +110,7 @@ export default function OrganizerAdminList() {
         <>
             <MUIDataTable
                 title={<>
-                    <TextField variant="outlined"
+                    <TextField
                         id="crewName"
                         label="Arbeidslag"
                         style={{ margin: 8 }}
