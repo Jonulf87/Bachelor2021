@@ -70,7 +70,10 @@ export default function OrganizerAdminMain() {
         },
         {
             name: 'description',
-            label: 'Beskrivelse'
+            label: 'Beskrivelse',
+            options: {
+                sort: false
+            }
         }
     ];
 
@@ -110,7 +113,7 @@ export default function OrganizerAdminMain() {
                 title={<>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography variant="h6" style={{ margin: '15px' }}>
+                            <Typography variant="h5" style={{ marginTop: '15px', marginLeft: '15px' }}>
                                 Organisasjoner
                         </Typography>
                         </Grid>
@@ -118,7 +121,7 @@ export default function OrganizerAdminMain() {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                size="large"
+                                size="medium"
                                 style={{ margin: '15px' }}
                                 onClick={handleDialogCreateOrganizerOpen}
                             >

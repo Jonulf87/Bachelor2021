@@ -12,7 +12,9 @@ namespace Warpweb.DataAccessLayer.Models
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public int AreaAvailable { get; set; } 
-        public int Capacity { get; set; } 
+        public int Capacity { get; set; }
+        public string InfoComments { get; set; }
+        public string OrganizerWebPage { get; set; }
 
         [ForeignKey(nameof(Organizer))]
         public int OrganizerId { get; set; }

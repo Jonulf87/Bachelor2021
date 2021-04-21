@@ -80,6 +80,9 @@ namespace Warpweb.DataAccessLayer
 
             builder.Entity<Row>()
                 .HasQueryFilter(a => a.MainEventId == _mainEventProvider.MainEventId);
+            
+            builder.Entity<Seat>()
+                .HasQueryFilter(a => a.Row.MainEventId == _mainEventProvider.MainEventId);
         }
     }
 }

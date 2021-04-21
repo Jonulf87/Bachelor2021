@@ -28,6 +28,7 @@ import SeatMapMain from './components/SeatMap/SeatMapMain';
 import LogOut from './components/MainPageNavBar/LogOut';
 import CurrentEventProvider from './providers/CurrentEventProvider';
 import OrganizerAdminMain from './components/OrganizerAdmin/OrganizerAdminMain';
+import TicketMain from './components/Ticket/TicketMain';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -81,6 +82,7 @@ export default function App() {
                                     <Route exact path='/' component={EventUserMain} />
                                     <Route path='/seatmap' component={SeatMapMain} />
                                     <Route path='/organizer' component={OrganizerAdminMain} />
+                                    <Route path='/userticket' component={TicketMain} /> 
                                 </Switch>
                             </Container>
                         </main>

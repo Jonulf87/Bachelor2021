@@ -29,7 +29,7 @@ export default function UserMainMenu() {
         >
             <ListItem aria-label='Velg arrangement' button component={Link} to='/userevent'>
                 <ListItemIcon  ><StarIcon color="primary"/></ListItemIcon>
-                <ListItemText primary='Velg arrangement' />
+                <ListItemText primary='Arrangement' />
             </ListItem>
             <ListItem aria-label='kjøp billett' button component={Link} to='/userticket'>
                 <ListItemIcon><ConfirmationNumberIcon color="primary"/></ListItemIcon>

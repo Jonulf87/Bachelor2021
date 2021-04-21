@@ -54,6 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\components\TicketAdmin\" />
     <Folder Include="ClientApp\src\services\" />
   </ItemGroup>
 

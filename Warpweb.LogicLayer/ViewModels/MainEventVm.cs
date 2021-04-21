@@ -15,5 +15,7 @@ namespace Warpweb.LogicLayer.ViewModels
         public int? VenueId { get; set; }
         [Required]
         public int OrganizerId { get; set; }
+        public string InfoComments { get; set; }
+        public string OrganizerWebPage { get; set; }
     }
 }

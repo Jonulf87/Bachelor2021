@@ -147,7 +147,7 @@ export default function EventUserList() {
     return (
         <>
             <Typography>
-                <strong>Arrangementsoversikt</strong>
+                <strong>Kommende arrangementer</strong>
                     </Typography>
 
             {isReady && (<>
