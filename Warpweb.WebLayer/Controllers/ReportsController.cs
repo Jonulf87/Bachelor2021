@@ -36,5 +36,12 @@ namespace Warpweb.WebLayer.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        [Route("allergiesreport")]
+        public async Task<List<AllergyReportListVm>> GetAllergiesReportAsync()
+        {
+            return await _reportsService.GetAllergiesReportAsync();
+        }
     }
 }

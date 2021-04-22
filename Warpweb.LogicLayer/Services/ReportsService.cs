@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,23 @@ namespace Warpweb.LogicLayer.Services
                 NotDisclosedAmount = notDisclosed,
                 OtherAmount = other
             };
+        }
+
+        public async Task<List<AllergyReportListVm>> GetAllergiesReportAsync()
+        {
+
+            return await _dbContext.ApplicationUsers
+                .Where(a => a.AllergyDescription != null)
+                .OrderBy(a => a.FirstName)
+                .ThenBy(a => a.LastName)
+                .Select(a => new AllergyReportListVm
+                {
+                    FirstName = a.FirstName,
+                    LastName = a.LastName,
+                    AllergyDescription = a.AllergyDescription,
+
+                })
+                .ToListAsync();
         }
     }
 }

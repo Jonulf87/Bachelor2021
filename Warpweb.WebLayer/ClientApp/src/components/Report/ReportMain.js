@@ -1,19 +1,22 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Button} from '@material-ui/core';
-import { PDFDownloadLink, Document, Page, View, Text } from '@react-pdf/renderer';
+import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import UsersReport from './UsersReport';
 import GendersReport from './GendersReport';
+import AllergicsReport from './AllergicsReport';
 import useAuth from '../../hooks/useAuth';
 
 export default function ReportMain() {
 
     const [userData, setUserData] = useState([]);
     const [genderData, setGenderData] = useState([]);
+    const [allergicsData, setAllergicsData] = useState([]);
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
         const getReports = async () => {
             if (isAuthenticated) {
+
                 const responseUsers = await fetch('/api/users/userslist', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -31,32 +34,84 @@ export default function ReportMain() {
                 });
                 const resultGender = await responseGender.json();
                 setGenderData(resultGender);
+
+                const responseAllergics = await fetch('/api/reports/allergiesreport', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const resultAllergics = await responseAllergics.json();
+                setAllergicsData(resultAllergics);
             }
         }
         getReports();
-        
 
     }, [isAuthenticated]);
 
-    
-
     return (
-        <>
-            <PDFDownloadLink
-                document={<UsersReport data={userData} />}
-                fileName='brukerrapport.pdf'
-            >
-                {(blob, url, loading, error) => loading ? 'Generer Brukerrapport...' : 'Last ned brukerrapport' }
-            </PDFDownloadLink>
+        <Paper>
+            <TableContainer>
+                <Grid container item xs={12}>
+                    <Typography variant="h6" style={{ margin: '15px' }}>
+                        Rapporter
+                            </Typography>
+                </Grid>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="left">Rapport-type</TableCell>
+                            <TableCell align="left">Last ned</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
 
-            <PDFDownloadLink
-                document={<GendersReport data={genderData} />}
-                fileName='genderrapport.pdf'
-            >
-                {(blob, url, loading, error) => loading ? 'Generer Brukerrapport...' : 'Last ned rapport om kjønnsfordeling'}
-            </PDFDownloadLink>
-        </>
+                        <TableRow>
+                            <TableCell align="left">
+                                Bruker-rapport
+                            </TableCell>
+                            <TableCell align="left">
 
+                                <PDFDownloadLink
+                                    document={<UsersReport data={userData} />}
+                                    fileName='Brukerrapport.pdf'
+                                >
+                                    {(blob, url, loading, error) => loading ? 'Generer brukerrapport...' : 'Last ned brukerrapport'}
+                                </PDFDownloadLink>
+                            </TableCell>
+                        </TableRow>
 
+                        <TableRow>
+                            <TableCell align="left">
+                                Kjønnsfordelings-rapport
+                            </TableCell>
+                            <TableCell align="left">
+                                <PDFDownloadLink
+                                    document={<GendersReport data={genderData} />}
+                                    fileName='Kjonnsfordelingsrapport.pdf'
+                                >
+                                    {(blob, url, loading, error) => loading ? 'Generer kjønnsfordelingsrapport...' : 'Last ned kjønnsfordelingsrapport'}
+                                </PDFDownloadLink>
+                            </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                            <TableCell align="left">
+                                Allergiker-rapport
+                            </TableCell>
+                            <TableCell align="left">
+                                <PDFDownloadLink
+                                    document={<AllergicsReport data={allergicsData} />}
+                                    fileName='Allergikerrapport.pdf'
+                                >
+                                    {(blob, url, loading, error) => loading ? 'Generer allergikerrapport...' : 'Last ned allergikerapport'}
+                                </PDFDownloadLink>
+                            </TableCell>
+                        </TableRow>
+
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Paper>
     );
 }
