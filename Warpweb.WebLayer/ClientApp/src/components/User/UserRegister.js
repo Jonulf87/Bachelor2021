@@ -410,6 +410,7 @@ export default function UserRegister() {
                             <FormControlLabel
                                 control={
                                     <Checkbox
+                                        inputProps={{ 'aria-label': 'is allergic' }}
                                         checked={isAllergic}
                                         onChange={(e) => setCheckBox(e.target.checked)}
                                     />

@@ -45,7 +45,7 @@ export default function EventCard({ id, name, endDate, endTime, startDate, start
         else {
             history.push(`/login/${ref.current.value}`);
         }
-        
+
     }
 
     return (
@@ -121,7 +121,7 @@ export default function EventCard({ id, name, endDate, endTime, startDate, start
                                 type="submit"
                             >
                                 Kjøp billett
-                                        </Button>
+                             </Button>
                         </form>
                     </Grid>
                 </Grid>

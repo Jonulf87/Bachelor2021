@@ -2,7 +2,6 @@
 import { Dialog, DialogTitle, Divider, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 import { Button } from 'reactstrap';
-import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles((theme) => ({
     root: {

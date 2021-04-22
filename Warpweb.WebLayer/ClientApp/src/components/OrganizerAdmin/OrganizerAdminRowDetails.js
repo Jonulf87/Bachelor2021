@@ -188,6 +188,7 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
                 <TableRow key={admin.name}>
                     <TableCell colSpan={1}>
                         <IconButton
+                            aria-label="delete"
                             onClick={(e) =>  removeAdmin(admin.id) }
                         >
                             <DeleteIcon

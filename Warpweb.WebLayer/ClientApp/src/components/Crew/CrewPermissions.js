@@ -1,10 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import useAuth from '../../hooks/useAuth';
 
@@ -66,6 +62,7 @@ export default function CrewPermissions({ crewId }) {
                     <FormControlLabel
                         key={crewPermission.value}
                         control={<Checkbox
+                            inputProps={{ 'aria-label': crewPermission.name }}
                             checked={crewPermission.crewHasPermission}
                             onChange={updatePermissionsList}
                             name={crewPermission.name} />}
