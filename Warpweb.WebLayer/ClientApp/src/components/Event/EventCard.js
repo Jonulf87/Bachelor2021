@@ -33,17 +33,15 @@ export default function EventCard({ id, name, endDate, endTime, startDate, start
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
-    const ref = useRef(null);
     const history = useHistory();
 
-    const handleClick = (e) => {
-        e.preventDefault();
+    const handleClick = (eventId) => {
 
         if (isAuthenticated) {
-            history.push(`/crewadmin/${ref.current.value}`);
+            history.push(`/userticket/${eventId}`);
         }
         else {
-            history.push(`/login/${ref.current.value}`);
+            history.push(`/login/${eventId}`);
         }
 
     }
@@ -105,24 +103,13 @@ export default function EventCard({ id, name, endDate, endTime, startDate, start
                         item
                         xs={12}
                     >
-                        <form
-                            onSubmit={handleClick}
-
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => handleClick(id)}
                         >
-                            <input
-                                hidden
-                                value={id}
-                                ref={ref}
-                            >
-                            </input>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                            >
-                                Kjøp billett
-                             </Button>
-                        </form>
+                            Kjøp billett
+                        </Button>
                     </Grid>
                 </Grid>
             </CardContent>

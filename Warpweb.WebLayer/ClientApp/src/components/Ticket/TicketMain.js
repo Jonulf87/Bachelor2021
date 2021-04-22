@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -7,6 +7,11 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import useAuth from '../../hooks/useAuth';
+import { useHistory } from 'react-router-dom';
+import EventUserList from '../Event/EventUserList';
+import { useParams } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,31 +30,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return `Du må logge inn for å kunne kjøpe billetter.
-                Her er link later vi som`;
-        case 1:
-            return 'Her velger du bilttene du ønsker å kjøpe.';
-        case 2:
-            return `Godkjenn reglene for arrangemntet og vilkår for kjøp. Les og godta.`;
-        case 3:
-            return `Vis mulighet for å fylle inn manglende påkrevd personalia. Eks. mobil, fødsel, etternavn etc.`;
-        case 4:
-            return `Klikk her for å betale.`;
-        case 5:
-            return `Få seatmap og velg sete. Eventuelt vis at seatmap enda ikke er publisert`;
-        default:
-            return 'Unknown step';
-    }
-}
 
 export default function TicketMain() {
 
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0);
-    const steps = ['Innlogging', 'Velg billett', 'Vilkår og rettigher', 'Personalia', 'Betaling', 'Veg sitteplass'];
+    const [loggedInSkip, setLoggedInSkip] = useState(false);
+    const steps = ['Velg arrangement', 'Velg billett', 'Innlogging og personalia', 'Betaling', 'Velg sitteplass'];
+
+    const { isAuthenticated, token } = useAuth();
+    const history = useHistory();
+    const { eventIdParam } = useParams();
 
     const handleNext = () => {
         setActiveStep(oldValue => oldValue + 1);
@@ -59,10 +50,37 @@ export default function TicketMain() {
         setActiveStep(oldValue => oldValue - 1);
     };
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+    useEffect(() => {
+        if (isAuthenticated) {
+            setLoggedInSkip(true)
+        }
+        else {
+            setLoggedInSkip(false)
+        }
+    }, [isAuthenticated])
 
+ 
+
+    function getStepContent(step) {
+        switch (step) {
+            case 0:
+                return (<EventUserList eventIdParam={eventIdParam} />);
+            case 1:
+                return ('stahp!');
+            case 2:
+                return 'Her velger du bilttene du ønsker å kjøpe.';
+            case 3:
+                return `Godkjenn reglene for arrangemntet og vilkår for kjøp. Les og godta.`;
+            case 4:
+                return `Vis mulighet for å fylle inn manglende påkrevd personalia. Eks. mobil, fødsel, etternavn etc.`;
+            case 5:
+                return `Klikk her for å betale.`;
+            case 6:
+                return `Få seatmap og velg sete. Eventuelt vis at seatmap enda ikke er publisert`;
+            default:
+                return 'Unknown step';
+        }
+    }
     return (
         <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical">
@@ -96,11 +114,11 @@ export default function TicketMain() {
                 ))}
             </Stepper>
             {activeStep === steps.length && (
-                <Paper square elevation={0} className={classes.resetContainer}>
+                <Paper square elevation={5} className={classes.resetContainer}>
                     <Typography>Takk for kjøpet - Gleder oss til å se deg</Typography>
-                    <Button onClick={handleReset} className={classes.button} variant="outlined">
+                    <Button onClick={ () => setActiveStep(0)} className={classes.button} variant="outlined">
                         Kjøp ny billett
-          </Button>
+                    </Button>
                 </Paper>
             )}
         </div>

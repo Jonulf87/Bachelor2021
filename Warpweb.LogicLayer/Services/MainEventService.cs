@@ -58,8 +58,10 @@ namespace Warpweb.LogicLayer.Services
                     EndTime = a.EndDateTime,
                     OrganizerId = a.OrganizerId,
                     VenueId = a.VenueId,
+                    VenueName = a.Venue.Name,
                     InfoComments = a.InfoComments,
-                    OrganizerWebPage = a.OrganizerWebPage
+                    OrganizerWebPage = a.OrganizerWebPage,
+                    OrganizerName = a.Organizer.Name
                 })
                 .SingleOrDefaultAsync();
         }

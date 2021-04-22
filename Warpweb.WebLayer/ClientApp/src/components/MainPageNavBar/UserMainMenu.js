@@ -33,7 +33,7 @@ export default function UserMainMenu() {
         >
             <ListItem aria-label='Velg arrangement' activeClassName={classes.root} button component={NavLink} to='/userevent'>
                 <ListItemIcon  ><StarIcon color="primary"/></ListItemIcon>
-                <ListItemText primary='Arrangement' />
+                <ListItemText primary='Arrangementer' />
             </ListItem>
             <ListItem aria-label='kjøp billett' activeClassName={classes.root} button component={NavLink} to='/userticket'>
                 <ListItemIcon><ConfirmationNumberIcon color="primary"/></ListItemIcon>

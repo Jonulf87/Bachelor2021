@@ -83,7 +83,7 @@ export default function App() {
                                     <Route exact path='/' component={EventUserMain} />
                                     <Route path='/seatmap' component={SeatMapMain} />
                                     <Route path='/organizer' component={OrganizerAdminMain} />
-                                    <Route path='/userticket' component={TicketMain} />
+                                    <Route path='/userticket/:eventIdParam?' component={TicketMain} />
                                     <Route component={PageNotFound}/>
                                 </Switch>
                             </Container>

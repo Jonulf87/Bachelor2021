@@ -1,13 +1,13 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
     Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails,
-    CircularProgress, Divider, Grid, Button
+    CircularProgress, Divider, Grid, Button, Table, TableHead, TableRow, TableCell, TableBody
 } from '@material-ui/core';
-
+import { format, parseISO } from 'date-fns';
 import useAuth from '../../hooks/useAuth';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
+import EventUserListRow from './EventUserListRow';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -29,16 +29,17 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function EventUserList() {
+export default function EventUserList({ eventIdParam }) {
 
     const [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
-    const [expanded, setExpanded] = useState(false);
+    const [selectedEventId, setSelectedEventId] = useState(eventIdParam);
+    const [selectedEvent, setSelectedEvent] = useState("");
 
     const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
 
     const { isAuthenticated, token, refreshToken } = useAuth();
-    
+
 
     useEffect(() => {
         const getEvents = async () => {
@@ -46,115 +47,104 @@ export default function EventUserList() {
             const response = await fetch('/api/events/eventslist');
             const result = await response.json();
             setEventsList(result);
-            setIsReady(true);
+            console.log(result);
         }
 
         getEvents();
 
     }, []);
 
-    const setSelectedEvent = async () => {
-        if (isAuthenticated) {
-            await fetch('/api/events/setcurrentevent', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
-                },
-                method: 'PUT',
-                body: JSON.stringify(expanded)
-            });
-            setCurrentEvent(eventsList.find(a => a.id === expanded).name);
-            refreshToken(0, () => {
-                setCurrentEventChangeCompleteTrigger(oldValue => !oldValue);
-            });
-        }
+    const handleSelectedEvent = (eventId) => {
+        setIsReady(false);
+        setSelectedEventId(eventId);
     }
 
-    function getEventsFromList() {
+    useEffect(() => {
+        const getEvent = async () => {
+            setIsReady(false);
+            if (selectedEventId !== 0) {
 
-        return (
-            <div className={classes.accordionWrapper}>
-                {eventsList.map((mainevent) => (
-                    <Accordion
-                        key={mainevent.id}
-                        expanded={expanded === mainevent.id}
-                        onChange={(event, isExpanded) => setExpanded(isExpanded ? mainevent.id : false)}
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography className={classes.heading}>{mainevent.name}</Typography>
-                        </AccordionSummary>
-                        <Divider />
-                        <AccordionDetails>
-                            <Grid container spacing={2}>
-                                {/*Event details container*/}
-                                <Grid item xs={6} container>
-                                    <Grid item xs={3}>
-                                        <Typography><strong>Startdato</strong></Typography>
-                                    </Grid>
-                                    <Grid item xs={9}>
-                                        <Typography>{mainevent.startDateTime}</Typography>
-                                    </Grid>
-                                </Grid>
+                const eventResponse = await fetch(`/api/events/getmainevent/${selectedEventId}`, {
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                });
+                const eventResult = await eventResponse.json();
+                setSelectedEvent(eventResult);
+                console.log(selectedEventId);
+            }
+            setIsReady(true);
+            console.log(selectedEventId);
+        }
+        getEvent();
+    }, [selectedEventId])
 
-                                <Grid item xs={6} container>
-                                    <Grid item xs={3}>
-                                        <Typography><strong>Sluttdato</strong></Typography>
-                                    </Grid>
-                                    <Grid item xs={9}>
-                                        <Typography>{mainevent.endDateTime}</Typography>
-                                    </Grid>
-                                </Grid>
-                                {mainevent.venueName &&
-
-                                    <Grid item xs={6} container>
-                                        <Grid item xs={3}>
-                                            <Typography><strong>Lokale</strong></Typography>
-                                        </Grid>
-                                        <Grid item xs={9}>
-                                            <Typography>{mainevent.venueName}</Typography>
-                                        </Grid>
-                                    </Grid>
-                                }
-
-                                <Grid item xs={6} container>
-                                    <Grid item xs={3}>
-                                        <Typography><strong>Arrangør</strong></Typography>
-                                    </Grid>
-                                    <Grid item xs={9}>
-                                        <Typography>{mainevent.organizerName}</Typography>
-                                    </Grid>
-                                </Grid>
-
-                                {isAuthenticated &&
-                                    (<Grid item xs={12}>
-                                        <Button variant="contained" color="primary" onClick={setSelectedEvent} >Velg arrangement</Button>
-                                    </Grid>)
-                                }
-                            </Grid>
-                        </AccordionDetails>
-                    </Accordion>
-                ))}
-            </div>
-        )
-    };
+    const otherEvents = () => {
+        setSelectedEventId(0);
+    }
 
     const classes = useStyles();
 
     return (
         <>
-            <Typography>
-                <strong>Kommende arrangementer</strong>
-                    </Typography>
+            {isReady ?
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>
+                                Hva
+                        </TableCell>
+                            <TableCell>
+                                Hvor
+                        </TableCell>
+                            <TableCell>
+                                Når
+                        </TableCell>
+                            <TableCell>
+                                Hvem
+                            </TableCell>
+                            <TableCell>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {selectedEventId > 0 ?
+                            (<TableRow>
+                                <TableCell>
+                                    {selectedEvent.name}
+                                </TableCell>
+                                <TableCell>
+                                    {selectedEvent.venueName}
+                                </TableCell>
+                                <TableCell>
+                                    {format(parseISO(selectedEvent.startDate), 'dd.MMM')} - {format(parseISO(selectedEvent.endDate), 'dd.MMM')}
+                                </TableCell>
+                                <TableCell>
+                                    {selectedEvent.organizerName}
+                                </TableCell>
+                                <TableCell>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={otherEvents}
+                                    >
+                                        Andre arrangementer
+                                    </Button>
+                                </TableCell>
 
-            {isReady && (<>
-                {getEventsFromList()}
-            </>)}
+                            </TableRow>)
+                            :
+                            (<>
+                                {eventsList.map((event) => (
+                                    <EventUserListRow {...event} key={event.id} selectEvent={handleSelectedEvent} />
+                                ))
+                                }
+                            </>)
+                        }
+                    </TableBody>
 
-                {!isReady && (<CircularProgress />)}
+                </Table>
+                : <CircularProgress />}
         </>
     );
 }

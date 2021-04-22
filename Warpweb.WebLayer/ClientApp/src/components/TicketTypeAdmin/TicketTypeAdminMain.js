@@ -1,4 +1,4 @@
-﻿import { Typography, Button, Toolbar, CircularProgress } from '@material-ui/core';
+﻿import { Typography, Button, Grid, CircularProgress } from '@material-ui/core';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
@@ -114,10 +114,13 @@ export default function TicketTypeAdminMain() {
             <CreateTicketType dialogOpen={dialogCreateTicketTypeOpen} handleDialogClose={handleDialogCreateTicketTypeClose} triggerUpdate={triggerUpdate} />
             <MUIDataTable
                 title={<>
-                    <Toolbar>
-                        <Typography>
-                            Billettyper
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" style={{ margin: "15px" }}>
+                                Billettyper
                         </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
                         <Button
                             variant="contained"
                             color="primary"
@@ -125,9 +128,10 @@ export default function TicketTypeAdminMain() {
                             style={{ margin: "15px" }}
                             onClick={handleDialogCreateTicketTypeOpen}
                         >
-                            Ny bilettype
+                                Ny bilettype
                         </Button>
-                    </Toolbar>
+                        </Grid>
+                    </Grid>
                 </>}
                 data={ticketTypesList}
                 columns={columns}
