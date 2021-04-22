@@ -88,7 +88,7 @@ export default function AdminMainMenu({ policies, roles}) {
             }
 
 
-                <ListItem button component={NavLink} to='/event'>
+            <ListItem button component={NavLink} activeClassName={classes.root} to='/event'>
                 <ListItemIcon><EventIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Arrangementer' />
                 </ListItem>

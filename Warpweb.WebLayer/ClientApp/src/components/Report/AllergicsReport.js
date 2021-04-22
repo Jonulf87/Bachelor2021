@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
-export default function UsersReport({ data }) {
+export default function AllergicsReport({ data }) {
 
     const styles = StyleSheet.create({
         page: {
@@ -21,16 +21,15 @@ export default function UsersReport({ data }) {
 
     return (
         <Document>
-        {console.log(data)}
             <Page style={styles.page}>
                 <View style={styles.section}>
-                    <Text>Bruker-rapport</Text>
+                    <Text>Allergi-rapport</Text>
                 </View>
                
                 <View style={styles.section}>
                     {data.map((user) => (
                         <Text key= { user.id } style={styles.text}>
-                            {user.firstName} {user.lastName} | {user.userName} | {user.eMail}
+                            {user.firstName} {user.lastName} | {user.allergyDescription}
                         </Text>
                     ))}
                     </View>
