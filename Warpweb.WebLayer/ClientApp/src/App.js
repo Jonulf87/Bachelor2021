@@ -11,6 +11,7 @@ import AuthProvider from './providers/AuthProvider';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline, Container } from '@material-ui/core';
 
+import AppRouter from './components/Approuter';
 import MainMenu from './components/MainPageNavBar/MainMenu';
 import UserAdminMain from './components/UserAdmin/UserAdminMain';
 import CrewMain from './components/Crew/CrewMain';
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function App() {
-
+    
     const classes = useStyles();
 
 
@@ -65,8 +66,8 @@ export default function App() {
                                 maxWidth='xl'
                                 justify="center"
                             >
-
-                                <Switch>
+                                <AppRouter />
+                                {/*<Switch>
                                     <Route path='/user' component={UserMain} />
                                     <Route path='/venue' component={VenueMain} />
                                     <Route path='/crew/:id' component={CrewMain} />
@@ -85,7 +86,7 @@ export default function App() {
                                     <Route path='/organizer' component={OrganizerAdminMain} />
                                     <Route path='/userticket/:eventIdParam?' component={TicketMain} />
                                     <Route component={PageNotFound}/>
-                                </Switch>
+                                </Switch>*/}
                             </Container>
                         </main>
                     </div>
