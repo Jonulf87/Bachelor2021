@@ -113,6 +113,7 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
         <Dialog
             open={dialogCreateVenueOpen}
             onClose={handleDialogCreateVenueClose}
+            style={{ width: '100%', minWidth: '600px' }}
         >
             <Paper
                 variant="outlined"
@@ -128,6 +129,7 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
                     autoComplete="off"
                     noValidate
                     onSubmit={submitForm}
+                    style={{ width: "100%", padding: '4px'}}
                 >
                     <TextValidator
                         onChange={event => {

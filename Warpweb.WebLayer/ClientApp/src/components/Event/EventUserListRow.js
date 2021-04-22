@@ -6,10 +6,7 @@ export default function EventUserListRow({ name, venueName, id, startDate, endDa
 
     const ref = useRef(null);
 
-    const handleClick = () => {
-        console.log(ref.current.id);
-    }
-
+ 
     return (
         <TableRow
             id={id}

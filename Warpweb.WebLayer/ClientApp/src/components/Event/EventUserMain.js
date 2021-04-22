@@ -37,7 +37,9 @@ export default function EventUserMain() {
     }, []);
 
     return (
-        <List>
+        <List
+            style={{maxWidth: 'fit-content', margin: 'auto'}}
+        >
             {isReady && eventsList.map((event) => (
 
                 <ListItem key={event.id}>

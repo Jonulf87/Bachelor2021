@@ -34,6 +34,22 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        public async Task<List<TicketTypeListVm>> GetTicketTypesForEventAsync(int eventId)
+        {
+            return await _dbContext.TicketTypes
+                .Where(a => a.MainEventId == eventId)
+                .IgnoreQueryFilters()
+                .Select(a => new TicketTypeListVm
+                {
+                    AmountAvailable = a.AmountAvailable,
+                    BasePrice = a.BasePrice,
+                    DescriptionName = a.DescriptionName,
+                    Id = a.Id,
+                    AmountToBuy = 0
+                })
+                .ToListAsync();
+        }
+
         public async Task<TicketTypeVm> GetTicketTypeAsync(int id)
         {
             return await _dbContext.TicketTypes

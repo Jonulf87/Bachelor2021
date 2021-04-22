@@ -20,21 +20,21 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<GendersReportVm> GetGendersReportAsync()
         {
-            var girls = _dbContext.ApplicationUsers
+            var girls = await _dbContext.ApplicationUsers
                 .Where(a => a.Gender == "Jente")
-                .Count();
+                .CountAsync();
 
-            var boys = _dbContext.ApplicationUsers
+            var boys = await _dbContext.ApplicationUsers
                 .Where(a => a.Gender == "Gutt")
-                .Count();
+                .CountAsync();
 
-            var other = _dbContext.ApplicationUsers
+            var other = await _dbContext.ApplicationUsers
                 .Where(a => a.Gender == "Annet")
-                .Count();
+                .CountAsync();
 
-            var notDisclosed = _dbContext.ApplicationUsers
+            var notDisclosed = await _dbContext.ApplicationUsers
                 .Where(a => a.Gender == "Vil ikke oppgi")
-                .Count();
+                .CountAsync();
 
             return new GendersReportVm
             {

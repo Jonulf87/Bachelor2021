@@ -29,12 +29,12 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function EventUserList({ eventIdParam }) {
+export default function EventUserList({ eventIdParam, handleFinalSelectedEvent, finalSelectedEventId }) {
 
     const [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
-    const [selectedEventId, setSelectedEventId] = useState(eventIdParam);
-    const [selectedEvent, setSelectedEvent] = useState("");
+    const [selectedEventId, setSelectedEventId] = useState(finalSelectedEventId || eventIdParam);
+    const [selectedEvent, setSelectedEvent] = useState();
 
     const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
 
@@ -47,17 +47,22 @@ export default function EventUserList({ eventIdParam }) {
             const response = await fetch('/api/events/eventslist');
             const result = await response.json();
             setEventsList(result);
-            console.log(result);
         }
 
         getEvents();
 
     }, []);
 
+
+
     const handleSelectedEvent = (eventId) => {
         setIsReady(false);
         setSelectedEventId(eventId);
     }
+
+    useEffect(() => {
+        handleFinalSelectedEvent(selectedEventId);
+    }, [selectedEventId])
 
     useEffect(() => {
         const getEvent = async () => {

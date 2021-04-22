@@ -32,18 +32,10 @@ const useStyles = makeStyles({
 export default function EventCard({ id, name, endDate, endTime, startDate, startTime, infoComments, venueName, organizerName, organizerWebPage }) {
 
     const classes = useStyles();
-    const { isAuthenticated, token } = useAuth();
     const history = useHistory();
 
     const handleClick = (eventId) => {
-
-        if (isAuthenticated) {
-            history.push(`/userticket/${eventId}`);
-        }
-        else {
-            history.push(`/login/${eventId}`);
-        }
-
+        history.push(`/userticket/${eventId}`);
     }
 
     return (

@@ -11,6 +11,7 @@ import useAuth from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
 import EventUserList from '../Event/EventUserList';
 import { useParams } from "react-router-dom";
+import TicketPicker from './TicketPicker';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +37,8 @@ export default function TicketMain() {
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0);
     const [loggedInSkip, setLoggedInSkip] = useState(false);
+    const [finalSelectedEventId, setFinalSelectedEventId] = useState();
+    const [finalSelectedTicketTypes, setFinalSelectedTicketTypes] = useState([]);
     const steps = ['Velg arrangement', 'Velg billett', 'Innlogging og personalia', 'Betaling', 'Velg sitteplass'];
 
     const { isAuthenticated, token } = useAuth();
@@ -49,6 +52,15 @@ export default function TicketMain() {
     const handleBack = () => {
         setActiveStep(oldValue => oldValue - 1);
     };
+
+    const handleFinalSelectedTicketTypes = (ticketTypes) => {
+        setFinalSelectedTicketTypes(ticketTypes)
+    }
+
+    const handleFinalSelectedEvent = (eventId) => {
+        setFinalSelectedEventId(eventId);
+        console.log(eventId);
+    }
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -64,9 +76,9 @@ export default function TicketMain() {
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return (<EventUserList eventIdParam={eventIdParam} />);
+                return (<EventUserList eventIdParam={eventIdParam} handleFinalSelectedEvent={handleFinalSelectedEvent} finalSelectedEventId={finalSelectedEventId}/>);
             case 1:
-                return ('stahp!');
+                return (<TicketPicker eventId={finalSelectedEventId} handleFinalSelectedTicketTypes={handleFinalSelectedTicketTypes}  />);
             case 2:
                 return 'Her velger du bilttene du ønsker å kjøpe.';
             case 3:

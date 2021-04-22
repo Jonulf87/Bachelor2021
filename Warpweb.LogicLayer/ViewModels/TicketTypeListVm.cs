@@ -6,6 +6,7 @@
         public string DescriptionName { get; set; }
         public int BasePrice { get; set; }
         public int AmountAvailable { get; set; }
+        public int AmountToBuy { get; set; }
 
     }
 }

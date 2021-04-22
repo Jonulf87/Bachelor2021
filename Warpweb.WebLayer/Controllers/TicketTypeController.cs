@@ -22,6 +22,23 @@ namespace Warpweb.WebLayer.Controllers
             _ticketTypeService = ticketTypeService;
         }
 
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("eventtickettypes/{eventId}")]
+        public async Task<ActionResult<List<TicketTypeListVm>>> GetTicketTypesForEventAsync(int eventId)
+        {
+            try
+            {
+                var tickets = await _ticketTypeService.GetTicketTypesForEventAsync(eventId);
+                return Ok(tickets);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
         /// <summary>
         /// Returns all ticket types
         /// </summary>
