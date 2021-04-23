@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
@@ -25,7 +26,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<List<VenueListVm>> GetVenuesAsync()
         {
-            return await _dbContext.Venues
+            var venuesList = await _dbContext.Venues
                 .Select(a => new VenueListVm
                 {
                     Id = a.Id,
@@ -33,7 +34,14 @@ namespace Warpweb.LogicLayer.Services
                     Address = a.Address
 
                 }).ToListAsync();
+
+            if(venuesList == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ingen lokaler");
+            }
+            return venuesList;
         }
+           
 
         public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
@@ -48,7 +56,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<VenueVm> GetVenueAsync(int id)
         {
-            return await _dbContext.Venues
+            var venue = await _dbContext.Venues
                 .Where(a => a.Id == id)
                 .Select(a => new VenueVm
                 {
@@ -62,6 +70,13 @@ namespace Warpweb.LogicLayer.Services
                     PostalCode = a.PostalCode
 
                 }).SingleOrDefaultAsync();
+            
+            if(venue == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke lokalet");
+            }
+
+            return venue;
         }
 
         public async Task CreateVenueAsync(VenueVm venueVm)
@@ -71,7 +86,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingVenue != null)
             {
-                throw new ItemAlreadyExistsException($"Lokalet med navn: {venueVm.Name} eksisterer allerede");
+                throw new HttpException(HttpStatusCode.Conflict, $"Lokalet med navn: {venueVm.Name} eksisterer allerede");
             }
     
             var venue = new Venue
@@ -95,7 +110,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingVenue == null)
             {
-                throw new NotImplementedException();
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen lokaler med navn: {venueVm.Name}");
             }
 
             existingVenue.Id = venueVm.Id;

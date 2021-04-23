@@ -33,7 +33,7 @@ export default function AppRouter() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            const getPoliciesAndCrewsAndOrgAdmins = async () => {
+            const getPolicies = async () => {
                 const responsePolicies = await fetch('/api/security/policies', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -44,7 +44,7 @@ export default function AppRouter() {
                 setPolicies(resultPolicies);
 
             }
-            getPoliciesAndCrewsAndOrgAdmins();
+            getPolicies();
         }
         else {
             setPolicies([]);
@@ -54,7 +54,7 @@ export default function AppRouter() {
 
     return (
         <Switch>
-            <Route exact path='/' component={EventUserMain} />
+            <Route exact path='/' component={EventUserMain} />            
             <Route path='/userevent' component={EventUserMain} />
             <Route path='/userticket' component={TicketMain} />
             <Route path='/user' component={UserMain} />
@@ -63,8 +63,10 @@ export default function AppRouter() {
             <Route path='/logout' component={LogOut} />
             <Route path='/event' component={EventAdminMain} />
 
-            <Route path='/crew/:id' component={CrewMain} />
-         
+            <Route exact path='/crew/:id' component={CrewMain} >
+                {isAuthenticated ? <CrewMain /> : <Unauthorized />}
+            </Route>
+            
             <Route path='/venue'>
                 {policies.some(a => a === 6) ? <VenueMain /> : <Unauthorized />}
             </Route>
