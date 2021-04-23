@@ -151,7 +151,6 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(result);
         }
 
-
         private static string GetMainEventId(ApplicationUser user)
         {
             

@@ -97,8 +97,6 @@ namespace Warpweb.WebLayer.Controllers
 
         }
 
-
-
         /// <summary>
         /// Returns active contact person for organization
         /// </summary>

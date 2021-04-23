@@ -22,7 +22,9 @@ namespace Warpweb.WebLayer.Controllers
             _ticketTypeService = ticketTypeService;
         }
 
-
+        /// <summary>
+        /// Returns all available ticket types for active event
+        /// </summary>
         [HttpGet]
         [AllowAnonymous]
         [Route("eventtickettypes/{eventId}")]

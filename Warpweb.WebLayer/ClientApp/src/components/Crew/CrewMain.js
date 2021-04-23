@@ -34,7 +34,7 @@ export default function CrewMain() {
                 setCrew(resultCrew);
                 console.log(resultCrew)
 
-                const responseMyCrews = await fetch('/api/crews/mine', {
+                const responseMyCrews = await fetch('/api/crews/mycrews', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'

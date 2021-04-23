@@ -118,11 +118,14 @@ namespace Warpweb.WebLayer.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            await _mainEventService.SetCurrentEventAsync(eventId, userId);
-
-            return Ok();
+            try {
+                await _mainEventService.SetCurrentEventAsync(eventId, userId);
+                return Ok();
+            } 
+            catch (HttpException) {
+                return BadRequest();
+            }
         }
-
 
         /// <summary>
         /// Returns current active event
@@ -143,6 +146,9 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns events where current user is organization admin
+        /// </summary>
         [HttpGet]
         [Route("orgadminmainevents")]
         public async Task<ActionResult<List<MainEventListVm>>> GetMainEventsForOrgAdminAsync()
