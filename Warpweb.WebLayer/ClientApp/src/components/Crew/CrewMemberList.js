@@ -3,37 +3,9 @@ import useAuth from '../../hooks/useAuth';
 import { Typography, Toolbar, Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow, Container} from '@material-ui/core';
 
-export default function CrewMemberList({ id }) {
+export default function CrewMemberList({ crewMembers, crewLeaders }) {
 
-    const [crewMembers, setCrewMembers] = useState([]);
-    const [crewLeaders, setCrewLeaders] = useState([]);
-    
     const { isAuthenticated, token } = useAuth();
-
-    useEffect(() => {
-        console.log(id);
-        const getCrewLeaderAndMembers = async () => {
-            if (isAuthenticated) {
-                const responseCrew = await fetch(`/api/crews/crewmembers/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const resultCrew = await responseCrew.json();
-                setCrewMembers(resultCrew);
-
-                const responseLeader = await fetch(`/api/crews/crewleaders/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const resultLeader = await responseLeader.json();
-                setCrewLeaders(resultLeader);
-            }
-        }
-        getCrewLeaderAndMembers();
-
-    }, [isAuthenticated]);
 
     function CrewLeaderTable() {
         return (
