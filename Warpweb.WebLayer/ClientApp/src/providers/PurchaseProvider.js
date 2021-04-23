@@ -9,18 +9,25 @@ const PurchaseProvider = ({ children }) => {
     const [selectedTickets, setSelectedTickets] = useState([]);
     const [ticketTypesList, setTicketTypesList] = useState([]);
     const [userEventTickets, setUserEventsTickets] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
 
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
         const getTicketTypes = async () => {
-            const ticketTypesResponse = await fetch(`/api/tickettypes/eventtickettypes/${selectedMainEventId}`, {
-                headers: {
-                    'content-type': 'application/json'
+            if (selectedMainEventId !== null && selectedMainEventId > 0) {
+
+                const ticketTypesResponse = await fetch(`/api/tickettypes/eventtickettypes/${selectedMainEventId}`, {
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                });
+                const ticketTypesResult = await ticketTypesResponse.json();
+                setTicketTypesList(ticketTypesResult);
+                if (selectedTickets?.length < ticketTypesResult.length) {
+                    setSelectedTickets(ticketTypesResult);
                 }
-            });
-            const ticketTypesResult = await ticketTypesResponse.json();
-            setTicketTypesList(ticketTypesResult);
+            }
         }
         getTicketTypes();
     }, [selectedMainEventId])
@@ -57,8 +64,24 @@ const PurchaseProvider = ({ children }) => {
         }
     }
 
+    const handleSelectedTickets = (amount, id) => {
+        const ticketType = ticketTypesList.find(a => a.id === id);
+        ticketType.amountToBuy = amount;
+        setSelectedTickets(oldValue => [...oldValue.filter(a => a.id !== id), ticketType]);
+    }
 
-    return <PurchaseContext.Provider value={{ ticketTypesList, generateTickets, setSelectedTickets, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
+    useEffect(() => {
+        const calculateTotalPrice = () => {
+            let tempTotal = 0;
+            selectedTickets.forEach(ticketType => tempTotal = (ticketType.basePrice * ticketType.amountToBuy + tempTotal));
+            setTotalPrice(tempTotal);
+        }
+        calculateTotalPrice();
+
+    }, [selectedTickets])
+
+
+    return <PurchaseContext.Provider value={{ totalPrice, ticketTypesList, generateTickets, handleSelectedTickets, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
 
 };
 

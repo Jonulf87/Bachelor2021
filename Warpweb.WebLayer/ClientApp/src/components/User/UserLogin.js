@@ -1,6 +1,5 @@
 ﻿import React, { useState } from 'react';
 import { TextField, Button, Grid, Container, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 import queryString from 'query-string';
 
@@ -10,22 +9,17 @@ import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
 
-//component spesifik styling
-const useStyles = makeStyles((theme) => ({
 
-}));
 
 export default function UserLogin(props) {
 
-    let queryParams = queryString.parse(props.location.search)
-
-    const [userName, setUserName] = useState(queryParams.userName ? queryParams.userName : "");
+    //let queryParams = queryString.parse(props.location.search)
+    //queryParams.userName ||
+    const [userName, setUserName] = useState( "");
     const [password, setPassword] = useState("");
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [open, setOpen] = useState(false);
     const [errors, setErrors] = useState([]);
-
-    const classes = useStyles();
 
     const { login } = useAuth();
 
@@ -43,7 +37,9 @@ export default function UserLogin(props) {
     }
 
     if (loginSuccess) {
-        return (<Redirect to={'/user'} />)
+        if (!props.fromTicket) {
+            return (<Redirect to={'/user'} />)
+        }
     }
 
     const showErrors = (errors) => {
@@ -59,7 +55,7 @@ export default function UserLogin(props) {
     return (
         <>
             <PopupWindow open={open} onClose={() => setOpen(false)} text={showErrors(errors)} />
-            <Container className={classes.container} maxWidth="xs">
+            <Container maxWidth="xs">
                 <form onSubmit={logInSubmit}>
                     <Grid container spacing={2} alignContent="center">
                         {/*Input brukernavn/email*/}

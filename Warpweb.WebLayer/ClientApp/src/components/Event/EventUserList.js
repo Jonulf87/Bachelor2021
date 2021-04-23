@@ -40,6 +40,9 @@ export default function EventUserList() {
                 const eventResult = await eventResponse.json();
                 setSelectedEvent(eventResult);
                 console.log("selectedMainEventId: " + selectedMainEventId);
+                console.log("selectedMainEvent: ");
+                console.log(eventResult);
+                console.log(isReady);
             }
             setIsReady(true);
             console.log(selectedMainEventId);
@@ -49,6 +52,7 @@ export default function EventUserList() {
 
     const otherEvents = () => {
         setSelectedMainEventId(0);
+        setSelectedEvent(null);
     }
 
 
@@ -75,7 +79,7 @@ export default function EventUserList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {selectedMainEventId > 0 ?
+                        {selectedEvent ?
                             (<TableRow>
                                 <TableCell>
                                     {selectedEvent.name}
