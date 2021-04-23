@@ -1,45 +1,17 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import {
-    Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails,
-    CircularProgress, Divider, Grid, Button, Table, TableHead, TableRow, TableCell, TableBody
-} from '@material-ui/core';
+﻿import React, { useState, useEffect } from 'react';
+import { CircularProgress, Button, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import { format, parseISO } from 'date-fns';
-import useAuth from '../../hooks/useAuth';
-import useCurrentEvent from '../../hooks/useCurrentEvent';
 import EventUserListRow from './EventUserListRow';
+import usePurchase from '../../hooks/usePurchase';
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
 
-        accordionWrapper: {
-            width: '100%',
-            '&> :nth-child(even)': {
-                '&> div:first-child': {
-                    backgroundColor: 'lightgray'
-                },
-
-            },
-            '&> :nth-child(odd)': {
-                '&> div:first-child': {
-                    backgroundColor: 'white'
-                },
-            },
-        },
-    }),
-);
-
-export default function EventUserList({ eventIdParam, handleFinalSelectedEvent, finalSelectedEventId }) {
+export default function EventUserList() {
 
     const [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
-    const [selectedEventId, setSelectedEventId] = useState(finalSelectedEventId || eventIdParam);
     const [selectedEvent, setSelectedEvent] = useState();
 
-    const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
-
-    const { isAuthenticated, token, refreshToken } = useAuth();
-
+    const { selectedMainEventId, setSelectedMainEventId } = usePurchase();
 
     useEffect(() => {
         const getEvents = async () => {
@@ -55,40 +27,34 @@ export default function EventUserList({ eventIdParam, handleFinalSelectedEvent, 
 
 
 
-    const handleSelectedEvent = (eventId) => {
-        setIsReady(false);
-        setSelectedEventId(eventId);
-    }
-
     useEffect(() => {
-        handleFinalSelectedEvent(selectedEventId);
-    }, [selectedEventId])
-
-    useEffect(() => {
-        const getEvent = async () => {
             setIsReady(false);
-            if (selectedEventId !== 0) {
+        const getEvent = async () => {
+            if (selectedMainEventId !== 0 && selectedMainEventId !== null) {
 
-                const eventResponse = await fetch(`/api/events/getmainevent/${selectedEventId}`, {
+                const eventResponse = await fetch(`/api/events/getmainevent/${selectedMainEventId}`, {
                     headers: {
                         'content-type': 'application/json'
                     }
                 });
                 const eventResult = await eventResponse.json();
                 setSelectedEvent(eventResult);
-                console.log(selectedEventId);
+                console.log("selectedMainEventId: " + selectedMainEventId);
+                console.log("selectedMainEvent: ");
+                console.log(eventResult);
+                console.log(isReady);
             }
             setIsReady(true);
-            console.log(selectedEventId);
+            console.log(selectedMainEventId);
         }
         getEvent();
-    }, [selectedEventId])
+    }, [selectedMainEventId])
 
     const otherEvents = () => {
-        setSelectedEventId(0);
+        setSelectedMainEventId(0);
+        setSelectedEvent(null);
     }
 
-    const classes = useStyles();
 
     return (
         <>
@@ -113,7 +79,7 @@ export default function EventUserList({ eventIdParam, handleFinalSelectedEvent, 
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {selectedEventId > 0 ?
+                        {selectedEvent ?
                             (<TableRow>
                                 <TableCell>
                                     {selectedEvent.name}
@@ -141,7 +107,7 @@ export default function EventUserList({ eventIdParam, handleFinalSelectedEvent, 
                             :
                             (<>
                                 {eventsList.map((event) => (
-                                    <EventUserListRow {...event} key={event.id} selectEvent={handleSelectedEvent} />
+                                    <EventUserListRow {...event} key={event.id} />
                                 ))
                                 }
                             </>)

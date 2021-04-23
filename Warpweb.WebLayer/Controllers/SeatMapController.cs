@@ -13,7 +13,6 @@ namespace Warpweb.WebLayer.Controllers
     [Route("api/seatmap")]
     [ApiController]
     [Authorize]
-
     public class SeatMapController : ControllerBase
     {
         private readonly SeatMapService _seatMapService;

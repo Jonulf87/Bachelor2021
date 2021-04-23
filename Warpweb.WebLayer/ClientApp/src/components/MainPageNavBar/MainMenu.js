@@ -102,7 +102,7 @@ export default function MainMenu({ window }) {
                 const resultPolicies = await responsePolicies.json();
                 setPolicies(resultPolicies);
 
-                const responseCrews = await fetch('/api/crews/mine', {
+                const responseCrews = await fetch('/api/crews/mycrews', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'

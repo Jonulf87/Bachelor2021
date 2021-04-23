@@ -31,6 +31,7 @@ import CurrentEventProvider from './providers/CurrentEventProvider';
 import OrganizerAdminMain from './components/OrganizerAdmin/OrganizerAdminMain';
 import TicketMain from './components/Ticket/TicketMain';
 import PageNotFound from './components/ErrorPages/PageNotFound'
+import PurchaseProvider from './providers/PurchaseProvider';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function App() {
-    
+
     const classes = useStyles();
 
 
@@ -56,18 +57,19 @@ export default function App() {
 
         <AuthProvider>
             <CurrentEventProvider>
-                <ThemeProvider theme={theme}>
-                    <div className={classes.root}>
-                        <CssBaseline />
-                        <MainMenu />
-                        <main className={classes.content}>
-                            <div className={classes.toolbar} />
-                            <Container
-                                maxWidth='xl'
-                                justify="center"
-                            >
-                                <AppRouter />
-                                {/*<Switch>
+                <PurchaseProvider>
+                    <ThemeProvider theme={theme}>
+                        <div className={classes.root}>
+                            <CssBaseline />
+                            <MainMenu />
+                            <main className={classes.content}>
+                                <div className={classes.toolbar} />
+                                <Container
+                                    maxWidth='xl'
+                                    justify="center"
+                                >
+                                    <AppRouter />
+                                    {/*<Switch>
                                     <Route path='/user' component={UserMain} />
                                     <Route path='/venue' component={VenueMain} />
                                     <Route path='/crew/:id' component={CrewMain} />
@@ -87,10 +89,11 @@ export default function App() {
                                     <Route path='/userticket/:eventIdParam?' component={TicketMain} />
                                     <Route component={PageNotFound}/>
                                 </Switch>*/}
-                            </Container>
-                        </main>
-                    </div>
-                </ThemeProvider>
+                                </Container>
+                            </main>
+                        </div>
+                    </ThemeProvider>
+                </PurchaseProvider>
             </CurrentEventProvider>
         </AuthProvider>
     );

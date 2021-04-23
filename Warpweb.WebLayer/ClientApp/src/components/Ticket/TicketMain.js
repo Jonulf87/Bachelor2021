@@ -10,8 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import useAuth from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
 import EventUserList from '../Event/EventUserList';
-import { useParams } from "react-router-dom";
 import TicketPicker from './TicketPicker';
+import UserLogin from '../User/UserLogin';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,14 +36,9 @@ export default function TicketMain() {
 
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0);
-    const [loggedInSkip, setLoggedInSkip] = useState(false);
-    const [finalSelectedEventId, setFinalSelectedEventId] = useState();
-    const [finalSelectedTicketTypes, setFinalSelectedTicketTypes] = useState([]);
     const steps = ['Velg arrangement', 'Velg billett', 'Innlogging og personalia', 'Betaling', 'Velg sitteplass'];
 
-    const { isAuthenticated, token } = useAuth();
-    const history = useHistory();
-    const { eventIdParam } = useParams();
+    const { isAuthenticated } = useAuth();
 
     const handleNext = () => {
         setActiveStep(oldValue => oldValue + 1);
@@ -53,34 +48,18 @@ export default function TicketMain() {
         setActiveStep(oldValue => oldValue - 1);
     };
 
-    const handleFinalSelectedTicketTypes = (ticketTypes) => {
-        setFinalSelectedTicketTypes(ticketTypes)
-    }
 
-    const handleFinalSelectedEvent = (eventId) => {
-        setFinalSelectedEventId(eventId);
-        console.log(eventId);
-    }
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            setLoggedInSkip(true)
-        }
-        else {
-            setLoggedInSkip(false)
-        }
-    }, [isAuthenticated])
 
  
 
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return (<EventUserList eventIdParam={eventIdParam} handleFinalSelectedEvent={handleFinalSelectedEvent} finalSelectedEventId={finalSelectedEventId}/>);
+                return (<EventUserList />);
             case 1:
-                return (<TicketPicker eventId={finalSelectedEventId} handleFinalSelectedTicketTypes={handleFinalSelectedTicketTypes}  />);
+                return (<TicketPicker />);
             case 2:
-                return 'Her velger du bilttene du ønsker å kjøpe.';
+                return (<UserLogin fromTicket={true} /> );
             case 3:
                 return `Godkjenn reglene for arrangemntet og vilkår for kjøp. Les og godta.`;
             case 4:

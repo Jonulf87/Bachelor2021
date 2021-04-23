@@ -22,6 +22,9 @@ namespace Warpweb.WebLayer.Controllers
             _reportsService = reportsService;
         }
 
+        /// <summary>
+        /// Returns count of different genders across participants
+        /// </summary>
         [HttpGet]
         [Route("participantsgenderreport")]
         public async Task<ActionResult<GendersReportVm>> GetGendersReportAsync()
@@ -37,6 +40,9 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns participants with allergies
+        /// </summary>
         [HttpGet]
         [Route("allergiesreport")]
         public async Task<List<AllergyReportListVm>> GetAllergiesReportAsync()

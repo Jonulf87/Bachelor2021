@@ -29,11 +29,11 @@ namespace Warpweb.LogicLayer.Services
                 .Select(a => new TicketListVm
                 {
                     Id = a.Id,
-                    MainEvent = a.MainEvent,
+                    MainEventName = a.MainEvent.Name,
                     Price = a.Price,
-                    Seat = a.Seat,
-                    Type = a.Type,
-                    User = a.User
+                    SeatNumber = a.Seat.SeatNumber,
+                    TicketType = a.Type.DescriptionName,
+                    UserId = a.User.Id
                 }).ToListAsync();
         }
 
@@ -48,47 +48,66 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
-        public async Task<TicketVm> CreateTicketAsync(int ticketTypeId, string userId)
+        public async Task<List<TicketListVm>> GetAllTicketsUserEvent(string userId, int eventId)
         {
+            return await _dbContext.Tickets
+                .Where(a => a.MainEventId == eventId && a.User.Id == userId)
+                .IgnoreQueryFilters()
+                .Select(a => new TicketListVm
+                {
+                    Id = a.Id,
+                    MainEventName = a.MainEvent.Name,
+                    Price = a.Price,
+                    RowName = a.Seat.Row.Name,
+                    SeatNumber = a.Seat.SeatNumber,
+                    TicketType = a.Type.DescriptionName,
+                    UserId = userId
+                }).ToListAsync();
+        }
 
-            var ticketCount = await _dbContext.Tickets
-                .Where(a => a.TicketTypeId == ticketTypeId)
-                .CountAsync();
-            var ticketType = await _dbContext.TicketTypes
-                .Where(a => a.Id == ticketTypeId)
-                .SingleOrDefaultAsync();
+        public async Task CreateTicketAsync(List<TicketTypeListVm> ticketList, string userId)
+        {
             var user = await _dbContext.ApplicationUsers
                 .FindAsync(userId);
-
-            if (ticketCount >= ticketType.AmountAvailable)
-            {
-                throw new TicketTypeSoldOutException();
-            }
 
             if (user.DateOfBirth > DateTime.Now.AddYears(-16) && user?.Guardian.EMail == null && user?.Guardian.PhoneNumber == null)
             {
                 throw new NoGuardianSetForMinorException();
             }
-
-            var ticket = new Ticket
+            foreach (var ticketIn in ticketList)
             {
-                MainEventId = ticketType.MainEventId,
-                Price = ticketType.BasePrice,
-                TicketTypeId = ticketType.Id,
-                ApplicationUserId = userId
-            };
+                var ticketCount = await _dbContext.Tickets
+                    .Where(a => a.TicketTypeId == ticketIn.Id)
+                    .CountAsync();
+                var ticketType = await _dbContext.TicketTypes
+                    .Where(a => a.Id == ticketIn.Id)
+                    .SingleOrDefaultAsync();
 
-            _dbContext.Tickets.Add(ticket);
+                if (ticketCount >= ticketType.AmountAvailable + 5)
+                {
+                    throw new TicketTypeSoldOutException();
+                }
+
+                List<Ticket> tickets = new();
+
+                for (int i = 0; i < ticketIn.AmountToBuy; i++)
+                {
+                    tickets.Add(
+                        new Ticket
+                        {
+                            MainEventId = ticketType.MainEventId,
+                            Price = ticketType.BasePrice,
+                            TicketTypeId = ticketType.Id,
+                            ApplicationUserId = userId
+                        }
+                    );
+                }
+
+                _dbContext.Tickets.AddRange(tickets);
+
+            }
+
             await _dbContext.SaveChangesAsync();
-
-            var ticketVm = new TicketVm
-            {
-                Id = ticket.Id,
-                Price = ticket.Price,
-                TicketTypeId = ticket.TicketTypeId
-            };
-
-            return ticketVm;      
         }
 
         public async Task PurchaseTicketAsync(int ticketId, string userId, int provider)
@@ -114,22 +133,22 @@ namespace Warpweb.LogicLayer.Services
                 .Where(a => a.Id == ticketId && a.ApplicationUserId == userId)
                 .SingleOrDefaultAsync();
 
-            if(seat == null)
+            if (seat == null)
             {
                 throw new ItemNotFoundException($"Fant ingen seter med setenr: {seat.SeatNumber}");
             }
-            
-            if(seat.Row.TicketTypes.All(a => a.Id != ticket.TicketTypeId))
+
+            if (seat.Row.TicketTypes.All(a => a.Id != ticket.TicketTypeId))
             {
                 throw new NoAccessToSeatClassException();
             }
 
-            if(seat.IsReserved)
+            if (seat.IsReserved)
             {
                 throw new SeatAlreadyReservedException();
             }
 
-            if(!ticket.IsPaid)
+            if (!ticket.IsPaid)
             {
                 throw new TicketNotPaidException();
             }

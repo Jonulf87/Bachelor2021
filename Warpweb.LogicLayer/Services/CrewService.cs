@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,36 +16,49 @@ namespace Warpweb.LogicLayer.Services
     public class CrewService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<CrewService> _log; //Denne må ordnes. Den er i bruk nede, men vil alltid være null av en eller annen grunn. Foreløpig ukjent
         private readonly IMainEventProvider _mainEventProvider;
 
-        public CrewService(ApplicationDbContext dbContext, ILogger<CrewService> log, IMainEventProvider mainEventProvider)
+        public CrewService(ApplicationDbContext dbContext, IMainEventProvider mainEventProvider)
         {
             _dbContext = dbContext;
-            _log = log;
             _mainEventProvider = mainEventProvider;
         }
 
         public async Task<List<CrewListVm>> GetCrewsAsync()
         {
-            return await _dbContext.Crews
+            var crewsList = await _dbContext.Crews
                 .Select(a => new CrewListVm
                 {
                     Id = a.Id,
                     Name = a.Name,
                 })
                 .ToListAsync();
+            
+            if(crewsList == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ingen arbeidslag");
+            }
+
+            return crewsList;
         }
 
         public async Task<CrewVm> GetCrewAsync(int id)
         {
-            return await _dbContext.Crews
+
+            var crew = await _dbContext.Crews
                 .Where(a => a.Id == id)
                 .Select(a => new CrewVm
                 {
                     CrewId = a.Id,
                     CrewName = a.Name
                 }).SingleOrDefaultAsync();
+
+            if (crew == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke arbeidslaget");
+            }
+
+            return crew;
         }
 
         public async Task CreateCrewAsync(string crewName)
@@ -55,7 +69,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingCrew != null)
             {
-                throw new ItemAlreadyExistsException($"Crewet: {crewName} eksisterer fra før av");
+                throw new HttpException(HttpStatusCode.Conflict, $"Arbeidslaget: {crewName} eksisterer allerede");
             }
 
             var crew = new Crew
@@ -74,15 +88,13 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingCrew == null)
             {
-                throw new ItemNotFoundException($"Det finnes ingen crew ved navn: {crewVm.CrewName}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke arbeidslaget: {crewVm.CrewName}");
             }
-
 
             if (crewVm.CrewName == null)
             {
                 crewVm.CrewName = existingCrew.Name;
             }
-
 
             existingCrew.Id = crewVm.CrewId;
             existingCrew.Name = crewVm.CrewName;
@@ -97,7 +109,7 @@ namespace Warpweb.LogicLayer.Services
         {
             if (userId == null || crewId <= 0)
             {
-                throw new Exception();
+                throw new HttpException(HttpStatusCode.BadRequest, "Mangler ID på arbeidslag eller bruker");
             }
 
             var existingCrewUser = await _dbContext.CrewUsers
@@ -106,7 +118,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingCrewUser != null)
             {
-                throw new ItemAlreadyExistsException($"Bruker: {existingCrewUser.ApplicationUser.FirstName} er allerede lagt til i crewet");
+                throw new HttpException(HttpStatusCode.Conflict, $"Bruker: {existingCrewUser.ApplicationUser.FirstName} er allerede lagt til i arbeidslaget");
             }
 
             var crewUser = new CrewUser
@@ -130,10 +142,10 @@ namespace Warpweb.LogicLayer.Services
 
             if (crew == null)
             {
-                throw new ItemNotFoundException($"Fant ingen crew med ID: {crewId}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke arbeidslaget med ID: {crewId}");
             }
 
-            return crew.Users
+            var crewUsers = crew.Users
                 .Where(a => !a.IsLeader)
                 .Select(a => new CrewMembersListVm
                 {
@@ -145,13 +157,20 @@ namespace Warpweb.LogicLayer.Services
                     IsLeader = a.IsLeader
 
                 }).ToList();
+
+            if (crewUsers == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Arbeidslaget har ingen medlemmer");
+            }
+
+            return crewUsers;
         }
 
         public async Task AddCrewLeaderAsync(int crewId, string userId)
         {
             if (userId == null || crewId <= 0)
             {
-                throw new ArgumentException($"Ugyldig userId: {userId} eller crewId: {crewId}");
+                throw new HttpException(HttpStatusCode.BadRequest, "Mangler ID på arbeidslag eller bruker");
             }
 
             var existingCrewUser = await _dbContext.CrewUsers
@@ -187,7 +206,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crew == null)
             {
-                throw new ItemNotFoundException($"Fant ingen crew med ID: {crewId}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen arbeidslagsledere");
             }
 
             return crew.Users
@@ -211,7 +230,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crewToBeDeleted == null)
             {
-                throw new ItemNotFoundException($"Fant ingen crew med navnet: {crewVm.CrewName}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke arbeidslaget");
             }
 
             _dbContext.Remove<Crew>(crewToBeDeleted);
@@ -221,6 +240,10 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<List<CrewListVm>> GetCrewsUserIsMemberOfAsync(string userId)
         {
+            if (userId == null)
+            {
+                throw new HttpException(HttpStatusCode.BadRequest, "Mangler bruker ID");
+            }
 
             return await _dbContext.CrewUsers
                 .Where(a => a.ApplicationUserId == userId)

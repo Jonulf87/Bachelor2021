@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -33,7 +34,9 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "VenueAdmin")]
         public async Task<List<VenueListVm>> GetVenuesAsync()
         {
+
             return await _venueService.GetVenuesAsync();
+
         }
 
         /// <summary>
@@ -58,7 +61,20 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "VenueAdmin")]
         public async Task<ActionResult<VenueVm>> GetVenueAsync(int venueId)
         {
-            return await _venueService.GetVenueAsync(venueId);
+
+            try {
+                var venue = await _venueService.GetVenueAsync(venueId);
+                return venue;
+            }
+
+            catch (HttpException)
+            {
+                return NotFound("Fant ingen lokaler");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Noe gikk galt");
+            }
         }
 
         /// <summary>
