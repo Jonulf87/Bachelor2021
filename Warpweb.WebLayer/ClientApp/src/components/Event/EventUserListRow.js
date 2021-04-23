@@ -1,10 +1,12 @@
 ﻿import { Button, TableCell, TableRow } from '@material-ui/core';
 import React, { useRef } from 'react';
 import { format, parseISO } from 'date-fns';
+import usePurchase from '../../hooks/usePurchase';
 
-export default function EventUserListRow({ name, venueName, id, startDate, endDate, organizerName, selectEvent }) {
+export default function EventUserListRow({ name, venueName, id, startDate, endDate, organizerName }) {
 
     const ref = useRef(null);
+    const { setSelectedMainEventId } = usePurchase();
 
  
     return (
@@ -28,7 +30,7 @@ export default function EventUserListRow({ name, venueName, id, startDate, endDa
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => selectEvent(ref.current.id)}
+                    onClick={() => setSelectedMainEventId(ref.current.id)}
                 >Velg</Button>
             </TableCell>
         </TableRow>

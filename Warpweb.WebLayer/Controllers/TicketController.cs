@@ -43,20 +43,36 @@ namespace Warpweb.WebLayer.Controllers
             return await _ticketService.GetTicketAsync(id);
         }
 
-        /// <summary>
-        /// Create new ticket
-        /// </summary>
-        /// <param name="ticketTypeId"></param>
-        /// <returns>TicketVM</returns>
-        [HttpPost]
-        [Route("createticket/{ticketTypeId}")]
-        public async Task<ActionResult<TicketVm>> CreateTicketAsync(int ticketTypeId)
+        [HttpGet]
+        [Route("alltickets/{eventId}")]
+        public async Task<ActionResult<List<TicketListVm>>> GetAllTicketsUserEvent(int eventId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try
             {
-                var ticket = await _ticketService.CreateTicketAsync(ticketTypeId, userId);
-                return Ok(ticket);
+                var tickets = await _ticketService.GetAllTicketsUserEvent(userId, eventId);
+                return Ok(tickets);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Create new ticket
+        /// </summary>
+        /// <param name="ticketList"></param>
+        /// <returns>TicketVM</returns>
+        [HttpPost]
+        [Route("createticket")]
+        public async Task<ActionResult> CreateTicketAsync([FromBody] List<TicketTypeListVm> ticketList)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try
+            {
+                await _ticketService.CreateTicketAsync(ticketList, userId);
+                return Ok();
             }
             catch (ItemAlreadyExistsException)
             {
