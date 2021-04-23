@@ -15,13 +15,11 @@ namespace Warpweb.LogicLayer.Services
     public class CrewService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<CrewService> _log; //Denne må ordnes. Den er i bruk nede, men vil alltid være null av en eller annen grunn. Foreløpig ukjent
         private readonly IMainEventProvider _mainEventProvider;
 
-        public CrewService(ApplicationDbContext dbContext, ILogger<CrewService> log, IMainEventProvider mainEventProvider)
+        public CrewService(ApplicationDbContext dbContext, IMainEventProvider mainEventProvider)
         {
             _dbContext = dbContext;
-            _log = log;
             _mainEventProvider = mainEventProvider;
         }
 
