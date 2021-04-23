@@ -61,11 +61,12 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "VenueAdmin")]
         public async Task<ActionResult<VenueVm>> GetVenueAsync(int venueId)
         {
-            try
-            {
-                await _venueService.GetVenueAsync(venueId);
-                return Ok();
+
+            try {
+                var venue = await _venueService.GetVenueAsync(venueId);
+                return venue;
             }
+
             catch (HttpException)
             {
                 return NotFound("Fant ingen lokaler");

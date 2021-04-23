@@ -56,7 +56,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<VenueVm> GetVenueAsync(int id)
         {
-            var venue = await _dbContext.Venues
+           var venue = await _dbContext.Venues
                 .Where(a => a.Id == id)
                 .Select(a => new VenueVm
                 {
@@ -70,8 +70,8 @@ namespace Warpweb.LogicLayer.Services
                     PostalCode = a.PostalCode
 
                 }).SingleOrDefaultAsync();
-            
-            if(venue == null)
+
+            if (venue == null)
             {
                 throw new HttpException(HttpStatusCode.NotFound, "Fant ikke lokalet");
             }
