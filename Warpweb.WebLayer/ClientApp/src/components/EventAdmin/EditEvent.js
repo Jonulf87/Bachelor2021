@@ -1,31 +1,25 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import SaveIcon from '@material-ui/icons/Save';
-import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, FormControl } from '@material-ui/core';
+import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem} from '@material-ui/core';
 import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { Form } from 'reactstrap';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
-import useCurrentEvent from '../../hooks/useCurrentEvent';
 
 const useStyles = makeStyles((theme) => ({
-
     root: {
         '& .MuiTextField-root': {
             padding: theme.spacing(1),
-            width: "100%",
-        },
-    },
-}));
+            width: '100%'
+        }
+    }
+}))
 
-export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpdate }) {
+export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEditEventClose, updateListTrigger }) {
 
-    const classes = useStyles();
-
-    //Her følger variablene til VM for mainEvent til posting
-    const [name, setName] = useState("");
+    const [event, setEvent] = useState("");
+    const [organizers, setOrganizers] = useState([]);
+    const [venues, setVenues] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(new Date('2020-05-05T11:54:00'));
     const [endDate, setEndDate] = useState(new Date());
@@ -33,16 +27,27 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     const [organizerId, setOrganizerId] = useState("");
     const [venueId, setVenueId] = useState("");
 
-    //Her følger noen variabler som trengs for å vise rette ting og greier og saker
-    const [organizers, setOrganizers] = useState([]);
-    const [venues, setVenues] = useState([]);
+    const classes = useStyles();
+    const { isAuthenticated, token } = useAuth();
 
-    const { isAuthenticated, token, refreshToken } = useAuth();
 
-    const history = useHistory();
-    const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
+    useEffect(() => {
+        const getEvent = async () => {
+            if (isAuthenticated) {
+                const responseEvent = await fetch(`/api/events/getmainevent/${eventId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const resultEvent = await responseEvent.json();
+                setEvent(resultEvent);
+            }
+        }
+        getEvent();
 
-    //Henter organizere brukeren er knyttet til
+    }, [isAuthenticated])
+
     useEffect(() => {
         const getOrganizers = async () => {
 
@@ -80,53 +85,38 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
         getVenues();
     }, [isAuthenticated]);
 
-
-    const mainEventDataToBeSent = {
-        'name': name,
-        'startDate': startDate,
-        'startTime': startTime,
-        'endDate': endDate,
-        'endTime': endTime,
-        'organizerId': organizerId,
-        'venueId': venueId
-    }
-
-    // NB - Må sjekke at det er gjort valg i skjema før innsending
-    const submitForm = async () => {
+    const submitForm = async (e) => {
+        e.preventDefault();
         if (isAuthenticated) {
-            await fetch('/api/events/createmainevent', {
+            const response = await fetch('/api/events', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
                 },
-                method: 'POST',
-                body: JSON.stringify(mainEventDataToBeSent)
+                method: 'PUT',
+                body: JSON.stringify(event)
             });
-            triggerUpdate();
-            refreshToken(0, () => {
-                setCurrentEvent(name);
-                setCurrentEventChangeCompleteTrigger(oldValue => !oldValue);
-                history.push('/crewadmin');
-            });
-            handleDialogClose();
+            if (response.ok) {
+                updateListTrigger();
+            }
+            handleDialogEditEventClose();
         }
     }
 
 
     return (
         <Dialog
-            open={dialogOpen}
-            onClose={handleDialogClose}
+            open={dialogEditEventOpen}
+            onClose={handleDialogEditEventClose}
         >
-            <Paper
-                variant="outlined"
-                elevation={0}
-                style={{ padding: '10px' }}
-            >
+            <Paper>
                 <DialogTitle>
-                    Nytt arrangement
+                    Endre arrangement
                 </DialogTitle>
-                <Form className={classes.root}>
+                <form
+                    className={classes.root}
+                    onSubmit={submitForm}
+                >
                     <TextField
                         className={classes.textField}
                         id="eventName"
@@ -134,8 +124,8 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                         required
                         fullWidth
                         variant="outlined"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={event.name}
+                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, name: e.target.value }))}
                     />
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
@@ -145,7 +135,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             format="dd/MM/yyyy"
                             variant="inline"
                             margin="normal"
-                            value={startDate}
+                            value={event.startDate}
                             onChange={(dateEvent) => setStartDate(dateEvent)}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre start dato",
@@ -158,7 +148,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             variant="inline"
                             margin="normal"
                             ampm={false}
-                            value={startTime}
+                            value={event.startTime}
                             onChange={(timeEvent) => setStartTime(timeEvent)}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre start tid",
@@ -173,11 +163,12 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             format="dd/MM/yyyy"
                             variant="inline"
                             margin="normal"
-                            value={endDate}
+                            value={event.endDate}
                             onChange={(dateEvent) => setEndDate(dateEvent)}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre slutt dato",
                             }}
+
                         />
                         <KeyboardTimePicker
                             className={classes.keyboardTimePicker}
@@ -186,14 +177,13 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             variant="inline"
                             margin="normal"
                             ampm={false}
-                            value={endTime}
+                            value={event.endTime}
                             onChange={(timeEvent) => setEndTime(timeEvent)}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre slutt tid",
                             }}
                         />
                     </MuiPickersUtilsProvider>
-                    {/*Dropdown for Lokaler*/}
                     <TextField
                         select
                         variant="outlined"
@@ -201,8 +191,8 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                         id="venue"
                         label="Lokale"
                         fullWidth
-                        value={venueId}
-                        onChange={(e) => setVenueId(e.target.value)}
+                        value={event.venueId}
+                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, descriptionName: e.target.value }))}
                     >
                         {venues.map((venue) => (
                             <MenuItem key={venue.id} value={venue.id} >
@@ -210,9 +200,6 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             </MenuItem>
                         ))}
                     </TextField>
-
-                    {/*Dropdown for arrangører*/}
-
                     {organizers.length > 1 && (
 
                         <TextField
@@ -222,8 +209,8 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             id="organizer"
                             label="Organisator"
                             fullWidth
-                            value={organizerId}
-                            onChange={(e) => setOrganizerId(e.target.value)}
+                            value={event.organizerId}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, descriptionName: e.target.value }))}
                         >
                             {organizers.map((organizer) => (
                                 <MenuItem key={organizer.id} value={organizer.id} >
@@ -232,20 +219,15 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             ))}
                         </TextField>
                     )}
-                    <FormControl style={{ padding: '8px' }}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            className={classes.button}
-                            startIcon={<SaveIcon />}
-                            onClick={submitForm}
-                        >
-                            Lagre
-                        </Button>
-                    </FormControl>
-                </Form>
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        type='submit'
+                    >
+                        Lagre
+                    </Button>
+                </form>
             </Paper>
         </Dialog>
-    );
+    )
 }

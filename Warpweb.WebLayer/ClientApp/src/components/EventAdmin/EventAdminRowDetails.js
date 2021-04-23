@@ -2,19 +2,31 @@
 import { TableCell, TableRow, Typography, Button } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 import { format, parseISO } from 'date-fns';
+import EditEvent from './EditEvent';
 
 
-export default function CrewAdminRowDetails({ rowData, rowMeta }) {
+export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigger }) {
 
 
     const [event, setEvent] = useState(null);
     const openEventId = rowData[0];
+    const [dialogEditEventOpen, setDialogEditEventOpen] = useState(false);
+    const [triggerUpdate, setTriggerUpdate] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
+    const handleDialogEditEventClose = () => {
+        setDialogEditEventOpen(false);
+    }
 
+    const handleDialogEditEventOpen = () => {
+        setDialogEditEventOpen(true);
+    }
 
-
+    const updateList = () => {
+        setTriggerUpdate(oldvalue => !oldvalue);
+        updateListTrigger();
+    }
 
     useEffect(() => {
         const getEvent = async () => {
@@ -30,7 +42,7 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
             }
         }
         getEvent();
-    }, [isAuthenticated])
+    }, [isAuthenticated, triggerUpdate])
 
 
     if (event === null) return (<TableRow><TableCell colSpan={4}><p>Lading...</p></TableCell></TableRow>);
@@ -82,7 +94,26 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
                     </Typography>
                 </TableCell>
             </TableRow>
-
+            <TableRow>
+                <TableCell colSpan={1}>
+                </TableCell>
+                <TableCell colSpan={2}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        onClick={handleDialogEditEventOpen}
+                    >
+                        Endre arrangement
+                    </Button>
+                </TableCell>
+            </TableRow>
+            <EditEvent
+                eventId={openEventId}
+                dialogEditEventOpen={dialogEditEventOpen}
+                handleDialogEditEventClose={handleDialogEditEventClose}
+                updateListTrigger={updateListTrigger}
+            />
         </>
     )
 }

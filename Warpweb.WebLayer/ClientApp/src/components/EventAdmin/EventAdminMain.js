@@ -92,7 +92,7 @@ export default function EventAdminList() {
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
             return (
-                <EventAdminRowDetails rowData={rowData} rowMeta={rowMeta} />
+                <EventAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />
             )
         },
         onRowClick: (rowData, rowMeta) => {
