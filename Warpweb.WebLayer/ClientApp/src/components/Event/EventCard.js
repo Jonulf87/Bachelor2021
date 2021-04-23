@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { format, parseISO } from 'date-fns';
 import useAuth from '../../hooks/useAuth';
 import { Redirect, useHistory } from 'react-router-dom';
+import usePurchase from '../../hooks/usePurchase';
 
 
 const useStyles = makeStyles({
@@ -33,9 +34,11 @@ export default function EventCard({ id, name, endDate, endTime, startDate, start
 
     const classes = useStyles();
     const history = useHistory();
+    const { setSelectedMainEventId } = usePurchase();
 
-    const handleClick = (eventId) => {
-        history.push(`/userticket/${eventId}`);
+    const handleClick = () => {
+        setSelectedMainEventId(id)
+        history.push(`/userticket`);
     }
 
     return (
@@ -98,7 +101,7 @@ export default function EventCard({ id, name, endDate, endTime, startDate, start
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => handleClick(id)}
+                            onClick={() => handleClick()}
                         >
                             Kjøp billett
                         </Button>
