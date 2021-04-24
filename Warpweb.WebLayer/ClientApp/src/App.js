@@ -13,24 +13,7 @@ import { CssBaseline, Container } from '@material-ui/core';
 
 import AppRouter from './components/Approuter';
 import MainMenu from './components/MainPageNavBar/MainMenu';
-import UserAdminMain from './components/UserAdmin/UserAdminMain';
-import CrewMain from './components/Crew/CrewMain';
-import CrewAdminMain from './components/Crew/CrewAdminMain';
-import EventAdminMain from './components/EventAdmin/EventAdminMain';
-import EventUserMain from './components/Event/EventUserMain';
-import ParticipantMain from './components/Participant/ParticipantMain';
-import ReportMain from './components/Report/ReportMain';
-import TicketTypeAdminMain from './components/TicketTypeAdmin/TicketTypeAdminMain';
-import UserMain from './components/User/UserMain';
-import VenueMain from './components/Venue/VenueMain';
-import UserRegister from "./components/User/UserRegister";
-import UserLogin from "./components/User/UserLogin";
-import SeatMapMain from './components/SeatMap/SeatMapMain';
-import LogOut from './components/MainPageNavBar/LogOut';
 import CurrentEventProvider from './providers/CurrentEventProvider';
-import OrganizerAdminMain from './components/OrganizerAdmin/OrganizerAdminMain';
-import TicketMain from './components/Ticket/TicketMain';
-import PageNotFound from './components/ErrorPages/PageNotFound'
 import PurchaseProvider from './providers/PurchaseProvider';
 
 const useStyles = makeStyles((theme) => ({
@@ -69,26 +52,6 @@ export default function App() {
                                     justify="center"
                                 >
                                     <AppRouter />
-                                    {/*<Switch>
-                                    <Route path='/user' component={UserMain} />
-                                    <Route path='/venue' component={VenueMain} />
-                                    <Route path='/crew/:id' component={CrewMain} />
-                                    <Route path='/crewadmin' component={CrewAdminMain} />
-                                    <Route path='/useradmin' component={UserAdminMain} />
-                                    <Route path='/report' component={ReportMain} />
-                                    <Route path='/event' component={EventAdminMain} />
-                                    <Route path='/userevent' component={EventUserMain} />
-                                    <Route path='/participant' component={ParticipantMain} />
-                                    <Route path='/ticketadmin' component={TicketTypeAdminMain} />
-                                    <Route path='/register' component={UserRegister} />
-                                    <Route path='/login' component={UserLogin} />
-                                    <Route path='/logout' component={LogOut} />
-                                    <Route exact path='/' component={EventUserMain} />
-                                    <Route path='/seatmap' component={SeatMapMain} />
-                                    <Route path='/organizer' component={OrganizerAdminMain} />
-                                    <Route path='/userticket/:eventIdParam?' component={TicketMain} />
-                                    <Route component={PageNotFound}/>
-                                </Switch>*/}
                                 </Container>
                             </main>
                         </div>

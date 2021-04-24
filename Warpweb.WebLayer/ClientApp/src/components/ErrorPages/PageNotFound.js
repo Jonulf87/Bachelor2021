@@ -7,10 +7,11 @@ export default function PageNotFound() {
     return (
         <Grid container justify="center" alignItems="center">
             <Grid item>
-                <Typography align="center" variant="h4" component="h2">
+                <Typography align="center" variant="h4" component="body1">
                     Denne siden finnes ikke
                 </Typography>
-                <Typography align="center" variant="h6" component={Link} to="/">
+                <br />
+                <Typography align="center" variant="body1" component={Link} to="/">
                     Gå til framsiden
                 </Typography>
             </Grid>

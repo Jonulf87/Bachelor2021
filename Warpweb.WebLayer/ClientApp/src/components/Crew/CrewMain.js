@@ -43,8 +43,8 @@ export default function CrewMain() {
                 const resultMyCrews = await responseMyCrews.json();
                 setMyCrews(resultMyCrews);
                 console.log(resultMyCrews)
-                    //sjekk om brukeren er med i arbeidslag
-                    if (resultMyCrews.some(a => a.id === resultCrew.crewId)){
+                    
+                    if (resultMyCrews.some(a => a.id === resultCrew.crewId)){//sjekk om brukeren er med i arbeidslag
                         const responseCrewMembers = await fetch(`/api/crews/crewmembers/${id}`, {
                             headers: {
                                 'Authorization': `Bearer ${token}`

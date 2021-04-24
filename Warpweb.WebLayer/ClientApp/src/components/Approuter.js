@@ -6,7 +6,7 @@ import {
 
 import UserAdminMain from './UserAdmin/UserAdminMain';
 import CrewMain from './Crew/CrewMain';
-import CrewAdminMain from './Crew/CrewAdminMain';
+import CrewAdminMain from './CrewAdmin/CrewAdminMain';
 import EventAdminMain from './EventAdmin/EventAdminMain';
 import EventUserMain from './Event/EventUserMain';
 import ParticipantMain from './Participant/ParticipantMain';
@@ -20,8 +20,9 @@ import SeatMapMain from './SeatMap/SeatMapMain';
 import LogOut from './MainPageNavBar/LogOut';
 import OrganizerAdminMain from './OrganizerAdmin/OrganizerAdminMain';
 import TicketMain from './Ticket/TicketMain';
-import PageNotFound from './ErrorPages/PageNotFound'
-import Unauthorized from './ErrorPages/Unauthorized'
+import PageNotFound from './ErrorPages/PageNotFound';
+import Unauthorized from './ErrorPages/Unauthorized';
+import NotAuthenticated from './ErrorPages/NotAuthenticated';
 
 import useCurrentEvent from '../hooks/useCurrentEvent';
 import useAuth from '../hooks/useAuth';
@@ -57,36 +58,51 @@ export default function AppRouter() {
             <Route exact path='/' component={EventUserMain} />            
             <Route path='/userevent' component={EventUserMain} />
             <Route path='/userticket' component={TicketMain} />
-            <Route path='/user' component={UserMain} />
+            
             <Route path='/register' component={UserRegister} />
             <Route path='/login' component={UserLogin} />
             <Route path='/logout' component={LogOut} />
             <Route path='/event' component={EventAdminMain} />
-
-            <Route exact path='/crew/:id' component={CrewMain} >
-                {isAuthenticated ? <CrewMain /> : <Unauthorized />}
+            <Route path='/user'>
+                {!isAuthenticated ? <NotAuthenticated /> : <UserMain /> }
             </Route>
-            
+            <Route exact path='/crew/:id' component={CrewMain} >
+                {!isAuthenticated ? <NotAuthenticated /> : <CrewMain />}
+            </Route>           
             <Route path='/venue'>
-                {policies.some(a => a === 6) ? <VenueMain /> : <Unauthorized />}
+                {!isAuthenticated ? <NotAuthenticated /> 
+                : !policies.some(a => a === 6) ? <Unauthorized />
+                : <VenueMain />}
             </Route>
             <Route path='/crewadmin'>
-                {policies.some(a => a === 1) ? <CrewAdminMain /> : <Unauthorized />}
+                {!isAuthenticated ? <NotAuthenticated /> 
+                : !policies.some(a => a === 1) ? <Unauthorized />
+                : <CrewAdminMain />}
             </Route>
             <Route path='/useradmin'>
-                {policies.some(a => a === 4) ? <UserAdminMain /> : <Unauthorized />}
+                {!isAuthenticated ? <NotAuthenticated /> 
+                : !policies.some(a => a === 4) ? <Unauthorized />
+                : <UserAdminMain />}
             </Route>
             <Route path='/report'>
-                {policies.some(a => a === 5) ? <ReportMain /> : <Unauthorized />}
+                {!isAuthenticated ? <NotAuthenticated /> 
+                : !policies.some(a => a === 5) ? <Unauthorized />
+                : <ReportMain />}
             </Route>
             <Route path='/participant'>
-                {policies.some(a => a === 7) ? <ParticipantMain /> : <Unauthorized />}
+                {!isAuthenticated ? <NotAuthenticated /> 
+                : !policies.some(a => a === 7) ? <Unauthorized />
+                : <ParticipantMain />}
             </Route>
             <Route path='/ticketadmin'>
-                {policies.some(a => a === 2) ? <TicketTypeAdminMain /> : <Unauthorized />}
+                {!isAuthenticated ? <NotAuthenticated /> 
+                : !policies.some(a => a === 2) ? <Unauthorized />
+                : <TicketTypeAdminMain />}
             </Route>
             <Route path='/seatmap'>
-                {policies.some(a => a === 3) ? <SeatMapMain /> : <Unauthorized />}
+                {!isAuthenticated ? <NotAuthenticated /> 
+                : !policies.some(a => a === 3) ? <Unauthorized />
+                : <SeatMapMain />}
             </Route>
             <Route path='/organizer' component={OrganizerAdminMain} >
                 {roles.some(a => a === "Admin") ? <OrganizerAdminMain /> : <Unauthorized />}
