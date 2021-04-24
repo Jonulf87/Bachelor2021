@@ -20,12 +20,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
     const [event, setEvent] = useState("");
     const [organizers, setOrganizers] = useState([]);
     const [venues, setVenues] = useState([]);
-    const [startDate, setStartDate] = useState(new Date());
-    const [startTime, setStartTime] = useState(new Date('2020-05-05T11:54:00'));
-    const [endDate, setEndDate] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date('2020-01-01T12:00:00'))
     const [organizerId, setOrganizerId] = useState("");
-    const [venueId, setVenueId] = useState("");
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
@@ -136,7 +131,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                             variant="inline"
                             margin="normal"
                             value={event.startDate}
-                            onChange={(dateEvent) => setStartDate(dateEvent)}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, startDate: e }))}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre start dato",
                             }}
@@ -149,7 +144,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                             margin="normal"
                             ampm={false}
                             value={event.startTime}
-                            onChange={(timeEvent) => setStartTime(timeEvent)}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, startTime: e }))}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre start tid",
                             }}
@@ -164,7 +159,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                             variant="inline"
                             margin="normal"
                             value={event.endDate}
-                            onChange={(dateEvent) => setEndDate(dateEvent)}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, endDate: e }))}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre slutt dato",
                             }}
@@ -178,7 +173,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                             margin="normal"
                             ampm={false}
                             value={event.endTime}
-                            onChange={(timeEvent) => setEndTime(timeEvent)}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, endTime: e }))}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre slutt tid",
                             }}
@@ -192,7 +187,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         label="Lokale"
                         fullWidth
                         value={event.venueId}
-                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, descriptionName: e.target.value }))}
+                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, venueId: e.target.value }))}
                     >
                         {venues.map((venue) => (
                             <MenuItem key={venue.id} value={venue.id} >

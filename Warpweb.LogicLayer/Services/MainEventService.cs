@@ -148,6 +148,7 @@ namespace Warpweb.LogicLayer.Services
             existingMainEvent.Name = maineventVm.Name;
             existingMainEvent.StartDateTime = StartDateTime;
             existingMainEvent.EndDateTime = EndDateTime;
+            existingMainEvent.VenueId = maineventVm.VenueId;
 
             _dbContext.Update<MainEvent>(existingMainEvent);
             await _dbContext.SaveChangesAsync();
