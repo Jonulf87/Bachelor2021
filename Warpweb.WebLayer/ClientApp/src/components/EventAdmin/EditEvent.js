@@ -5,6 +5,7 @@ import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,6 +22,8 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
     const [organizers, setOrganizers] = useState([]);
     const [venues, setVenues] = useState([]);
     const [organizerId, setOrganizerId] = useState("");
+    const [open, setOpen] = useState(false);
+    const [error, setError] = useState("");
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
@@ -92,9 +95,14 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                 body: JSON.stringify(event)
             });
             if (response.ok) {
+                handleDialogEditEventClose();
                 updateListTrigger();
+            } else {
+                response.text().then(function (text) {
+                    setError(text);
+                    setOpen(true);
+                });
             }
-            handleDialogEditEventClose();
         }
     }
 
@@ -112,6 +120,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                     className={classes.root}
                     onSubmit={submitForm}
                 >
+                    <PopupWindow open={open} onClose={() => setOpen(false)} text={error} />
                     <TextField
                         className={classes.textField}
                         id="eventName"

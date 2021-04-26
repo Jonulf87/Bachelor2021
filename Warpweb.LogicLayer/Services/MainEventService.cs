@@ -134,7 +134,17 @@ namespace Warpweb.LogicLayer.Services
         public async Task UpdateMainEventAsync(MainEventVm maineventVm)
         {
 
-            var existingMainEvent = _dbContext.MainEvents.Find(maineventVm.Id);
+            var existingMainEvent = await _dbContext.MainEvents
+               .Where(a => a.Id != maineventVm.Id && a.Name == maineventVm.Name)
+               .SingleOrDefaultAsync();
+
+
+            if (existingMainEvent != null)
+            {
+                throw new Exception("Arrangenent med dette navnet eksisterer allerede");
+            }
+
+            existingMainEvent = _dbContext.MainEvents.Find(maineventVm.Id);
 
             if (existingMainEvent == null)
             {

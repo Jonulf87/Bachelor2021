@@ -105,6 +105,10 @@ namespace Warpweb.WebLayer.Controllers
             {
                 return BadRequest();
             }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
         }
 
