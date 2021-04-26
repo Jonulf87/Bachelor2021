@@ -14,9 +14,9 @@ import {
     Typography,
     Paper,
     Container,
-    Collapse
+    Collapse,
 } from '@material-ui/core';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
@@ -56,7 +56,7 @@ export default function UserRegister() {
     const [zipCode, setZipCode] = useState("");
     const [eMail, setEMail] = useState("");
     const [userName, setUserName] = useState("");
-    const [dateOfBirth, setDateOfBirth] = useState(new Date("1990-01-01T00:00:00"));
+    const [dateOfBirth, setDateOfBirth] = useState(null);
     const [gender, setGender] = useState("");
     const [isAllergic, setIsAllergic] = useState(false);
     const [allergyDescription, setAllergyDescription] = useState("");
@@ -180,8 +180,7 @@ export default function UserRegister() {
     return (
         <Container maxWidth="sm" >
             <Paper
-                elevation={0}
-                variant="outlined"
+                elevation={3}
                 className={classes.paper}
             >
                 <ValidatorForm
@@ -198,7 +197,6 @@ export default function UserRegister() {
                         </Grid>
                         <Grid item xs={12} lg={4} >
                             <TextValidator
-                                variant="outlined"
                                 id="firstName"
                                 label="Fornavn"
                                 type="text"
@@ -211,7 +209,6 @@ export default function UserRegister() {
                         </Grid>
                         <Grid item xs={12} lg={4} >
                             <TextValidator
-                                variant="outlined"
                                 id="middleName"
                                 label="Mellomnavn"
                                 type="text"
@@ -223,7 +220,6 @@ export default function UserRegister() {
                         </Grid>
                         <Grid item xs={12} lg={4} >
                             <TextValidator
-                                variant="outlined"
                                 id="lastName"
                                 label="Etternavn"
                                 type="text"
@@ -239,7 +235,6 @@ export default function UserRegister() {
                         </Grid>
                         <Grid item xs={12}>{/*Input epost*/}
                             <TextValidator
-                                variant="outlined"
                                 id="eMail"
                                 label="Epost"
                                 type="email"
@@ -253,7 +248,6 @@ export default function UserRegister() {
 
                         <Grid item xs={12}>{/*Input brukernavn*/}
                             <TextValidator
-                                variant="outlined"
                                 id="userName"
                                 label="Brukernavn"
                                 type="text"
@@ -266,21 +260,20 @@ export default function UserRegister() {
                         </Grid>
                         <Grid item xs={12}>{/*Input passord*/}
                             <TextValidator
-                                variant="outlined"
                                 id="password"
                                 label="Passord"
                                 type="password"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                validators={['required', 'minStringLength:10', 'matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})']}
-                                errorMessages={['Passord må oppgis', 'Passord må bestå av minst 10 tegn', 'Passord må bestå av minst 10 tegn']}
+                                validators={['required', 'minStringLength:10', 'matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})','matchRegexp:^(?=.{10,})' ]}
+                                errorMessages={['Passord må oppgis', 'Passord må bestå av minst 10 tegn', 'Passord må ha både store og små bokstaver','Passord må bestå av minst 10 tegn']}
+                                helperText="Passord må bestå av: minst 10 tegn. Både store og små bokstaver"
                             // matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{14,}) - Regex for 14 tegn - sifre, både store og små bokstaver og symboler
                             />
                         </Grid>
                         <Grid item xs={12} >{/*Input telefon*/}
                             <TextValidator
-                                variant="outlined"
                                 id="phoneNumber"
                                 label="Telefon"
                                 type="tel"
@@ -293,7 +286,6 @@ export default function UserRegister() {
                         </Grid>{/*Input adresse og postnummer*/}
                         <Grid item xs={12} md={9}>
                             <TextValidator
-                                variant="outlined"
                                 id="address"
                                 label="Adresse"
                                 type="text"
@@ -306,7 +298,6 @@ export default function UserRegister() {
                         </Grid>
                         <Grid item xs={12} md={3}>
                             <TextValidator
-                                variant="outlined"
                                 id="zipCode"
                                 label="Postnummer"
                                 type="text"
@@ -318,7 +309,7 @@ export default function UserRegister() {
                             />
                         </Grid>
                         <Grid item xs={12} >{/*Input kjønn*/}
-                            <FormControl variant="outlined">
+                            <FormControl>
                                 <InputLabel id="gender">Kjønn</InputLabel>
                                 <Select
                                     labelId="gender"
@@ -337,11 +328,13 @@ export default function UserRegister() {
                         </Grid>
                         <Grid item xs={12} >{/*Input fødselsdag*/}
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <KeyboardDatePicker
+                                <DatePicker
                                     id="dateOfBirth"
-                                    label="Fødselsdato"
+                                    label="Fødselsdato DD/MM/ÅÅÅÅ"
+                                    openTo="year"
+                                    views={["year", "month", "date"]}
+                                    maxDate={new Date().getFullYear() + "/" + new Date().getMonth() + "/" + new Date().getDate()}
                                     format="dd/MM/yyyy"
-                                    inputVariant="outlined"
                                     margin="normal"
                                     value={dateOfBirth}
                                     onChange={(dateEvent) => setDateOfBirth(dateEvent)}
@@ -354,7 +347,6 @@ export default function UserRegister() {
                             <>
                                 <Grid item xs={12} >
                                     <TextValidator
-                                        variant="outlined"
                                         id="firstName"
                                         label="Foresatte fornavn"
                                         type="text"
@@ -368,7 +360,6 @@ export default function UserRegister() {
                                 </Grid>
                                 <Grid item xs={12} >
                                     <TextValidator
-                                        variant="outlined"
                                         id="lastName"
                                         label="Foresatte etternavn"
                                         type="text"
@@ -381,7 +372,6 @@ export default function UserRegister() {
                                 </Grid>
                                 <Grid item xs={12} >
                                     <TextValidator
-                                        variant="outlined"
                                         id="parentPhoneNumber"
                                         label="Foresatte telefon"
                                         type="tel"
@@ -394,7 +384,6 @@ export default function UserRegister() {
                                 </Grid>
                                 <Grid item xs={12} >
                                     <TextValidator
-                                        variant="outlined"
                                         id="parentEMail"
                                         label="Foresatte e-post"
                                         type="email"
@@ -407,6 +396,9 @@ export default function UserRegister() {
                         }
                         {/*Input allergi*/}
                         <Grid item xs={12} >
+                            <InputLabel>
+                                har du noen allergier? 
+                            </InputLabel>
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -415,13 +407,12 @@ export default function UserRegister() {
                                         onChange={(e) => setCheckBox(e.target.checked)}
                                     />
                                 }
-                                label="allergisk"
+                                label="ja"
                             />
                         </Grid>
                         <Collapse component={Grid} item xs={12} in={isAllergic}>
 
                             <TextField
-                                variant="outlined"
                                 id="allergyDescription"
                                 label="Allergibeskrivelse"
                                 required
@@ -434,7 +425,6 @@ export default function UserRegister() {
                         </Collapse>
                         <Grid item xs={12} > {/*Input team/klan*/}
                             <TextField
-                                variant="outlined"
                                 id="team"
                                 label="Lag/klan"
                                 value={team}
@@ -444,7 +434,6 @@ export default function UserRegister() {
                         <Grid item xs={12} >{/*Input kommentarer*/}
                             <TextField
                                 id="comments"
-                                variant="outlined"
                                 label="Tilleggsinformasjon"
                                 multiline
                                 value={comments}
@@ -458,7 +447,7 @@ export default function UserRegister() {
                                 size="large"
                                 type="submit"
                             >
-                                Lagre
+                                Bekreft
                             </Button>
                         </Grid>
                     </Grid>

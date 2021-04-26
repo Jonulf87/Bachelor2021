@@ -51,16 +51,23 @@ const theme = createMuiTheme({
                 backgroundColor: "none",
                 cursor: "pointer"
             }
+        },
+        MuiInputBase: {
+            root: {
+                background: "#fff",
+            }
         }
     },
     props: {
         MuiPaper: {
-            variant: "outlined",
+            variant: "elevated",
         },
         MUIDataTable: {
-            elevation: 0,
         },
         MuiTextField: {
+            variant: "outlined",
+        },
+        MuiFormControl: {
             variant: "outlined",
         }
     }
