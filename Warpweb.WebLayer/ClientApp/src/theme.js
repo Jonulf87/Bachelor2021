@@ -60,7 +60,7 @@ const theme = createMuiTheme({
     },
     props: {
         MuiPaper: {
-            variant: "elevated",
+            variant: "elevation",
         },
         MUIDataTable: {
         },
