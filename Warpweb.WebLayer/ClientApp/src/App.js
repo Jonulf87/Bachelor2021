@@ -16,6 +16,12 @@ import MainMenu from './components/MainPageNavBar/MainMenu';
 import CurrentEventProvider from './providers/CurrentEventProvider';
 import PurchaseProvider from './providers/PurchaseProvider';
 
+Date.prototype.toJSON = function () {
+    const hoursDiff = this.getHours() - this.getTimezoneOffset() / 60;
+    this.setHours(hoursDiff);
+    return this.toISOString();
+};
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',

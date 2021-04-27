@@ -28,7 +28,6 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
 
-
     useEffect(() => {
         const getEvent = async () => {
             if (isAuthenticated) {

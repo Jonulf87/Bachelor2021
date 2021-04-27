@@ -154,10 +154,21 @@ namespace Warpweb.LogicLayer.Services
             DateTime StartDateTime = maineventVm.StartDate.Date + maineventVm.StartTime.TimeOfDay;
             DateTime EndDateTime = maineventVm.EndDate.Date + maineventVm.EndTime.TimeOfDay;
 
+            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+
+            DateTime StartDateTimeCET = StartDateTime;
+            DateTime EndDateTimeCET = EndDateTime;
+            if (StartDateTime.Kind == DateTimeKind.Utc)
+            {
+                StartDateTimeCET = TimeZoneInfo.ConvertTimeFromUtc(StartDateTime, cstZone);
+                EndDateTimeCET = TimeZoneInfo.ConvertTimeFromUtc(EndDateTime, cstZone);
+            }
+            
+
             existingMainEvent.Id = maineventVm.Id;
             existingMainEvent.Name = maineventVm.Name;
-            existingMainEvent.StartDateTime = StartDateTime;
-            existingMainEvent.EndDateTime = EndDateTime;
+            existingMainEvent.StartDateTime = StartDateTimeCET;
+            existingMainEvent.EndDateTime = EndDateTimeCET;
             existingMainEvent.VenueId = maineventVm.VenueId;
 
             _dbContext.Update<MainEvent>(existingMainEvent);
