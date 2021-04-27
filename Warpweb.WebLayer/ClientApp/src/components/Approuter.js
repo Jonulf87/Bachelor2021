@@ -57,9 +57,9 @@ export default function AppRouter() {
         <Switch>
             <Route exact path='/' component={EventUserMain} />            
             <Route path='/userevent' component={EventUserMain} />
-            <Route path='/userticket' component={TicketMain} />
+            <Route path='/userticket/:login?' component={TicketMain} />
             
-            <Route path='/register' component={UserRegister} />
+            <Route path='/register/:ticket?' component={UserRegister} />
             <Route path='/login' component={UserLogin} />
             <Route path='/logout' component={LogOut} />
             <Route path='/event' component={EventAdminMain} />

@@ -11,10 +11,8 @@ import PopupWindow from '../PopupWindow/PopupWindow';
 
 
 
-export default function UserLogin(props) {
+export default function UserLogin({ fromTicket }) {
 
-    //let queryParams = queryString.parse(props.location.search)
-    //queryParams.userName ||
     const [userName, setUserName] = useState( "");
     const [password, setPassword] = useState("");
     const [loginSuccess, setLoginSuccess] = useState(false);
@@ -37,7 +35,7 @@ export default function UserLogin(props) {
     }
 
     if (loginSuccess) {
-        if (!props.fromTicket) {
+        if (!fromTicket) {
             return (<Redirect to={'/user'} />)
         }
     }
@@ -97,7 +95,12 @@ export default function UserLogin(props) {
                         </Button>
                         </Grid>
                         <Grid item xs={8}>
-                            <Typography variant="body1" >Ingen bruker? <Link to="/register">Registrer deg her</Link></Typography>
+                            {fromTicket ?
+                                (<Typography variant="body1" >Ingen bruker? <Link to="/register/1">Registrer deg her</Link></Typography>)
+                                :
+                                (<Typography variant="body1" >Ingen bruker? <Link to="/register">Registrer deg her</Link></Typography>)
+                            }
+                            
                         </Grid>
                     </Grid>
                 </form>

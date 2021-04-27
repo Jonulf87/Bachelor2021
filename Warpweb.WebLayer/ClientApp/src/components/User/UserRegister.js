@@ -1,24 +1,11 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import {
-    Select,
-    FormControl,
-    InputLabel,
-    TextField,
-    Button,
-    Grid,
-    Checkbox,
-    FormControlLabel,
-    MenuItem,
-    Typography,
-    Paper,
-    Container,
-    Collapse,
-} from '@material-ui/core';
+import { Select, FormControl, InputLabel, TextField, Button, Grid, Checkbox, FormControlLabel, MenuItem, Typography, Paper, Container, Collapse } from '@material-ui/core';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import { useParams } from 'react-router-dom';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -94,6 +81,8 @@ export default function UserRegister() {
     const [showParents, setShowParents] = useState(false);
     const [checkBox, setCheckBox] = useState(false);
     const [open, setOpen] = useState(false);
+
+    const { ticket } = useParams();
 
     const classes = useStyles();
 
@@ -171,10 +160,15 @@ export default function UserRegister() {
         }
     }
 
- 
+
 
     if (isRegistered) {
-        return <Redirect to={'/login?userName=' + userName} />
+        if (ticket == 1) {
+            return <Redirect to={'/userticket/2'} />
+        }
+        else {
+            return <Redirect to={'/login?userName=' + userName} />
+        }
     }
 
     return (
@@ -266,8 +260,8 @@ export default function UserRegister() {
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                validators={['required', 'minStringLength:10', 'matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})','matchRegexp:^(?=.{10,})' ]}
-                                errorMessages={['Passord må oppgis', 'Passord må bestå av minst 10 tegn', 'Passord må ha både store og små bokstaver','Passord må bestå av minst 10 tegn']}
+                                validators={['required', 'minStringLength:10', 'matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})', 'matchRegexp:^(?=.{10,})']}
+                                errorMessages={['Passord må oppgis', 'Passord må bestå av minst 10 tegn', 'Passord må ha både store og små bokstaver', 'Passord må bestå av minst 10 tegn']}
                                 helperText="Passord må bestå av: minst 10 tegn. Både store og små bokstaver"
                             // matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{14,}) - Regex for 14 tegn - sifre, både store og små bokstaver og symboler
                             />
@@ -397,7 +391,7 @@ export default function UserRegister() {
                         {/*Input allergi*/}
                         <Grid item xs={12} >
                             <InputLabel>
-                                har du noen allergier? 
+                                har du noen allergier?
                             </InputLabel>
                             <FormControlLabel
                                 control={
