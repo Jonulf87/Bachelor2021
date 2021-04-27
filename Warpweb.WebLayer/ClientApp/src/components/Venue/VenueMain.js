@@ -104,7 +104,7 @@ export default function VenueMain() {
                     <>
                         <Grid container>
                             <Grid item xs={12}>
-                                <Typography variant="h6" style={{ margin: '15px' }}>
+                                <Typography variant="h6" style={{ marginTop: '15px' }, {marginLeft: '15px' }}>
                                     Lokaler
                             </Typography>
                             </Grid>
@@ -112,7 +112,7 @@ export default function VenueMain() {
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    size="large"
+                                    size="medium"
                                     style={{ margin: '15px' }}
                                     onClick={handleDialogCreateVenueOpen}
                                 >

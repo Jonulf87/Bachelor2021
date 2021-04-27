@@ -56,6 +56,12 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<VenueVm> GetVenueAsync(int id)
         {
+
+           if(id <= 0)
+           {
+                throw new HttpException(HttpStatusCode.BadRequest, "Ugyldig Id");
+           }
+
            var venue = await _dbContext.Venues
                 .Where(a => a.Id == id)
                 .Select(a => new VenueVm

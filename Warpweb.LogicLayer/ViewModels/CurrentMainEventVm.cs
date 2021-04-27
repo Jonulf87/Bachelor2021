@@ -9,6 +9,6 @@ namespace Warpweb.LogicLayer.ViewModels
     public class CurrentMainEventVm
     {
         public string Name { get; set; }
-        public int OrganizerId { get; set; }
+        public int? OrganizerId { get; set; }
     }
 }

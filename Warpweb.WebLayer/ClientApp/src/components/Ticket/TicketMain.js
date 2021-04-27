@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import useAuth from '../../hooks/useAuth';
-import { useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import EventUserList from '../Event/EventUserList';
 import TicketPicker from './TicketPicker';
 import UserLogin from '../User/UserLogin';
@@ -34,9 +34,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TicketMain() {
 
+    const { login } = useParams();
     const classes = useStyles();
-    const [activeStep, setActiveStep] = useState(0);
-    const steps = ['Velg arrangement', 'Velg billett', 'Innlogging og personalia', 'Betaling', 'Velg sitteplass'];
+    const [activeStep, setActiveStep] = useState(parseInt(login) || 0);
+    const steps = ['Velg arrangement', 'Velg billett', 'Innlogging', 'Oppsummering', 'Betaling', 'Velg sitteplass'];
 
     const { isAuthenticated } = useAuth();
 
@@ -79,7 +80,7 @@ export default function TicketMain() {
                     <Step key={label}>
                         <StepLabel>{label}</StepLabel>
                         <StepContent>
-                            <Typography>{getStepContent(index)}</Typography>
+                            <Typography component={'div'}>{getStepContent(index)}</Typography>
                             <div className={classes.actionsContainer}>
                                 <div>
                                     <Button

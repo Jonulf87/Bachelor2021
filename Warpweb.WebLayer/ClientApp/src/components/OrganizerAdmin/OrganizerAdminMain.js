@@ -113,7 +113,7 @@ export default function OrganizerAdminMain() {
                 title={<>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography variant="h5" style={{ marginTop: '15px', marginLeft: '15px' }}>
+                            <Typography variant="h6" style={{ marginTop: '15px' }, {marginLeft: '15px' }}>
                                 Organisasjoner
                         </Typography>
                         </Grid>
