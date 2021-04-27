@@ -118,7 +118,7 @@ export default function EventAdminList() {
                 title={<>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography variant="h6" style={{ margin: "15px" }}>
+                            <Typography variant="h6" style={{ marginTop: "15px" }, { marginLeft: '15px' }}>
                             Arrangementer
                         </Typography>
                         </Grid>
@@ -126,7 +126,7 @@ export default function EventAdminList() {
                         <Button
                             variant="contained"
                             color="primary"
-                            size="large"
+                            size="medium"
                             style={{ margin: "15px" }}
                             onClick={handleDialogCreateEventOpen}
                         >

@@ -1,0 +1,6 @@
+2021-04-27T19:02:07.0521775+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2021-04-27T19:02:07.0610712+02:00  [INF] Hosting environment: "Development" (c3307c92)
+2021-04-27T19:02:07.0634391+02:00  [INF] Content root path: "C:\Users\arnes\Documents\GIT\Warpweb\Warpweb.WebLayer" (b5d60022)
+2021-04-27T19:25:09.7565805+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2021-04-27T19:25:09.7689205+02:00  [INF] Hosting environment: "Development" (c3307c92)
+2021-04-27T19:25:09.7727200+02:00  [INF] Content root path: "C:\Users\arnes\Documents\GIT\Warpweb\Warpweb.WebLayer" (b5d60022)

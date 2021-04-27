@@ -113,14 +113,14 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
                 <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                 </TableCell>
                 <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
-                    <Typography variant="h4" >
+                    <Typography variant="h5" >
                         Kontaktperson
-                            </Typography>
+                    </Typography>
                 </TableCell>
                 <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                     <Button
                         variant="contained"
-                        size="large"
+                        size="medium"
                         color="primary"
                         onClick={handleDialogContactOpen}
                     >
@@ -170,12 +170,13 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
                 <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                 </TableCell>
                 <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
-                    <Typography variant="h4" >Admins</Typography>
+                    <Typography variant="h5" >Admins</Typography>
                 </TableCell>
                 <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                     <Button
                         color="primary"
                         variant="contained"
+                        size="medium"
                         onClick={handleDialogAdminOpen}
                     >
                         Legg til admin
@@ -189,6 +190,7 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
                     <TableCell colSpan={1}>
                         <IconButton
                             aria-label="delete"
+                            size="medium"
                             onClick={(e) =>  removeAdmin(admin.id) }
                         >
                             <DeleteIcon
