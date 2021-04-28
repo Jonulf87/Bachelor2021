@@ -293,13 +293,14 @@ export default function UserRegister() {
                         <Grid item xs={12} md={3}>
                             <TextValidator
                                 id="zipCode"
-                                label="Postnummer"
+                                label="Postnr"
                                 type="text"
                                 required
                                 value={zipCode}
                                 onChange={(e) => setZipCode(e.target.value)}
                                 validators={['required', 'matchRegexp:^[0-9]{4}$']}
                                 errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
+                                inputProps={{ maxLength: 4 }}
                             />
                         </Grid>
                         <Grid item xs={12} >{/*Input kjønn*/}
@@ -425,6 +426,7 @@ export default function UserRegister() {
                                 label="Lag/klan"
                                 value={team}
                                 onChange={(e) => setTeam(e.target.value)}
+                                helperText="Er du med i en klan eller lag?"
                             />
                         </Grid>
                         <Grid item xs={12} >{/*Input kommentarer*/}
@@ -434,6 +436,7 @@ export default function UserRegister() {
                                 multiline
                                 value={comments}
                                 onChange={(e) => setComments(e.target.value)}
+                                helperText="Er det noe vi burde vite? Spesielle behov eller tilpasninger vi skal vite om?"
                             />
                         </Grid>
                         <Grid item xs={12} >
