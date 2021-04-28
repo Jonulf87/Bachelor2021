@@ -1,8 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import {
-    Grid, Button, Card, CardContent, Typography, CircularProgress, Divider
-} from '@material-ui/core';
+import { Grid, Button, Card, CardContent, Typography, CircularProgress } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) =>
@@ -11,6 +9,7 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexWrap: 'wrap',
             marginBottom: 20,
+            minWidth: 275,
         },
     }),
 );
@@ -45,84 +44,77 @@ export default function UserInfo() {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} variant="outlined">
 
             <CardContent>
                 {isReady && (<>
-                    <Grid
-                        container
-                        spacing={2}
-                    >
+                    <Typography gutterBottom variant="h6" component="h2" gutterBottom>
+                        Hei {userInfo.firstName}&nbsp;{userInfo.lastName}
+                    </Typography>
 
-                        <Typography gutterBottom variant="h5" component="h2">
-                            Hei {userInfo.firstName}&nbsp;{userInfo.lastName}
+                    <Typography variant="body" component="p">
+                        <strong>Fullt navn:&nbsp;</strong>{userInfo.firstName}&nbsp;{userInfo.middleName}&nbsp;{userInfo.lastName}
+                    </Typography>
+
+                    <Typography variant="body" component="p">
+                        <strong>Brukernavn:&nbsp;</strong>{userInfo.userName}
+                    </Typography>
+
+                    <Typography variant="body" component="p">
+                        <strong>E-post:&nbsp;</strong>{userInfo.eMail}
+                    </Typography>
+
+                    <Typography variant="body" component="p">
+                        <strong>Telefon:&nbsp;</strong>{userInfo.phoneNumber}
+                    </Typography>
+
+                    <Typography variant="body" component="p">
+                        <strong>Kjønn:&nbsp;</strong>{userInfo.gender}
+                    </Typography>
+
+                    <Typography variant="body" component="p">
+                        <strong>Fødselsdato:&nbsp;</strong>{userInfo.dateOfBirth}
+                    </Typography>
+
+                    <Typography variant="body" component="p">
+                        <strong>Allergier:&nbsp;</strong>{userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'}
+                    </Typography>
+
+                    {userInfo.isAllergic &&
+                        <Typography variant="body" component="p">
+                            <strong>Allergier:&nbsp;</strong>{userInfo.allergyDescription}
                         </Typography>
+                    }
 
-                        <Grid id="userFullName" item xs={12}>
-                            <p><strong>Fullt navn:&nbsp;</strong>{userInfo.firstName}&nbsp;{userInfo.middleName}&nbsp;{userInfo.lastName}</p>
+                    {userInfo.parentPhoneNumber &&
+                        <Grid container id="userParentInfo" spacing={2}>
+                            <Typography variant="body" component="p">
+                                <strong>Foresatt:&nbsp;</strong>{userInfo.parentFirstName}&nbsp;{userInfo.parentLastName}
+                            </Typography>
+
+                            <Typography variant="body" component="p">
+                                <strong>Foresatt telefon:&nbsp;</strong>{userInfo.parentPhoneNumber}
+                            </Typography>
+
+                            <Typography variant="body" component="p">
+                                <strong>Foresatt epost:&nbsp;</strong>{userInfo.parentEMail}
+                            </Typography>
                         </Grid>
+                    }
 
-                        <Grid id="userUserName" item xs={12}>
-                            <p><strong>Brukernavn:&nbsp;</strong>{userInfo.userName}</p>
-                        </Grid>
+                    <Typography variant="body" component="p">
+                        <strong>Lag/klan:&nbsp;</strong>{userInfo.team}
+                    </Typography>
 
-                        <Grid id="userEmail" item xs={12}>
-                            <p><strong>E-post:&nbsp;</strong>{userInfo.eMail}</p>
-                        </Grid>
+                    <Typography variant="body" component="p">
+                        <strong>Tilleggsinformasjon:&nbsp;</strong>{userInfo.comments}
+                    </Typography>
 
-                        <Grid id="userPhoneNumber" item xs={12}>
-                            <p><strong>Telefon:&nbsp;</strong>{userInfo.phoneNumber}</p>
-                        </Grid>
 
-                        <Grid id="userGender" item xs={12}>
-                            <p><strong>Kjønn:&nbsp;</strong>{userInfo.gender}</p>
-                        </Grid>
+                    <Button variant="contained" color="primary">
+                        Endre
+                    </Button>
 
-                        <Grid id="userDateOfBirth" item xs={12}>
-                            <p><strong>Fødselsdato:&nbsp;</strong>{userInfo.dateOfBirth}</p>
-                        </Grid>
-
-                        <Grid id="userIsAllergic" item xs={12}>
-                            <p><strong>Allergier:&nbsp;</strong>{userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'}</p>
-                        </Grid>
-
-                        {userInfo.isAllergic &&
-                            <Grid id="userAllergyDescription" item xs={12}>
-                                <p><strong>Allergier:&nbsp;</strong>{userInfo.allergyDescription}</p>
-                            </Grid>
-                        }
-
-                        {userInfo.parentPhoneNumber &&
-                            <Grid container id="userParentInfo" spacing={2}>
-                                <Grid id="userParenFullName" item xs={12}>
-                                    <p><strong>Foresatt:&nbsp;</strong>{userInfo.parentFirstName}&nbsp;{userInfo.parentLastName} </p>
-                                </Grid>
-
-                                <Grid id="userParentPhoneNumber" item xs={12}>
-                                    <p><strong>Foresatt telefon:&nbsp;</strong>{userInfo.parentPhoneNumber} </p>
-                                </Grid>
-
-                                <Grid id="userParentEmail" item xs={12}>
-                                    <p><strong>Foresatt epost:&nbsp;</strong>{userInfo.parentEMail} </p>
-                                </Grid>
-                            </Grid>
-                        }
-
-                        <Grid id="userTeam" item xs={12}>
-                            <p><strong>Lag/klan:&nbsp;</strong>{userInfo.team} </p>
-                        </Grid>
-
-                        <Grid id="userComments" item xs={12}>
-                            <p><strong>Tilleggsinformasjon:&nbsp;</strong>{userInfo.comments} </p>
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <Button variant="contained" color="primary">
-                                Endre
-                            </Button>
-                        </Grid>
-
-                    </Grid>
                 </>)}
 
                 {!isReady && ((<CircularProgress />))}
