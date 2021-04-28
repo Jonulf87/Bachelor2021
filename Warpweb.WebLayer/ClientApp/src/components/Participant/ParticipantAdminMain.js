@@ -2,14 +2,12 @@
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
-import CreateTicketType from './CreateTicketType';
-import TicketTypeAdminRowDetails from './TicketTypeAdminRowDetails';
+import ParticipantAdminRowDetails from './ParticipantAdminRowDetails';
 
-export default function TicketTypeAdminMain() {
+export default function ParticipantAdminMain() {
 
-    const [ticketTypesList, setTicketTypesList] = useState([]);
-    const [updateList, setUpdateList] = useState(false);
-    const [dialogCreateTicketTypeOpen, setDialogCreateTicketTypeOpen] = useState(false);
+    const [participantList, setParticipantList] = useState([]);
+    const [updateList, setUpdateList] = useState([]);
     const [rowsExpanded, setRowsExpanded] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -19,39 +17,29 @@ export default function TicketTypeAdminMain() {
         setUpdateList(oldValue => !oldValue);
     }
 
-    const handleDialogCreateTicketTypeOpen = () => {
-        setDialogCreateTicketTypeOpen(true);
-    };
-
-    const handleDialogCreateTicketTypeClose = () => {
-        setDialogCreateTicketTypeOpen(false);
-    };
-
     useEffect(() => {
-        const getTicketTypes = async () => {
+        const getParticipants = async () => {
             if (isAuthenticated) {
 
-                const responseTicketType = await fetch('/api/tickettypes/tickettypes', {
+                const responseParticipants = await fetch('/api/users/userslist', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
                     }
                 });
 
-                if (responseTicketType.ok) {
-                    const resultTicketType = await responseTicketType.json();
-                    setTicketTypesList(resultTicketType);
+                if (responseParticipants.ok) {
+                    const resultParticipants = await responseParticipants.json();
+                    setParticipantList(resultParticipants);
                 }
                 else {
-                    setTicketTypesList([]);
+                    setParticipantList([]);
                 }
                 setIsLoading(false);
             }
         }
-        getTicketTypes();
+        getParticipants();
     }, [isAuthenticated, updateList])
-
-
 
     const columns = [
         {
@@ -63,16 +51,20 @@ export default function TicketTypeAdminMain() {
             }
         },
         {
-            name: 'descriptionName',
-            label: 'Navn '
+            name: 'firstName',
+            label: 'Fornavn '
         },
         {
-            name: 'basePrice',
-            label: 'Grunnpris'
+            name: 'lastName',
+            label: 'Etternavn'
         },
         {
-            name: 'amountAvailable',
-            label: 'Totalt antall tilgjengelig'
+            name: 'userName',
+            label: 'Brukernavn'
+        },
+        {
+            name: 'eMail',
+            label: 'Epost'
         }
     ];
 
@@ -90,7 +82,7 @@ export default function TicketTypeAdminMain() {
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
             return (
-                <TicketTypeAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />
+                <ParticipantAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />
             )
         },
         onRowClick: (rowData, rowMeta) => {
@@ -103,40 +95,27 @@ export default function TicketTypeAdminMain() {
         }
     };
 
-
     if (isLoading) {
         return (<CircularProgress />);
     };
 
-
     return (
         <>
-            <CreateTicketType dialogOpen={dialogCreateTicketTypeOpen} handleDialogClose={handleDialogCreateTicketTypeClose} triggerUpdate={triggerUpdate} />
             <MUIDataTable
                 title={<>
                     <Grid container>
                         <Grid item xs={12}>
                             <Typography variant="h6" style={{ marginTop: "15px" }, { marginLeft: "15px" }}>
-                                Billettyper
+                                Deltakere
                         </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="medium"
-                            style={{ margin: "15px" }}
-                            onClick={handleDialogCreateTicketTypeOpen}
-                        >
-                                Ny bilett-type
-                        </Button>
                         </Grid>
                     </Grid>
                 </>}
-                data={ticketTypesList}
+                data={participantList}
                 columns={columns}
                 options={options}
             />
         </>
-    )
+
+    );
 }

@@ -11,29 +11,10 @@ export default function PaperSheet() {
             container
             spacing={2}
         >
-            <Grid
-                item
-                xs={6}
+            <Grid item
+
             >
                 <UserInfo />
-            </Grid>
-            <Grid
-                container
-                item
-                xs={6}
-            >
-                <Grid
-                    item
-                    xs={12}
-                >
-                    <UserCrewTable />
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                >
-                    <UserTicketTable />
-                </Grid>
             </Grid>
         </Grid>
     );
