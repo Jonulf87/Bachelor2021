@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import EventUserList from '../Event/EventUserList';
 import TicketPicker from './TicketPicker';
 import UserLogin from '../User/UserLogin';
+import TicketPurchaseSummary from './TicketPurchaseSummary';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,16 +43,30 @@ export default function TicketMain() {
     const { isAuthenticated } = useAuth();
 
     const handleNext = () => {
-        setActiveStep(oldValue => oldValue + 1);
+        if (isAuthenticated && activeStep === 1) {
+            setActiveStep(3);
+        }
+        else {
+            setActiveStep(oldValue => oldValue + 1);
+        }
     };
 
     const handleBack = () => {
-        setActiveStep(oldValue => oldValue - 1);
+        if (isAuthenticated && activeStep === 3) {
+            setActiveStep(1);
+        }
+        else {
+            setActiveStep(oldValue => oldValue - 1);
+        }
     };
 
+    useEffect(() => {
+        if (activeStep === 2) {
+            setActiveStep(3);
+        }
+    }, [isAuthenticated])
 
 
- 
 
     function getStepContent(step) {
         switch (step) {
@@ -60,9 +75,9 @@ export default function TicketMain() {
             case 1:
                 return (<TicketPicker />);
             case 2:
-                return (<UserLogin fromTicket={true} /> );
+                return (<UserLogin fromTicket={true} />);
             case 3:
-                return `Godkjenn reglene for arrangemntet og vilkår for kjøp. Les og godta.`;
+                return (<TicketPurchaseSummary />);
             case 4:
                 return `Vis mulighet for å fylle inn manglende påkrevd personalia. Eks. mobil, fødsel, etternavn etc.`;
             case 5:
@@ -96,6 +111,7 @@ export default function TicketMain() {
                                         color="primary"
                                         onClick={handleNext}
                                         className={classes.button}
+                                        disabled={activeStep > 1 && !isAuthenticated}
                                     >
                                         {activeStep === steps.length - 1 ? 'Fullfør' : 'Neste'}
                                     </Button>
@@ -108,7 +124,7 @@ export default function TicketMain() {
             {activeStep === steps.length && (
                 <Paper square elevation={5} className={classes.resetContainer}>
                     <Typography>Takk for kjøpet - Gleder oss til å se deg</Typography>
-                    <Button onClick={ () => setActiveStep(0)} className={classes.button} variant="outlined">
+                    <Button onClick={() => setActiveStep(0)} className={classes.button} variant="outlined">
                         Kjøp ny billett
                     </Button>
                 </Paper>
