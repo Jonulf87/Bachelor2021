@@ -42,7 +42,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
             }
         }
         getEvent();
-    }, [isAuthenticated, triggerUpdate])
+    }, [isAuthenticated, rowData])
 
 
     if (event === null) return (<TableRow><TableCell colSpan={4}><p>Lading...</p></TableCell></TableRow>);
@@ -109,7 +109,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 </TableCell>
             </TableRow>
             <EditEvent
-                eventId={openEventId}
+                event={event}
                 dialogEditEventOpen={dialogEditEventOpen}
                 handleDialogEditEventClose={handleDialogEditEventClose}
                 updateListTrigger={updateListTrigger}

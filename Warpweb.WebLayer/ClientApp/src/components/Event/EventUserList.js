@@ -31,7 +31,6 @@ export default function EventUserList() {
             setIsReady(false);
         const getEvent = async () => {
             if (selectedMainEventId !== 0 && selectedMainEventId !== null) {
-
                 const eventResponse = await fetch(`/api/events/getmainevent/${selectedMainEventId}`, {
                     headers: {
                         'content-type': 'application/json'
