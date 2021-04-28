@@ -52,10 +52,8 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    StartDate = a.StartDateTime,
-                    StartTime = a.StartDateTime,
-                    EndDate = a.EndDateTime,
-                    EndTime = a.EndDateTime,
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime,
                     OrganizerId = a.OrganizerId,
                     VenueId = a.VenueId,
                     VenueName = a.Venue.Name,
@@ -76,9 +74,6 @@ namespace Warpweb.LogicLayer.Services
             {
                 throw new Exception();
             }
-
-            DateTime StartDateTime = maineventVm.StartDate.Date + maineventVm.StartTime.TimeOfDay;
-            DateTime EndDateTime = maineventVm.EndDate.Date + maineventVm.EndTime.TimeOfDay;
 
             var leaderCrew = new Crew
             {
@@ -109,8 +104,8 @@ namespace Warpweb.LogicLayer.Services
             var mainevent = new MainEvent
             {
                 Name = maineventVm.Name,
-                StartDateTime = StartDateTime,
-                EndDateTime = EndDateTime,
+                StartDateTime = maineventVm.StartDateTime,
+                EndDateTime = maineventVm.EndDateTime,
                 OrganizerId = maineventVm.OrganizerId,
                 VenueId = maineventVm.VenueId,
                 Crews = new List<Crew>
@@ -149,29 +144,15 @@ namespace Warpweb.LogicLayer.Services
             if (existingMainEvent == null)
             {
                 throw new NotImplementedException();
-            }
-
-            DateTime StartDateTime = maineventVm.StartDate.Date + maineventVm.StartTime.TimeOfDay;
-            DateTime EndDateTime = maineventVm.EndDate.Date + maineventVm.EndTime.TimeOfDay;
-
-            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-
-            DateTime StartDateTimeCET = StartDateTime;
-            DateTime EndDateTimeCET = EndDateTime;
-            if (StartDateTime.Kind == DateTimeKind.Utc)
-            {
-                StartDateTimeCET = TimeZoneInfo.ConvertTimeFromUtc(StartDateTime, cstZone);
-                EndDateTimeCET = TimeZoneInfo.ConvertTimeFromUtc(EndDateTime, cstZone);
-            }
-            
+            }     
 
             existingMainEvent.Id = maineventVm.Id;
             existingMainEvent.Name = maineventVm.Name;
-            existingMainEvent.StartDateTime = StartDateTimeCET;
-            existingMainEvent.EndDateTime = EndDateTimeCET;
+            existingMainEvent.StartDateTime = maineventVm.StartDateTime;
+            existingMainEvent.EndDateTime = maineventVm.EndDateTime;
             existingMainEvent.VenueId = maineventVm.VenueId;
 
-            _dbContext.Update<MainEvent>(existingMainEvent);
+            _dbContext.Update(existingMainEvent);
             await _dbContext.SaveChangesAsync();
 
         }

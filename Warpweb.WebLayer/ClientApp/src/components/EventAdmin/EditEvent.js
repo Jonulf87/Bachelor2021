@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem} from '@material-ui/core';
-import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
@@ -131,59 +131,34 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         onChange={(e) => setEvent(oldValues => ({ ...oldValues, name: e.target.value }))}
                     />
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            className={classes.keyboardDatePicker}
-                            id="startDatePicker"
-                            label="Startdato"
-                            format="dd/MM/yyyy"
-                            variant="inline"
-                            margin="normal"
-                            value={event.startDate}
-                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, startDate: e }))}
-                            KeyboardButtonProps={{
-                                "aria-label": "Endre start dato",
-                            }}
-                        />
-                        <KeyboardTimePicker
+                        <KeyboardDateTimePicker
                             className={classes.keyboardTimePicker}
                             id="startTimePicker"
-                            label="Startklokkeslett"
-                            variant="inline"
+                            label="Start dato og klokkeslett"
+                            variant="dialog"
                             margin="normal"
                             ampm={false}
-                            value={event.startTime}
-                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, startTime: e }))}
+                            format="dd.MM.yyyy HH:mm"
+                            value={event.startDateTime}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, startDateTime: e }))}
                             KeyboardButtonProps={{
-                                "aria-label": "Endre start tid",
+                                "aria-label": "Endre start dato og tid",
                             }}
                         />
                     </MuiPickersUtilsProvider>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            className={classes.keyboardDatePicker}
-                            id="endDatePicker"
-                            label="Sluttdato"
-                            format="dd/MM/yyyy"
-                            variant="inline"
-                            margin="normal"
-                            value={event.endDate}
-                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, endDate: e }))}
-                            KeyboardButtonProps={{
-                                "aria-label": "Endre slutt dato",
-                            }}
-
-                        />
-                        <KeyboardTimePicker
+                        <KeyboardDateTimePicker
                             className={classes.keyboardTimePicker}
                             id="endTimePicker"
-                            label="Sluttklokkeslett"
-                            variant="inline"
+                            label="Slutt dato og klokkeslett"
+                            variant="dialog"
                             margin="normal"
                             ampm={false}
-                            value={event.endTime}
-                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, endTime: e }))}
+                            format="dd.MM.yyyy HH:mm"
+                            value={event.endDateTime}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, endDateTime: e }))}
                             KeyboardButtonProps={{
-                                "aria-label": "Endre slutt tid",
+                                "aria-label": "Endre slutt dato og tid",
                             }}
                         />
                     </MuiPickersUtilsProvider>

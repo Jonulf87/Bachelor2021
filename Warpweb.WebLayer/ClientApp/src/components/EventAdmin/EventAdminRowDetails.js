@@ -75,7 +75,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 </TableCell>
                 <TableCell colSpan={2}>
                     <Typography variant="subtitle1" >
-                        {format(parseISO(event.startDate), 'dd.MM.yyyy')} {format(parseISO(event.startTime), 'HH:mm')}
+                        {format(parseISO(event.startDateTime), 'dd.MM.yyyy HH:mm')}
                     </Typography>
                 </TableCell>
             </TableRow>
@@ -90,7 +90,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 </TableCell>
                 <TableCell colSpan={2}>
                     <Typography variant="subtitle1" >
-                        {format(parseISO(event.endDate), 'dd.MM.yyyy')} {format(parseISO(event.endTime), 'HH:mm')}
+                        {format(parseISO(event.endDateTime), 'dd.MM.yyyy HH:mm')}
                     </Typography>
                 </TableCell>
             </TableRow>
