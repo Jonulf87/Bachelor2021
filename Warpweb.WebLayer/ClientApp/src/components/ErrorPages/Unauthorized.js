@@ -7,7 +7,7 @@ export default function Unauthorized() {
     return (
         <Grid container justify="center" alignItems="center">
             <Grid item>
-                <Typography align="center" variant="h4" component="body1">
+                <Typography align="center" variant="h4">
                     Du har ikke ikke tilgang til denne siden
                 </Typography>
                 <br />

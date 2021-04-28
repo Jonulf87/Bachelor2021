@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Typography, List, ListItem, ListItemText, ListSubheader, Toolbar } from '@material-ui/core';
+import { Typography, List, ListItem, ListItemText, ListSubheader, Paper, Toolbar } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 
 export default function CrewPermissionList({ id }) {
@@ -21,11 +21,10 @@ export default function CrewPermissionList({ id }) {
                 });
                 const result = await response.json();
                 setCrewPermissions(result);
-                console.log(result)
             }
         }
         getPolicies();
-    }, [isAuthenticated])
+    }, [isAuthenticated, id])
 
     return (
         <>
@@ -35,14 +34,17 @@ export default function CrewPermissionList({ id }) {
                 </Typography>
             </Toolbar>
             <List>
-                {/*lister bare alle mulige permission for øyeblikket*/}
-                {crewPermissions.map((permission) => (
-                    <ListItem key={permission.name}>
-                    <ListItemText>
-                        {permission.name}
-                    </ListItemText>
-                </ListItem>
-                ))}
+                {crewPermissions.map((permission) => {
+                    return permission.crewHasPermission &&
+                    <>
+                        <ListItem key={permission.name}>
+                            <ListItemText>
+                                {permission.name}
+                            </ListItemText>
+                        </ListItem>
+                    </>
+
+                })}
             </List>
         </>
     );

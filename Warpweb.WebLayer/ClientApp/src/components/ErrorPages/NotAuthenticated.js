@@ -7,7 +7,7 @@ export default function NotAuthenticated() {
     return (
         <Grid container justify="center" alignItems="center">
             <Grid item>
-                <Typography align="center" variant="h4" component="body1">
+                <Typography align="center" variant="h4">
                     Du må være logget inn for å se denne siden
                 </Typography>
                 <br />

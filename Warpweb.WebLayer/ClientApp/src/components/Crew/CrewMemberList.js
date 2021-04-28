@@ -1,88 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
-import { Typography, Toolbar, Table, TableBody, TableCell,
+
+import { makeStyles } from '@material-ui/core/styles';
+import { Divider, List, ListItem, ListItemText, ListSubheader, Typography, Toolbar, Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow, Container} from '@material-ui/core';
+
+const useStyles = makeStyles({
+    inline: {
+        display: 'inline',
+      },
+    
+    });
 
 export default function CrewMemberList({ crewMembers, crewLeaders }) {
 
-    const { isAuthenticated, token } = useAuth();
 
-    function CrewLeaderTable() {
-        return (
-            <TableBody>
-                    {crewLeaders.map((leader) => (
-                        <TableRow key={leader.id}>
-                            <TableCell>
-                                {leader.name}
-                            </TableCell>
-                            <TableCell>
-                                {leader.phone}
-                            </TableCell>
-                            <TableCell>
-                                {leader.eMail}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-            </TableBody>
-        )
-    }
+    const classes = useStyles();
 
-    function CrewMemberTable() {        
+    function CrewList({list}) {        
         return (
-            <TableBody>
-                    {crewMembers.map((member) => (
-                        <TableRow key={member.id}>
-                            <TableCell>
-                                {member.name}
-                            </TableCell>
-                            <TableCell>
-                                {member.phone}
-                            </TableCell>
-                            <TableCell>
-                                {member.eMail}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-            </TableBody>
-        )
+            list.map((member) => (
+                <ListItem
+                    alignItems="flex-start"
+                    key={member.id}
+                >  
+                            <ListItemText
+                                primary={member.name}
+                                secondary={
+                                    <>
+                                        <Typography
+                                            variant="body2"
+                                            color="textPrimary"
+                                            component="span"
+                                        >
+                                            tlf:
+                                        </Typography>
+                                        {member.phone}
+                                        <br />
+                                        <Typography
+                                            variant="body2"
+                                            color="textPrimary"
+                                            component="span"
+                                        >
+                                            e-post: 
+                                        </Typography>
+                                        {member.eMail}
+                                    </>
+                                }
+                            >
+                            </ListItemText>
+                        
+                </ListItem>
+            )))
     }
 
     return (
         <>
             <Container>
-                <Toolbar>
-                <Typography variant="h6" component="h3" noWrap>
-                    Ledere
-                </Typography>
-            </Toolbar>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    Navn
-                                </TableCell>
-                                <TableCell>
-                                    Telefon
-                                </TableCell>
-                                <TableCell>
-                                    e-post
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <CrewLeaderTable />
-                    </Table>
-                </TableContainer>
-                <Toolbar>
-                    <Typography variant="h6" component="h3" noWrap>
-                        Lag
-                    </Typography>
-                </Toolbar>
-                <TableContainer>
-                    <Table>
-                        <CrewMemberTable/>
-                    </Table>
-                </TableContainer>
+                <List>
+                    <ListSubheader >
+                        Arbeidslagsledere
+                    </ListSubheader>
+                    <CrewList list={crewLeaders} />
+                    <Divider />
+                    <ListSubheader >
+                        Øvrige medlemmer
+                    </ListSubheader>
+                    <CrewList list={crewMembers} />
+                </List>
             </Container>
         </>
     );

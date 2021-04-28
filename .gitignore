@@ -348,3 +348,4 @@ ASALocalRun/
 /Warpweb.DataAccessLayer/Migrations/20210317103026_Init.Designer.cs
 /Warpweb.WebLayer/Logs/Errorlog-20210426.txt
 /Warpweb.WebLayer/Logs/Errorlog-20210424.txt
+/Warpweb.WebLayer/Logs/*.txt

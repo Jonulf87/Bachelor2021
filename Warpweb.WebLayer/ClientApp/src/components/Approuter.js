@@ -9,7 +9,7 @@ import CrewMain from './Crew/CrewMain';
 import CrewAdminMain from './CrewAdmin/CrewAdminMain';
 import EventAdminMain from './EventAdmin/EventAdminMain';
 import EventUserMain from './Event/EventUserMain';
-import ParticipantMain from './Participant/ParticipantMain';
+import ParticipantAdminMain from './Participant/ParticipantAdminMain';
 import ReportMain from './Report/ReportMain';
 import TicketTypeAdminMain from './TicketTypeAdmin/TicketTypeAdminMain';
 import UserMain from './User/UserMain';
@@ -92,7 +92,7 @@ export default function AppRouter() {
             <Route path='/participant'>
                 {!isAuthenticated ? <NotAuthenticated /> 
                 : !policies.some(a => a === 7) ? <Unauthorized />
-                : <ParticipantMain />}
+                : <ParticipantAdminMain />}
             </Route>
             <Route path='/ticketadmin'>
                 {!isAuthenticated ? <NotAuthenticated /> 
