@@ -323,12 +323,14 @@ export default function UserRegister() {
                         <Grid item xs={12} >{/*Input fødselsdag*/}
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DatePicker
+                                    autoOk
                                     id="dateOfBirth"
-                                    label="Fødselsdato DD/MM/ÅÅÅÅ"
+                                    label="Fødselsdato"
                                     openTo="year"
                                     views={["year", "month", "date"]}
-                                    maxDate={new Date().getFullYear() + "/" + new Date().getMonth() + "/" + new Date().getDate()}
+                                    disableFuture
                                     format="dd/MM/yyyy"
+                                    placeholder="DD/MM/ÅÅÅÅ"
                                     margin="normal"
                                     value={dateOfBirth}
                                     onChange={(dateEvent) => setDateOfBirth(dateEvent)}
