@@ -1,7 +1,5 @@
 ﻿import React from 'react';
 import UserInfo from './UserInfo';
-import UserTicketTable from './UserTicketTable';
-import UserCrewTable from './UserCrewTable';
 import { Grid } from '@material-ui/core';
 
 export default function PaperSheet() {
