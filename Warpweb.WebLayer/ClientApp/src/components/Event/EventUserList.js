@@ -88,7 +88,7 @@ export default function EventUserList() {
                                     {selectedEvent.venueName}
                                 </TableCell>
                                 <TableCell>
-                                    {format(parseISO(selectedEvent.startDate), 'dd.MMM')} - {format(parseISO(selectedEvent.endDate), 'dd.MMM')}
+                                    {format(parseISO(selectedEvent.startDateTime), 'dd.MMM')} - {format(parseISO(selectedEvent.endDateTime), 'dd.MMM')}
                                 </TableCell>
                                 <TableCell>
                                     {selectedEvent.organizerName}

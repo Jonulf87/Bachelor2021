@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function EventCard({ id, name, endDate, endTime, startDate, startTime, infoComments, venueName, organizerName, organizerWebPage }) {
+export default function EventCard({ id, name, startDateTime, endDateTime, infoComments, venueName, organizerName, organizerWebPage }) {
 
     const classes = useStyles();
     const history = useHistory();
@@ -74,9 +74,9 @@ export default function EventCard({ id, name, endDate, endTime, startDate, start
                         >
                             <Typography>
                                 Praktisk info:
-                                        </Typography>
-                            {format(parseISO(startDate), 'dd.MM.yyyy')} {format(parseISO(startTime), 'HH:mm')}
-                            {format(parseISO(endDate), 'dd.MM.yyyy')} {format(parseISO(endTime), 'HH:mm')}
+                            </Typography>
+                            {format(parseISO(startDateTime), 'dd.MM.yyyy HH:mm')}
+                            {format(parseISO(endDateTime), 'dd.MM.yyyy HH:mm')}
                             {venueName}
                             {organizerName}
                             {organizerWebPage}

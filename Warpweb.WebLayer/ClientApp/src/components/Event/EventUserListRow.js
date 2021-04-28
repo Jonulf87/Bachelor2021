@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { format, parseISO } from 'date-fns';
 import usePurchase from '../../hooks/usePurchase';
 
-export default function EventUserListRow({ name, venueName, id, startDate, endDate, organizerName }) {
+export default function EventUserListRow({ name, venueName, id, startDateTime, endDateTime, organizerName }) {
 
     const ref = useRef(null);
     const { setSelectedMainEventId } = usePurchase();
@@ -21,7 +21,7 @@ export default function EventUserListRow({ name, venueName, id, startDate, endDa
                 {venueName}
             </TableCell>
             <TableCell>
-                {format(parseISO(startDate), 'dd.MMM')} - {format(parseISO(endDate), 'dd.MMM')}
+                {format(parseISO(startDateTime), 'dd.MMM')} - {format(parseISO(endDateTime), 'dd.MMM')}
             </TableCell>
             <TableCell>
                 {organizerName}

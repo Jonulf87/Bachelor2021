@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
 import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, FormControl } from '@material-ui/core';
-import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Form } from 'reactstrap';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -26,10 +26,8 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
 
     //Her følger variablene til VM for mainEvent til posting
     const [name, setName] = useState("");
-    const [startDate, setStartDate] = useState(new Date());
-    const [startTime, setStartTime] = useState(new Date('2020-05-05T11:54:00'));
-    const [endDate, setEndDate] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date('2020-01-01T12:00:00'))
+    const [startDateTime, setStartDateTime] = useState(new Date());
+    const [endDateTime, setEndDateTime] = useState(new Date())
     const [organizerId, setOrganizerId] = useState("");
     const [venueId, setVenueId] = useState("");
 
@@ -83,10 +81,8 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
 
     const mainEventDataToBeSent = {
         'name': name,
-        'startDate': startDate,
-        'startTime': startTime,
-        'endDate': endDate,
-        'endTime': endTime,
+        'startDateTime': startDateTime,
+        'endDateTime': endDateTime,
         'organizerId': organizerId,
         'venueId': venueId
     }
@@ -138,58 +134,34 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                         onChange={(e) => setName(e.target.value)}
                     />
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            className={classes.keyboardDatePicker}
-                            id="startDatePicker"
-                            label="Startdato"
-                            format="dd/MM/yyyy"
-                            variant="inline"
-                            margin="normal"
-                            value={startDate}
-                            onChange={(dateEvent) => setStartDate(dateEvent)}
-                            KeyboardButtonProps={{
-                                "aria-label": "Endre start dato",
-                            }}
-                        />
-                        <KeyboardTimePicker
+                        <KeyboardDateTimePicker
                             className={classes.keyboardTimePicker}
                             id="startTimePicker"
-                            label="Startklokkeslett"
-                            variant="inline"
+                            label="Start dato og klokkeslett"
+                            variant="dialog"
                             margin="normal"
                             ampm={false}
-                            value={startTime}
-                            onChange={(timeEvent) => setStartTime(timeEvent)}
+                            format="dd.MM.yyyy HH:mm"
+                            value={startDateTime}
+                            onChange={(timeEvent) => setStartDateTime(timeEvent)}
                             KeyboardButtonProps={{
-                                "aria-label": "Endre start tid",
+                                "aria-label": "Endre start dato og tid",
                             }}
                         />
                     </MuiPickersUtilsProvider>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            className={classes.keyboardDatePicker}
-                            id="endDatePicker"
-                            label="Sluttdato"
-                            format="dd/MM/yyyy"
-                            variant="inline"
-                            margin="normal"
-                            value={endDate}
-                            onChange={(dateEvent) => setEndDate(dateEvent)}
-                            KeyboardButtonProps={{
-                                "aria-label": "Endre slutt dato",
-                            }}
-                        />
-                        <KeyboardTimePicker
+                        <KeyboardDateTimePicker
                             className={classes.keyboardTimePicker}
                             id="endTimePicker"
-                            label="Sluttklokkeslett"
-                            variant="inline"
+                            label="Slutt dato og klokkeslett"
+                            variant="dialog"
                             margin="normal"
                             ampm={false}
-                            value={endTime}
-                            onChange={(timeEvent) => setEndTime(timeEvent)}
+                            format="dd.MM.yyyy HH:mm"
+                            value={endDateTime}
+                            onChange={(timeEvent) => setEndDateTime(timeEvent)}
                             KeyboardButtonProps={{
-                                "aria-label": "Endre slutt tid",
+                                "aria-label": "Endre slutt dato og tid",
                             }}
                         />
                     </MuiPickersUtilsProvider>
