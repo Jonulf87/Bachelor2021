@@ -1,51 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import useAuth from '../../hooks/useAuth';
+import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import {
-    Divider, List, ListItem, ListItemText, ListSubheader, Typography, Toolbar, Table, TableBody, TableCell,
-    TableContainer, TableHead, TableRow, Container
-} from '@material-ui/core';
-
-const useStyles = makeStyles({
-    inline: {
-        display: 'inline',
-    },
-
-});
+import { Divider, List, ListItem, ListItemText, Typography, Container } from '@material-ui/core';
 
 export default function CrewMemberList({ crewMembers, crewLeaders }) {
-
-    const classes = useStyles();
 
     function CrewList({ list }) {
         return (
             list.map((member) => (
-                <ListItem
+                <ListItem 
                     alignItems="flex-start"
                     key={member.id}
                 >
                     <ListItemText
-                        primary={member.name}
+                        primary= {member.name}
                         secondary={
                             <>
                                 <Typography
                                     variant="body2"
                                     color="textPrimary"
-                                    component="span"
                                 >
-                                    tlf:
-                                        </Typography>
-                                {member.phone}
-                                <br />
+                                    <strong>Tlf:</strong> {member.phone}
+                                </Typography>
+                                
+
                                 <Typography
                                     variant="body2"
                                     color="textPrimary"
-                                    component="span"
                                 >
-                                    e-post:
-                                        </Typography>
-                                {member.eMail}
+                                    <strong>E-post:</strong> {member.eMail}
+                                </Typography>
                             </>
                         }
                     >
@@ -59,14 +42,16 @@ export default function CrewMemberList({ crewMembers, crewLeaders }) {
         <>
             <Container>
                 <List>
-                    <ListSubheader >
-                        Arbeidslagsledere
-                    </ListSubheader>
+                    <Typography gutterBottom variant="h6" component="h2" gutterBottom>
+                        Arbeidslagsleder(e):
+                    </Typography>
                     <CrewList list={crewLeaders} />
+
                     <Divider />
-                    <ListSubheader >
-                        Øvrige medlemmer
-                    </ListSubheader>
+                    
+                    <Typography gutterBottom variant="h6" component="h2" gutterBottom>
+                        &#216;vrige medlemmer:
+                    </Typography>
                     <CrewList list={crewMembers} />
                 </List>
             </Container>
