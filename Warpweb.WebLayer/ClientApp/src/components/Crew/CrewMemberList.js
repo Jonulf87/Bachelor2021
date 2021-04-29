@@ -18,6 +18,7 @@ export default function CrewMemberList({ crewMembers, crewLeaders }) {
                                 <Typography
                                     variant="body2"
                                     color="textPrimary"
+                                    component="p"
                                 >
                                     <strong>Tlf:</strong> {member.phone}
                                 </Typography>
@@ -26,6 +27,7 @@ export default function CrewMemberList({ crewMembers, crewLeaders }) {
                                 <Typography
                                     variant="body2"
                                     color="textPrimary"
+                                    component="p"
                                 >
                                     <strong>E-post:</strong> {member.eMail}
                                 </Typography>

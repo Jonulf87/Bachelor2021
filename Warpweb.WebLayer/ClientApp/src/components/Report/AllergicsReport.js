@@ -28,7 +28,7 @@ export default function AllergicsReport({ data }) {
                
                 <View style={styles.section}>
                     {data.map((user) => (
-                        <Text key= { user.id } style={styles.text}>
+                        <Text key= {user.id} style={styles.text}>
                             {user.firstName} {user.lastName} | {user.allergyDescription}
                         </Text>
                     ))}
