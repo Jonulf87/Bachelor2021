@@ -169,6 +169,9 @@ export default function MainMenu({ window }) {
                         <LoginMenu />
                     </ButtonGroup>
                 </Toolbar>
+                <Toolbar>
+                    crumbs
+                </Toolbar>
             </AppBar>
 
             <nav className={classes.drawer} aria-label="Meny">

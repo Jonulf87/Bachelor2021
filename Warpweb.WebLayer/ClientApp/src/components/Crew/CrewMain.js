@@ -1,6 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Divider, Grid, Paper, Toolbar, Typography} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Paper, Toolbar, Typography} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 
@@ -10,28 +9,17 @@ import CrewMemberList from './CrewMemberList';
 import CrewPermissionList from './CrewPermissionList';
 
 
-const useStyles = makeStyles({
-    root: {
-        minWidth: 800,
-    },
-    verticalDivider: {
-        height: "80%",
-    },
-
-});
-
 export default function CrewMain() {
 
     const [isReady, SetIsReady] = useState(false)
     const [isCrewMember, SetisCrewMember] = useState(false)
     const [crew, setCrew] = useState([])
+    const [myCrews, setMyCrews] = useState([])
     const [crewMembers, setCrewMembers] = useState([]);
     const [crewLeaders, setCrewLeaders] = useState([]);
     const {id} = useParams();
  
     const { isAuthenticated, token } = useAuth();
-
-    const classes = useStyles();
     
     useEffect(() => {
         const getCrews = async () => {
@@ -44,8 +32,8 @@ export default function CrewMain() {
                 });
                 const resultCrew = await responseCrew.json();
                 setCrew(resultCrew);
-                
-                //fetch for if-sjekk nedenfor
+                console.log(resultCrew)
+
                 const responseMyCrews = await fetch('/api/crews/mycrews', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -53,6 +41,8 @@ export default function CrewMain() {
                     }
                 });
                 const resultMyCrews = await responseMyCrews.json();
+                setMyCrews(resultMyCrews);
+                console.log(resultMyCrews)
                     
                     if (resultMyCrews.some(a => a.id === resultCrew.crewId)){//sjekk om brukeren er med i arbeidslag
                         const responseCrewMembers = await fetch(`/api/crews/crewmembers/${id}`, {
@@ -62,6 +52,7 @@ export default function CrewMain() {
                         });
                         const resultCrewMembers = await responseCrewMembers.json();
                         setCrewMembers(resultCrewMembers);
+                        console.log(resultCrewMembers)
 
                         const responseLeader = await fetch(`/api/crews/crewleaders/${id}`, {
                             headers: {
@@ -70,6 +61,7 @@ export default function CrewMain() {
                         });
                         const resultLeader = await responseLeader.json();
                         setCrewLeaders(resultLeader);
+                        console.log(resultLeader)
 
                         SetIsReady(true);
                         SetisCrewMember(true);
@@ -84,6 +76,7 @@ export default function CrewMain() {
                 setCrewMembers([]);
                 setCrewLeaders([]);
                 setCrew([]);
+                setMyCrews([]);
             }
         }
         getCrews();
@@ -93,6 +86,7 @@ export default function CrewMain() {
     
     return (
         <Paper
+            variant="outlined"
         >
             <Grid
             container
@@ -108,11 +102,8 @@ export default function CrewMain() {
                                 </Typography>
                             </Toolbar>
                         </Grid>
-                        <Grid item xs={12} sm={12} lg={7}> 
+                        <Grid item xs={12} sm={12} lg={8}> 
                             {isReady && <CrewMemberList crewMembers={crewMembers} crewLeaders={crewLeaders} />}
-                        </Grid>
-                        <Grid item xs={1} lg={1}>
-                            <Divider flexItem className={classes.verticalDivider} orientation="vertical" />
                         </Grid>
                         <Grid item xs={12} sm={12} lg={4}>
                             {isReady && <CrewPermissionList id={crew.crewId} />}
