@@ -22,6 +22,7 @@ export default function AllergicsReport({ data }) {
     return (
         <Document>
             <Page style={styles.page}>
+
                 <View style={styles.section}>
                     <Text>Allergi-rapport</Text>
                 </View>
@@ -32,7 +33,8 @@ export default function AllergicsReport({ data }) {
                             {user.firstName} {user.lastName} | {user.allergyDescription}
                         </Text>
                     ))}
-                    </View>
+                </View>
+
             </Page>
         </Document>
     );

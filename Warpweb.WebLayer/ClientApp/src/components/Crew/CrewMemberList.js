@@ -7,36 +7,36 @@ export default function CrewMemberList({ crewMembers, crewLeaders }) {
     function CrewList({ list }) {
         return (
             list.map((member) => (
-                <ListItem 
-                    alignItems="flex-start"
-                    key={member.id}
-                >
-                    <ListItemText
-                        primary= {member.name}
-                        secondary={
-                            <>
-                                <Typography
-                                    variant="body2"
-                                    color="textPrimary"
-                                    component="p"
-                                >
-                                    <strong>Tlf:</strong> {member.phone}
-                                </Typography>
-                                
-
-                                <Typography
-                                    variant="body2"
-                                    color="textPrimary"
-                                    component="p"
-                                >
-                                    <strong>E-post:</strong> {member.eMail}
-                                </Typography>
-                            </>
-                        }
+                <List key={member.id}>
+                    <ListItem
+                        alignItems="flex-start"
+                        
                     >
-                    </ListItemText>
+                        <Typography
+                            variant="body2"
+                            color="textPrimary"
+                        >
+                            <strong>{member.name}:</strong>
+                        </Typography>
+                    </ListItem>
+                    <ListItem>
+                        <Typography
+                            variant="body2"
+                            color="textPrimary"
+                        >
+                            <strong>Tlf:</strong> {member.phone}
+                        </Typography>
+                    </ListItem>
+                    <ListItem>
+                        <Typography
+                            variant="body2"
+                            color="textPrimary"
+                        >
+                            <strong>E-post:</strong> {member.eMail}
+                        </Typography>
 
-                </ListItem>
+                    </ListItem>
+                </List>
             )))
     }
 
@@ -50,7 +50,7 @@ export default function CrewMemberList({ crewMembers, crewLeaders }) {
                     <CrewList list={crewLeaders} />
 
                     <Divider />
-                    
+
                     <Typography gutterBottom variant="h6" component="h2" gutterBottom>
                         &#216;vrige medlemmer:
                     </Typography>
