@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Grid, Paper, Toolbar, Typography} from '@material-ui/core';
+import { Divider, Grid, Paper, Toolbar, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 
@@ -9,18 +10,29 @@ import CrewMemberList from './CrewMemberList';
 import CrewPermissionList from './CrewPermissionList';
 
 
+const useStyles = makeStyles({
+    root: {
+        minWidth: 800,
+    },
+    verticalDivider: {
+        height: "80%",
+    },
+
+});
+
 export default function CrewMain() {
 
     const [isReady, SetIsReady] = useState(false)
     const [isCrewMember, SetisCrewMember] = useState(false)
     const [crew, setCrew] = useState([])
-    const [myCrews, setMyCrews] = useState([])
     const [crewMembers, setCrewMembers] = useState([]);
     const [crewLeaders, setCrewLeaders] = useState([]);
-    const {id} = useParams();
- 
+    const { id } = useParams();
+
     const { isAuthenticated, token } = useAuth();
-    
+
+    const classes = useStyles();
+
     useEffect(() => {
         const getCrews = async () => {
             if (isAuthenticated) {
@@ -32,8 +44,8 @@ export default function CrewMain() {
                 });
                 const resultCrew = await responseCrew.json();
                 setCrew(resultCrew);
-                console.log(resultCrew)
 
+                //fetch for if-sjekk nedenfor
                 const responseMyCrews = await fetch('/api/crews/mycrews', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -41,59 +53,53 @@ export default function CrewMain() {
                     }
                 });
                 const resultMyCrews = await responseMyCrews.json();
-                setMyCrews(resultMyCrews);
-                console.log(resultMyCrews)
-                    
-                    if (resultMyCrews.some(a => a.id === resultCrew.crewId)){//sjekk om brukeren er med i arbeidslag
-                        const responseCrewMembers = await fetch(`/api/crews/crewmembers/${id}`, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            }
-                        });
-                        const resultCrewMembers = await responseCrewMembers.json();
-                        setCrewMembers(resultCrewMembers);
-                        console.log(resultCrewMembers)
 
-                        const responseLeader = await fetch(`/api/crews/crewleaders/${id}`, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            }
-                        });
-                        const resultLeader = await responseLeader.json();
-                        setCrewLeaders(resultLeader);
-                        console.log(resultLeader)
+                if (resultMyCrews.some(a => a.id === resultCrew.crewId)) {//sjekk om brukeren er med i arbeidslag
+                    const responseCrewMembers = await fetch(`/api/crews/crewmembers/${id}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const resultCrewMembers = await responseCrewMembers.json();
+                    setCrewMembers(resultCrewMembers);
 
-                        SetIsReady(true);
-                        SetisCrewMember(true);
-                    } else {
-                        SetIsReady(false);
-                        setCrewMembers([]);
-                        setCrewLeaders([]);
-                    }
+                    const responseLeader = await fetch(`/api/crews/crewleaders/${id}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const resultLeader = await responseLeader.json();
+                    setCrewLeaders(resultLeader);
+
+                    SetIsReady(true);
+                    SetisCrewMember(true);
+                } else {
+                    SetIsReady(false);
+                    setCrewMembers([]);
+                    setCrewLeaders([]);
+                }
 
             } else {
                 SetIsReady(false);
                 setCrewMembers([]);
                 setCrewLeaders([]);
                 setCrew([]);
-                setMyCrews([]);
             }
         }
         getCrews();
     }, [isAuthenticated, id])
-    
-    
-    
+
+
+
     return (
         <Paper
-            variant="outlined"
         >
             <Grid
-            container
-            spacing={2}
-            justify="center"
+                container
+                spacing={2}
+                justify="center"
             >
-                { isCrewMember ? (
+                {isCrewMember ? (
                     <>
                         <Grid item xs={12}>
                             <Toolbar>
@@ -102,23 +108,26 @@ export default function CrewMain() {
                                 </Typography>
                             </Toolbar>
                         </Grid>
-                        <Grid item xs={12} sm={12} lg={8}> 
+                        <Grid item xs={12} sm={12} lg={7}>
                             {isReady && <CrewMemberList crewMembers={crewMembers} crewLeaders={crewLeaders} />}
+                        </Grid>
+                        <Grid item xs={1} lg={1}>
+                            <Divider flexItem className={classes.verticalDivider} orientation="vertical" />
                         </Grid>
                         <Grid item xs={12} sm={12} lg={4}>
                             {isReady && <CrewPermissionList id={crew.crewId} />}
                         </Grid>
                     </>
                 ) : (
-                    <Grid item >
-                        <Typography align="center" variant="h5" component="h2">
-                            Du er ikke medlem i dette Arbeidslaget
+                        <Grid item >
+                            <Typography align="center" variant="h5" component="h2">
+                                Du er ikke medlem i dette Arbeidslaget
                         </Typography>
-                        <Typography align="center" variant="h6" component={Link} to="/">
-                            Gå til framsiden
+                            <Typography align="center" variant="h6" component={Link} to="/">
+                                Gå til framsiden
                         </Typography>
-                    </Grid>                    
-                )}
+                        </Grid>
+                    )}
             </Grid>
         </Paper>
     );

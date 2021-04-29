@@ -21,7 +21,6 @@ export default function UsersReport({ data }) {
 
     return (
         <Document>
-        {console.log(data)}
             <Page style={styles.page}>
                 <View style={styles.section}>
                     <Text>Bruker-rapport</Text>
@@ -29,7 +28,7 @@ export default function UsersReport({ data }) {
                
                 <View style={styles.section}>
                     {data.map((user) => (
-                        <Text key= { user.id } style={styles.text}>
+                        <Text key= {user.id} style={styles.text}>
                             {user.firstName} {user.lastName} | {user.userName} | {user.eMail}
                         </Text>
                     ))}

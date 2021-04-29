@@ -22,17 +22,19 @@ export default function AllergicsReport({ data }) {
     return (
         <Document>
             <Page style={styles.page}>
+
                 <View style={styles.section}>
                     <Text>Allergi-rapport</Text>
                 </View>
                
                 <View style={styles.section}>
                     {data.map((user) => (
-                        <Text key= { user.id } style={styles.text}>
+                        <Text key= {user.id} style={styles.text}>
                             {user.firstName} {user.lastName} | {user.allergyDescription}
                         </Text>
                     ))}
-                    </View>
+                </View>
+
             </Page>
         </Document>
     );

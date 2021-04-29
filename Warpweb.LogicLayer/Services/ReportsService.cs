@@ -54,8 +54,10 @@ namespace Warpweb.LogicLayer.Services
                 .ThenBy(a => a.LastName)
                 .Select(a => new AllergyReportListVm
                 {
+                    Id = a.Id,
                     FirstName = a.FirstName,
                     LastName = a.LastName,
+                    Email = a.Email,
                     AllergyDescription = a.AllergyDescription,
 
                 })

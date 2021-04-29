@@ -21,7 +21,6 @@ export default function GendersReport({ data }) {
 
     return (
         <Document>
-            {console.log(data)}
             <Page style={styles.page}>
 
                 <View style={styles.section}>
