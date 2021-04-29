@@ -52,36 +52,36 @@ export default function UserInfo() {
                         Hei {userInfo.firstName}&nbsp;{userInfo.lastName}
                     </Typography>
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>Fullt navn:&nbsp;</strong>{userInfo.firstName}&nbsp;{userInfo.middleName}&nbsp;{userInfo.lastName}
                     </Typography>
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>Brukernavn:&nbsp;</strong>{userInfo.userName}
                     </Typography>
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>E-post:&nbsp;</strong>{userInfo.eMail}
                     </Typography>
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>Telefon:&nbsp;</strong>{userInfo.phoneNumber}
                     </Typography>
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>Kjønn:&nbsp;</strong>{userInfo.gender}
                     </Typography>
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>Fødselsdato:&nbsp;</strong>{userInfo.dateOfBirth}
                     </Typography>
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>Allergier:&nbsp;</strong>{userInfo.isAllergic ? 'Ja, jeg er allergisk' : 'Nei, jeg har ingen allergier'}
                     </Typography>
 
                     {userInfo.isAllergic &&
-                        <Typography variant="body" component="p">
+                        <Typography variant="body1" component="p">
                             <strong>Allergier:&nbsp;</strong>{userInfo.allergyDescription}
                         </Typography>
                     }
@@ -92,21 +92,21 @@ export default function UserInfo() {
                                 <strong>Foresatt:&nbsp;</strong>{userInfo.parentFirstName}&nbsp;{userInfo.parentLastName}
                             </Typography>
 
-                            <Typography variant="body" component="p">
+                            <Typography variant="body1" component="p">
                                 <strong>Foresatt telefon:&nbsp;</strong>{userInfo.parentPhoneNumber}
                             </Typography>
 
-                            <Typography variant="body" component="p">
+                            <Typography variant="body1" component="p">
                                 <strong>Foresatt epost:&nbsp;</strong>{userInfo.parentEMail}
                             </Typography>
                         </Grid>
                     }
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>Lag/klan:&nbsp;</strong>{userInfo.team}
                     </Typography>
 
-                    <Typography variant="body" component="p">
+                    <Typography variant="body1" component="p">
                         <strong>Tilleggsinformasjon:&nbsp;</strong>{userInfo.comments}
                     </Typography>
 

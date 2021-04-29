@@ -9,7 +9,8 @@ const PurchaseProvider = ({ children }) => {
     const [selectedTickets, setSelectedTickets] = useState([]);
     const [ticketTypesList, setTicketTypesList] = useState([]);
     const [userEventTickets, setUserEventsTickets] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
+    const [userUnpaidEventTickets, setUnpaidUserEventsTickets] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0); 
 
     const { isAuthenticated, token } = useAuth();
 
@@ -24,6 +25,7 @@ const PurchaseProvider = ({ children }) => {
                 });
                 const ticketTypesResult = await ticketTypesResponse.json();
                 setTicketTypesList(ticketTypesResult);
+                setTotalPrice(0);
                 if (selectedTickets?.length < ticketTypesResult.length) {
                     setSelectedTickets(ticketTypesResult);
                 }
@@ -38,7 +40,7 @@ const PurchaseProvider = ({ children }) => {
             const ticketsResponse = await fetch(`/api/tickets/alltickets/${selectedMainEventId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'content-type': 'appliction/json'
+                    'content-type': 'application/json'
                 }
             });
             if (ticketsResponse.ok) {
@@ -47,19 +49,33 @@ const PurchaseProvider = ({ children }) => {
         }
     }
 
+    const getUnpaidUserTickets = async () => {
+        if (isAuthenticated) {
+            const ticketsResponse = await fetch(`/api/tickets/allticketsunpaid/${selectedMainEventId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'application/json'
+                }
+            });
+            if (ticketsResponse.ok) {
+                setUnpaidUserEventsTickets(await ticketsResponse.json())
+            }
+        }
+    }
+
 
     const generateTickets = async () => {
         if (isAuthenticated) {
             const createTicketResponse = await fetch('/api/tickets/createticket', {
-                header: {
+                headers: {
                     'Authorization': `Bearer ${token}`,
-                    'content-type': 'aaplicaiton/json'
+                    'content-type': 'application/json'
                 },
                 method: 'POST',
                 body: JSON.stringify(selectedTickets)
             });
             if (createTicketResponse.ok) {
-                getUserTickets();
+                getUnpaidUserTickets();
             }
         }
     }
@@ -81,7 +97,7 @@ const PurchaseProvider = ({ children }) => {
     }, [selectedTickets])
 
 
-    return <PurchaseContext.Provider value={{ totalPrice, ticketTypesList, generateTickets, handleSelectedTickets, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
+    return <PurchaseContext.Provider value={{ userUnpaidEventTickets, selectedTickets, totalPrice, ticketTypesList, generateTickets, handleSelectedTickets, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
 
 };
 

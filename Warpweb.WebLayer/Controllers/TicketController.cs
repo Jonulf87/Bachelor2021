@@ -45,12 +45,28 @@ namespace Warpweb.WebLayer.Controllers
 
         [HttpGet]
         [Route("alltickets/{eventId}")]
-        public async Task<ActionResult<List<TicketListVm>>> GetAllTicketsUserEvent(int eventId)
+        public async Task<ActionResult<List<TicketListVm>>> GetAllTiccketsUserEventAsync(int eventId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try
             {
-                var tickets = await _ticketService.GetAllTicketsUserEvent(userId, eventId);
+                var tickets = await _ticketService.GetAllTicketsUserEventAsync(userId, eventId);
+                return Ok(tickets);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("allticketsunpaid/{eventId}")]
+        public async Task<ActionResult<List<TicketListVm>>> GetAllTicketsUserEventUnpaidAsync(int eventId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try
+            {
+                var tickets = await _ticketService.GetAllTicketsUserEventUnpaidAsync(userId, eventId);
                 return Ok(tickets);
             }
             catch (Exception)

@@ -48,7 +48,7 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
-        public async Task<List<TicketListVm>> GetAllTicketsUserEvent(string userId, int eventId)
+        public async Task<List<TicketListVm>> GetAllTicketsUserEventAsync(string userId, int eventId)
         {
             return await _dbContext.Tickets
                 .Where(a => a.MainEventId == eventId && a.User.Id == userId)
@@ -65,12 +65,30 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        public async Task<List<TicketListVm>> GetAllTicketsUserEventUnpaidAsync(string userId, int eventId)
+        {
+            return await _dbContext.Tickets
+                .Where(a => a.MainEventId == eventId && a.User.Id == userId && !a.IsPaid)
+                .IgnoreQueryFilters()
+                .Select(a => new TicketListVm
+                {
+                    Id = a.Id,
+                    MainEventName = a.MainEvent.Name,
+                    Price = a.Price,
+                    RowName = a.Seat.Row.Name,
+                    SeatNumber = a.Seat.SeatNumber,
+                    TicketType = a.Type.DescriptionName,
+                    UserId = userId
+                }).ToListAsync();
+        }
+
         public async Task CreateTicketAsync(List<TicketTypeListVm> ticketList, string userId)
         {
             var user = await _dbContext.ApplicationUsers
-                .FindAsync(userId);
+                .Include(a => a.Guardian)
+                .SingleOrDefaultAsync(a => a.Id == userId);
 
-            if (user.DateOfBirth > DateTime.Now.AddYears(-16) && user?.Guardian.EMail == null && user?.Guardian.PhoneNumber == null)
+            if (user.DateOfBirth > DateTime.Now.AddYears(-16) && user.Guardian?.EMail == null && user.Guardian?.PhoneNumber == null)
             {
                 throw new NoGuardianSetForMinorException();
             }
@@ -81,6 +99,7 @@ namespace Warpweb.LogicLayer.Services
                     .CountAsync();
                 var ticketType = await _dbContext.TicketTypes
                     .Where(a => a.Id == ticketIn.Id)
+                    .IgnoreQueryFilters()
                     .SingleOrDefaultAsync();
 
                 if (ticketCount >= ticketType.AmountAvailable + 5)

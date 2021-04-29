@@ -13,6 +13,8 @@ import EventUserList from '../Event/EventUserList';
 import TicketPicker from './TicketPicker';
 import UserLogin from '../User/UserLogin';
 import TicketPurchaseSummary from './TicketPurchaseSummary';
+import TicketPayment from './TicketPayment';
+import usePurchase from '../../hooks/usePurchase';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,12 +41,18 @@ export default function TicketMain() {
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(parseInt(login) || 0);
     const steps = ['Velg arrangement', 'Velg billett', 'Innlogging', 'Oppsummering', 'Betaling', 'Velg sitteplass'];
+    const [checkedEula, setCheckedEula] = useState(false);
 
     const { isAuthenticated } = useAuth();
+    const { generateTickets, selectedTickets } = usePurchase();
 
     const handleNext = () => {
         if (isAuthenticated && activeStep === 1) {
             setActiveStep(3);
+        }
+        else if (activeStep === 3) {
+            generateTickets();
+            setActiveStep(oldValue => oldValue + 1);
         }
         else {
             setActiveStep(oldValue => oldValue + 1);
@@ -77,9 +85,9 @@ export default function TicketMain() {
             case 2:
                 return (<UserLogin fromTicket={true} />);
             case 3:
-                return (<TicketPurchaseSummary />);
+                return (<TicketPurchaseSummary setCheckedEula={setCheckedEula} checkedEula={checkedEula} />);
             case 4:
-                return `Vis mulighet for å fylle inn manglende påkrevd personalia. Eks. mobil, fødsel, etternavn etc.`;
+                return (<TicketPayment />);
             case 5:
                 return `Klikk her for å betale.`;
             case 6:
@@ -111,7 +119,10 @@ export default function TicketMain() {
                                         color="primary"
                                         onClick={handleNext}
                                         className={classes.button}
-                                        disabled={activeStep > 1 && !isAuthenticated}
+                                        disabled={(activeStep > 1 && !isAuthenticated)
+                                            || activeStep === 3 && !checkedEula
+                                            || activeStep === 1 && !selectedTickets.some(a => a.amountToBuy > 0)
+                                        }
                                     >
                                         {activeStep === steps.length - 1 ? 'Fullfør' : 'Neste'}
                                     </Button>
