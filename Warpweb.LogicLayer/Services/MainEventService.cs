@@ -32,10 +32,8 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    StartDate = a.StartDateTime,
-                    StartTime = a.StartDateTime,
-                    EndDate = a.EndDateTime,
-                    EndTime = a.EndDateTime,
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime,
                     VenueName = a.Venue.Name,
                     OrganizerName = a.Organizer.Name,
                     InfoComments = a.InfoComments,
@@ -189,10 +187,8 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    StartDate = a.StartDateTime,
-                    StartTime = a.StartDateTime,
-                    EndDate = a.EndDateTime,
-                    EndTime = a.EndDateTime,
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime,
                     OrganizerName = a.Organizer.Name,
                     VenueName = a.Venue.Name
                 }).ToListAsync();
