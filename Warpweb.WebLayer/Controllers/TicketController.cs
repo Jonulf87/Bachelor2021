@@ -43,6 +43,11 @@ namespace Warpweb.WebLayer.Controllers
             return await _ticketService.GetTicketAsync(id);
         }
 
+        /// <summary>
+        /// Returns list of tickets held by current user
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns>TicketVM</returns>
         [HttpGet]
         [Route("alltickets/{eventId}")]
         public async Task<ActionResult<List<TicketListVm>>> GetAllTiccketsUserEventAsync(int eventId)
@@ -59,6 +64,11 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns list of unpaid tickets held by current user
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns>TicketVM</returns>
         [HttpGet]
         [Route("allticketsunpaid/{eventId}")]
         public async Task<ActionResult<List<TicketListVm>>> GetAllTicketsUserEventUnpaidAsync(int eventId)

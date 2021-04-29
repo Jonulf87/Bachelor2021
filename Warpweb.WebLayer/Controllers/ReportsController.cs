@@ -23,7 +23,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Returns count of different genders across participants
+        /// Returns count of different genders across participants for current event
         /// </summary>
         [HttpGet]
         [Route("participantsgenderreport")]
@@ -41,7 +41,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Returns participants with allergies
+        /// Returns participants with allergies for current event
         /// </summary>
         [HttpGet]
         [Route("allergiesreport")]

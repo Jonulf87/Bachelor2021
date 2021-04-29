@@ -24,6 +24,7 @@ namespace Warpweb.WebLayer.Controllers
             _mainEventService = mainEventService;
             _securityService = securityService;
         }
+
         /// <summary>
         /// Returns all events
         /// </summary>
