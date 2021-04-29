@@ -16,16 +16,34 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default function EditEvent({ event, dialogEditEventOpen, handleDialogEditEventClose, updateListTrigger }) {
+export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEditEventClose, updateListTrigger }) {
 
-    const [changedEvent, setChangedEvent] = useState(event);
+    const [event, setEvent] = useState("");
     const [organizers, setOrganizers] = useState([]);
     const [venues, setVenues] = useState([]);
+    const [organizerId, setOrganizerId] = useState("");
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
+
+    useEffect(() => {
+        const getEvent = async () => {
+            if (isAuthenticated) {
+                const responseEvent = await fetch(`/api/events/getmainevent/${eventId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const resultEvent = await responseEvent.json();
+                setEvent(resultEvent);
+            }
+        }
+        getEvent();
+
+    }, [isAuthenticated])
 
     useEffect(() => {
         const getOrganizers = async () => {
@@ -39,6 +57,9 @@ export default function EditEvent({ event, dialogEditEventOpen, handleDialogEdit
                 });
                 const result = await response.json();
                 setOrganizers(result);
+                if (result.length === 1) {
+                    setOrganizerId(result[0].id);
+                }
             }
         }
         getOrganizers();
@@ -70,7 +91,7 @@ export default function EditEvent({ event, dialogEditEventOpen, handleDialogEdit
                     'content-type': 'application/json'
                 },
                 method: 'PUT',
-                body: JSON.stringify(changedEvent)
+                body: JSON.stringify(event)
             });
             if (response.ok) {
                 handleDialogEditEventClose();
@@ -106,20 +127,20 @@ export default function EditEvent({ event, dialogEditEventOpen, handleDialogEdit
                         required
                         fullWidth
                         variant="outlined"
-                        value={changedEvent.name}
-                        onChange={(e) => setChangedEvent(oldValues => ({ ...oldValues, name: e.target.value }))}
+                        value={event.name}
+                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, name: e.target.value }))}
                     />
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDateTimePicker
                             className={classes.keyboardTimePicker}
-                            id="startDateTimePicker"
+                            id="startTimePicker"
                             label="Start dato og klokkeslett"
                             variant="dialog"
                             margin="normal"
                             ampm={false}
                             format="dd.MM.yyyy HH:mm"
-                            value={changedEvent.startDateTime}
-                            onChange={(e) => setChangedEvent(oldValues => ({ ...oldValues, startDateTime: e }))}
+                            value={event.startDateTime}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, startDateTime: e }))}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre start dato og tid",
                             }}
@@ -128,14 +149,14 @@ export default function EditEvent({ event, dialogEditEventOpen, handleDialogEdit
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDateTimePicker
                             className={classes.keyboardTimePicker}
-                            id="endDateTimePicker"
+                            id="endTimePicker"
                             label="Slutt dato og klokkeslett"
                             variant="dialog"
                             margin="normal"
                             ampm={false}
                             format="dd.MM.yyyy HH:mm"
-                            value={changedEvent.endDateTime}
-                            onChange={(e) => setChangedEvent(oldValues => ({ ...oldValues, endDateTime: e }))}
+                            value={event.endDateTime}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, endDateTime: e }))}
                             KeyboardButtonProps={{
                                 "aria-label": "Endre slutt dato og tid",
                             }}
@@ -148,8 +169,8 @@ export default function EditEvent({ event, dialogEditEventOpen, handleDialogEdit
                         id="venue"
                         label="Lokale"
                         fullWidth
-                        value={changedEvent.venueId}
-                        onChange={(e) => setChangedEvent(oldValues => ({ ...oldValues, venueId: e.target.value }))}
+                        value={event.venueId}
+                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, venueId: e.target.value }))}
                     >
                         {venues.map((venue) => (
                             <MenuItem key={venue.id} value={venue.id} >
@@ -166,8 +187,8 @@ export default function EditEvent({ event, dialogEditEventOpen, handleDialogEdit
                             id="organizer"
                             label="Organisator"
                             fullWidth
-                            value={changedEvent.organizerId}
-                            onChange={(e) => setChangedEvent(oldValues => ({ ...oldValues, descriptionName: e.target.value }))}
+                            value={event.organizerId}
+                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, descriptionName: e.target.value }))}
                         >
                             {organizers.map((organizer) => (
                                 <MenuItem key={organizer.id} value={organizer.id} >
