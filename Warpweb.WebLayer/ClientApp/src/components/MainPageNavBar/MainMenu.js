@@ -145,7 +145,7 @@ export default function MainMenu({ window }) {
                     </>
                 }
                 {crews.length !== 0 &&
-                    <CrewMainMenu crews={crews}/>
+                    <CrewMainMenu crews={crews} />
                 }
             </>
         )
@@ -168,9 +168,6 @@ export default function MainMenu({ window }) {
                     <ButtonGroup className={classes.buttonRight}>
                         <LoginMenu />
                     </ButtonGroup>
-                </Toolbar>
-                <Toolbar>
-                    crumbs
                 </Toolbar>
             </AppBar>
 
