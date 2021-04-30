@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Divider, Grid, Paper, Toolbar, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 
@@ -15,7 +16,7 @@ const useStyles = makeStyles({
         minWidth: 800,
     },
     verticalDivider: {
-        height: "80%",
+        height: "90%",
     },
 
 });
@@ -28,10 +29,15 @@ export default function CrewMain() {
     const [crewMembers, setCrewMembers] = useState([]);
     const [crewLeaders, setCrewLeaders] = useState([]);
     const { id } = useParams();
+    
+    //styling variabler
+    const classes = useStyles();
+    const theme = useTheme();
+    const DisplayVerticalDivider = useMediaQuery(theme.breakpoints.up('sm'));
 
     const { isAuthenticated, token } = useAuth();
 
-    const classes = useStyles();
+    
 
     useEffect(() => {
         const getCrews = async () => {
@@ -108,13 +114,14 @@ export default function CrewMain() {
                                 </Typography>
                             </Toolbar>
                         </Grid>
-                        <Grid item xs={12} sm={12} lg={7}>
+                        <Grid item xs={12} sm={6} lg={4}>
                             {isReady && <CrewMemberList crewMembers={crewMembers} crewLeaders={crewLeaders} />}
                         </Grid>
-                        <Grid item xs={1} lg={1}>
-                            <Divider flexItem className={classes.verticalDivider} orientation="vertical" />
+
+                        <Grid item xs={12} sm={1} lg={1}>
+                            {DisplayVerticalDivider ? <Divider flexItem className={classes.verticalDivider} orientation="vertical" /> : <Divider variant="middle"/>}
                         </Grid>
-                        <Grid item xs={12} sm={12} lg={4}>
+                        <Grid item xs={12} sm={5} lg={4}>
                             {isReady && <CrewPermissionList id={crew.crewId} />}
                         </Grid>
                     </>

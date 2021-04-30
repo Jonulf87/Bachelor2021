@@ -48,7 +48,12 @@ const useStyles = makeStyles((theme) => ({
 
     // nødvendig for innhold nendefor baren
     toolbar: {
-        height: '80px'
+        [theme.breakpoints.up('md')]: {
+            height: '80px'
+        },
+        [theme.breakpoints.down('sm')]: {
+            height: '0px'
+        }
     },
 
     drawerPaper: {

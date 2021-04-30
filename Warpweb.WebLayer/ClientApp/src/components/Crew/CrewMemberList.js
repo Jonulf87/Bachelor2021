@@ -4,56 +4,41 @@ import { Divider, List, ListItem, ListItemText, Typography, Container } from '@m
 
 export default function CrewMemberList({ crewMembers, crewLeaders }) {
 
-    function CrewList({ list }) {
+    const CrewList = ({ list }) => {
         return (
             list.map((member) => (
-                <List key={member.id}>
                     <ListItem
                         alignItems="flex-start"
-                        
+                        key={member.id}
                     >
-                        <Typography
-                            variant="body2"
-                            color="textPrimary"
-                        >
-                            <strong>{member.name}:</strong>
-                        </Typography>
+                        <ListItemText
+                            
+                            primary={member.name}
+                            secondary={
+                                <>
+                                    <a href={`tel:${member.phone}`}>{member.phone}</a>
+                                    <br/>
+                                    <a href={`mailto:${member.eMail}`}>{member.eMail}</a>
+                                </>
+                            }
+                        />
                     </ListItem>
-                    <ListItem>
-                        <Typography
-                            variant="body2"
-                            color="textPrimary"
-                        >
-                            <strong>Tlf:</strong> {member.phone}
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography
-                            variant="body2"
-                            color="textPrimary"
-                        >
-                            <strong>E-post:</strong> {member.eMail}
-                        </Typography>
-
-                    </ListItem>
-                </List>
             )))
     }
 
     return (
         <>
             <Container>
+                <Typography gutterBottom variant="h6" component="h2" gutterBottom>
+                    Arbeidslagsleder(e):
+                </Typography>
                 <List>
-                    <Typography gutterBottom variant="h6" component="h2" gutterBottom>
-                        Arbeidslagsleder(e):
-                    </Typography>
                     <CrewList list={crewLeaders} />
-
-                    <Divider />
-
-                    <Typography gutterBottom variant="h6" component="h2" gutterBottom>
-                        &#216;vrige medlemmer:
-                    </Typography>
+                </List>
+                <Typography gutterBottom variant="h6" component="h2" gutterBottom>
+                    &#216;vrige medlemmer:
+                </Typography>
+                <List>
                     <CrewList list={crewMembers} />
                 </List>
             </Container>
