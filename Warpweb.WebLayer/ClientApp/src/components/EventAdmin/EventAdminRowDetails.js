@@ -97,6 +97,20 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
             <TableRow>
                 <TableCell colSpan={1}>
                 </TableCell>
+                <TableCell colSpan={1}>
+                    <Typography variant="subtitle1" >
+                        Lokale
+                    </Typography>
+                </TableCell>
+                <TableCell colSpan={2}>
+                    <Typography variant="subtitle1" >
+                        {event.venueName}
+                    </Typography>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell colSpan={1}>
+                </TableCell>
                 <TableCell colSpan={2}>
                     <Button
                         variant="contained"

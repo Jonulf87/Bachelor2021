@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem} from '@material-ui/core';
+import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem } from '@material-ui/core';
+import SaveIcon from '@material-ui/icons/Save';
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -12,6 +13,10 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiTextField-root': {
             padding: theme.spacing(1),
             width: '100%'
+        },
+        '& .MuiButtonBase-root': {
+            padding: '7px',
+            margin: '12px'
         }
     }
 }))
@@ -201,6 +206,9 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         variant='contained'
                         color='primary'
                         type='submit'
+                        size="large"
+                        className={classes.button}
+                        startIcon={<SaveIcon />}
                     >
                         Lagre
                     </Button>
