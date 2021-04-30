@@ -11,6 +11,7 @@ const PurchaseProvider = ({ children }) => {
     const [userEventTickets, setUserEventsTickets] = useState([]);
     const [userUnpaidEventTickets, setUnpaidUserEventsTickets] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0); 
+    const [amountError, setAmountError] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -81,9 +82,14 @@ const PurchaseProvider = ({ children }) => {
     }
 
     const handleSelectedTickets = (amount, id) => {
+        if (amount < 0) {
+            setAmountError(true);
+            return
+        }
         const ticketType = ticketTypesList.find(a => a.id === id);
         ticketType.amountToBuy = amount;
         setSelectedTickets(oldValue => [...oldValue.filter(a => a.id !== id), ticketType]);
+        setAmountError(false);
     }
 
     useEffect(() => {
@@ -97,7 +103,7 @@ const PurchaseProvider = ({ children }) => {
     }, [selectedTickets])
 
 
-    return <PurchaseContext.Provider value={{ userUnpaidEventTickets, selectedTickets, totalPrice, ticketTypesList, generateTickets, handleSelectedTickets, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
+    return <PurchaseContext.Provider value={{ amountError, userUnpaidEventTickets, selectedTickets, totalPrice, ticketTypesList, generateTickets, handleSelectedTickets, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
 
 };
 

@@ -1,15 +1,29 @@
 ﻿import { Button, TableCell, TableRow, TextField, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import usePurchase from '../../hooks/usePurchase';
 
 export default function EventUserListRow({ id, descriptionName, basePrice, amountAvailable, amountToBuy }) {
 
-    const { handleSelectedTickets } = usePurchase();
+    const { handleSelectedTickets, amountError } = usePurchase();
+    const [helperText, setHelperText] = useState("");
+
+    useEffect(() => {
+        const handleHelperText = () => {
+            if (amountError) {
+                setHelperText("Du kan ikke velge mindre enn 0 billetter.");
+            }
+            else {
+                setHelperText("");
+            }
+        }
+        handleHelperText();
+
+    }, [amountError])
 
     return (
         <TableRow>
             <TableCell>
-                {descriptionName} 
+                {descriptionName}
             </TableCell>
             <TableCell>
                 {basePrice}
@@ -20,11 +34,13 @@ export default function EventUserListRow({ id, descriptionName, basePrice, amoun
                         Ingen tilgjengelig
                     </Typography>
                     :
-                     amountAvailable 
+                    amountAvailable
                 }
             </TableCell>
             <TableCell>
                 <TextField
+                    error={amountError}
+                    helperText={helperText}
                     type="number"
                     variant="filled"
                     label="Antall"
