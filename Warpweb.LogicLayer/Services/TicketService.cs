@@ -88,6 +88,16 @@ namespace Warpweb.LogicLayer.Services
                 .Include(a => a.Guardian)
                 .SingleOrDefaultAsync(a => a.Id == userId);
 
+            if(!ticketList.Any(a => a.AmountToBuy > 0 ))
+            {
+                throw new Exception();
+            }
+
+            if(user == null)
+            {
+                throw new Exception();
+            }
+
             if (user.DateOfBirth > DateTime.Now.AddYears(-16) && user.Guardian?.EMail == null && user.Guardian?.PhoneNumber == null)
             {
                 throw new NoGuardianSetForMinorException();

@@ -126,6 +126,7 @@ export default function TicketMain() {
                                     >
                                         {activeStep === steps.length - 1 ? 'Fullfør' : 'Neste'}
                                     </Button>
+                                    {(activeStep === 1 && !selectedTickets.some(a => a.amountToBuy > 0)) && <Typography color="error">Du må velge minst en billett</Typography>}
                                 </div>
                             </div>
                         </StepContent>
