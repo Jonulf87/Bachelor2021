@@ -92,7 +92,9 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
                         <CardContent>
                             {userData ?
                                 (<>
-
+                                    <Typography variant="h6">
+                                        <strong>Personalia:</strong>
+                                    </Typography>
 
                                     <Typography variant="body1" component="p">
                                         <strong>Navn:&nbsp;</strong>{userData.firstName}&nbsp;{userData.lastName}
@@ -124,19 +126,19 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
                     <Card>
                         <CardContent>
                             {eventName ?
-                                (<Typography>
-                                    Du er i ferd med å kjøpe disse billettene til {eventName.name}
+                                (<Typography variant="h6">
+                                    Valgte billetter til {eventName.name}:
                                 </Typography>)
                                 : <CircularProgress />
                             }
 
                             {selectedTickets ? selectedTickets.map((ticket) => (
-                                <Typography>
-                                    {ticket.descriptionName}  x{ticket.amountToBuy}
+                                <Typography key={ticket.Id}>
+                                    {ticket.descriptionName}  x {ticket.amountToBuy}
                                 </Typography>
                             )) : <CircularProgress />}
                             <Typography>
-                                Totalt: {totalPrice},-
+                                <strong>Totalt: {totalPrice},-</strong>
                             {console.log(selectedTickets)}
                             </Typography>
                         </CardContent>
