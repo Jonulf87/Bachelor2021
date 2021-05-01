@@ -25,7 +25,7 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
     const [open, setOpen] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
-    const { selectedTickets, selectedMainEventId, totalPrice } = usePurchase();
+    const { shoppingCart, selectedMainEventId, totalPrice } = usePurchase();
 
 
     const classes = useStyles();
@@ -61,6 +61,8 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
     const handleClose = () => {
         setOpen(false);
     }
+
+    const shoppingCartUnique = [...new Set(shoppingCart.map(a => a.descriptionName))];
 
     return (
         <>
@@ -132,14 +134,13 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
                                 : <CircularProgress />
                             }
 
-                            {selectedTickets ? selectedTickets.map((ticket) => (
-                                <Typography key={ticket.Id}>
-                                    {ticket.descriptionName}  x {ticket.amountToBuy}
+                            {shoppingCartUnique ? shoppingCartUnique.map((ticket) => (
+                                <Typography key={ticket}>
+                                    {ticket}  x {shoppingCart.filter(a => a.descriptionName === ticket).length}
                                 </Typography>
                             )) : <CircularProgress />}
                             <Typography>
                                 <strong>Totalt: {totalPrice},-</strong>
-                            {console.log(selectedTickets)}
                             </Typography>
                         </CardContent>
                     </Card>
@@ -154,7 +155,7 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
                         <CardContent>
                             <FormControlLabel
                                 control={<Checkbox checked={checkedEula} onChange={(e) => setCheckedEula(e.target.checked)} />}
-                                label={<><span>Jeg har lest og forstått de</span><Link onClick={handleOpen}> vilkår og regler</Link><span> som gjelder for dette arrangement</span></>}
+                                label={<><span>Jeg har lest og forstått de</span><Link onClick={handleOpen} to="#"> vilkår og regler</Link><span> som gjelder for dette arrangement</span></>}
                             />
                         </CardContent>
                     </Paper>

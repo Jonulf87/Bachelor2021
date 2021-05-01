@@ -44,15 +44,11 @@ export default function TicketMain() {
     const [checkedEula, setCheckedEula] = useState(false);
 
     const { isAuthenticated } = useAuth();
-    const { generateTickets, selectedTickets } = usePurchase();
+    const { shoppingCart } = usePurchase();
 
     const handleNext = () => {
         if (isAuthenticated && activeStep === 1) {
             setActiveStep(3);
-        }
-        else if (activeStep === 3) {
-            generateTickets();
-            setActiveStep(oldValue => oldValue + 1);
         }
         else {
             setActiveStep(oldValue => oldValue + 1);
@@ -60,9 +56,10 @@ export default function TicketMain() {
     };
 
     const handleBack = () => {
-        if (isAuthenticated && activeStep === 3) {
+        if (isAuthenticated && activeStep === 3 || activeStep == 4) {
             setActiveStep(1);
         }
+
         else {
             setActiveStep(oldValue => oldValue - 1);
         }
@@ -121,12 +118,12 @@ export default function TicketMain() {
                                         className={classes.button}
                                         disabled={(activeStep > 1 && !isAuthenticated)
                                             || activeStep === 3 && !checkedEula
-                                            || activeStep === 1 && !selectedTickets.some(a => a.amountToBuy > 0)
+                                            || activeStep === 1 && shoppingCart.length === 0
                                         }
                                     >
                                         {activeStep === steps.length - 1 ? 'Fullfør' : 'Neste'}
                                     </Button>
-                                    {(activeStep === 1 && !selectedTickets.some(a => a.amountToBuy > 0)) && <Typography color="error">Du må velge minst en billett</Typography>}
+                                    {(activeStep === 1 && shoppingCart.length === 0) && <Typography color="error">Du må velge minst en billett</Typography>}
                                 </div>
                             </div>
                         </StepContent>

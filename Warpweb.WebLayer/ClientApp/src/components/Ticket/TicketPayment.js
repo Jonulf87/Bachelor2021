@@ -1,29 +1,21 @@
 ﻿import { Button, CardContent, Typography, Card } from '@material-ui/core';
-import React from 'react';
-import useAuth from '../../hooks/useAuth';
+import React, { useEffect, useState } from 'react';
 import usePurchase from '../../hooks/usePurchase';
 
 export default function TicketPayment() {
 
-    const { userUnpaidEventTickets } = usePurchase();
-    const { isAuthenticated, token } = useAuth();
+    const { userUnpaidEventTickets, payForTicket, shoppingCart } = usePurchase();
+    const [noUnpaidTickets, setNoUnpaidTickets] = useState(false);
 
-    const payForTicket = async (ticket) => {
-        if (isAuthenticated) {
-            await fetch(`/api/tickets/purchaseticket/${ticket.id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
-                }
-            })
+
+    useEffect(() => {
+        if (userUnpaidEventTickets.length === 0) {
+            setNoUnpaidTickets(true);
         }
-    }
-
-    const handleClick = (e) => {
-        userUnpaidEventTickets.forEach((unpaidTicket) => (
-            payForTicket(unpaidTicket)
-        ))
-    }
+        else {
+            setNoUnpaidTickets(false);
+        }
+    }, [userUnpaidEventTickets])
 
     return (
 
@@ -33,9 +25,10 @@ export default function TicketPayment() {
                     Trykk på knappen for å "betale", ( ͡° ͜ʖ ͡°)
                 </Typography>
                 <Button
+                    disabled={noUnpaidTickets}
                     variant="contained"
                     color="primary"
-                    onClick={handleClick}
+                    onClick={payForTicket}
                 >Betal</Button>
             </CardContent>
         </Card>
