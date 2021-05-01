@@ -20,13 +20,10 @@ export default function TicketPayment() {
     }
 
     const handleClick = (e) => {
-        userUnpaidEventTickets.foreach((unpaidTicket) => (
+        userUnpaidEventTickets.forEach((unpaidTicket) => (
             payForTicket(unpaidTicket)
         ))
     }
-
-
-
 
     return (
 
