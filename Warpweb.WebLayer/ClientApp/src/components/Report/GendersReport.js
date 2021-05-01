@@ -9,6 +9,7 @@ export default function GendersReport({ data }) {
             margin: '15px',
         },
         section: {
+            fontSize: 14,
             margin: 2,
             padding: 2,
         },

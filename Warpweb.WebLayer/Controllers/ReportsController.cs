@@ -49,5 +49,15 @@ namespace Warpweb.WebLayer.Controllers
         {
             return await _reportsService.GetAllergiesReportAsync();
         }
+
+        /// <summary>
+        /// Returns participants with allergies for current event
+        /// </summary>
+        [HttpGet]
+        [Route("tickettypesreport")]
+        public async Task<List<TicketTypesReportListVm>> GetTicketTypesReportAsync()
+        {
+            return await _reportsService.GetTicketTypesReportAsync();
+        }
     }
 }
