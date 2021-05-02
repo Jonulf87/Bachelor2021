@@ -33,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: '0px',
+            paddingRight: '0px',
+        }
     },
 }));
 

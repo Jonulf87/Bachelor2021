@@ -12,9 +12,6 @@ import CrewPermissionList from './CrewPermissionList';
 
 
 const useStyles = makeStyles({
-    root: {
-        minWidth: 800,
-    },
     verticalDivider: {
         height: "90%",
     },
@@ -103,7 +100,7 @@ export default function CrewMain() {
             <Grid
                 container
                 spacing={2}
-                justify="center"
+                justify="flex-start"
             >
                 {isCrewMember ? (
                     <>
