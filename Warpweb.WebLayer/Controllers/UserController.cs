@@ -98,9 +98,9 @@ namespace Warpweb.WebLayer.Controllers
                 await _securityService.RegisterUserAsync(user);
                 return Ok();
             }
-            catch (ItemAlreadyExistsException)
+            catch (HttpException)
             {
-                return BadRequest("Brukeren eksisterer allerede");
+                return Conflict("Brukeren eksisterer allerede");
             }
             catch (Exception)
             {

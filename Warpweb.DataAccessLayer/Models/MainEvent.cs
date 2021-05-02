@@ -5,7 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
-    public class MainEvent //Arrangementet. Events under arrangementet heter SubEvents
+    /// <summary>
+    /// The MainEvent class. MainEvents represent events taking place within a set date/time span, at a set location and with a given number of tickets available.
+    /// </summary>
+    /// <remarks>
+    /// MainEvents can be create without a Venue, but will need a specified Venue before tickets can be sold.
+    /// </remarks>
+    public class MainEvent
     {
         public int Id { get; set; }
         public string Name { get; set; }

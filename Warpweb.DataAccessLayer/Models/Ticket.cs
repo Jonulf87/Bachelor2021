@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
+    /// <summary>
+    /// The Ticket class. Tickets are sold to ApplicationUsers, are locked to MainEvents, TicketTypes and Seats.
+    /// </summary>
     public class Ticket
     {
         public int Id { get; set; }

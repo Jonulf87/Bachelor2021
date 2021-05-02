@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
+    /// <summary>
+    /// The Venue class. Venues represent physical entities where MainEvents take place.
+    /// </summary>
+    /// <remarks>
+    /// Each Organizer has its own list of Venues, thus the same Venue can exist in multiple MainEvents arranged by different Organizers.
+    /// </remarks>
     public class Venue
     {
         public int Id { get; set; }

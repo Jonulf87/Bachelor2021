@@ -3,6 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
+    /// <summary>
+    /// The CrewUser class. CrewUsers are ApplicationUsers that are given Crew roles within a MainEvent.
+    /// </summary>
+    /// <remarks>
+    /// The Comment field allows for noting special attributes of the CrewUser such as licenses etc.
+    /// </remarks>
     public class CrewUser
     {
         public int Id { get; set; }
