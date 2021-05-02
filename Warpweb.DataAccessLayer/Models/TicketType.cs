@@ -3,10 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
+    /// <summary>
+    /// The TicketType class. TicketTypes represent the different ticket groups with specific attributes such as availability and price.
+    /// <remarks>
+    /// TicketTypes are locked to Rows in the SeatMap.
+    /// </remarks>
     public class TicketType
     {
         public int Id { get; set; }
-        public string DescriptionName { get; set; } //Kanskje gjøre noe med navnet. Er meningen å være navn på type billett, f.eks. første klasse eller økonomi eller silver.
+        public string DescriptionName { get; set; }
         public int BasePrice { get; set; }
         public int AmountAvailable { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }

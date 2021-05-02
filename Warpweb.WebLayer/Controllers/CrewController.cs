@@ -140,7 +140,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.AddCrewMemberAsync(crewId, userId);
                 return Ok();
             }
-            catch
+            catch(HttpException)
             {
                 return BadRequest("Kunne ikke legge til crewmedlem!");
             }

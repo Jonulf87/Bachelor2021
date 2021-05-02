@@ -99,9 +99,13 @@ namespace Warpweb.WebLayer.Controllers
                 await _venueService.CreateVenueAsync(venueVm);
                 return Ok();
             }
-            catch (ItemAlreadyExistsException)
+            catch (HttpException)
             {
                 return Conflict($"Lokalet med navn: {venueVm.Name} eksisterer fra før");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Noe gikk galt.");
             }
 
         }
@@ -120,9 +124,13 @@ namespace Warpweb.WebLayer.Controllers
                 await _venueService.UpdateVenueAsync(venueVm);
                 return Ok();
             }
-            catch (ItemNotFoundException)
+            catch (HttpException)
             {
-                return BadRequest();
+                return NotFound("Fant ikke lokalet");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Noe gikk galt");
             }
         }
 
