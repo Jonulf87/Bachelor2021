@@ -18,14 +18,14 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
+export default function TicketPurchaseSummary() {
 
     const [userData, setUserData] = useState(null);
     const [eventName, setEventName] = useState(null);
     const [open, setOpen] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
-    const { shoppingCart, selectedMainEventId, totalPrice } = usePurchase();
+    const { shoppingCart, selectedMainEventId, totalPrice, setCheckedEula, checkedEula } = usePurchase();
 
 
     const classes = useStyles();

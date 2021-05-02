@@ -119,6 +119,10 @@ namespace Warpweb.LogicLayer.Services
                 {
                     throw new TicketTypeSoldOutException();
                 }
+                if (ticketType == null)
+                {
+                    throw new Exception();
+                }
 
                 newTickets.Add(
                     new Ticket

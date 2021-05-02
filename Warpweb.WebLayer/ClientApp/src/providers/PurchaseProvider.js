@@ -11,6 +11,8 @@ const PurchaseProvider = ({ children }) => {
     const [userUnpaidEventTickets, setUnpaidUserEventsTickets] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [shoppingCart, setShoppingCart] = useState([]);
+    const [paymentOk, setPaymentOk] = useState(false);
+    const [checkedEula, setCheckedEula] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -88,7 +90,7 @@ const PurchaseProvider = ({ children }) => {
     }
 
     const payForTicket = async () => {
-        if (isAuthenticated) {
+        if (isAuthenticated && checkedEula) {
             const paymentResponse = await fetch(`/api/tickets/purchaseticket`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -103,6 +105,8 @@ const PurchaseProvider = ({ children }) => {
                 setUserEventsTickets([]);
                 setUnpaidUserEventsTickets([]);
                 setTotalPrice(0);
+                setPaymentOk(true);
+                setCheckedEula(false);
             }
         }
     }
@@ -118,7 +122,7 @@ const PurchaseProvider = ({ children }) => {
     }, [shoppingCart])
 
 
-    return <PurchaseContext.Provider value={{ shoppingCart, addTicketType, payForTicket, userUnpaidEventTickets, totalPrice, ticketTypesList, generateTickets, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
+    return <PurchaseContext.Provider value={{ checkedEula, setCheckedEula, paymentOk, setPaymentOk, shoppingCart, addTicketType, payForTicket, userUnpaidEventTickets, totalPrice, ticketTypesList, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
 
 };
 

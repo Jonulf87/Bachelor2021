@@ -28,9 +28,9 @@ export default function EventUserMain() {
     useEffect(() => {
         const getEvents = async () => {
 
-            const response = await fetch('/api/events/eventslist');
-            const result = await response.json();
-            setEventsList(result);
+            const responseEvents = await fetch('/api/events/eventslist');
+            const resultEvents = await responseEvents.json();
+            setEventsList(resultEvents);
             setIsReady(true);
         }
         getEvents();

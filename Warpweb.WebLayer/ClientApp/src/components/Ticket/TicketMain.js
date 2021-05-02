@@ -41,14 +41,17 @@ export default function TicketMain() {
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(parseInt(login) || 0);
     const steps = ['Velg arrangement', 'Velg billett', 'Innlogging', 'Oppsummering', 'Betaling', 'Velg sitteplass'];
-    const [checkedEula, setCheckedEula] = useState(false);
 
     const { isAuthenticated } = useAuth();
-    const { shoppingCart } = usePurchase();
+    const { shoppingCart, setPaymentOk, checkedEula } = usePurchase();
 
     const handleNext = () => {
         if (isAuthenticated && activeStep === 1) {
             setActiveStep(3);
+        }
+        else if (activeStep === 4) {
+            setPaymentOk(false);
+            setActiveStep(oldValue => oldValue + 1);
         }
         else {
             setActiveStep(oldValue => oldValue + 1);
@@ -59,7 +62,10 @@ export default function TicketMain() {
         if (isAuthenticated && activeStep === 3 || activeStep == 4) {
             setActiveStep(1);
         }
-
+        else if (activeStep === 4) {
+            setPaymentOk(false);
+            setActiveStep(oldValue => oldValue + 1);
+        }
         else {
             setActiveStep(oldValue => oldValue - 1);
         }
@@ -82,7 +88,7 @@ export default function TicketMain() {
             case 2:
                 return (<UserLogin fromTicket={true} />);
             case 3:
-                return (<TicketPurchaseSummary setCheckedEula={setCheckedEula} checkedEula={checkedEula} />);
+                return (<TicketPurchaseSummary />);
             case 4:
                 return (<TicketPayment />);
             case 5:
