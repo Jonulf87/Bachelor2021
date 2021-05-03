@@ -73,11 +73,10 @@ namespace Warpweb.WebLayer.Controllers
                 return BadRequest();
             }
 
-
         }
 
         /// <summary>
-        /// Create tenant/organizer
+        /// Update/modify tenant/organizer
         /// </summary>
         /// <param name="organizerVm"></param> 
         [HttpPut]
@@ -118,7 +117,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Sets contact person for organization
+        /// Sets active contact person for organization
         /// </summary>
         /// <param name="orgId"></param>
         /// <param name="userId"></param> 

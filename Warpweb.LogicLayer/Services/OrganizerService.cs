@@ -21,6 +21,9 @@ namespace Warpweb.LogicLayer.Services
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Returns all tentants/organizers
+        /// </summary>
         public async Task<List<OrganizerListVm>> GetOrganizersAsync()
         {
             return await _dbContext.Organizers
@@ -34,6 +37,10 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Return specific tentant/organizer
+        /// </summary>
+        /// <param name="orgId"></param> 
         public async Task<OrganizerVm> GetOrganizerAsync(int id)
         {
             return await _dbContext.Organizers
@@ -49,6 +56,10 @@ namespace Warpweb.LogicLayer.Services
                 .SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Create tenant/organizer
+        /// </summary>
+        /// <param name="organizerVm"></param> 
         public async Task CreateOrganizerAsync(OrganizerVm organizerVm)
         {
             var existingOrganizer = _dbContext.Organizers
@@ -72,6 +83,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Create tenant/organizer
+        /// </summary>
+        /// <param name="organizerVm"></param> 
         public async Task UpdateOrganizerAsync(OrganizerVm organizerVm)
         {
 
@@ -92,8 +107,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        
-
+        /// <summary>
+        /// Returns active contact person for organization
+        /// </summary>
+        /// <param name="orgId"></param> 
         public async Task<List<OrganizerVm>> GetOrganizerContactAsync(int orgId)
         {
             var contact = await _dbContext.Organizers
@@ -111,6 +128,11 @@ namespace Warpweb.LogicLayer.Services
             return contact;
         }
 
+        /// <summary>
+        /// Sets contact person for organization
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="userId"></param> 
         public async Task<OrganizerVm> SetOrganizerContactAsync(int orgId, string userId)
         {
             var organizer = await _dbContext.Organizers
@@ -139,6 +161,10 @@ namespace Warpweb.LogicLayer.Services
             return organizerToBeSent;
         }
 
+        /// <summary>
+        /// Returns organizations where the user is administraor
+        /// </summary>
+        /// <param name="userId"></param> 
         public async Task<List<OrganizerListVm>> GetOrgsWhereUserIsAdminAsync(string userId)
         {
             return await _dbContext.Organizers
@@ -152,6 +178,11 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        /// <summary>
+        /// Remove organization administrator
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="userId"></param>
         public async Task RemoveOrgAdminAsync(int orgId, string userId)
         {
             var user = _dbContext.ApplicationUsers.Find(userId);
@@ -174,6 +205,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Returns organization administrators
+        /// </summary>
+        /// <param name="orgId"></param> 
         public async Task<List<OrgAdminVm>> GetOrgAdminsAsync(int orgId)
         {
             var organizer = await _dbContext.Organizers
@@ -198,6 +233,11 @@ namespace Warpweb.LogicLayer.Services
             return null;
         }
 
+        /// <summary>
+        /// Add organization administrator
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="userId"></param> 
         public async Task SetOrgAdminAsync(int orgId, string userId)
         {
             var existingOrg = await _dbContext.Organizers
