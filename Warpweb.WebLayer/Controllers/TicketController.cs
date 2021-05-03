@@ -89,7 +89,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Create new ticket
         /// </summary>
         /// <param name="tickets"></param>
-        /// <returns>TicketVM</returns>
+        /// <returns>Ticket list</returns>
         [HttpPost]
         [Route("createticket")]
         public async Task<ActionResult> CreateTicketsAsync([FromBody] List<TicketsToBuyVm> tickets)

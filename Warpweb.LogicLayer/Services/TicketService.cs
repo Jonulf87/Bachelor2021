@@ -22,6 +22,10 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
+        /// <summary>
+        /// Return all tickets
+        /// </summary>
+        /// <returns>TicketListVM</returns>
         public async Task<List<TicketListVm>> GetTicketsAsync()
         {
             return await _dbContext.Tickets
@@ -37,6 +41,11 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        /// <summary>
+        /// Return specific ticket
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>TicketVM</returns>
         public async Task<TicketVm> GetTicketAsync(int id)
         {
             return await _dbContext.Tickets
@@ -48,6 +57,12 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Returns list of tickets held by current user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="eventId"></param>
+        /// <returns>TicketVM</returns>
         public async Task<List<TicketListVm>> GetAllTicketsUserEventAsync(string userId, int eventId)
         {
             return await _dbContext.Tickets
@@ -65,6 +80,12 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        /// <summary>
+        /// Returns list of unpaid tickets held by current user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="eventId"></param>
+        /// <returns>TicketVM</returns>
         public async Task<List<TicketListVm>> GetAllTicketsUserEventUnpaidAsync(string userId, int eventId)
         {
             return await _dbContext.Tickets
@@ -82,6 +103,12 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        /// <summary>
+        /// Create new ticket
+        /// </summary>
+        /// <param name="tickets"></param>
+        /// <param name="userId"></param>
+        /// <returns>Ticket list</returns>
         public async Task<List<Ticket>> CreateTicketsAsync(List<TicketsToBuyVm> tickets, string userId)
         {
             var user = await _dbContext.ApplicationUsers
@@ -140,6 +167,11 @@ namespace Warpweb.LogicLayer.Services
             return newTickets;
         }
 
+        /// <summary>
+        /// Simulates purchase of ticket
+        /// </summary>
+        /// <param name="tickets"></param>
+        /// <param name="userId"></param>
         public async Task PurchaseTicketsAsync(List<TicketsToBuyVm> tickets, string userId)
         {
 
@@ -154,6 +186,12 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Simulates reservation of seat in seatmap
+        /// </summary>
+        /// <param name="ticketId"></param>
+        /// <param name="seatId"></param>
+        /// <param name="userId"></param>
         public async Task ReserveSeatAsync(int ticketId, int seatId, string userId)
         {
             var seat = await _dbContext.Seats
@@ -190,6 +228,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Modify ticket
+        /// </summary>
+        /// <param name="ticketVm"></param> 
         public async Task<int> UpdateTicketAsync(TicketVm ticketVm)
         {
 
@@ -210,7 +252,10 @@ namespace Warpweb.LogicLayer.Services
             return existingTicket.Id;
         }
 
-        // Restrict to SuperAdmin
+        /// <summary>
+        /// Delete ticket
+        /// </summary>
+        /// <param name="ticketVm"></param> 
         public async Task<int> DeleteTicketAsync(TicketVm ticketVm)
         {
 

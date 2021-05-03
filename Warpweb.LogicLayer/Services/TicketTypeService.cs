@@ -22,6 +22,9 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
+        /// <summary>
+        /// Returns all available ticket types for active event
+        /// </summary>
         public async Task<List<TicketTypeListVm>> GetTicketTypesAsync()
         {
             return await _dbContext.TicketTypes
@@ -34,6 +37,10 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        /// <summary>
+        /// Returns all ticket types
+        /// </summary>
+        /// <param name="eventId"></param>  
         public async Task<List<TicketTypeListVm>> GetTicketTypesForEventAsync(int eventId)
         {
             var ticketTypesForEvent = await _dbContext.TicketTypes
@@ -62,6 +69,10 @@ namespace Warpweb.LogicLayer.Services
             return ticketTypesListToSend;
         }
 
+        /// <summary>
+        /// Return specific ticket type
+        /// </summary>
+        /// <param name="id"></param>  
         public async Task<TicketTypeVm> GetTicketTypeAsync(int id)
         {
             return await _dbContext.TicketTypes
@@ -75,6 +86,10 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Create ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         public async Task CreateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             var existingTicketType = _dbContext.TicketTypes
@@ -98,6 +113,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Modify ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         public async Task UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             var existingTicketType = _dbContext.TicketTypes.Find(ticketTypeVm.Id); 
@@ -115,7 +134,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync(); 
         }
 
-
+        /// <summary>
+        /// Deletes ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         public async Task DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
 
