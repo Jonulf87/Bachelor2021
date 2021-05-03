@@ -7,7 +7,7 @@ const PurchaseProvider = ({ children }) => {
 
     const [selectedMainEventId, setSelectedMainEventId] = useState(null);
     const [ticketTypesList, setTicketTypesList] = useState([]);
-    const [userEventTickets, setUserEventsTickets] = useState([]);
+    const [userTickets, setUserTickets] = useState([]);
     const [userUnpaidEventTickets, setUnpaidUserEventsTickets] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [shoppingCart, setShoppingCart] = useState([]);
@@ -43,20 +43,27 @@ const PurchaseProvider = ({ children }) => {
         setShoppingCart(oldValue => [...oldValue, ticket])
     }
 
-
-    const getUserTickets = async () => {
-        if (isAuthenticated) {
-            const ticketsResponse = await fetch(`/api/tickets/alltickets/${selectedMainEventId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+    useEffect(() => {
+        const getUserTickets = async () => {
+            if (isAuthenticated) {
+                const ticketsResponse = await fetch(`/api/tickets/usertickets`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                if (ticketsResponse.ok) {
+                    setUserTickets(await ticketsResponse.json())
                 }
-            });
-            if (ticketsResponse.ok) {
-                setUserEventsTickets(await ticketsResponse.json())
+                else {
+                    setUserTickets([]);
+                }
             }
         }
-    }
+        getUserTickets();
+        console.log(userTickets);
+
+    }, [paymentOk, isAuthenticated])
 
     const getUnpaidUserTickets = async () => {
         if (isAuthenticated) {
@@ -98,11 +105,10 @@ const PurchaseProvider = ({ children }) => {
                 },
                 body: JSON.stringify(shoppingCart),
                 method: 'POST'
-                
+
             });
             if (paymentResponse.ok) {
                 setShoppingCart([]);
-                setUserEventsTickets([]);
                 setUnpaidUserEventsTickets([]);
                 setTotalPrice(0);
                 setPaymentOk(true);
@@ -122,7 +128,7 @@ const PurchaseProvider = ({ children }) => {
     }, [shoppingCart])
 
 
-    return <PurchaseContext.Provider value={{ checkedEula, setCheckedEula, paymentOk, setPaymentOk, shoppingCart, addTicketType, payForTicket, userUnpaidEventTickets, totalPrice, ticketTypesList, selectedMainEventId, setSelectedMainEventId, userEventTickets }}>{children}</PurchaseContext.Provider>;
+    return <PurchaseContext.Provider value={{ checkedEula, setCheckedEula, paymentOk, setPaymentOk, shoppingCart, addTicketType, payForTicket, userUnpaidEventTickets, totalPrice, ticketTypesList, selectedMainEventId, setSelectedMainEventId, userTickets, setUserTickets }}>{children}</PurchaseContext.Provider>;
 
 };
 

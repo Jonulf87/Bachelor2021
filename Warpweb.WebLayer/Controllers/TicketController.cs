@@ -22,6 +22,14 @@ namespace Warpweb.WebLayer.Controllers
             _ticketService = ticketService;
         }
 
+        [HttpGet]
+        [Route("usertickets")]
+        public async Task<List<TicketListVm>> GetAllTicketsOfUserAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return await _ticketService.GetAllTicketsOfUserAsync(userId);
+        }
+
         /// <summary>
         /// Return all tickets
         /// </summary>
@@ -44,7 +52,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Returns list of tickets held by current user
+        /// Returns list of tickets held by current user of that event
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns>TicketVM</returns>
@@ -65,7 +73,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Returns list of unpaid tickets held by current user
+        /// Returns list of unpaid tickets held by current user of that event
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns>TicketVM</returns>

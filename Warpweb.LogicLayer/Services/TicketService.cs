@@ -23,13 +23,12 @@ namespace Warpweb.LogicLayer.Services
         }
 
         /// <summary>
-        /// Return all tickets
+        /// Return all tickets of event
         /// </summary>
         /// <returns>TicketListVM</returns>
         public async Task<List<TicketListVm>> GetTicketsAsync()
         {
             return await _dbContext.Tickets
-                .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
                 .Select(a => new TicketListVm
                 {
                     Id = a.Id,
@@ -38,6 +37,26 @@ namespace Warpweb.LogicLayer.Services
                     SeatNumber = a.Seat.SeatNumber,
                     TicketType = a.Type.DescriptionName,
                     UserId = a.User.Id
+                }).ToListAsync();
+        }
+        /// <summary>
+        /// Returns all tickets belonging to user independent of mainevent
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<TicketListVm>> GetAllTicketsOfUserAsync(string userId)
+        {
+            return await _dbContext.Tickets
+                .Where(a => a.User.Id == userId)
+                .IgnoreQueryFilters()
+                .Select(a => new TicketListVm
+                {
+                    Id = a.Id,
+                    MainEventName = a.MainEvent.Name,
+                    Price = a.Price,
+                    RowName = a.Seat.Row.Name,
+                    SeatNumber = a.Seat.SeatNumber,
+                    TicketType = a.Type.DescriptionName
                 }).ToListAsync();
         }
 
@@ -49,7 +68,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<TicketVm> GetTicketAsync(int id)
         {
             return await _dbContext.Tickets
-                .Where(a => a.Id == id && a.MainEventId == _mainEventProvider.MainEventId)
+                .Where(a => a.Id == id)
                 .Select(a => new TicketVm
                 {
                     Id = a.Id,

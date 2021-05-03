@@ -1,10 +1,11 @@
 ﻿import { Card, CardContent, Divider, Grid, Typography, Button } from '@material-ui/core';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { format, parseISO } from 'date-fns';
 import useAuth from '../../hooks/useAuth';
 import { Redirect, useHistory } from 'react-router-dom';
 import usePurchase from '../../hooks/usePurchase';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 
 
 const useStyles = makeStyles({
@@ -32,13 +33,59 @@ const useStyles = makeStyles({
 
 export default function EventCard({ id, name, startDateTime, endDateTime, infoComments, venueName, organizerName, organizerWebPage }) {
 
+ 
     const classes = useStyles();
     const history = useHistory();
-    const { setSelectedMainEventId } = usePurchase();
+    const { setSelectedMainEventId, userTickets } = usePurchase();
+    const { setSelectedEvent, currentEvent } = useCurrentEvent();
+    const { isAuthenticated } = useAuth();
 
     const handleClick = () => {
-        setSelectedMainEventId(id)
-        history.push(`/userticket`);
+        if (userTickets.some(a => a.mainEventName === name && currentEvent !== name)) {
+            setSelectedEvent(id);
+        }
+        else {
+            setSelectedMainEventId(id)
+            history.push(`/userticket`);
+        }
+    }
+
+    const buttonSelector = () => {
+        
+        if (userTickets.some(a => a.mainEventName === name) && currentEvent !== name) {
+            return (
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleClick()}
+                >
+                    Sett som aktivt arrangement
+                </Button>
+            )
+        }
+        else if (userTickets.some(a => a.mainEventName === name) && currentEvent === name) {
+            return (
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleClick()}
+                    disabled
+                >
+                    Aktivt arrangement
+                 </Button>
+            )
+        }
+        else {
+            return (
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleClick()}
+                >
+                    Kjøp billett
+                </Button>
+            )
+        }
     }
 
     return (
@@ -98,13 +145,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
                         item
                         xs={12}
                     >
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => handleClick()}
-                        >
-                            Kjøp billett
-                        </Button>
+                        {buttonSelector()}
                     </Grid>
                 </Grid>
             </CardContent>
