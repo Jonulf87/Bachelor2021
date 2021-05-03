@@ -51,7 +51,7 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Returns participants with allergies for current event
+        /// Returns sold ticket types for current event
         /// </summary>
         [HttpGet]
         [Route("tickettypesreport")]
