@@ -11,9 +11,6 @@ using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
 {
-    // Creation and maintenance of events.
-    // Deletion of events should be restricted to SuperAdmin
-
     public class MainEventService
     {
         private readonly ApplicationDbContext _dbContext;
@@ -25,6 +22,9 @@ namespace Warpweb.LogicLayer.Services
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Returns all events
+        /// </summary>
         public async Task<List<MainEventListVm>> GetMainEventsAsync()
         {
             return await _dbContext.MainEvents
@@ -42,6 +42,10 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Returns a specific Event.
+        /// </summary>
+        /// <param name="id"></param>  
         public async Task<MainEventVm> GetMainEventAsync(int id)
         {
             return await _dbContext.MainEvents
@@ -61,6 +65,15 @@ namespace Warpweb.LogicLayer.Services
                 })
                 .SingleOrDefaultAsync();
         }
+
+        /// <summary>
+        /// Creates a new Event.
+        /// </summary>
+        /// <param name="mainEventVm"></param>
+        /// /// <param name="userId"></param>
+        /// <remarks>
+        /// A default management crew with crew permissions is created along with the MainEvent.
+        /// </remarks>
         public async Task CreateMainEventAsync(MainEventVm maineventVm, string userId)
         {
             var existingMainEvent = await _dbContext.MainEvents
@@ -124,6 +137,10 @@ namespace Warpweb.LogicLayer.Services
             
         }
 
+        /// <summary>
+        /// Updates a specific Event.
+        /// </summary>
+        /// <param name="mainEventVm"></param> 
         public async Task UpdateMainEventAsync(MainEventVm maineventVm)
         {
 
@@ -155,7 +172,10 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
-
+        /// <summary>
+        /// Returns current active event
+        /// </summary>
+        /// <param name="userId"></param>
         public async Task<ActionResult<CurrentMainEventVm>> GetCurrentMainEventAsync(string userId)
         {
             return await _dbContext.ApplicationUsers
@@ -168,6 +188,11 @@ namespace Warpweb.LogicLayer.Services
                 .SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Sets the active event
+        /// </summary>
+        /// <param name="eventId"></param> 
+        /// <param name="userId"></param>  
         public async Task SetCurrentEventAsync(int eventId, string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -178,7 +203,9 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        //Metoden henter ut kun de arrangementer som tilhører organisasjonen som pålogget bruker er administrator i.
+        /// <summary>
+        /// Returns events where current user is organization admin
+        /// </summary>
         public async Task<List<MainEventListVm>> GetMainEventsForOrgAdminAsync(string userId)
         {
             return await _dbContext.MainEvents
