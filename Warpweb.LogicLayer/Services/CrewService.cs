@@ -24,6 +24,9 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
+        /// <summary>
+        /// Returns all crews
+        /// </summary>
         public async Task<List<CrewListVm>> GetCrewsAsync()
         {
             var crewsList = await _dbContext.Crews
@@ -42,6 +45,10 @@ namespace Warpweb.LogicLayer.Services
             return crewsList;
         }
 
+        /// <summary>
+        /// Return specific crew
+        /// </summary>
+        /// <param name="crewId"></param> 
         public async Task<CrewVm> GetCrewAsync(int id)
         {
 
@@ -61,6 +68,10 @@ namespace Warpweb.LogicLayer.Services
             return crew;
         }
 
+        /// <summary>
+        /// Create crew
+        /// </summary>
+        /// <param name="crewName"></param> 
         public async Task CreateCrewAsync(string crewName)
         {
             var existingCrew = _dbContext.Crews
@@ -82,6 +93,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Modify crew
+        /// </summary>
+        /// <param name="crewVm"></param> 
         public async Task UpdateCrewAsync(CrewVm crewVm)
         {
             var existingCrew = _dbContext.Crews.Where(a => a.Id == crewVm.CrewId).SingleOrDefault();
@@ -104,7 +119,11 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
-
+        /// <summary>
+        /// Add crewmember to crew with specific ID
+        /// </summary>
+        /// <param name="crewId"></param>
+        /// <param name="userId"></param>
         public async Task AddCrewMemberAsync(int crewId, string userId)
         {
             if (userId == null || crewId <= 0)
@@ -132,6 +151,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Returns crewmembers in crew with specific ID
+        /// </summary>
+        /// <param name="crewId"></param> 
         public async Task<List<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
         {
             var crew = await _dbContext.Crews
@@ -166,6 +189,12 @@ namespace Warpweb.LogicLayer.Services
             return crewUsers;
         }
 
+
+        /// <summary>
+        /// Add crewleader to crew with specific ID
+        /// </summary>
+        /// <param int="crewId"></param>
+        /// <param string="userId"></param>
         public async Task AddCrewLeaderAsync(int crewId, string userId)
         {
             if (userId == null || crewId <= 0)
@@ -196,6 +225,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Get crewleaders from crew with specific ID
+        /// </summary>
+        /// <param int="crewId"></param>
         public async Task<List<CrewMembersListVm>> GetCrewLeadersAsync(int crewId)
         {
             var crew = await _dbContext.Crews
@@ -223,6 +256,10 @@ namespace Warpweb.LogicLayer.Services
                 }).ToList();
         }
 
+        /// <summary>
+        /// Delete crew
+        /// </summary>
+        /// <param name="crewVm"></param> 
         public async Task DeleteCrewAsync(CrewVm crewVm)
         {
 
@@ -238,6 +275,9 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
+        /// <summary>
+        /// Returns crews current user is member of
+        /// </summary>
         public async Task<List<CrewListVm>> GetCrewsUserIsMemberOfAsync(string userId)
         {
             if (userId == null)
