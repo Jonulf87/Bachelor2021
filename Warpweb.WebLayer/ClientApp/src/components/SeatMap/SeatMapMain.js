@@ -1,35 +1,22 @@
-﻿import React from 'react';
-import SeatMapAdminMenu from './SeatMapAdminMenu';
+﻿import React, { useEffect } from 'react';
 import SeatMapFloor from './SeatMapFloor';
-import { Grid } from '@material-ui/core';
+import useAuth from '../../hooks/useAuth';
+import useSeatMap from '../../hooks/useSeatMap';
+import SeatMapTicket from './SeatMapTicket';
 
 export default function SeatMapMain() {
 
+    const { isAuthenticated } = useAuth();
+    const { getSeatMap } = useSeatMap();
 
+    useEffect(() => {
+        getSeatMap();
+    }, [isAuthenticated])
 
     return (
         <>
-            <Grid
-                container
-                spacing={2}
-
-            >
-                <Grid
-                    item
-                    xs={12}
-                    lg={6}
-                >
-                    <SeatMapFloor />
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    lg={6}
-                >
-                    <SeatMapAdminMenu />
-                </Grid>
-            </Grid>
+            <SeatMapFloor />
+            <SeatMapTicket />
         </>
-
-    );
+    )
 }

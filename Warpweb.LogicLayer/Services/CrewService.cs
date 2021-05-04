@@ -36,11 +36,7 @@ namespace Warpweb.LogicLayer.Services
                     Name = a.Name,
                 })
                 .ToListAsync();
-            
-            if(crewsList == null)
-            {
-                throw new HttpException(HttpStatusCode.NotFound, "Fant ingen arbeidslag");
-            }
+
 
             return crewsList;
         }

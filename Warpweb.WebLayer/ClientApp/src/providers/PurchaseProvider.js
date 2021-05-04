@@ -61,7 +61,6 @@ const PurchaseProvider = ({ children }) => {
             }
         }
         getUserTickets();
-        console.log(userTickets);
 
     }, [paymentOk, isAuthenticated])
 

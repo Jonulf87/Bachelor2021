@@ -11,7 +11,6 @@ import EventSeatIcon from '@material-ui/icons/EventSeat';
 import SettingsIcon from '@material-ui/icons/Settings';
 import BusinessIcon from '@material-ui/icons/Business';
 import EventIcon from '@material-ui/icons/Event';
-import useSeatMap from '../../hooks/useSeatMap';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 export default function AdminMainMenu({ policies, roles}) {
 
     const classes = useStyles();
-    const { getSeatMap } = useSeatMap();
 
     return (
         <List
@@ -50,7 +48,7 @@ export default function AdminMainMenu({ policies, roles}) {
 
 
             {policies.some(a => a === 3) &&
-                <ListItem button component={NavLink} activeClassName={classes.root} to='/seatmap' onClick={getSeatMap}>
+                <ListItem button component={NavLink} activeClassName={classes.root} to='/seatmap'>
                 <ListItemIcon><EventSeatIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Setekart' />
                 </ListItem>

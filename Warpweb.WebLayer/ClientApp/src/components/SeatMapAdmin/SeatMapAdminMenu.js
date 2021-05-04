@@ -1,11 +1,11 @@
 ﻿import { Button, Grid, TextField } from '@material-ui/core';
 import { Form } from 'reactstrap';
 import React, { useState } from 'react';
-import useSeatMap from '../../hooks/useSeatMap';
+import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
 export default function SeatMapAdminMenu() {
 
-    const { addRow, rowName, setRowName, numberOfSeats, setNumberOfSeats, error, submitRows } = useSeatMap();
+    const { addRow, rowName, setRowName, numberOfSeats, setNumberOfSeats, error, submitRows } = useSeatMapAdmin();
 
 
     return (

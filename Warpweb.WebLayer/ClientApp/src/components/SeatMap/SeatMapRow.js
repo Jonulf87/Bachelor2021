@@ -1,55 +1,17 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
-import Draggable from 'react-draggable';
-import { Button } from 'reactstrap/lib';
-import useSeatMap from '../../hooks/useSeatMap';
-import SeatMapSeat from './SeatMapSeat';
+﻿import React from 'react';
 
-export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVertical, handleOpen }) {
-
-    const [style, setStyle] = useState({ display: 'none', zIndex: '9999' });
-
-    const { updateRowPosition, gridSize } = useSeatMap();
-
-    const handleDrag = (e, data) => {
-        updateRowPosition(rowName, data.x, data.y)
-    }
-
-    const renderSeats = () => {
-        const seatsToBeRendered = [];
-
-        for (let i = 1; i <= numberOfSeats; i++) {
-            seatsToBeRendered.push(<SeatMapSeat key={i} seatNumber={i} />)
-
-
-        }
-        return seatsToBeRendered;
-    }
+export default function SeatMapRow({ id, rowName, xPos, yPos, isVertical, seats, ticketTypeIds }) {
 
     return (
-        <Draggable bounds="parent" grid={[gridSize, gridSize]} position={{ x: xPos, y: yPos }} onDrag={handleDrag}>
-            <div className="seatRow"
-                onMouseOver={(e) => {
-                    e.preventDefault();
-                    setStyle({ display: 'block', zIndex: '9999' });
-                }}
-                onMouseOut={(e) => {
-                    e.preventDefault();
-                    setStyle({ display: 'none', zIndex: '9999' });
-                }}
-                style={{
-                    width: `${gridSize * numberOfSeats}px`,
-                    height: `${gridSize}px`,
-                    position: "absolute"
-                }}>
-                {renderSeats()}
-                <Button
-                    style={style}
-                    onClick={(e) =>  handleOpen(rowName) }
-                >
-                    Rediger rad
-            </Button>
-            </div>
-        </Draggable>
-    );
+        <div
+            style={{
+                position: "absolute",
+                top: `${yPos}px`,
+                left: `${xPos}px`,
+                border: '1px solid #333'
+            }}
+        >
+            Howdy how!!!!
+        </div>
+            )
 }
-

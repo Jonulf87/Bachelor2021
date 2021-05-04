@@ -4,7 +4,7 @@ import { MenuItem, Select, TextField, Checkbox, FormControlLabel, Paper, FormCon
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from 'reactstrap/lib';
 import useAuth from '../../hooks/useAuth';
-import useSeatMap from '../../hooks/useSeatMap';
+import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,7 +22,7 @@ export default function RowToolsDialog({ open, handleClose, row }) {
     const [numberOfSeats, setNumberOfSeats] = useState("");
     const [ticketTypesSelected, setTicketTypesSelected] = useState([])
 
-    const { updateRowData, ticketTypes } = useSeatMap();
+    const { updateRowData, ticketTypes } = useSeatMapAdmin();
 
     useEffect(() => {
         if (row) {

@@ -15,6 +15,7 @@ import AppRouter from './components/Approuter';
 import MainMenu from './components/MainPageNavBar/MainMenu';
 import CurrentEventProvider from './providers/CurrentEventProvider';
 import PurchaseProvider from './providers/PurchaseProvider';
+import SeatMapAdminProvider from './providers/SeatMapAdminProvider';
 import SeatMapProvider from './providers/SeatMapProvider';
 
 Date.prototype.toJSON = function () {
@@ -52,23 +53,25 @@ export default function App() {
         <AuthProvider>
             <CurrentEventProvider>
                 <PurchaseProvider>
-                    <SeatMapProvider>
-                        <ThemeProvider theme={theme}>
-                            <div className={classes.root}>
-                                <CssBaseline />
-                                <MainMenu />
-                                <main className={classes.content}>
-                                    <div className={classes.toolbar} />
-                                    <Container
-                                        maxWidth='xl'
-                                        justify="center"
-                                    >
-                                        <AppRouter />
-                                    </Container>
-                                </main>
-                            </div>
-                        </ThemeProvider>
-                    </SeatMapProvider>
+                    <SeatMapAdminProvider>
+                        <SeatMapProvider>
+                            <ThemeProvider theme={theme}>
+                                <div className={classes.root}>
+                                    <CssBaseline />
+                                    <MainMenu />
+                                    <main className={classes.content}>
+                                        <div className={classes.toolbar} />
+                                        <Container
+                                            maxWidth='xl'
+                                            justify="center"
+                                        >
+                                            <AppRouter />
+                                        </Container>
+                                    </main>
+                                </div>
+                            </ThemeProvider>
+                        </SeatMapProvider>
+                    </SeatMapAdminProvider>
                 </PurchaseProvider>
             </CurrentEventProvider>
         </AuthProvider>
