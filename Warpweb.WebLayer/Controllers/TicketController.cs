@@ -55,7 +55,7 @@ namespace Warpweb.WebLayer.Controllers
         /// Returns list of tickets held by current user of that event
         /// </summary>
         /// <param name="eventId"></param>
-        /// <returns>TicketVM</returns>
+        /// <returns>List of TicketVM</returns>
         [HttpGet]
         [Route("alltickets/{eventId}")]
         public async Task<ActionResult<List<TicketListVm>>> GetAllTiccketsUserEventAsync(int eventId)

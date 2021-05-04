@@ -1,13 +1,14 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button } from 'reactstrap/lib';
+import useSeatMap from '../../hooks/useSeatMap';
 import SeatMapSeat from './SeatMapSeat';
 
-export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVertical, updateRowPosition, setSeatInfo, handleOpen }) {
+export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVertical, handleOpen }) {
 
     const [style, setStyle] = useState({ display: 'none', zIndex: '9999' });
-    
-    const gridSize = 20;
+
+    const { updateRowPosition, gridSize } = useSeatMap();
 
     const handleDrag = (e, data) => {
         updateRowPosition(rowName, data.x, data.y)
@@ -17,7 +18,7 @@ export default function SeatMapRow({ xPos, yPos, numberOfSeats, rowName, isVerti
         const seatsToBeRendered = [];
 
         for (let i = 1; i <= numberOfSeats; i++) {
-            seatsToBeRendered.push(<SeatMapSeat key={i} seatNumber={i} rowName={rowName} gridSize={gridSize} />)
+            seatsToBeRendered.push(<SeatMapSeat key={i} seatNumber={i} />)
 
 
         }

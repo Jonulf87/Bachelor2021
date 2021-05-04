@@ -6,6 +6,7 @@ import useAuth from '../../hooks/useAuth';
 import { Redirect, useHistory } from 'react-router-dom';
 import usePurchase from '../../hooks/usePurchase';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
+import useSeatMap from '../../hooks/useSeatMap';
 
 
 const useStyles = makeStyles({
@@ -38,11 +39,12 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
     const history = useHistory();
     const { setSelectedMainEventId, userTickets } = usePurchase();
     const { setSelectedEvent, currentEvent } = useCurrentEvent();
-    const { isAuthenticated } = useAuth();
+    const { setRows } = useSeatMap();
 
     const handleClick = () => {
         if (userTickets.some(a => a.mainEventName === name && currentEvent !== name)) {
             setSelectedEvent(id);
+            setRows([]);
         }
         else {
             setSelectedMainEventId(id)

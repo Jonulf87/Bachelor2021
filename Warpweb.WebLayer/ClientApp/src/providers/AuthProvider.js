@@ -13,7 +13,9 @@ const AuthProvider = ({ children }) => {
 
 
     const refreshToken = (delay, callback) => {
-
+        if (refreshTokenTimeoutId.current) {
+            clearTimeout(refreshTokenTimeoutId.current);
+        }
         refreshTokenTimeoutId.current = setTimeout(async () => {
             const response = await fetch('/api/auth/refreshtoken', {
                 method: 'POST'
