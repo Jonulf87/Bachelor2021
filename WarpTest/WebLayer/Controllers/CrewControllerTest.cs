@@ -40,21 +40,6 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_crewName3, result[2].Name);
         }
 
-        /*
-        [Test]
-        public void ShouldThrowExceptionIfNoCrews()
-        {
-            CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
-            CrewController crewController = new CrewController(crewService);
-
-            var ex = Assert.ThrowsAsync<HttpException>(async () =>
-            {
-                List<CrewListVm> result = await crewController.GetCrewsAsync();
-            });
-            Assert.That(ex.Message == "Fant ingen arbeidslag");
-        }
-        */
-
         [Test]
         public async Task ShouldGetCrewById()
         {
