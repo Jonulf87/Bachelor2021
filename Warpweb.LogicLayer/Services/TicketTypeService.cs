@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
@@ -98,7 +99,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingTicketType != null)
             {
-                throw new ItemAlreadyExistsException($"Billettypen {ticketTypeVm.DescriptionName} eksisterer allerede");
+                throw new HttpException(HttpStatusCode.Conflict, $"Billettypen {ticketTypeVm.DescriptionName} eksisterer allerede");
             }
 
             var newTicketType = new TicketType
@@ -123,7 +124,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingTicketType == null) 
             {
-                throw new ItemNotFoundException($"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
             }
 
             existingTicketType.AmountAvailable = ticketTypeVm.AmountAvailable; 
@@ -145,7 +146,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (ticketTypeToBeDeleted == null)
             {
-                throw new ItemNotFoundException($"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
             }
 
             _dbContext.Remove<TicketType>(ticketTypeToBeDeleted);

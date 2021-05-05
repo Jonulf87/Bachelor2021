@@ -102,7 +102,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _mainEventService.UpdateMainEventAsync(mainEventVm);
                 return Ok();
             }
-            catch (ItemNotFoundException)
+            catch (HttpException)
             {
                 return BadRequest();
             }

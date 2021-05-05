@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
@@ -224,7 +225,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (seat == null)
             {
-                throw new ItemNotFoundException($"Fant ingen seter med setenr: {seat.SeatNumber}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen seter med setenr: {seat.SeatNumber}");
             }
 
             if (seat.Row.TicketTypes.All(a => a.Id != ticket.TicketTypeId))

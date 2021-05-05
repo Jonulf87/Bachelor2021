@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityServer4.Extensions;
@@ -140,7 +141,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (userExists != null)
             {
-                throw new ItemAlreadyExistsException($"Bruker med e-post: {user.EMail} eksisterer allerede");
+                throw new HttpException(HttpStatusCode.Conflict, $"Bruker med e-post: {user.EMail} eksisterer allerede");
             }
 
             var userDataToBeStored = new ApplicationUser

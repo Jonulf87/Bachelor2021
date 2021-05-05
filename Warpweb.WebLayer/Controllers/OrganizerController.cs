@@ -68,7 +68,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _organizerService.CreateOrganizerAsync(organizerVm);
                 return Ok();
             }
-            catch (ItemAlreadyExistsException)
+            catch (HttpException)
             {
                 return BadRequest();
             }
@@ -89,7 +89,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _organizerService.UpdateOrganizerAsync(organizerVm);
                 return Ok();
             }
-            catch (ItemAlreadyExistsException)
+            catch (HttpException)
             {
                 return BadRequest();
             }

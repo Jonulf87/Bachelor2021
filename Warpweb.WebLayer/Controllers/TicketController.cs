@@ -108,7 +108,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _ticketService.CreateTicketsAsync(tickets, userId);
                 return Ok();
             }
-            catch (ItemAlreadyExistsException)
+            catch (HttpException)
             {
                 return BadRequest(); 
             }
@@ -169,7 +169,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _ticketService.UpdateTicketAsync(ticketVm);
             }
 
-            catch (ItemNotFoundException)
+            catch (HttpException)
             {
                 return BadRequest();
             }
@@ -187,7 +187,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _ticketService.DeleteTicketAsync(ticketVm);
             }
-            catch (ItemNotFoundException)
+            catch (HttpException)
             {
                 return BadRequest();
             }

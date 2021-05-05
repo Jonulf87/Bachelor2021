@@ -27,7 +27,7 @@ namespace Warpweb.LogicLayer.Services
         /// <summary>
         /// Returns all Venues.
         /// </summary>
-        /// <returns>VenueListVm</returns>
+        /// <returns>List of Venues</returns>
         public async Task<List<VenueListVm>> GetVenuesAsync()
         {
             var venuesList = await _dbContext.Venues

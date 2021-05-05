@@ -6,7 +6,8 @@ namespace Warpweb.DataAccessLayer.Models
     public class Guardian
     {
         /// <summary>
-        /// The Guardian class. Guardians are ApplicationUsers that act as guardians (parents, typically) for ApplicationUsers below the set age requirements.
+        /// The Guardian class. Guardians are typically parents of
+        /// ApplicationUsers below the set age requirements.
         /// </summary>
         public int Id { get; set; }
         public string FirstName { get; set; }

@@ -26,6 +26,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Returns all crews
         /// </summary>
+        /// <returns>CrewListVM</returns>
         [HttpGet]
         [Route("allcrews")]
         public async Task<List<CrewListVm>> GetCrewsAsync()
@@ -34,9 +35,10 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
-        /// Return specific crew
+        /// Return specific crew with id = crewId
         /// </summary>
-        /// <param name="crewId"></param> 
+        /// <param name="crewId">crewId</param>
+        /// <returns>CrewVM</returns>
         [HttpGet]
         [Route("getcrew/{crewId}")]
         public async Task<ActionResult<CrewVm>> GetCrewAsync(int crewId)
