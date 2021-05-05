@@ -142,7 +142,7 @@ namespace Warpweb.WebLayer.Controllers
                 await _crewService.AddCrewMemberAsync(crewId, userId);
                 return Ok();
             }
-            catch(HttpException)
+            catch(Exception)
             {
                 return BadRequest("Kunne ikke legge til crewmedlem!");
             }
@@ -154,7 +154,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param int="crewId"></param>
         [HttpGet]
         [Route("crewleaders/{crewId}")]
-        public async Task<ActionResult<CrewMembersListVm>> GetCrewLeadersAsync(int crewId)
+        public async Task<ActionResult<List<CrewMembersListVm>>> GetCrewLeadersAsync(int crewId)
         {
             try
             {

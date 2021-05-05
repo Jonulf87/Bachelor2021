@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
@@ -173,7 +172,7 @@ namespace WarpTest.WebLayer.Controllers
             List<CrewMembersListVm> returnedCrewMembers = (List<CrewMembersListVm>)((OkObjectResult)result.Result).Value;
 
             Assert.AreEqual(1, returnedCrewMembers.Count);
-            Assert.AreEqual(_createdUser.Entity.Id, returnedCrewMembers[0].Id);
+            Assert.AreEqual(_createdUser1.Entity.Id, returnedCrewMembers[0].Id);
         }
         
 
@@ -187,7 +186,7 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual((int)HttpStatusCode.NotFound, ((NotFoundObjectResult)result.Result).StatusCode);
         }
 
-        /*
+
         [Test]
         public async Task ShouldAddCrewMember()
         {
@@ -202,43 +201,33 @@ namespace WarpTest.WebLayer.Controllers
             List<CrewMembersListVm> returnedCrewMembers = (List<CrewMembersListVm>)((OkObjectResult)result.Result).Value;
             Assert.AreEqual(0, returnedCrewMembers.Count);
 
-            await crewController.AddCrewMemberAsync(crew2.Id, crewUser.Id.ToString());
+            await crewController.AddCrewMemberAsync(crew2.Id, _createdUser1.Entity.Id);
 
             result = await crewController.GetCrewMembersAsync(crew2.Id);
             returnedCrewMembers = (List<CrewMembersListVm>)((OkObjectResult)result.Result).Value;
             Assert.AreEqual(1, returnedCrewMembers.Count);
-            Assert.AreEqual(_createdUser.Entity.Id, returnedCrewMembers[0].Id);
+            Assert.AreEqual(_createdUser1.Entity.Id, returnedCrewMembers[0].Id);
         }
 
         [Test]
         public async Task ShouldNotAddCrewMemberWithInvalidId()
         {
-            Crew crew1 = _dbContext.Crews.Find(2);
+            Crew crew1 = _dbContext.Crews.Find(1);
 
             CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
             CrewController crewController = new CrewController(crewService);
 
-            StatusCodeResult result = (StatusCodeResult)await crewController.AddCrewMemberAsync(crew1.Id, "123");
-            Assert.AreEqual((int)HttpStatusCode.BadRequest, result.StatusCode);
+            ActionResult result = await crewController.AddCrewMemberAsync(crew1.Id, "123");
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, ((BadRequestObjectResult)result).StatusCode);
         }
-        
-
-        public async Task ShouldGetLeader()
-        {
-            CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
-            CrewController crewController = new CrewController(crewService);
-
-
-        }
-
-        */
+             
 
         // Helper methods
         private async Task<ActionResult> CreateCrew(string crewName)
         {
             CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
             CrewController crewController = new CrewController(crewService);
-            SetUser(crewController, _createdUser.Entity.Id);
+            SetUser(crewController, _createdUser1.Entity.Id);
 
             return await crewController.CreateCrewAsync(crewName);
         }

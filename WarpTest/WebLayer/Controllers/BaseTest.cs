@@ -22,14 +22,15 @@ namespace WarpTest.WebLayer.Controllers
         protected DbConnection _connection;
         protected DbContextOptions _options;
         protected ApplicationDbContext _dbContext;
-        static protected ClaimsIdentity _identity;
+        static protected ClaimsIdentity _identity1;
         protected ClaimsPrincipal _currentUser;
         protected ControllerContext _controllerContext;
-
         protected HttpContext _httpContext;
         protected IHttpContextAccessor _httpContextAccessor;
         protected IMainEventProvider _mainEventProvider;
-        protected EntityEntry<ApplicationUser> _createdUser;
+        protected EntityEntry<ApplicationUser> _createdUser1;
+        protected EntityEntry<ApplicationUser> _createdUser2;
+
 
         [SetUp]
         public void Setup()
@@ -45,13 +46,13 @@ namespace WarpTest.WebLayer.Controllers
 
         protected void SetUser(ControllerBase controller, string userId)
         {
-            _identity = new ClaimsIdentity();
-            _identity.AddClaims(new[]
+            _identity1 = new ClaimsIdentity();
+            _identity1.AddClaims(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(ClaimTypes.Authentication, userId)
             });
-            _currentUser = new ClaimsPrincipal(_identity);
+            _currentUser = new ClaimsPrincipal(_identity1);
             _controllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = _currentUser } };
 
             controller.ControllerContext = _controllerContext;
@@ -72,13 +73,13 @@ namespace WarpTest.WebLayer.Controllers
 
             // Now we have nothing in _mainEventProvider
             // Let's create user first
-            _createdUser = _dbContext.ApplicationUsers.Add(
+            _createdUser1 = _dbContext.ApplicationUsers.Add(
                 new ApplicationUser
                 {
-                    FirstName = "Test",
+                    FirstName = "Ola",
                     MiddleName = "",
                     LastName = "Testesen",
-                    Address = "Blabla gate 123",
+                    Address = "Oslo gate 123",
                     ZipCode = "1234",
                     Team = "Team 1",
                     DateOfBirth = DateTime.Now,
@@ -89,13 +90,13 @@ namespace WarpTest.WebLayer.Controllers
             _dbContext.SaveChanges();
 
             // Now we need to create identity for the user
-            _identity = new ClaimsIdentity("someAuthTypeName");
-            _identity.AddClaims(new[]
+            _identity1 = new ClaimsIdentity("someAuthTypeName");
+            _identity1.AddClaims(new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,  _createdUser.Entity.Id),
+                new Claim(ClaimTypes.NameIdentifier,  _createdUser1.Entity.Id),
                 new Claim("CurrentMainEventId",  "1") // TODO: Always 1 for test purposes
             });
-            _currentUser = new ClaimsPrincipal(_identity);
+            _currentUser = new ClaimsPrincipal(_identity1);
 
             // Now we need to put the user into httpContext
             // Then httpContext into httpContextAccessor
@@ -169,14 +170,43 @@ namespace WarpTest.WebLayer.Controllers
             );
             _dbContext.SaveChanges();
 
+            // Add existing user to the crew
             _dbContext.CrewUsers.Add(
                 new CrewUser
                 {
-                    ApplicationUserId = _createdUser.Entity.Id,
+                    ApplicationUserId = _createdUser1.Entity.Id,
                     IsLeader = false,
                     CrewId = 1
                 }
             );
+            _dbContext.SaveChanges();
+
+            // Create another application user to be Leader in the crew
+            _createdUser2 = _dbContext.ApplicationUsers.Add(
+                new ApplicationUser
+                {
+                    FirstName = "Line",
+                    MiddleName = "",
+                    LastName = "Evensen",
+                    Address = "Osloveien 123",
+                    ZipCode = "1234",
+                    Team = "Team 1",
+                    DateOfBirth = DateTime.Now,
+                    IsAllergic = false,
+                    Gender = "Female"
+                }
+            );
+            _dbContext.SaveChanges();
+
+            // Add
+            _dbContext.CrewUsers.Add(
+               new CrewUser
+               {
+                   ApplicationUserId = _createdUser2.Entity.Id,
+                   IsLeader = true,
+                   CrewId = 1
+               }
+           );
             _dbContext.SaveChanges();
         }
     }
