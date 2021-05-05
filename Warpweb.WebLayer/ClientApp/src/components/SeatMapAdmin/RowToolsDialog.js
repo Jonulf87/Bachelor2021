@@ -4,6 +4,7 @@ import { MenuItem, Select, TextField, Checkbox, FormControlLabel, Paper, FormCon
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from 'reactstrap/lib';
 import useAuth from '../../hooks/useAuth';
+import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -14,12 +15,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function RowToolsDialog({ open, handleClose, row, ticketTypeList, updateRowData }) {
+export default function RowToolsDialog({ open, handleClose, row }) {
 
     const classes = useStyles();
     const [name, setName] = useState("");
     const [numberOfSeats, setNumberOfSeats] = useState("");
     const [ticketTypesSelected, setTicketTypesSelected] = useState([])
+
+    const { updateRowData, ticketTypes } = useSeatMapAdmin();
 
     useEffect(() => {
         if (row) {
@@ -72,7 +75,7 @@ export default function RowToolsDialog({ open, handleClose, row, ticketTypeList,
                         label="Antall seter"
                         onChange={(e) => setNumberOfSeats(e.target.value)}
                     />
-                    {ticketTypeList.sort((a, b) => a.name > b.name ? 1 : ((b.name > a.name) ? -1 : 0)).map((ticketType) => (
+                    {ticketTypes.sort((a, b) => a.name > b.name ? 1 : ((b.name > a.name) ? -1 : 0)).map((ticketType) => (
                         <FormControlLabel
                             key={ticketType.id}
                             control={<Checkbox

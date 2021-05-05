@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
+    /// <summary>
+    /// The Seat class. Seats are locked to Rows
+    /// </summary>
     public class Seat
     {
         public int Id { get; set; }

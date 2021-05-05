@@ -1,6 +1,9 @@
 ﻿import React from 'react';
+import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
-export default function SeatMapSeat({ seatNumber, gridSize, rowName }) {
+export default function SeatMapAdminSeat({ seatNumber }) {
+
+    const { gridSize } = useSeatMapAdmin();
 
     return (
         <div className="seat" style={{

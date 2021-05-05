@@ -7,6 +7,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Warpweb.WebLayer.Controllers
 {
+    // Implementation based on https://medium.com/swlh/how-to-make-your-net-api-fail-gracefully-86067128fa10
+    /// <summary>
+    /// Custom Exception Handling Middleware. The exception handler will intercept all exceptions
+    /// and return either a Http status code message, or a 500 error.
+    /// </summary>
+    
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;

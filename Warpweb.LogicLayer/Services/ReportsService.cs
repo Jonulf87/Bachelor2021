@@ -21,6 +21,9 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
+        /// <summary>
+        /// Returns count of different genders across participants for current event
+        /// </summary>
         public async Task<GendersReportVm> GetGendersReportAsync()
         {
             var girls = await _dbContext.ApplicationUsers
@@ -48,6 +51,9 @@ namespace Warpweb.LogicLayer.Services
             };
         }
 
+        /// <summary>
+        /// Returns participants with allergies for current event
+        /// </summary>
         public async Task<List<AllergyReportListVm>> GetAllergiesReportAsync()
         {
 
@@ -63,6 +69,26 @@ namespace Warpweb.LogicLayer.Services
                     Email = a.Email,
                     AllergyDescription = a.AllergyDescription,
 
+                })
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns sold ticket types for current event
+        /// </summary>
+        public async Task<List<TicketTypesReportListVm>> GetTicketTypesReportAsync()
+        {
+            var amountSoldTotal = await _dbContext.Tickets
+                .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
+                .CountAsync();
+
+            return await _dbContext.TicketTypes
+                .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
+                .Select(a => new TicketTypesReportListVm
+                {
+                    AmountSold = amountSoldTotal,
+                    AmountAvailable = a.AmountAvailable,
+                    DescriptionName = a.DescriptionName
                 })
                 .ToListAsync();
         }

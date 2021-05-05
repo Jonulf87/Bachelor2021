@@ -18,14 +18,14 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
+export default function TicketPurchaseSummary() {
 
     const [userData, setUserData] = useState(null);
     const [eventName, setEventName] = useState(null);
     const [open, setOpen] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
-    const { selectedTickets, selectedMainEventId, totalPrice } = usePurchase();
+    const { shoppingCart, selectedMainEventId, totalPrice, setCheckedEula, checkedEula } = usePurchase();
 
 
     const classes = useStyles();
@@ -62,6 +62,8 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
         setOpen(false);
     }
 
+    const shoppingCartUnique = [...new Set(shoppingCart.map(a => a.descriptionName))];
+
     return (
         <>
             <Dialog onClose={handleClose} open={open}>
@@ -92,7 +94,9 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
                         <CardContent>
                             {userData ?
                                 (<>
-
+                                    <Typography variant="h6">
+                                        <strong>Personalia:</strong>
+                                    </Typography>
 
                                     <Typography variant="body1" component="p">
                                         <strong>Navn:&nbsp;</strong>{userData.firstName}&nbsp;{userData.lastName}
@@ -124,20 +128,19 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
                     <Card>
                         <CardContent>
                             {eventName ?
-                                (<Typography>
-                                    Du er i ferd med å kjøpe disse billettene til {eventName.name}
+                                (<Typography variant="h6">
+                                    Valgte billetter til {eventName.name}:
                                 </Typography>)
                                 : <CircularProgress />
                             }
 
-                            {selectedTickets ? selectedTickets.map((ticket) => (
-                                <Typography>
-                                    {ticket.descriptionName}  x{ticket.amountToBuy}
+                            {shoppingCartUnique ? shoppingCartUnique.map((ticket) => (
+                                <Typography key={ticket}>
+                                    {ticket}  x {shoppingCart.filter(a => a.descriptionName === ticket).length}
                                 </Typography>
                             )) : <CircularProgress />}
                             <Typography>
-                                Totalt: {totalPrice},-
-                            {console.log(selectedTickets)}
+                                <strong>Totalt: {totalPrice},-</strong>
                             </Typography>
                         </CardContent>
                     </Card>
@@ -152,7 +155,7 @@ export default function TicketPurchaseSummary({ setCheckedEula, checkedEula }) {
                         <CardContent>
                             <FormControlLabel
                                 control={<Checkbox checked={checkedEula} onChange={(e) => setCheckedEula(e.target.checked)} />}
-                                label={<><span>Jeg har lest og forstått de</span><Link onClick={handleOpen}> vilkår og regler</Link><span> som gjelder for dette arrangement</span></>}
+                                label={<><span>Jeg har lest og forstått de</span><Link onClick={handleOpen} to="#"> vilkår og regler</Link><span> som gjelder for dette arrangement</span></>}
                             />
                         </CardContent>
                     </Paper>

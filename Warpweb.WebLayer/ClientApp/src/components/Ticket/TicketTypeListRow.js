@@ -4,21 +4,7 @@ import usePurchase from '../../hooks/usePurchase';
 
 export default function EventUserListRow({ id, descriptionName, basePrice, amountAvailable, amountToBuy }) {
 
-    const { handleSelectedTickets, amountError } = usePurchase();
-    const [helperText, setHelperText] = useState("");
-
-    useEffect(() => {
-        const handleHelperText = () => {
-            if (amountError) {
-                setHelperText("Du kan ikke velge mindre enn 0 billetter.");
-            }
-            else {
-                setHelperText("");
-            }
-        }
-        handleHelperText();
-
-    }, [amountError])
+    const {  addTicketType } = usePurchase();
 
     return (
         <TableRow>
@@ -29,7 +15,7 @@ export default function EventUserListRow({ id, descriptionName, basePrice, amoun
                 {basePrice}
             </TableCell>
             <TableCell>
-                {amountAvailable === 0 ?
+                {amountAvailable < 1 ?
                     <Typography>
                         Ingen tilgjengelig
                     </Typography>
@@ -38,16 +24,15 @@ export default function EventUserListRow({ id, descriptionName, basePrice, amoun
                 }
             </TableCell>
             <TableCell>
-                <TextField
-                    error={amountError}
-                    helperText={helperText}
-                    type="number"
-                    variant="filled"
-                    label="Antall"
-                    value={amountToBuy}
-                    onChange={(e) => handleSelectedTickets(e.target.value, id)}
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => addTicketType(id, descriptionName)}
                 >
-                </TextField>
+                    Legg til billett
+                </Button>
+
+
             </TableCell>
 
         </TableRow>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
@@ -22,6 +23,9 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
+        /// <summary>
+        /// Returns all available ticket types for active event
+        /// </summary>
         public async Task<List<TicketTypeListVm>> GetTicketTypesAsync()
         {
             return await _dbContext.TicketTypes
@@ -34,6 +38,10 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        /// <summary>
+        /// Returns all ticket types
+        /// </summary>
+        /// <param name="eventId"></param>  
         public async Task<List<TicketTypeListVm>> GetTicketTypesForEventAsync(int eventId)
         {
             var ticketTypesForEvent = await _dbContext.TicketTypes
@@ -62,6 +70,10 @@ namespace Warpweb.LogicLayer.Services
             return ticketTypesListToSend;
         }
 
+        /// <summary>
+        /// Return specific ticket type
+        /// </summary>
+        /// <param name="id"></param>  
         public async Task<TicketTypeVm> GetTicketTypeAsync(int id)
         {
             return await _dbContext.TicketTypes
@@ -75,6 +87,10 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Create ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         public async Task CreateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             var existingTicketType = _dbContext.TicketTypes
@@ -83,7 +99,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingTicketType != null)
             {
-                throw new ItemAlreadyExistsException($"Billettypen {ticketTypeVm.DescriptionName} eksisterer allerede");
+                throw new HttpException(HttpStatusCode.Conflict, $"Billettypen {ticketTypeVm.DescriptionName} eksisterer allerede");
             }
 
             var newTicketType = new TicketType
@@ -98,13 +114,17 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Modify ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         public async Task UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             var existingTicketType = _dbContext.TicketTypes.Find(ticketTypeVm.Id); 
 
             if (existingTicketType == null) 
             {
-                throw new ItemNotFoundException($"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
             }
 
             existingTicketType.AmountAvailable = ticketTypeVm.AmountAvailable; 
@@ -115,7 +135,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync(); 
         }
 
-
+        /// <summary>
+        /// Deletes ticket type
+        /// </summary>
+        /// <param name="ticketTypeVm"></param> 
         public async Task DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
 
@@ -123,7 +146,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (ticketTypeToBeDeleted == null)
             {
-                throw new ItemNotFoundException($"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen billettyper med navnet: {ticketTypeVm.DescriptionName}");
             }
 
             _dbContext.Remove<TicketType>(ticketTypeToBeDeleted);

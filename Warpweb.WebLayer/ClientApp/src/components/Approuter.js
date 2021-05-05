@@ -16,7 +16,7 @@ import UserMain from './User/UserMain';
 import VenueMain from './Venue/VenueMain';
 import UserRegister from "./User/UserRegister";
 import UserLogin from "./User/UserLogin";
-import SeatMapMain from './SeatMap/SeatMapMain';
+import SeatMapAdminMain from './SeatMapAdmin/SeatMapAdminMain';
 import LogOut from './MainPageNavBar/LogOut';
 import OrganizerAdminMain from './OrganizerAdmin/OrganizerAdminMain';
 import TicketMain from './Ticket/TicketMain';
@@ -26,6 +26,7 @@ import NotAuthenticated from './ErrorPages/NotAuthenticated';
 
 import useCurrentEvent from '../hooks/useCurrentEvent';
 import useAuth from '../hooks/useAuth';
+import SeatMapMain from './SeatMap/SeatMapMain';
 
 export default function AppRouter() {
     const [policies, setPolicies] = useState([]);
@@ -58,7 +59,7 @@ export default function AppRouter() {
             <Route exact path='/' component={EventUserMain} />            
             <Route path='/userevent' component={EventUserMain} />
             <Route path='/userticket/:login?' component={TicketMain} />
-            
+            <Route path='/userseatmap' component={SeatMapMain} />
             <Route path='/register/:ticket?' component={UserRegister} />
             <Route path='/login' component={UserLogin} />
             <Route path='/logout' component={LogOut} />
@@ -102,7 +103,7 @@ export default function AppRouter() {
             <Route path='/seatmap'>
                 {!isAuthenticated ? <NotAuthenticated /> 
                 : !policies.some(a => a === 3) ? <Unauthorized />
-                : <SeatMapMain />}
+                : <SeatMapAdminMain />}
             </Route>
             <Route path='/organizer' component={OrganizerAdminMain} >
                 {roles.some(a => a === "Admin") ? <OrganizerAdminMain /> : <Unauthorized />}

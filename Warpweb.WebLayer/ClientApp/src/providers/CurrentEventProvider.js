@@ -7,8 +7,9 @@ const CurrentEventProvider = ({ children }) => {
 
     const [currentEvent, setCurrentEvent] = useState("");
     const [currentEventChangeCompleteTrigger, setCurrentEventChangeCompleteTrigger] = useState(false);
+    const [newEventSet, setNewEventSet] = useState(false);
 
-    const { isAuthenticated, token } = useAuth();
+    const { isAuthenticated, token, refreshToken } = useAuth();
 
     useEffect(() => {
         const getCurrentMainEvent = async () => {
@@ -24,10 +25,28 @@ const CurrentEventProvider = ({ children }) => {
             }
         }
         getCurrentMainEvent();
-    }, [isAuthenticated]);
+    }, [isAuthenticated, newEventSet]);
+
+    const setSelectedEvent = async (eventId) => {  
+        if (isAuthenticated) {
+            await fetch('/api/events/setcurrentevent', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+                method: 'put',
+                body: JSON.stringify(eventId)
+            });
+
+            setNewEventSet(oldValue => !oldValue);
+            refreshToken(0, () => {
+                setCurrentEventChangeCompleteTrigger(oldvalue => !oldvalue);
+            });
+        }
+    }
 
 
-    return <CurrentEventContext.Provider value={{ currentEvent, setCurrentEvent, currentEventChangeCompleteTrigger, setCurrentEventChangeCompleteTrigger }}>{children}</CurrentEventContext.Provider>;
+    return <CurrentEventContext.Provider value={{ setSelectedEvent, currentEvent, setCurrentEvent, currentEventChangeCompleteTrigger, setCurrentEventChangeCompleteTrigger }}>{children}</CurrentEventContext.Provider>;
 
 };
 

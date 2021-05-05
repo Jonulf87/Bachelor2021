@@ -1,40 +1,12 @@
 ﻿import { Button, Grid, TextField } from '@material-ui/core';
 import { Form } from 'reactstrap';
 import React, { useState } from 'react';
+import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
-export default function SeatMapAdminMenu({ addRow, submit, rowNameAlreadyExists }) {
+export default function SeatMapAdminMenu() {
 
-    const [numberOfSeats, setNumberOfSeats] = useState("");
-    const [rowName, setRowName] = useState("");
-    const [error, setError] = useState();
+    const { addRow, rowName, setRowName, numberOfSeats, setNumberOfSeats, error, submitRows } = useSeatMapAdmin();
 
-    const addRowSubmit = (e) => {
-        if (numberOfSeats == "") return;
-        if (rowName == "") return;
-        if (rowNameAlreadyExists(rowName)) {
-            setError("Rad med dette navnet eksisterer allerde.");
-            return;
-        }
-        setError(null);
-        const seats = [];
-
-        for (var i = 1; i <= numberOfSeats; i++) {
-            seats.push({
-                seatNumber: i
-            })
-        }
-
-        addRow({
-            numberOfSeats: numberOfSeats,
-            xPos: 0,
-            yPos: 0,
-            isVertical: false,
-            rowName: rowName,
-            seats: seats,
-            ticketTypeIds: []
-        });
-        setNumberOfSeats("");
-    }
 
     return (
 
@@ -80,14 +52,14 @@ export default function SeatMapAdminMenu({ addRow, submit, rowNameAlreadyExists 
                         item
                         xs={6}
                     >
-                        <Button variant="contained" color="primary" onClick={addRowSubmit}>Legg til rad </Button>
+                        <Button variant="contained" color="primary" onClick={addRow}>Legg til rad </Button>
                     </Grid>
 
                     <Grid
                         item
                         xs={6}
                     >
-                        <Button variant="contained" color="secondary" onClick={submit} >Lagre</Button>
+                        <Button variant="contained" color="secondary" onClick={submitRows} >Lagre</Button>
                     </Grid>
                 </Grid>
             </Form>

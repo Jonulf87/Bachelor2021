@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Warpweb.DataAccessLayer.Models
 {
+    /// <summary>
+    /// The ApplicationUser class. ApplicationUsers can be participants, guardians, crewmembers, 
+    /// crewleaders, organization contacts or organizationadmins.
+    /// </summary>
     public class ApplicationUser : IdentityUser
     {
         [PersonalData]

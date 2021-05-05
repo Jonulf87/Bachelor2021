@@ -4,6 +4,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import UsersReport from './UsersReport';
 import GendersReport from './GendersReport';
 import AllergicsReport from './AllergicsReport';
+import TicketTypesReport from './TicketTypesReport';
 import useAuth from '../../hooks/useAuth';
 
 export default function ReportMain() {
@@ -11,6 +12,8 @@ export default function ReportMain() {
     const [userData, setUserData] = useState([]);
     const [genderData, setGenderData] = useState([]);
     const [allergicsData, setAllergicsData] = useState([]);
+    const [ticketTypesData, setTicketTypesData] = useState([]);
+
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
@@ -43,6 +46,15 @@ export default function ReportMain() {
                 });
                 const resultAllergics = await responseAllergics.json();
                 setAllergicsData(resultAllergics);
+
+                const responseTicketTypes = await fetch('/api/reports/tickettypesreport', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                const resultTicketTypes = await responseTicketTypes.json();
+                setTicketTypesData(resultTicketTypes);
             }
         }
         getReports();
@@ -105,6 +117,20 @@ export default function ReportMain() {
                                     fileName='Allergikerrapport.pdf'
                                 >
                                     {(blob, url, loading, error) => loading ? 'Generer allergikerrapport...' : 'Last ned allergikerapport'}
+                                </PDFDownloadLink>
+                            </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                            <TableCell align="left">
+                                Billett-rapport
+                            </TableCell>
+                            <TableCell align="left">
+                                <PDFDownloadLink
+                                    document={<TicketTypesReport data={ticketTypesData} />}
+                                    fileName='Billettyperapport.pdf'
+                                >
+                                    {(blob, url, loading, error) => loading ? 'Generer billettyperapport...' : 'Last ned billettyperapport'}
                                 </PDFDownloadLink>
                             </TableCell>
                         </TableRow>

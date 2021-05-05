@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
+    /// <summary>
+    /// The Row class. MainEvents have a defined set of Rows which again consist of Seats, and are locked to TicketTypes.
+    /// </summary>
     public class Row
     {
         public int Id { get; set; }

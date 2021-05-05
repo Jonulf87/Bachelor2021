@@ -24,6 +24,10 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
+        /// <summary>
+        /// Returns all Venues.
+        /// </summary>
+        /// <returns>List of Venues</returns>
         public async Task<List<VenueListVm>> GetVenuesAsync()
         {
             var venuesList = await _dbContext.Venues
@@ -41,19 +45,32 @@ namespace Warpweb.LogicLayer.Services
             }
             return venuesList;
         }
-           
 
+        /// <summary>
+        /// Returns only Venues under Tenant
+        /// </summary>
+        /// <returns>VenueListVm</returns>
         public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
-            return await _dbContext.Venues
+            var organizerVenuesList = await _dbContext.Venues
                 .Where(a => a.MainEvents.Any(b => b.Id == _mainEventProvider.MainEventId))
                 .Select(a => new VenueListVm
                 {
                     Id = a.Id,
                     Name = a.Name
                 }).ToListAsync();
+            if (organizerVenuesList == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ingen lokaler");
+            }
+            return organizerVenuesList;
         }
 
+        /// <summary>
+        /// Returns a specific Venue.
+        /// </summary>
+        /// <param name="venueId"></param>
+        /// <returns>VenueVm</returns>
         public async Task<VenueVm> GetVenueAsync(int id)
         {
 
@@ -85,6 +102,11 @@ namespace Warpweb.LogicLayer.Services
             return venue;
         }
 
+        /// <summary>
+        /// Create a Venue.
+        /// </summary>
+        /// <param name="venueVm"></param>
+        /// <returns>VenueVm</returns>
         public async Task CreateVenueAsync(VenueVm venueVm)
         {
 
@@ -110,6 +132,10 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Update specific venue
+        /// </summary>
+        /// <param name="venueVm"></param>  
         public async Task UpdateVenueAsync(VenueVm venueVm)
         {
             var existingVenue = _dbContext.Venues.Where(a => a.Id == venueVm.Id).SingleOrDefault();

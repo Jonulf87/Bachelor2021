@@ -71,6 +71,12 @@ export default function OrganizerAdminList() {
             options: {
                 filter: false
             }
+        },
+        {
+            name: '',
+            options: {
+                filter: false
+            }
         }
     ];
 

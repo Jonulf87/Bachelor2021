@@ -15,6 +15,8 @@ import AppRouter from './components/Approuter';
 import MainMenu from './components/MainPageNavBar/MainMenu';
 import CurrentEventProvider from './providers/CurrentEventProvider';
 import PurchaseProvider from './providers/PurchaseProvider';
+import SeatMapAdminProvider from './providers/SeatMapAdminProvider';
+import SeatMapProvider from './providers/SeatMapProvider';
 
 Date.prototype.toJSON = function () {
     const hoursDiff = this.getHours() - this.getTimezoneOffset() / 60;
@@ -33,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: '0px',
+            paddingRight: '0px',
+        }
     },
 }));
 
@@ -47,21 +53,25 @@ export default function App() {
         <AuthProvider>
             <CurrentEventProvider>
                 <PurchaseProvider>
-                    <ThemeProvider theme={theme}>
-                        <div className={classes.root}>
-                            <CssBaseline />
-                            <MainMenu />
-                            <main className={classes.content}>
-                                <div className={classes.toolbar} />
-                                <Container
-                                    maxWidth='xl'
-                                    justify="center"
-                                >
-                                    <AppRouter />
-                                </Container>
-                            </main>
-                        </div>
-                    </ThemeProvider>
+                    <SeatMapAdminProvider>
+                        <SeatMapProvider>
+                            <ThemeProvider theme={theme}>
+                                <div className={classes.root}>
+                                    <CssBaseline />
+                                    <MainMenu />
+                                    <main className={classes.content}>
+                                        <div className={classes.toolbar} />
+                                        <Container
+                                            maxWidth='xl'
+                                            justify="center"
+                                        >
+                                            <AppRouter />
+                                        </Container>
+                                    </main>
+                                </div>
+                            </ThemeProvider>
+                        </SeatMapProvider>
+                    </SeatMapAdminProvider>
                 </PurchaseProvider>
             </CurrentEventProvider>
         </AuthProvider>

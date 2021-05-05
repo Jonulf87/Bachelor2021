@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Warpweb.DataAccessLayer.Models
 {
+    /// <summary>
+    /// The CrewPermission class. CrewPermissions define access to the different modules within the Application.
+    /// </summary>
+    /// <remarks>
+    /// If rights are removed from the CrewPermissionType Enum, a comment must replace it so the value will not be used.
+    /// </remarks>
     public class CrewPermission
     {
         public int Id { get; set; }

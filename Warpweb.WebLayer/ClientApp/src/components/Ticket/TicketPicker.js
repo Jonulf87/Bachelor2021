@@ -5,9 +5,7 @@ import TicketTypeListRow from './TicketTypeListRow';
 
 export default function TicketPicker() {
 
-    
-    const { ticketTypesList, totalPrice } = usePurchase();
-
+    const { ticketTypesList, totalPrice, shoppingCart } = usePurchase();
 
     const sortFunction = (a, b) => {
         if (a.basePrice === b.basePrice) {
@@ -17,6 +15,10 @@ export default function TicketPicker() {
         }
         return b.basePrice - a.basePrice;
     }
+
+
+    const shoppingCartUnique = [...new Set(shoppingCart.map(a => a.descriptionName))];
+
 
     return (
         <>
@@ -32,7 +34,7 @@ export default function TicketPicker() {
                                 Pris
                         </TableCell>
                             <TableCell>
-                                Tilgjengelighet
+                                Tilgjengelig
                         </TableCell>
                             <TableCell>
                             </TableCell>
@@ -48,7 +50,22 @@ export default function TicketPicker() {
                         </>
 
                     </TableBody>
-                    <TableFooter>
+                    <TableBody>
+                        {shoppingCartUnique.map((ticket) => (
+                            <TableRow key={ticket}>
+                                <TableCell>
+                                    {ticket}
+                                </TableCell>
+                                <TableCell>
+                                </TableCell>
+                                <TableCell>
+                                    x {shoppingCart.filter(a => a.descriptionName === ticket).length}
+                                </TableCell>
+                                <TableCell>
+                                    {shoppingCart.filter(a => a.descriptionName === ticket).length * ticketTypesList.find(a => a.descriptionName === ticket).basePrice}
+                                </TableCell>
+                            </TableRow>
+                            ))}
                         <TableRow>
                             <TableCell>
                                 Totalpris
@@ -64,7 +81,7 @@ export default function TicketPicker() {
                             </TableCell>
 
                         </TableRow>
-                    </TableFooter>
+                    </TableBody>
                 </Table>
                 : <CircularProgress />}
         </>

@@ -41,17 +41,16 @@ export default function TicketMain() {
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(parseInt(login) || 0);
     const steps = ['Velg arrangement', 'Velg billett', 'Innlogging', 'Oppsummering', 'Betaling', 'Velg sitteplass'];
-    const [checkedEula, setCheckedEula] = useState(false);
 
     const { isAuthenticated } = useAuth();
-    const { generateTickets, selectedTickets } = usePurchase();
+    const { shoppingCart, setPaymentOk, checkedEula } = usePurchase();
 
     const handleNext = () => {
         if (isAuthenticated && activeStep === 1) {
             setActiveStep(3);
         }
-        else if (activeStep === 3) {
-            generateTickets();
+        else if (activeStep === 4) {
+            setPaymentOk(false);
             setActiveStep(oldValue => oldValue + 1);
         }
         else {
@@ -60,8 +59,12 @@ export default function TicketMain() {
     };
 
     const handleBack = () => {
-        if (isAuthenticated && activeStep === 3) {
+        if (isAuthenticated && activeStep === 3 || activeStep == 4) {
             setActiveStep(1);
+        }
+        else if (activeStep === 4) {
+            setPaymentOk(false);
+            setActiveStep(oldValue => oldValue + 1);
         }
         else {
             setActiveStep(oldValue => oldValue - 1);
@@ -85,7 +88,7 @@ export default function TicketMain() {
             case 2:
                 return (<UserLogin fromTicket={true} />);
             case 3:
-                return (<TicketPurchaseSummary setCheckedEula={setCheckedEula} checkedEula={checkedEula} />);
+                return (<TicketPurchaseSummary />);
             case 4:
                 return (<TicketPayment />);
             case 5:
@@ -121,12 +124,12 @@ export default function TicketMain() {
                                         className={classes.button}
                                         disabled={(activeStep > 1 && !isAuthenticated)
                                             || activeStep === 3 && !checkedEula
-                                            || activeStep === 1 && !selectedTickets.some(a => a.amountToBuy > 0)
+                                            || activeStep === 1 && shoppingCart.length === 0
                                         }
                                     >
                                         {activeStep === steps.length - 1 ? 'Fullfør' : 'Neste'}
                                     </Button>
-                                    {(activeStep === 1 && !selectedTickets.some(a => a.amountToBuy > 0)) && <Typography color="error">Du må velge minst en billett</Typography>}
+                                    {(activeStep === 1 && shoppingCart.length === 0) && <Typography color="error">Du må velge minst en billett</Typography>}
                                 </div>
                             </div>
                         </StepContent>

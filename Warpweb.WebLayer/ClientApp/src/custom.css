@@ -22,4 +22,12 @@ code {
         border-left: 1px rgba(0,0,0,0.4) solid;
     }
 
+.seatMapFloor {
+    width: 600px;
+    height: 600px;
+    position: relative;
+    background-color: #ccc;
+    box-sizing: border-box
+}
+
 

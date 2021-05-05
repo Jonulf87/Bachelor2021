@@ -72,7 +72,7 @@ namespace Warpweb.LogicLayer.Services
 
                     if (existingRow != null)
                     {
-                        
+
                         var newRowTicketTypes = row.TicketTypeIds;
 
                         var rowTicketTypesToBeDeleted = existingRow.TicketTypes.Where(a => !newRowTicketTypes.Contains(a.Id)).ToList();
@@ -127,6 +127,22 @@ namespace Warpweb.LogicLayer.Services
                     Seats = a.Seats.Select(b => new SeatVm { Id = b.Id, SeatNumber = b.SeatNumber }).ToList(),
                     TicketTypeIds = a.TicketTypes.Select(c => c.Id).ToList()
                 }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<PublicRowVm>> GetPublicSeatMapAsync()
+        {
+            var rows = await _dbContext.Rows
+                .Select(a => new PublicRowVm
+                {
+                    Id = a.Id,
+                    IsVertical = a.isVertical,
+                    XPos = a.XCoordinate,
+                    YPos = a.YCoordinate,
+                    RowName = a.Name,
+                    Seats = a.Seats.Select(b => new PublicSeatVm { Id = b.Id, SeatNumber = b.SeatNumber, IsReserved = b.IsReserved }).ToList(),
+                    TicketTypeIds = a.TicketTypes.Select(c => c.Id).ToList()
+                }).ToListAsync();
+            return rows;
         }
     }
 }
