@@ -91,7 +91,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
         >
             <CardHeader
             title={name}
-            subheader={organizerName}
+            subheader={`Arrangør: ${organizerName}`}
             />
             <CardContent>
                 <Grid
