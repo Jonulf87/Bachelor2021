@@ -33,8 +33,8 @@ namespace Warpweb.LogicLayer.Services
                     Name = a.Name,
                 })
                 .ToListAsync();
-            
-            if(crewsList == null)
+
+            if (crewsList == null)
             {
                 throw new HttpException(HttpStatusCode.NotFound, "Fant ingen arbeidslag");
             }
@@ -64,8 +64,8 @@ namespace Warpweb.LogicLayer.Services
         public async Task CreateCrewAsync(string crewName)
         {
             var existingCrew = _dbContext.Crews
-            .Where(a => a.Name == crewName)
-            .SingleOrDefault();
+             .Where(a => a.Name == crewName)
+             .SingleOrDefault();
 
             if (existingCrew != null)
             {

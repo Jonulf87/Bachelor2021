@@ -1,14 +1,19 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.Security.Claims;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.WebLayer;
 
 namespace WarpTest.WebLayer.Controllers
 {
@@ -17,14 +22,19 @@ namespace WarpTest.WebLayer.Controllers
         protected DbConnection _connection;
         protected DbContextOptions _options;
         protected ApplicationDbContext _dbContext;
-        protected ClaimsIdentity _identity;
+        static protected ClaimsIdentity _identity;
         protected ClaimsPrincipal _currentUser;
         protected ControllerContext _controllerContext;
+
+        protected HttpContext _httpContext;
+        protected IHttpContextAccessor _httpContextAccessor;
+        protected IMainEventProvider _mainEventProvider;
+        protected EntityEntry<ApplicationUser> _createdUser;
 
         [SetUp]
         public void Setup()
         {
-            //CreateInMemoryDatabase();
+            CreateInMemoryDatabase();
         }
 
         [TearDown]
@@ -38,7 +48,8 @@ namespace WarpTest.WebLayer.Controllers
             _identity = new ClaimsIdentity();
             _identity.AddClaims(new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userId)
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                new Claim(ClaimTypes.Authentication, userId)
             });
             _currentUser = new ClaimsPrincipal(_identity);
             _controllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = _currentUser } };
@@ -46,25 +57,127 @@ namespace WarpTest.WebLayer.Controllers
             controller.ControllerContext = _controllerContext;
         }
 
-        //private void CreateInMemoryDatabase()
-        //{
-        //    _connection = new SqliteConnection("DataSource=:memory:");
+        private void CreateInMemoryDatabase()
+        {
+            _connection = new SqliteConnection("DataSource=:memory:");
+            _connection.Open();
 
-        //    _connection.Open();
+            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseSqlite(_connection)
+                .Options;
 
-        //    _options = new DbContextOptionsBuilder<ApplicationDbContext>()
-        //        .UseSqlite(_connection)
-        //        .Options;
+            _dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()), _mainEventProvider);
+            _dbContext.Database.EnsureDeleted();
+            _dbContext.Database.EnsureCreated();
 
-        //    _dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()));
-        //    _dbContext.Database.EnsureDeleted();
-        //    _dbContext.Database.EnsureCreated();
+            // Now we have nothing in _mainEventProvider
+            // Let's create user first
+            _createdUser = _dbContext.ApplicationUsers.Add(
+                new ApplicationUser
+                {
+                    FirstName = "Test",
+                    MiddleName = "",
+                    LastName = "Testesen",
+                    Address = "Blabla gate 123",
+                    ZipCode = "1234",
+                    Team = "Team 1",
+                    DateOfBirth = DateTime.Now,
+                    IsAllergic = false,
+                    Gender = "Male"
+                }
+            );
+            _dbContext.SaveChanges();
 
-        //    _dbContext.CrewRoles.Add(new CrewUser { Id = 1, Description = "Test Rolle 1" });
-        //    _dbContext.CrewRoles.Add(new CrewUser { Id = 2, Description = "Test Rolle 2" });
-        //    _dbContext.CrewRoles.Add(new CrewUser { Id = 3, Description = "Test Rolle 3" });
+            // Now we need to create identity for the user
+            _identity = new ClaimsIdentity("someAuthTypeName");
+            _identity.AddClaims(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier,  _createdUser.Entity.Id),
+                new Claim("CurrentMainEventId",  "1") // TODO: Always 1 for test purposes
+            });
+            _currentUser = new ClaimsPrincipal(_identity);
 
-        //    _dbContext.SaveChangesAsync();
-        //}
+            // Now we need to put the user into httpContext
+            // Then httpContext into httpContextAccessor
+            // Finally httpContextAccessor into mainEventProvider
+            _httpContext = new DefaultHttpContext()
+            {
+                User = _currentUser
+            };
+            _httpContextAccessor = new HttpContextAccessor()
+            {
+                HttpContext = _httpContext
+            };
+            _mainEventProvider = new MainEventProvider(_httpContextAccessor);
+
+            // The problem is that we don't have setter for mainEventProvider in dbContext
+            // So we have to recreate dbContext with new mainEventProvider
+            _dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()), _mainEventProvider);
+
+            // Now we can proceed with creating test data
+            _dbContext.Organizers.Add(
+                new Organizer
+                {
+                    Name = "Organizer 1",
+                    OrgNumber = "123456",
+                    Description = "Description"
+                    /*
+                    Admins = new List<ApplicationUser>()
+                    {
+                        // _createdUser.Entity
+                        new ApplicationUser
+                        {
+                            Id = _createdUser.Entity.Id
+                        }
+                    }
+                    */
+                }
+            );
+            _dbContext.SaveChanges();
+
+            _dbContext.Venues.Add(
+                new Venue
+                {
+                    Name = "Venue 1",
+                    Address = "Venue gate 123",
+                    PostalCode = "1236",
+                    ContactPhone = "12345678",
+                    ContactEMail = "venue@test.no",
+                    OrganizerId = 1
+                }
+            );
+            _dbContext.SaveChanges();
+
+            _dbContext.MainEvents.Add(
+                new MainEvent
+                {
+                    Name = "Event 1",
+                    StartDateTime = DateTime.Now,
+                    EndDateTime = DateTime.Now,
+                    OrganizerId = 1,
+                    VenueId = 1
+                }
+            );
+            _dbContext.SaveChanges();
+
+            _dbContext.Crews.Add(
+                new Crew()
+                {
+                    Name = "Test crew 1",
+                    MainEventId = 1
+                }
+            );
+            _dbContext.SaveChanges();
+
+            _dbContext.CrewUsers.Add(
+                new CrewUser
+                {
+                    ApplicationUserId = _createdUser.Entity.Id,
+                    IsLeader = false,
+                    CrewId = 1
+                }
+            );
+            _dbContext.SaveChanges();
+        }
     }
 }

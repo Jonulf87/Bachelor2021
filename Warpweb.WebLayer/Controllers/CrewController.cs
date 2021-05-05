@@ -112,7 +112,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="crewId"></param> 
         [HttpGet]
         [Route("crewmembers/{crewId}")]
-        public async Task<ActionResult<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
+        public async Task<ActionResult<List<CrewMembersListVm>>> GetCrewMembersAsync(int crewId)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch (HttpException)
             {
-                return NotFound("Crew eksisterer ikke");
+                return NotFound("Arbeidslaget eksisterer ikke");
             }
         }
 
@@ -161,7 +161,7 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch (HttpException)
             {
-                return NotFound("Crew eksisterer ikke");
+                return NotFound("Arbeidslaget eksisterer ikke");
             }
         }
 
@@ -182,7 +182,7 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch(HttpException)
             {
-                return BadRequest("Kunne ikke legge til crewleder!");
+                return BadRequest("Kunne ikke legge til arbeidslagsleder!");
             }
         }
 
