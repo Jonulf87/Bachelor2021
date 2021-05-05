@@ -1,6 +1,7 @@
 ﻿import React from 'react';
-import UserInfo from './UserInfo';
 import { Grid } from '@material-ui/core';
+import UserInfo from './UserInfo';
+import UserTickets from './UserTickets';
 
 export default function PaperSheet() {
 
@@ -13,6 +14,7 @@ export default function PaperSheet() {
 
             >
                 <UserInfo />
+                <UserTickets />
             </Grid>
         </Grid>
     );

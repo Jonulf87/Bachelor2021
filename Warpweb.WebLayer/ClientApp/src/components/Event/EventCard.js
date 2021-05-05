@@ -1,4 +1,4 @@
-﻿import { Card, CardContent, Divider, Grid, Typography, Button } from '@material-ui/core';
+﻿import { Card, CardActions, CardContent, Divider, Typography, Button, CardHeader, Link, Grid } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { format, parseISO } from 'date-fns';
@@ -8,29 +8,24 @@ import usePurchase from '../../hooks/usePurchase';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
+import 'date-fns';
+import { nb } from 'date-fns/locale';
 
-const useStyles = makeStyles({
+
+
+const useStyles = makeStyles((theme) => ({
     root: {
-        minWidth: 800,
-    },
-
-    title: {
-        fontSize: 20,
-        marginBottom: 12
-    },
-    divider: {
-        minWidth: "100%",
-        height: "1px"
-    },
-    verticalDivider: {
-        height: "100%",
-
-    },
-    contentBox: {
-        minHeight: "200px",
-        paddingTop: "20px"
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        },
+        [theme.breakpoints.up('sm')]: {
+            width: 400,
+        },
+        [theme.breakpoints.up('md')]: {
+            minWidth: 580,
+        },
     }
-});
+}));
 
 export default function EventCard({ id, name, startDateTime, endDateTime, infoComments, venueName, organizerName, organizerWebPage }) {
 
@@ -69,7 +64,6 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
             return (
                 <Button
                     variant="contained"
-                    color="primary"
                     onClick={() => handleClick()}
                     disabled
                 >
@@ -93,64 +87,64 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
     return (
 
         <Card
-            className={classes.root}
+        className={classes.root}
         >
+            <CardHeader
+            title={name}
+            subheader={`Arrangør: ${organizerName}`}
+            />
             <CardContent>
                 <Grid
                     container
-                    alignItems="stretch"
-                    justify="center"
-                    direction="column"
+                    spacing={2}
                 >
                     <Grid
-                        itemxs={12}
+                        item
+                        xs={12}
+                        sm={6}
                     >
                         <Typography
-                            className={classes.title}
+                            variant="body1"
                         >
-                            {name}
+                            {format(parseISO(startDateTime), 'dd.LLLL yyyy', {locale: nb })} til&nbsp;{format(parseISO(endDateTime), 'dd.LLLL yyyy', {locale: nb })}
                         </Typography>
-                        <Divider className={classes.divider} />
                     </Grid>
                     <Grid
                         item
-                        container
-                        className={classes.contentBox}
+                        xs={12}
+                        sm={6}
                     >
-                        <Grid
-                            item
-                            xs={5}
-                        >
-                            <Typography>
-                                Praktisk info:
-                            </Typography>
-                            {format(parseISO(startDateTime), 'dd.MM.yyyy HH:mm')}
-                            {format(parseISO(endDateTime), 'dd.MM.yyyy HH:mm')}
+                        <Typography
+                                variant="body1"
+                            >
                             {venueName}
-                            {organizerName}
-                            {organizerWebPage}
-                        </Grid>
-                        <Grid
-                            item
-                            xs={1}
-                        >
-                            <Divider orientation="vertical" flexItem className={classes.verticalDivider} />
-                        </Grid>
-                        <Grid
-                            item
-                            xs={6}
-                        >
-                            {infoComments}
-                        </Grid>
+                        </Typography>
                     </Grid>
                     <Grid
                         item
                         xs={12}
                     >
-                        {buttonSelector()}
+                        <Link
+                            href={organizerWebPage}
+                            variant="body2"
+                            target="_blank"
+                        >
+                            {organizerName}s Nettside
+                        </Link>
+                        <Typography
+                            variant="body2"
+                        >
+                            {infoComments}
+                        </Typography>
                     </Grid>
-                </Grid>
+
+                            
+                            
+                </Grid>        
             </CardContent>
+            <CardActions>
+                {buttonSelector()}
+            </CardActions>
         </Card>
     )
 }
