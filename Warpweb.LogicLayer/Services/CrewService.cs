@@ -37,7 +37,6 @@ namespace Warpweb.LogicLayer.Services
                 })
                 .ToListAsync();
 
-
             return crewsList;
         }
 
@@ -71,8 +70,8 @@ namespace Warpweb.LogicLayer.Services
         public async Task CreateCrewAsync(string crewName)
         {
             var existingCrew = _dbContext.Crews
-            .Where(a => a.Name == crewName)
-            .SingleOrDefault();
+             .Where(a => a.Name == crewName)
+             .SingleOrDefault();
 
             if (existingCrew != null)
             {
