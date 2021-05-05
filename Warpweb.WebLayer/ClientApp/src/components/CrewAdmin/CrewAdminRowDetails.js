@@ -98,7 +98,7 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
     return (
         <>
             <TableRow>
-                <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
+                <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
                 </TableCell>
                 <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
                     <Typography variant="h6" >
@@ -116,17 +116,22 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
                 <TableCell colSpan={1}>
                     <Typography variant="subtitle1" >
                         Navn
-                            </Typography>
+                    </Typography>
                 </TableCell>
                 <TableCell colSpan={1}>
                     <Typography variant="subtitle1" >
                         E-post
-                            </Typography>
+                    </Typography>
                 </TableCell>
                 <TableCell colSpan={1}>
                     <Typography variant="subtitle1" >
                         Telefon
-                            </Typography>
+                    </Typography>
+                </TableCell>
+                <TableCell colSpan={1}>
+                    <Typography variant="subtitle1" >
+                        Kommentar
+                    </Typography>
                 </TableCell>
 
             </TableRow>
@@ -149,12 +154,16 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
                         {leader.phone}
                     </TableCell>
 
+                    <TableCell colSpan={1}>
+                        {leader.comment}
+                    </TableCell>
+
                 </TableRow>
 
             ))}
 
             <TableRow>
-                <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
+                <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
                 </TableCell>
                 <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
                     <Typography variant="h6" >
@@ -184,6 +193,11 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
                         Telefon
                             </Typography>
                 </TableCell>
+                <TableCell colSpan={1}>
+                    <Typography variant="subtitle1" >
+                        Kommentar
+                            </Typography>
+                </TableCell>
 
             </TableRow>
 
@@ -205,13 +219,17 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
                         {member.phone}
                     </TableCell>
 
+                    <TableCell colSpan={1}>
+                        {member.comment}
+                    </TableCell>
+
                 </TableRow>
             ))}
 
             <TableRow>
                 <TableCell colSpan={1} style={{ backgroundColor: "#becadb" }}>
                 </TableCell>
-                <TableCell colSpan={3} style={{ backgroundColor: "#becadb" }}>
+                <TableCell colSpan={4} style={{ backgroundColor: "#becadb" }}>
                     <Typography variant="h6" >
                         Rettigheter
                             </Typography>
@@ -228,7 +246,7 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
                     <CrewPermissions crewId={rowData[0]} />
                 </TableCell>
 
-                <TableCell colSpan={1}>
+                <TableCell colSpan={2}>
 
                 </TableCell>
 
