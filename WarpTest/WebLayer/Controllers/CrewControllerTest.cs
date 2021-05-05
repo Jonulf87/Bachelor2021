@@ -210,17 +210,64 @@ namespace WarpTest.WebLayer.Controllers
         }
 
         [Test]
-        public async Task ShouldNotAddCrewMemberWithInvalidId()
+        public async Task ShouldGetCrewLeders()
         {
             Crew crew1 = _dbContext.Crews.Find(1);
 
             CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
             CrewController crewController = new CrewController(crewService);
 
-            ActionResult result = await crewController.AddCrewMemberAsync(crew1.Id, "123");
-            Assert.AreEqual((int)HttpStatusCode.BadRequest, ((BadRequestObjectResult)result).StatusCode);
+            ActionResult<List<CrewMembersListVm>> result = await crewController.GetCrewLeadersAsync(crew1.Id);
+            List<CrewMembersListVm> returnedCrewLeaders = (List<CrewMembersListVm>)((OkObjectResult)result.Result).Value;
+
+            Assert.AreEqual(1, returnedCrewLeaders.Count);
+            Assert.AreEqual(_createdUser2.Entity.Id, returnedCrewLeaders[0].Id);
         }
-             
+
+        [Test]
+        public async Task ShouldNotGetCrewLeadersFromCrewWithInvalidId()
+        {
+            CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
+            CrewController crewController = new CrewController(crewService);
+
+            ActionResult<List<CrewMembersListVm>> result = await crewController.GetCrewLeadersAsync(123);
+            Assert.AreEqual((int)HttpStatusCode.NotFound, ((NotFoundObjectResult)result.Result).StatusCode);
+        }
+
+        [Test]
+        public async Task ShouldAddCrewLeader()
+        {
+            await CreateCrew(_crewName2);
+            Crew crew2 = _dbContext.Crews.Find(2);
+
+            CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
+            CrewController crewController = new CrewController(crewService);
+
+            ActionResult<List<CrewMembersListVm>> result = await crewController.GetCrewLeadersAsync(crew2.Id);
+            List<CrewMembersListVm> returnedCrewLeaders = (List<CrewMembersListVm>)((OkObjectResult)result.Result).Value;
+            Assert.AreEqual(0, returnedCrewLeaders.Count);
+
+            await crewController.AddCrewLeaderAsync(crew2.Id, _createdUser2.Entity.Id);
+
+            result = await crewController.GetCrewLeadersAsync(crew2.Id);
+            returnedCrewLeaders = (List<CrewMembersListVm>)((OkObjectResult)result.Result).Value;
+            Assert.AreEqual(1, returnedCrewLeaders.Count);
+            Assert.AreEqual(_createdUser2.Entity.Id, returnedCrewLeaders[0].Id);
+        }
+
+        [Test]
+        public async Task ShouldCheckIfAUserIsAMemberOfACrew()
+        {
+            CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
+            CrewController crewController = new CrewController(crewService);
+            SetUser(crewController, _createdUser1.Entity.Id);
+
+            ActionResult<List<CrewListVm>> result = await crewController.GetCrewsUserIsMemberOfAsync();
+            List<CrewListVm> returnedCrewLeaders = (List<CrewListVm>)((OkObjectResult)result.Result).Value;
+
+            Assert.AreEqual(1, returnedCrewLeaders.Count);
+            Assert.AreEqual(1, returnedCrewLeaders[0].Id);
+        }
 
         // Helper methods
         private async Task<ActionResult> CreateCrew(string crewName)
