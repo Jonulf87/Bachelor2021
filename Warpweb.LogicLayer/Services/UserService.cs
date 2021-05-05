@@ -1,9 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
@@ -11,10 +18,12 @@ namespace Warpweb.LogicLayer.Services
     public class UserService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserService(ApplicationDbContext dbContext)
+        public UserService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task<List<UserListVm>> GetUsersAsync()
@@ -93,6 +102,45 @@ namespace Warpweb.LogicLayer.Services
                     Team = a.Team
 
                 }).SingleOrDefaultAsync();
+        }
+
+        public async Task UpdateUserAsync(UserUpdateVm userVm)
+        {
+            var existingUser = _dbContext.ApplicationUsers.Where(a => a.Id == userVm.Id).SingleOrDefault();
+
+            if (existingUser == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med Id: {userVm.Id}");
+            }
+
+            existingUser.Id = userVm.Id;
+            existingUser.FirstName = userVm.FirstName;
+            existingUser.MiddleName = userVm.MiddleName;
+            existingUser.LastName = userVm.LastName;
+            existingUser.Address = userVm.Address;
+            existingUser.ZipCode = userVm.ZipCode;
+            existingUser.PhoneNumber = userVm.PhoneNumber;
+            existingUser.UserName = userVm.UserName;
+            existingUser.Team = userVm.Team;
+            existingUser.IsAllergic = userVm.IsAllergic;
+            existingUser.AllergyDescription = userVm.AllergyDescription;
+            existingUser.Comments = userVm.Comments;
+
+            var guardianToBeUpdated = existingUser.Guardian;
+
+            if (guardianToBeUpdated != null)
+            {
+                guardianToBeUpdated.EMail = userVm.ParentEMail;
+                guardianToBeUpdated.FirstName = userVm.ParentFirstName;
+                guardianToBeUpdated.LastName = userVm.ParentLastName;
+                guardianToBeUpdated.PhoneNumber = userVm.ParentPhoneNumber;
+
+                _dbContext.Update<Guardian>(guardianToBeUpdated);
+                _dbContext.SaveChanges();
+            }
+
+            _dbContext.Update<ApplicationUser>(existingUser);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

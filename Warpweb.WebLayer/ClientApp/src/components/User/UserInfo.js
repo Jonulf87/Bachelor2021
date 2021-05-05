@@ -1,7 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Grid, Button, Card, CardContent, Typography, CircularProgress } from '@material-ui/core';
+import { Button, Card, CardContent, Typography, CircularProgress } from '@material-ui/core';
+import { format, parseISO } from 'date-fns';
 import useAuth from '../../hooks/useAuth';
+import EditUser from './EditUser';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -9,7 +11,7 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexWrap: 'wrap',
             margin: 20,
-            maxWidth: 450,
+            maxWidth: 500,
         },
         p: {
             fontsize: 14,
@@ -21,9 +23,23 @@ const useStyles = makeStyles((theme) =>
 export default function UserInfo() {
 
     const [userInfo, setUserInfo] = useState([]);
+    const [dialogEditUserOpen, setDialogEditUserOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
+    const [updateUser, setUpdateUser] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
+
+    const handleDialogEditUserClose = () => {
+        setDialogEditUserOpen(false);
+    }
+
+    const handleDialogEditUserOpen = () => {
+        setDialogEditUserOpen(true);
+    }
+
+    const triggerUpdate = () => {
+        setUpdateUser(oldValue => !oldValue)
+    }
 
     useEffect(() => {
         const getUser = async () => {
@@ -43,7 +59,7 @@ export default function UserInfo() {
         }
         getUser();
 
-    }, [isAuthenticated]);
+    }, [isAuthenticated, updateUser]);
 
     const classes = useStyles();
 
@@ -73,11 +89,19 @@ export default function UserInfo() {
                     </Typography>
 
                     <Typography className={classes.p} variant="body1" component="p">
+                        <strong>Adresse:&nbsp;</strong>{userInfo.address}
+                    </Typography>
+
+                    <Typography className={classes.p} variant="body1" component="p">
+                        <strong>Postnr:&nbsp;</strong>{userInfo.zipCode}
+                    </Typography>
+
+                    <Typography className={classes.p} variant="body1" component="p">
                         <strong>Kjønn:&nbsp;</strong>{userInfo.gender}
                     </Typography>
 
                     <Typography className={classes.p} variant="body1" component="p">
-                        <strong>Fødselsdato:&nbsp;</strong>{userInfo.dateOfBirth}
+                        <strong>Fødselsdato:&nbsp;</strong>{format(parseISO(userInfo.dateOfBirth), 'dd.MM.yyyy')}
                     </Typography>
 
                     <Typography className={classes.p} variant="body1" component="p">
@@ -91,7 +115,7 @@ export default function UserInfo() {
                     }
 
                     {userInfo.parentPhoneNumber &&
-                        <Grid container id="userParentInfo" spacing={2}>
+                        <>
                         <Typography className={classes.p} variant="body1" component="p">
                                 <strong>Foresatt:&nbsp;</strong>{userInfo.parentFirstName}&nbsp;{userInfo.parentLastName}
                             </Typography>
@@ -103,21 +127,30 @@ export default function UserInfo() {
                         <Typography className={classes.p} variant="body1" component="p">
                                 <strong>Foresatt epost:&nbsp;</strong>{userInfo.parentEMail}
                             </Typography>
-                        </Grid>
+                        </>
                     }
 
+                    {userInfo.team &&
                     <Typography className={classes.p} variant="body1" component="p">
                         <strong>Lag/klan:&nbsp;</strong>{userInfo.team}
                     </Typography>
+                    }
 
-                    <Typography className={classes.p} variant="body1" component="p">
-                        <strong>Tilleggsinformasjon:&nbsp;</strong>{userInfo.comments}
-                    </Typography>
+                    {userInfo.comments &&
+                        <Typography className={classes.p} variant="body1" component="p">
+                            <strong>Tilleggsinformasjon:&nbsp;</strong>{userInfo.comments}
+                        </Typography>
+                    }
 
-
-                    <Button variant="contained" color="primary">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleDialogEditUserOpen}
+                    >
                         Endre
                     </Button>
+
+                    <EditUser dialogEditUserOpen={dialogEditUserOpen} handleDialogEditUserClose={handleDialogEditUserClose} triggerUpdate={triggerUpdate} />
 
                 </>)}
 

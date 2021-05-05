@@ -20,16 +20,11 @@ namespace Warpweb.WebLayer.Controllers
     {
         private readonly UserService _userService;
         private readonly SecurityService _securityService;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UserController(UserService userService, SecurityService securityService, 
-            UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UserController(UserService userService, SecurityService securityService)
         {
             _userService = userService;
             _securityService = securityService;
-            _userManager = userManager;
-            _signInManager = signInManager;
         }
 
         /// <summary>
@@ -107,6 +102,14 @@ namespace Warpweb.WebLayer.Controllers
                 return BadRequest("Noe gikk galt.");
             }
             
-        }  
+        }
+
+        [HttpPut]
+        [Route("updateuser")]
+        public async Task<ActionResult> UpdateUserAsync(UserUpdateVm user)
+        {
+            await _userService.UpdateUserAsync(user);
+            return Ok();
+        }
     }
 }
