@@ -127,6 +127,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
                         <Link
                             href={organizerWebPage}
                             variant="body2"
+                            target="_blank"
                         >
                             {organizerName}s Nettside
                         </Link>

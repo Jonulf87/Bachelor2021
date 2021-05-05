@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexWrap: 'wrap',
             margin: 20,
-            maxWidth: 500,
+            maxWidth: 650,
         },
         p: {
             fontsize: 14,
