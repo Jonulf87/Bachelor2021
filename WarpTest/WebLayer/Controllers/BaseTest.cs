@@ -82,7 +82,7 @@ namespace WarpTest.WebLayer.Controllers
                     Address = "Oslo gate 123",
                     ZipCode = "1234",
                     Team = "Team 1",
-                    DateOfBirth = DateTime.Now,
+                    DateOfBirth = DateTime.Now.AddYears(-20),
                     IsAllergic = false,
                     Gender = "Male"
                 }
@@ -207,6 +207,30 @@ namespace WarpTest.WebLayer.Controllers
                    CrewId = 1
                }
            );
+            _dbContext.SaveChanges();
+
+            _dbContext.TicketTypes.Add(
+              new TicketType
+              {
+                  DescriptionName = "Test ticket type",
+                  BasePrice = 10,
+                  AmountAvailable = 20,
+                  MainEventId = 1
+              }
+          );
+            _dbContext.SaveChanges();
+
+            _dbContext.Tickets.Add(
+              new Ticket
+              {
+                 Price = 15,
+                 IsCheckedIn = false,
+                 IsPaid = true,
+                 TicketTypeId = 1,
+                 MainEventId = 1,
+                 ApplicationUserId = _createdUser1.Entity.Id
+              }
+          );
             _dbContext.SaveChanges();
         }
     }
