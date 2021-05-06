@@ -28,7 +28,11 @@ export default function PopupWindow(props) {
             >
                 {props.title && <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>}
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description" style={{ color: 'black', font: 'bold', fontSize: 'large', textAlign: 'center' }}>
+                    <DialogContentText
+                        component="div"
+                        id="alert-dialog-description"
+                        style={{ color: 'black', font: 'bold', fontSize: 'large', textAlign: 'center' }}
+                    >
                         {props.text}
                     </DialogContentText>
                 </DialogContent>

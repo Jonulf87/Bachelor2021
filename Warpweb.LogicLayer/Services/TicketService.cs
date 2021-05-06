@@ -40,6 +40,33 @@ namespace Warpweb.LogicLayer.Services
                     UserId = a.User.Id
                 }).ToListAsync();
         }
+
+        /// <summary>
+        /// Returns all tickets of upcoming events belonging to user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<UserTicketsUpcomingVm>> GetAllUserTicketsUpcomingAsync(string userId)
+        {
+            return await _dbContext.Tickets
+                .Where(a => a.MainEvent.StartDateTime > DateTime.Now && a.User.Id == userId)
+                .IgnoreQueryFilters()
+                .Select(a => new UserTicketsUpcomingVm
+                {
+                    Id = a.Id,
+                    Price = a.Price,
+                    RowName = a.Seat.Row.Name,
+                    SeatNumber = a.Seat.SeatNumber,
+                    TicketType = a.Type.DescriptionName,
+                    MainEventName = a.MainEvent.Name,
+                    Start = a.MainEvent.StartDateTime,
+                    End = a.MainEvent.EndDateTime,
+                    VenueName = a.MainEvent.Venue.Name,
+                    UserFirstName = a.User.FirstName,
+                    UserLastName = a.User.LastName
+                }).ToListAsync();
+        }
+
         /// <summary>
         /// Returns all tickets belonging to user independent of mainevent
         /// </summary>

@@ -51,7 +51,8 @@ export default function TicketPicker() {
 
                     </TableBody>
                     <TableBody>
-                        {shoppingCartUnique.map((ticket) => (
+                        {shoppingCartUnique.length > 0
+                            ? shoppingCartUnique.map((ticket) => (
                             <TableRow key={ticket}>
                                 <TableCell>
                                     {ticket}
@@ -65,7 +66,9 @@ export default function TicketPicker() {
                                     {shoppingCart.filter(a => a.descriptionName === ticket).length * ticketTypesList.find(a => a.descriptionName === ticket).basePrice}
                                 </TableCell>
                             </TableRow>
-                            ))}
+                            ))
+                            : <CircularProgress />
+                        }
                         <TableRow>
                             <TableCell>
                                 Totalpris
