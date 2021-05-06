@@ -11,79 +11,72 @@ namespace WarpTest.WebLayer.Controllers
 {
     class TicketControllerTest : BaseTest
     {
-        private const int _price1 = 10;
-        private const string _seat1 = "Seat 1";
-        private const int _price2 = 20;
-        private const string _seat2 = "Seat 2";
 
-        //[Test]
-        //public async Task ShouldGetTickets()
-        //{
-        //    CreateTickets();
+        [Test]
+        public async Task ShouldGetTickets()
+        {
+            List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
+            tickets.Add(new TicketsToBuyVm { Id = 1 });
+            await CreateTickets(tickets);
 
-        //    TicketService ticketService = new TicketService(_dbContext);
-        //    TicketController ticketController = new TicketController(ticketService);
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
+            SetUser(ticketController, _createdUser1.Entity.Id);
 
-        //    List<TicketListVm> result = await ticketController.GetTickets();
+            List<TicketListVm> result = await ticketController.GetAllTicketsOfUserAsync();
 
-        //    Assert.AreEqual(2, result.Count);
-        //    Assert.AreEqual(1, result[0].Id);
-        //    Assert.AreEqual(_price1, result[0].Price);
-        //    Assert.AreEqual(_seat1, result[0].Seat);
-        //    Assert.AreEqual(2, result[1].Id);
-        //    Assert.AreEqual(_price2, result[1].Price);
-        //    Assert.AreEqual(_seat2, result[1].Seat);
-        //}
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(1, result[0].Id);
+        }
 
-        //[Test]
-        //public async Task ShouldGetTicketById()
-        //{
-        //    CreateTickets();
+        [Test]
+        public async Task ShouldGetTicketById()
+        {
+            List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
+            tickets.Add(new TicketsToBuyVm { Id = 1 });
+            await CreateTickets(tickets);
 
-        //    TicketService ticketService = new TicketService(_dbContext);
-        //    TicketController ticketController = new TicketController(ticketService);
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
 
-        //    ActionResult<TicketVm> result1 = await ticketController.GetTicket(1);
-        //    TicketVm returnedTicket1 = result1.Value;
-        //    Assert.AreEqual(1, returnedTicket1.Id);
-        //    Assert.AreEqual(_price1, returnedTicket1.Price);
-        //    Assert.AreEqual(_seat1, returnedTicket1.Seat);
+            ActionResult<TicketVm> result1 = await ticketController.GetTicketAsync(1);
+            TicketVm returnedTicket1 = result1.Value;
+            Assert.AreEqual(1, returnedTicket1.Id);
+            Assert.AreEqual(15, returnedTicket1.Price);
 
-        //    ActionResult<TicketVm> result2 = await ticketController.GetTicket(2);
-        //    TicketVm returnedTicket2 = result2.Value;
-        //    Assert.AreEqual(2, returnedTicket2.Id);
-        //    Assert.AreEqual(_price2, returnedTicket2.Price);
-        //    Assert.AreEqual(_seat2, returnedTicket2.Seat);
-        //}
 
-        //[Test]
-        //public async Task ShouldCreateTicket()
-        //{
-        //    CreateTickets();
+            ActionResult<TicketVm> result2 = await ticketController.GetTicketAsync(2);
+            TicketVm returnedTicket2 = result2.Value;
+            Assert.AreEqual(2, returnedTicket2.Id);
+            Assert.AreEqual(10, returnedTicket2.Price);
+        }
 
-        //    int price3 = 30;
-        //    string seat3 = "seat 3";
+       [Test]
+       public async Task ShouldGetAllTiccketsUserEventAsync()
+        {
+            List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
+            tickets.Add(new TicketsToBuyVm { Id = 1 });
+            await CreateTickets(tickets);
 
-        //    TicketService ticketService = new TicketService(_dbContext);
-        //    TicketController ticketController = new TicketController(ticketService);
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
+            SetUser(ticketController, _createdUser1.Entity.Id);
 
-        //    TicketVm ticketVm = new TicketVm { Price = price3, Seat = seat3 };
+            ActionResult<List<TicketListVm>> result = await ticketController.GetAllTiccketsUserEventAsync(1);
+            List<TicketListVm> returnedTickets = (List<TicketListVm>)((OkObjectResult)result.Result).Value;
 
-        //    ActionResult<TicketVm> result = await ticketController.CreateTicket(ticketVm);
+            Assert.AreEqual(2, returnedTickets.Count);
+            Assert.AreEqual("Event 1", returnedTickets[0].MainEventName);
+            Assert.AreEqual(15, returnedTickets[0].Price);
+            Assert.AreEqual("Test ticket type", returnedTickets[0].TicketType);
+            Assert.AreEqual(_createdUser1.Entity.Id, returnedTickets[0].UserId);
+            Assert.AreEqual("Event 1", returnedTickets[1].MainEventName);
+            Assert.AreEqual(10, returnedTickets[1].Price);
+            Assert.AreEqual("Test ticket type", returnedTickets[1].TicketType);
+            Assert.AreEqual(_createdUser1.Entity.Id, returnedTickets[1].UserId);
 
-        //    TicketVm createdTicket = (TicketVm)((OkObjectResult)result.Result).Value;
 
-        //    // Check object that is returned from the controller
-        //    Assert.AreEqual(3, createdTicket.Id);
-        //    Assert.AreEqual(price3, createdTicket.Price);
-        //    Assert.AreEqual(seat3, createdTicket.Seat);
-
-        //    // Check what we really have in the DB
-        //    Ticket ticket1 = _dbContext.Tickets.Find(3);
-        //    Assert.AreEqual(3, ticket1.Id);
-        //    Assert.AreEqual(price3, ticket1.Price);
-        //    Assert.AreEqual(seat3, ticket1.Seat);
-        //}
+        }
 
         //[Test]
         //public async Task ShouldUpdateTicket()
@@ -133,12 +126,13 @@ namespace WarpTest.WebLayer.Controllers
         //}
 
         // Helper methods
-        //private void CreateTickets()
-        //{
-        //    _dbContext.Tickets.Add(new Ticket { Price = _price1, Seat = _seat1 });
-        //    _dbContext.SaveChanges();
-        //    _dbContext.Tickets.Add(new Ticket { Price = _price2, Seat = _seat2 });
-        //    _dbContext.SaveChanges();
-        //}
+        private async Task<ActionResult> CreateTickets(List<TicketsToBuyVm> tickets)
+        {
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
+            SetUser(ticketController, _createdUser1.Entity.Id);
+
+            return await ticketController.CreateTicketsAsync(tickets);
+        }
     }
 }
