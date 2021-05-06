@@ -129,9 +129,11 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
-        public async Task<IEnumerable<PublicRowVm>> GetPublicSeatMapAsync()
+        public async Task<IEnumerable<PublicRowVm>> GetPublicSeatMapAsync(int mainEventId)
         {
             var rows = await _dbContext.Rows
+                .Where(a => a.MainEventId == mainEventId)
+                .IgnoreQueryFilters()
                 .Select(a => new PublicRowVm
                 {
                     Id = a.Id,

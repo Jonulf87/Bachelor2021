@@ -45,15 +45,17 @@ namespace Warpweb.WebLayer.Controllers
             var seatMap = await _seatMapService.GetSeatMapAsync();
             return Ok(seatMap);
         }
+
         /// <summary>
         /// Gets seatmap meant for the public
         /// </summary>
+        /// <param name="mainEventId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("publicseatmap")]
-        public async Task<ActionResult<IEnumerable<PublicRowVm>>> GetPublicSeatMapAsync()
+        [Route("publicseatmap/{mainEventId}")]
+        public async Task<ActionResult<IEnumerable<PublicRowVm>>> GetPublicSeatMapAsync(int mainEventId)
         {
-            var seatMap = await _seatMapService.GetPublicSeatMapAsync();
+            var seatMap = await _seatMapService.GetPublicSeatMapAsync(mainEventId);
             return Ok(seatMap);
         }
 

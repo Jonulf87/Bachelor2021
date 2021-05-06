@@ -2,11 +2,18 @@
 import React from 'react';
 import { format, parseISO } from 'date-fns';
 import useSeatMap from '../../hooks/useSeatMap';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 
-export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketType, mainEventName, userFirstName, userLastName, start, end, venueName }) {
+export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketType, mainEventName, mainEventId, userFirstName, userLastName, start, end, venueName }) {
 
-    const { setActiveTicket } = useSeatMap();
+    const { setSelectedEvent } = useCurrentEvent();
+    const { getSeatMap, setActiveTicket } = useSeatMap();
 
+    const handleClick = () => {
+        setSelectedEvent(mainEventId);
+        setActiveTicket(id);
+        getSeatMap(mainEventId);
+    }
 
     return (
         <>
@@ -47,7 +54,7 @@ export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketTy
                                     variant="contained"
                                     color="primary"
                                     style={{ margin: "0px", padding: "2px" }}
-                                    onClick={setActiveTicket(id)}
+                                    onClick={() => handleClick()}
                                 >
                                     Reserver
                                 </Button>

@@ -10,10 +10,10 @@ const SeatMapProvider = ({ children }) => {
     const [activeTicket, setActiveTicket] = useState(null);
     const { isAuthenticated, token } = useAuth();
 
-    const getSeatMap = async () => {
+    const getSeatMap = async (mainEventId) => {
 
         if (isAuthenticated) {
-            const responseSeatMap = await fetch('/api/seatmap/publicseatmap', {
+            const responseSeatMap = await fetch(`/api/seatmap/publicseatmap/${mainEventId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
@@ -36,21 +36,17 @@ const SeatMapProvider = ({ children }) => {
         }
     }
 
-    const reserveSeat = async (seatNumber, rowName) => {
+    const reserveSeat = async (seatId) => {
         if (isAuthenticated) {
 
             const ticket = userUpcomingTickets.find(t => t.id === activeTicket);
 
-            ticket.rowName = rowName;
-            ticket.seatNumber = seatNumber;
-
-            const ticketUpdateResponse = await fetch('/api/tickets/setseatnumber', {
+            const ticketUpdateResponse = await fetch(`/api/tickets/reserveseat/${ticket.id}/${seatId}`, {
                 headers: {
-                    'Authentication': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
                 },
-                method: 'PUT',
-                body: JSON.stringify(ticket)
+                method: 'POST'
             });
 
             if (ticketUpdateResponse.ok) {
@@ -60,7 +56,7 @@ const SeatMapProvider = ({ children }) => {
         }
     }
 
-    return <SeatMapContext.Provider value={{ setActiveTicket, getSeatMap, rows, getUserTicketsForUpcomingEvents, userUpcomingTickets }}>{children}</SeatMapContext.Provider>;
+    return <SeatMapContext.Provider value={{ reserveSeat, setActiveTicket, getSeatMap, rows, getUserTicketsForUpcomingEvents, userUpcomingTickets }}>{children}</SeatMapContext.Provider>;
 
 };
 

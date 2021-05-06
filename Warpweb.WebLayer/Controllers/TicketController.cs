@@ -156,14 +156,13 @@ namespace Warpweb.WebLayer.Controllers
         [Route("reserveseat/{ticketId}/{seatId}")]
         public async Task<ActionResult> ReserveSeatAsync(int ticketId, int seatId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             try
             {
-                await _ticketService.ReserveSeatAsync(ticketId, seatId, userId);
+                await _ticketService.ReserveSeatAsync(ticketId, seatId);
                 return Ok();
             }
-            catch
+            catch (Exception e)
             {
                 return BadRequest("Kunne ikke reservere sete");
             }
