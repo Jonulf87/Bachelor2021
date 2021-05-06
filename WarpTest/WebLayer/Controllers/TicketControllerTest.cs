@@ -24,10 +24,11 @@ namespace WarpTest.WebLayer.Controllers
             TicketController ticketController = new TicketController(ticketService);
             SetUser(ticketController, _createdUser1.Entity.Id);
 
-            List<TicketListVm> result = await ticketController.GetAllTicketsOfUserAsync();
+            ActionResult <List<TicketListVm>> result = await ticketController.GetAllTicketsOfUserAsync();
+            List<TicketListVm> returnedTickets = result.Value;
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(1, result[0].Id);
+            Assert.AreEqual(2, returnedTickets.Count);
+            Assert.AreEqual(1, returnedTickets[0].Id);
         }
 
 
