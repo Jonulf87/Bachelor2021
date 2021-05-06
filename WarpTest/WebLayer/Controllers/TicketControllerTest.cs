@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
@@ -29,6 +30,8 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(1, result[0].Id);
         }
 
+
+
         [Test]
         public async Task ShouldGetTicketById()
         {
@@ -52,7 +55,7 @@ namespace WarpTest.WebLayer.Controllers
         }
 
        [Test]
-       public async Task ShouldGetAllTiccketsUserEventAsync()
+       public async Task ShouldGetAllTiccketsUserEvent()
         {
             List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
             tickets.Add(new TicketsToBuyVm { Id = 1 });
@@ -70,60 +73,91 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(15, returnedTickets[0].Price);
             Assert.AreEqual("Test ticket type", returnedTickets[0].TicketType);
             Assert.AreEqual(_createdUser1.Entity.Id, returnedTickets[0].UserId);
+            Assert.AreEqual("Test row name", returnedTickets[0].RowName);
             Assert.AreEqual("Event 1", returnedTickets[1].MainEventName);
             Assert.AreEqual(10, returnedTickets[1].Price);
             Assert.AreEqual("Test ticket type", returnedTickets[1].TicketType);
             Assert.AreEqual(_createdUser1.Entity.Id, returnedTickets[1].UserId);
-
-
         }
 
-        //[Test]
-        //public async Task ShouldUpdateTicket()
-        //{
-        //    CreateTickets();
+        [Test]
+        public async Task ShouldGetAllUnpaidTickets()
+        {
+            List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
+            tickets.Add(new TicketsToBuyVm { Id = 1 });
+            await CreateTickets(tickets);
 
-        //    int newPrice = 50;
-        //    string newSeat = "Seat 4";
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
+            SetUser(ticketController, _createdUser1.Entity.Id);
 
-        //    TicketService ticketService = new TicketService(_dbContext);
-        //    TicketController ticketController = new TicketController(ticketService);
+            ActionResult<List<TicketListVm>> result = await ticketController.GetAllTicketsUserEventUnpaidAsync(1);
+            List<TicketListVm> returnedTickets = (List<TicketListVm>)((OkObjectResult)result.Result).Value;
 
-        //    TicketVm ticketVm = new TicketVm { Id = 1, Price = newPrice, Seat = newSeat };
+            Assert.AreEqual(2, returnedTickets.Count);
+            Assert.AreEqual("Event 1", returnedTickets[0].MainEventName);
+            Assert.AreEqual(15, returnedTickets[0].Price);
+            Assert.AreEqual("Test ticket type", returnedTickets[0].TicketType);
+            Assert.AreEqual(_createdUser1.Entity.Id, returnedTickets[0].UserId);
+            Assert.AreEqual("Test row name", returnedTickets[0].RowName);
+            Assert.AreEqual(1, returnedTickets[0].SeatNumber);
+            Assert.AreEqual("Event 1", returnedTickets[1].MainEventName);
+            Assert.AreEqual(10, returnedTickets[1].Price);
+            Assert.AreEqual("Test ticket type", returnedTickets[1].TicketType);
+            Assert.AreEqual(_createdUser1.Entity.Id, returnedTickets[1].UserId);
+        }
 
-        //    await ticketController.UpdateTicket(ticketVm);
 
-        //    // Check that only one has been changed
-        //    Ticket ticket1 = _dbContext.Tickets.Find(1);
-        //    Assert.AreEqual(newPrice, ticket1.Price);
-        //    Assert.AreEqual(newSeat, ticket1.Seat);
+        [Test]
+        public async Task ShouldUpdateTicket()
+        {
+            List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
+            tickets.Add(new TicketsToBuyVm { Id = 1 });
+            await CreateTickets(tickets);
 
-        //    Ticket ticket2 = _dbContext.Tickets.Find(2);
-        //    Assert.AreEqual(_price2, ticket2.Price);
-        //    Assert.AreEqual(_seat2, ticket2.Seat);
-        //}
+            int newPrice = 50;
 
-        //[Test]
-        //public async Task ShouldDeleteTicket()
-        //{
-        //    CreateTickets();
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
+            SetUser(ticketController, _createdUser1.Entity.Id);
 
-        //    TicketService ticketService = new TicketService(_dbContext);
-        //    TicketController ticketController = new TicketController(ticketService);
+            TicketVm ticketVm = new TicketVm { Id = 1, Price = newPrice};
 
-        //    TicketVm ticketVm = new TicketVm { Id = 1 };
+            await ticketController.UpdateTicketAsync(ticketVm);
 
-        //    ActionResult<TicketVm> result = await ticketController.DeleteTicket(ticketVm);
-        //    TicketVm deletedTicket = (TicketVm)((OkObjectResult)result.Result).Value;
+            // Check that only one has been changed
+            Ticket ticket1 = _dbContext.Tickets.Find(1);
+            Assert.AreEqual(newPrice, ticket1.Price);
 
-        //    Assert.AreEqual(1, deletedTicket.Id);
+            Ticket ticket2 = _dbContext.Tickets.Find(2);
+            Assert.AreEqual(10, ticket2.Price);
+        }
 
-        //    // Check that we have deleted only the first, but not the other
-        //    Ticket ticket1 = _dbContext.Tickets.Find(1);
-        //    Assert.IsNull(ticket1);
-        //    Ticket ticket2 = _dbContext.Tickets.Find(2);
-        //    Assert.IsNotNull(ticket2);
-        //}
+        [Test]
+        public async Task ShouldDeleteTicket()
+        {
+            List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
+            tickets.Add(new TicketsToBuyVm { Id = 1 });
+            await CreateTickets(tickets);
+
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
+            SetUser(ticketController, _createdUser1.Entity.Id);
+
+            TicketVm ticketVm = new TicketVm { Id = 1 };
+
+            ActionResult<TicketVm> result = await ticketController.DeleteTicketAsync(ticketVm);
+            TicketVm deletedTicket = (TicketVm)((OkObjectResult)result.Result).Value;
+
+            Assert.AreEqual(1, deletedTicket.Id);
+
+            // Check that we have deleted only the first, but not the other
+            Ticket ticket1 = _dbContext.Tickets.Find(1);
+            Assert.IsNull(ticket1);
+            Ticket ticket2 = _dbContext.Tickets.Find(2);
+            Assert.IsNotNull(ticket2);
+        }
+
 
         // Helper methods
         private async Task<ActionResult> CreateTickets(List<TicketsToBuyVm> tickets)

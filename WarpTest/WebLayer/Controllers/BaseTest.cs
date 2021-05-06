@@ -209,6 +209,24 @@ namespace WarpTest.WebLayer.Controllers
            );
             _dbContext.SaveChanges();
 
+            _dbContext.Rows.Add(
+              new Row
+              {
+                 Name = "Test row name",
+                 MainEventId = 1
+              }
+          );
+            _dbContext.SaveChanges();
+
+            _dbContext.Seats.Add(
+              new Seat
+              {
+                  SeatNumber = 1,
+                  RowId = 1
+              }
+          );
+            _dbContext.SaveChanges();
+
             _dbContext.TicketTypes.Add(
               new TicketType
               {
@@ -225,10 +243,11 @@ namespace WarpTest.WebLayer.Controllers
               {
                  Price = 15,
                  IsCheckedIn = false,
-                 IsPaid = true,
+                 IsPaid = false,
                  TicketTypeId = 1,
                  MainEventId = 1,
-                 ApplicationUserId = _createdUser1.Entity.Id
+                 ApplicationUserId = _createdUser1.Entity.Id,
+                 SeatId = 1
               }
           );
             _dbContext.SaveChanges();
