@@ -7,7 +7,7 @@ export default function SeatMapFloor() {
     const { rows } = useSeatMap();
     return (
         <div className="seatMapFloor">
-            {rows && rows.map(row => (<SeatMapRow {...row} />))}
+            {rows && rows.map(row => (<SeatMapRow {...row} key={row.id} />))}
         </div>
     )
 }

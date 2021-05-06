@@ -111,7 +111,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
             <TableRow>
                 <TableCell colSpan={1}>
                 </TableCell>
-                <TableCell colSpan={2}>
+                <TableCell colSpan={3}>
                     <Button
                         variant="contained"
                         color="primary"

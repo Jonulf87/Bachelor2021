@@ -30,4 +30,52 @@ code {
     box-sizing: border-box
 }
 
+.seatMapSeat {
+    float: left;
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.seatAvailable {
+    background-color: chartreuse;
+    border-right: 1px rgba(0,0,0,0.4) solid;
+    border-top: 1px rgba(0,0,0,0.4) solid;
+    border-bottom: 1px rgba(0,0,0,0.4) solid;
+    float: left;
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.seatOccupied {
+    background-color: crimson;
+    border-right: 1px rgba(0,0,0,0.4) solid;
+    border-top: 1px rgba(0,0,0,0.4) solid;
+    border-bottom: 1px rgba(0,0,0,0.4) solid;
+    float: left;
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.seatUnavailable {
+    background-color: dimgray;
+    border-right: 1px rgba(0,0,0,0.4) solid;
+    border-top: 1px rgba(0,0,0,0.4) solid;
+    border-bottom: 1px rgba(0,0,0,0.4) solid;
+    float: left;
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+    text-align: center;
+    cursor: not-allowed;
+}
+
 
