@@ -1,4 +1,4 @@
-﻿import { Dialog, DialogTitle, FormControl, makeStyles, Paper, TextField } from '@material-ui/core';
+﻿import { Container, Dialog, DialogTitle, FormControl, makeStyles, Paper, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
 import { Button, Form } from 'reactstrap/lib';
 import useAuth from '../../hooks/useAuth';
@@ -6,8 +6,9 @@ import useAuth from '../../hooks/useAuth';
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
-            padding: theme.spacing(1),
-            widht: "100%"
+            margin: theme.spacing(1),
+            width: "100%",
+            marginLeft: 0
         }
     },
 }));
@@ -51,10 +52,9 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
         <Dialog
             open={dialogOpen}
             onClose={handleDialogClose}
+            className={classes.root}
         >
-            <Paper
-                variant="outlined"
-                elevation={0}
+            <Container
                 style={{ padding: '10px' }}
             >
                 <DialogTitle>
@@ -62,7 +62,7 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                 </DialogTitle>
                 <Form
                     onSubmit={submitForm}
-                    className={classes.root}
+                    
                 >
                     <TextField
                         id="name"
@@ -105,7 +105,7 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                     </FormControl>
                         
                 </Form>
-            </Paper>
+            </Container>
         </Dialog>
     )
 }
