@@ -1,8 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { TextField, Button, Grid, Container, Typography } from '@material-ui/core';
 
-import queryString from 'query-string';
-
 import { Link, Redirect } from 'react-router-dom';
 
 import useAuth from '../../hooks/useAuth';

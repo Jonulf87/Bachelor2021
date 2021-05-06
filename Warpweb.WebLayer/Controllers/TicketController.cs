@@ -24,10 +24,23 @@ namespace Warpweb.WebLayer.Controllers
 
         [HttpGet]
         [Route("usertickets")]
-        public async Task<List<TicketListVm>> GetAllTicketsOfUserAsync()
+        public async Task<ActionResult<List<TicketListVm>>> GetAllTicketsOfUserAsync()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return await _ticketService.GetAllTicketsOfUserAsync(userId);
+        }
+
+        /// <summary>
+        /// Gets all tickets of user of upcoming events
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("userticketsupcoming")]
+        public async Task<ActionResult<List<UserTicketsUpcomingVm>>> GetAllUserTicketsUpcomingAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<UserTicketsUpcomingVm> tickets = await _ticketService.GetAllUserTicketsUpcomingAsync(userId);
+            return Ok(tickets);
         }
 
         /// <summary>
@@ -35,7 +48,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <returns>TicketListVM</returns>
         [HttpGet]
-        public async Task<List<TicketListVm>> GetTicketsAsync()
+        public async Task<ActionResult<List<TicketListVm>>> GetTicketsAsync()
         {
             return await _ticketService.GetTicketsAsync();
         }
@@ -110,7 +123,7 @@ namespace Warpweb.WebLayer.Controllers
             }
             catch (HttpException)
             {
-                return BadRequest(); 
+                return BadRequest();
             }
         }
 

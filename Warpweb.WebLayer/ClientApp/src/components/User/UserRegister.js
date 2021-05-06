@@ -182,7 +182,11 @@ export default function UserRegister() {
                     noValidate
                     onSubmit={submitForm}
                 >
-                    <Grid alignItems="center" className={classes.root} container spacing={2} >
+                    <Grid
+                        alignItems="flex-start"
+                        className={classes.root}
+                        container spacing={2}
+                    >
 
                         <PopupWindow open={open} onClose={() => setOpen(false)} text={error} />
 
@@ -198,7 +202,7 @@ export default function UserRegister() {
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 validators={['matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
-                                errorMessages={['Navn må oppgis', 'Ugyldig navn', 'Ugyldig navn', 'Ugyldig navn']}
+                                errorMessages={['Ugyldig navn', 'Ugyldig navn', 'Navn må oppgis', 'Ugyldig navn']}
                             />
                         </Grid>
                         <Grid item xs={12} lg={4} >
