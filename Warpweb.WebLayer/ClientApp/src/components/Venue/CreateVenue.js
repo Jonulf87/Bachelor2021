@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Dialog, Paper, DialogTitle, FormControl, TextField, MenuItem } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, FormControl, TextField, MenuItem, Container } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import useAuth from '../../hooks/useAuth';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -8,8 +8,14 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
-            padding: theme.spacing(1),
-            width: "100%",
+            margin: theme.spacing(1),
+            minWidth: 300,
+            maxWidth: "100%",
+        },
+        '& .MuiContainer-root': {
+            padding: '10px',
+            display: 'grid',
+            justifyContent: 'center',
         },
     }
 }));
@@ -113,23 +119,17 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
         <Dialog
             open={dialogCreateVenueOpen}
             onClose={handleDialogCreateVenueClose}
-            style={{ width: '100%', minWidth: '600px' }}
+            className={classes.root}
         >
-            <Paper
-                variant="outlined"
-                elevation={0}
-                style={{ padding: '10px' }}
-            >
+            <Container>
                 <DialogTitle>
                     Nytt lokale
                 </DialogTitle>
 
                 <ValidatorForm
-                    className={classes.root}
                     autoComplete="off"
                     noValidate
                     onSubmit={submitForm}
-                    style={{ width: "100%", padding: '4px'}}
                 >
                     <TextValidator
                         onChange={event => {
@@ -238,7 +238,7 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
                         </Button>
                     </FormControl>
                 </ValidatorForm>
-            </Paper>
+            </Container>
         </Dialog>
     );
 }
