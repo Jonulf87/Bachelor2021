@@ -28,6 +28,7 @@ namespace WarpTest.WebLayer.Controllers
         private  RoleManager<IdentityRole> _roleManager;
 
         EntityEntry<ApplicationUser> _createdUser3;
+        EntityEntry<ApplicationUser> _createdUser4;
 
         [Test]
         public async Task ShouldGetUsers()
@@ -82,18 +83,30 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_address3, returnedUser1.Address);
 
         }
-   
+
         // Helper methods
         private void CreateUsers()
         {
-            _createdUser3 = _dbContext.ApplicationUsers.Add(new ApplicationUser 
-            { 
-                FirstName = _firstName3, 
-                MiddleName = _middleName3, 
-                LastName = _lastName3, 
-                Address = _address3, 
-                DateOfBirth = _dateOfBirth3 });
-            _dbContext.SaveChanges(); 
+            _createdUser3 = _dbContext.ApplicationUsers.Add(new ApplicationUser
+            {
+                FirstName = _firstName3,
+                MiddleName = _middleName3,
+                LastName = _lastName3,
+                Address = _address3,
+                DateOfBirth = _dateOfBirth3
+            });
+            _dbContext.SaveChanges();
+
+            _createdUser4 = _dbContext.ApplicationUsers.Add(new ApplicationUser
+            {
+                FirstName = _firstName4,
+                MiddleName = _middleName4,
+                LastName = _lastName4,
+                Address = _address4,
+                DateOfBirth = _dateOfBirth4
+            });
+            _dbContext.SaveChanges();
+
         }
     }
 }
