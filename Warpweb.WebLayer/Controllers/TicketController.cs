@@ -200,7 +200,7 @@ namespace Warpweb.WebLayer.Controllers
             {
                 await _ticketService.DeleteTicketAsync(ticketVm);
             }
-            catch (HttpException)
+            catch (Exception)
             {
                 return BadRequest();
             }

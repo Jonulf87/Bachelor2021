@@ -212,8 +212,8 @@ namespace WarpTest.WebLayer.Controllers
             _dbContext.Rows.Add(
               new Row
               {
-                 Name = "Test row name",
-                 MainEventId = 1
+                  Name = "Test row name",
+                  MainEventId = 1
               }
           );
             _dbContext.SaveChanges();
@@ -241,13 +241,13 @@ namespace WarpTest.WebLayer.Controllers
             _dbContext.Tickets.Add(
               new Ticket
               {
-                 Price = 15,
-                 IsCheckedIn = false,
-                 IsPaid = false,
-                 TicketTypeId = 1,
-                 MainEventId = 1,
-                 ApplicationUserId = _createdUser1.Entity.Id,
-                 SeatId = 1
+                  Price = 15,
+                  IsCheckedIn = false,
+                  IsPaid = false,
+                  TicketTypeId = 1,
+                  MainEventId = 1,
+                  ApplicationUserId = _createdUser1.Entity.Id,
+                  SeatId = 1
               }
           );
             _dbContext.SaveChanges();
