@@ -170,7 +170,7 @@ namespace Warpweb.WebLayer.Controllers
         [Route("orgadminmainevents")]
         public async Task<ActionResult<List<MainEventListVm>>> GetMainEventsForOrgAdminAsync()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             try
             {
@@ -181,6 +181,15 @@ namespace Warpweb.WebLayer.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet]
+        [Route("eventsparticipation")]
+        public async Task<ActionResult<List<UserMainEventsVm>>> GetMainEventsOfUserParticipationAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<UserMainEventsVm> events = await _mainEventService.GetMainEventsOfUserParticipationAsync(userId);
+            return Ok(events);
         }
     }
 }

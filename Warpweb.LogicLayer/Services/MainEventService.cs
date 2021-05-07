@@ -190,6 +190,23 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
+        public async Task<List<UserMainEventsVm>> GetMainEventsOfUserParticipationAsync(string userId)
+        {
+            return await _dbContext.Tickets
+                .Where(a => a.ApplicationUserId == userId)
+                .IgnoreQueryFilters()
+                .Select(c => new UserMainEventsVm
+                {
+                    Id = c.MainEventId,
+                    Name = c.MainEvent.Name,
+                    End = c.MainEvent.EndDateTime,
+                    Start = c.MainEvent.StartDateTime,
+                    Venue = c.MainEvent.Venue.Name
+                })
+                .Distinct()
+                .ToListAsync();
+        }
+
         /// <summary>
         /// Returns current active event
         /// </summary>

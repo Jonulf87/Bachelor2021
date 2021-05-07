@@ -273,6 +273,7 @@ namespace Warpweb.LogicLayer.Services
             }
 
             ticket.SeatId = seatId;
+            seat.IsReserved = true;
 
             await _dbContext.SaveChangesAsync();
         }

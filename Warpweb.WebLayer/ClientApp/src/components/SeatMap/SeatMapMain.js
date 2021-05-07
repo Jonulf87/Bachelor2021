@@ -9,7 +9,8 @@ import useCurrentEvent from '../../hooks/useCurrentEvent';
 const useStyles = makeStyles(() => ({
     paper: {
         width: 'fit-content',
-        padding: '20px'
+        padding: '20px',
+        paddingBottom: '55px'
     }
 }));
 
@@ -18,11 +19,11 @@ export default function SeatMapMain() {
     const classes = useStyles();
 
     const { isAuthenticated } = useAuth();
-    const { getSeatMap, getUserTicketsForUpcomingEvents, userUpcomingTickets } = useSeatMap();
+    const { getSeatMap, getUserTicketsForUpcomingEvents, userUpcomingTickets, rows } = useSeatMap();
     const { currentEvent } = useCurrentEvent();
 
     useEffect(() => {
-        
+
         getUserTicketsForUpcomingEvents();
     }, [isAuthenticated])
 
@@ -39,8 +40,8 @@ export default function SeatMapMain() {
                     className={classes.paper}
                     elevation={3}
                 >
-                    <Typography variant="h2">Setekart</Typography>
-                    <SeatMapFloor />
+                        <Typography variant="h3">Setekart</Typography>
+                        <SeatMapFloor />
                 </Paper>
             </Grid>
             <Grid
@@ -52,7 +53,7 @@ export default function SeatMapMain() {
                     className={classes.paper}
                     elevation={3}
                 >
-                    <Typography variant="h2">Mine billetter </Typography>
+                    <Typography variant="h3">Mine billetter </Typography>
                     {userUpcomingTickets && userUpcomingTickets.map((ticket) => (
                         <SeatMapTicket {...ticket} key={ticket.id} />
 
