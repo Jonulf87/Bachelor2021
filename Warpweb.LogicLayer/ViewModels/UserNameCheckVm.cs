@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Warpweb.LogicLayer.Exceptions
+namespace Warpweb.LogicLayer.ViewModels
 {
-    class NoAccessToSeatClassException : Exception
+    public class UserNameCheckVm
     {
-
+        public bool IsUnavailable { get; set; }
     }
 }

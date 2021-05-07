@@ -104,6 +104,18 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+        public async Task<UserNameCheckVm> CheckUserNameAsync(string userName)
+        {
+            var userNameUnavailable = await _dbContext.ApplicationUsers
+                .Where(a => a.UserName == userName)
+                .AnyAsync();
+
+            return new UserNameCheckVm
+            {
+                IsUnavailable = userNameUnavailable
+            };
+        }
+
         public async Task UpdateUserAsync(UserUpdateVm userVm)
         {
             var existingUser = _dbContext.ApplicationUsers.Where(a => a.Id == userVm.Id).SingleOrDefault();

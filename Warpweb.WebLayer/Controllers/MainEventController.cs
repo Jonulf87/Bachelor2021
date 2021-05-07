@@ -135,11 +135,13 @@ namespace Warpweb.WebLayer.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            try {
+            try
+            {
                 await _mainEventService.SetCurrentEventAsync(eventId, userId);
                 return Ok();
-            } 
-            catch (HttpException) {
+            }
+            catch (HttpException)
+            {
                 return BadRequest();
             }
         }
@@ -172,15 +174,8 @@ namespace Warpweb.WebLayer.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            try
-            {
-                var events = await _mainEventService.GetMainEventsForOrgAdminAsync(userId);
-                return Ok(events);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            var events = await _mainEventService.GetMainEventsForOrgAdminAsync(userId);
+            return Ok(events);
         }
 
         [HttpGet]
