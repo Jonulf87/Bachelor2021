@@ -111,5 +111,13 @@ namespace Warpweb.WebLayer.Controllers
             await _userService.UpdateUserAsync(user);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("checkusername/{userName}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserNameCheckVm>> CheckUserNameAsync(string userName)
+        {
+            return await _userService.CheckUserNameAsync(userName);
+        }
     }
 }

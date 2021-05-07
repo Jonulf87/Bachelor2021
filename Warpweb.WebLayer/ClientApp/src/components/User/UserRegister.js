@@ -11,6 +11,7 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { intervalToDuration } from 'date-fns/esm/fp';
 import PopupWindow from '../PopupWindow/PopupWindow';
+import useAuth from '../../hooks/useAuth';
 
 export default function UserRegister() {
 
@@ -81,10 +82,41 @@ export default function UserRegister() {
     const [showParents, setShowParents] = useState(false);
     const [checkBox, setCheckBox] = useState(false);
     const [open, setOpen] = useState(false);
+    const [debouncedUserName, setDebouncedUserName] = useState(userName);
+    const [userNameUnavailable, setUserNameUnavailable] = useState(false);
 
     const { ticket } = useParams();
+    const { isAuthenticated, token } = useAuth();
 
     const classes = useStyles();
+
+    useEffect(() => {
+        const debounce = setTimeout(() => {
+            setDebouncedUserName(userName);
+        }, 400);
+
+        return () => {
+            clearTimeout(debounce);
+        }
+    }, [userName]);
+
+    useEffect(() => {
+        if (!debouncedUserName) {
+            return;
+        }
+        const checkUserName = async () => {
+
+            
+            const responseCheck = await fetch(`/api/users/checkusername/${debouncedUserName}`, {
+                headers: {
+                    'content-type': 'application/json'
+                }
+            })
+            const result = await responseCheck.json();
+            setUserNameUnavailable(result.isUnavailable);
+        }
+        checkUserName();
+    }, [debouncedUserName])
 
     useEffect(() => {
         const checkIsAllergic = () => {
@@ -97,6 +129,17 @@ export default function UserRegister() {
         }
         checkIsAllergic();
     }, [checkBox])
+
+
+
+    useEffect(() => {
+        ValidatorForm.addValidationRule('userNameUnavailable', () => {
+            return !userNameUnavailable;
+        });
+
+        return () => { ValidatorForm.removeValidationRule('userNameUnavailable') }
+        
+    }, []);
 
     useEffect(() => {
         const checkDateOfBirth = () => {
@@ -181,6 +224,7 @@ export default function UserRegister() {
                     autoComplete="off"
                     noValidate
                     onSubmit={submitForm}
+                    debounceTime={1000}
                 >
                     <Grid
                         alignItems="flex-start"
@@ -252,8 +296,8 @@ export default function UserRegister() {
                                 required
                                 value={userName}
                                 onChange={(e) => setUserName(e.target.value)}
-                                validators={['required']}
-                                errorMessages={['Brukernavn må oppgis']}
+                                validators={['required', 'userNameUnavailable']}
+                                errorMessages={['Brukernavn må oppgis', 'Brukernavn eksisterer allerede']}
                             />
                         </Grid>
                         <Grid item xs={12}>{/*Input passord*/}
@@ -316,6 +360,7 @@ export default function UserRegister() {
                                     value={gender}
                                     onChange={(e) => setGender(e.target.value)}
                                     label="Kjønn"
+                                    required
                                 >
                                     {genders.map((gender) => (
                                         <MenuItem key={gender.value} value={gender.value}>
@@ -329,6 +374,7 @@ export default function UserRegister() {
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DatePicker
                                     autoOk
+                                    required
                                     id="dateOfBirth"
                                     label="Fødselsdato"
                                     openTo="year"

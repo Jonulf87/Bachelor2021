@@ -19,7 +19,7 @@ export default function SeatMapMain() {
     const classes = useStyles();
 
     const { isAuthenticated } = useAuth();
-    const { getSeatMap, getUserTicketsForUpcomingEvents, userUpcomingTickets, rows } = useSeatMap();
+    const { getSeatMap, getUserTicketsForUpcomingEvents, userUpcomingTickets, rows, errors } = useSeatMap();
     const { currentEvent } = useCurrentEvent();
 
     useEffect(() => {

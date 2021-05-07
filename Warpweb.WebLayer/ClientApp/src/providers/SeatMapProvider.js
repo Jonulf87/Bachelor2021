@@ -9,6 +9,7 @@ const SeatMapProvider = ({ children }) => {
     const [userUpcomingTickets, setUserUpcomingTickets] = useState([]);
     const [activeTicket, setActiveTicket] = useState(null);
     const { isAuthenticated, token } = useAuth();
+    const [errors, setErrors] = useState("");
 
     const getSeatMap = async (mainEventId) => {
 
@@ -19,9 +20,15 @@ const SeatMapProvider = ({ children }) => {
                     'content-type': 'application/json'
                 }
             });
-            setRows(await responseSeatMap.json());
+            if (responseSeatMap.ok) {
+                setRows(await responseSeatMap.json());
+            }
+            
+            else {
+                const error = await responseSeatMap.json(); 
+                setErrors(error.message);
+            }
         }
-
     }
 
     const getUserTicketsForUpcomingEvents = async () => {
@@ -56,7 +63,7 @@ const SeatMapProvider = ({ children }) => {
         }
     }
 
-    return <SeatMapContext.Provider value={{ reserveSeat, setActiveTicket, getSeatMap, rows, getUserTicketsForUpcomingEvents, userUpcomingTickets }}>{children}</SeatMapContext.Provider>;
+    return <SeatMapContext.Provider value={{ errors, reserveSeat, setActiveTicket, getSeatMap, rows, getUserTicketsForUpcomingEvents, userUpcomingTickets }}>{children}</SeatMapContext.Provider>;
 
 };
 

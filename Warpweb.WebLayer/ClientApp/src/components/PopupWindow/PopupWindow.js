@@ -7,17 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 
-export default function PopupWindow(props) {
-    const [open, setOpen] = useState(false);
-
-    useEffect(() => {
-        setOpen(props.open);
-    }, [props.open])
-
-    const handleClose = () => {
-        setOpen(false);
-        props.onClose();
-    };
+export default function PopupWindow({ open, handleClose, title, text, }) {
 
     return (
         <div>
@@ -26,14 +16,14 @@ export default function PopupWindow(props) {
                 onClose={handleClose}
                 aria-describedby="alert-dialog-description"
             >
-                {props.title && <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>}
+                {title && <DialogTitle id="alert-dialog-title">{title}</DialogTitle>}
                 <DialogContent>
                     <DialogContentText
                         component="div"
                         id="alert-dialog-description"
                         style={{ color: 'black', font: 'bold', fontSize: 'large', textAlign: 'center' }}
                     >
-                        {props.text}
+                        {text}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

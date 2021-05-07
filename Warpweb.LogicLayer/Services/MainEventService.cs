@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
@@ -192,6 +194,7 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task<List<UserMainEventsVm>> GetMainEventsOfUserParticipationAsync(string userId)
         {
+
             return await _dbContext.Tickets
                 .Where(a => a.ApplicationUserId == userId)
                 .IgnoreQueryFilters()
@@ -243,7 +246,7 @@ namespace Warpweb.LogicLayer.Services
         /// </summary>
         public async Task<List<MainEventListVm>> GetMainEventsForOrgAdminAsync(string userId)
         {
-            return await _dbContext.MainEvents
+            var events = await _dbContext.MainEvents
                 .Where(a => a.Organizer.Admins.Any(b => b.Id == userId))
                 .Select(a => new MainEventListVm
                 {
@@ -254,6 +257,13 @@ namespace Warpweb.LogicLayer.Services
                     OrganizerName = a.Organizer.Name,
                     VenueName = a.Venue.Name
                 }).ToListAsync();
+
+
+            if(events == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Ingen events registrert på brukeren.");
+            }
+            return events;
         }
     }
 }
