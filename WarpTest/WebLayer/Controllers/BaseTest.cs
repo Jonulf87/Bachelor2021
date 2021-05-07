@@ -79,12 +79,15 @@ namespace WarpTest.WebLayer.Controllers
                     FirstName = "Ola",
                     MiddleName = "",
                     LastName = "Testesen",
+                    UserName = "OlaTestesen",
                     Address = "Oslo gate 123",
                     ZipCode = "1234",
                     Team = "Team 1",
                     DateOfBirth = DateTime.Now.AddYears(-20),
                     IsAllergic = false,
-                    Gender = "Male"
+                    Gender = "Male",
+                    Email = "ola@test.no",
+                    PhoneNumber = "12345678"
                 }
             );
             _dbContext.SaveChanges();
@@ -188,12 +191,15 @@ namespace WarpTest.WebLayer.Controllers
                     FirstName = "Line",
                     MiddleName = "",
                     LastName = "Evensen",
+                    UserName = "LineEvensen",
                     Address = "Osloveien 123",
                     ZipCode = "1234",
                     Team = "Team 1",
                     DateOfBirth = DateTime.Now.AddYears(-20),
                     IsAllergic = false,
-                    Gender = "Female"
+                    Gender = "Female",
+                    Email = "Line@test.no",
+                    PhoneNumber = "98765432"
                 }
             );
             _dbContext.SaveChanges();
