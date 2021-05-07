@@ -27,7 +27,8 @@ code {
     height: 600px;
     position: relative;
     background-color: #ccc;
-    box-sizing: border-box
+    box-sizing: border-box;
+    margin-Bottom: 30px
 }
 
 .seatMapSeat {
@@ -79,36 +80,31 @@ code {
     
 }
 
-
-
-
 /*Styling for ticket*/
 
-
-
 ticketbody {
-    background: #f2f2f2;
+    background: #F3F5F5; /*f2f2f2*/
     font-family: 'Questrial', sans-serif;
 }
 
 .main-content {
     margin: 4em auto 0;
-    width: 600px;
+    width: 500px;
     text-transform: uppercase;
 }
 
 .ticket {
     display: grid;
     grid-template-columns: auto;
-    background: #f3f1c9;
+    background: #FFFF; /*F3F5F5*/
     border-radius: 10px;
-    border: 2px solid #222;
+    border: 2px solid #3a4557;
     cursor: default;
 }
 
 .ticket__main {
     display: grid;
-    grid-template-columns: repeat(6) 120px;
+    grid-template-columns: repeat(4) 120px;
     grid-template-rows: repeat(4, min-content) auto;
     padding: 10px;
     padding-bottom: 0px;
@@ -116,17 +112,17 @@ ticketbody {
 
 .header {
     grid-area: title;
-    grid-column: span 6;
+    grid-column: span 4;
     grid-row: 1;
-    font: 900 38px 'Montserrat', sans-serif;
+    font: 900 24px 'Montserrat', sans-serif;
     padding: 5px 0 5px 20px;
     letter-spacing: 6px;
-    background: #111;
-    color: #f3f1c9;
+    background: #3a4557;
+    color: #ffff;
 }
 
 .info {
-    border: 3px solid;
+    border: 3px solid #3a4557;
     border-width: 0 3px 3px 0;
     padding: 8px;
 }
@@ -142,34 +138,33 @@ ticketbody {
     margin: 4px 0;
 }
 
-.passenger {
-    grid-column: 1 / span 6;
+.participant {
+    grid-column: 1 / span 4;
 }
 
-.departure, .arrival {
-    grid-column-start: span 3;
-}
-
-.passenger, .departure, .date {
-    border-left: 3px solid;
-}
-
-.date, .time {
+.startdatetime, .enddatetime {
     grid-column-start: span 2;
 }
 
+.participant, .startdatetime, .tickettype {
+    border-left: 3px solid #3a4557;
+}
+
+.price {
+
+}
+
+.rownumber, .seat {
+    grid-column-start: span 1;
+}
+
 .fineprint {
-    grid-column-start: span 6;
+    grid-column-start: span 4;
     font-size: 14px;
     font-family: 'Inconsolata';
     line-height: 1;
     margin-top: 10px;
     padding-right: 5px;
-    p: nth-child(2);
-    p-margin: 4px 4px 0 0;
-    p-padding-top: 4px;
-    p-border-top: 1.5px dotted;
-    p-font: 11px 'Inconsolata';
 }
 
 .ticket_id {
@@ -179,7 +174,6 @@ ticketbody {
 .ticket_used {
 
 }
- 
 
 
 /*
