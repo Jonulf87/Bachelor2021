@@ -42,6 +42,24 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        public async Task<List<MainEventListVm>> GetUpcomingEventsAsync()
+        {
+            return await _dbContext.MainEvents
+                .Where(a => a.EndDateTime > DateTime.Now)
+                .Select(a => new MainEventListVm
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime,
+                    VenueName = a.Venue.Name,
+                    OrganizerName = a.Organizer.Name,
+                    InfoComments = a.InfoComments,
+                    OrganizerWebPage = a.OrganizerWebPage
+                })
+                .ToListAsync();
+        }
+
         /// <summary>
         /// Returns a specific Event.
         /// </summary>

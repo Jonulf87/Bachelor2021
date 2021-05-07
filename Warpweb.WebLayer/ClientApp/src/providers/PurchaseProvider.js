@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import { Shop } from '@material-ui/icons';
+import React, { useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 
 export const PurchaseContext = React.createContext();
@@ -41,6 +42,17 @@ const PurchaseProvider = ({ children }) => {
         }
 
         setShoppingCart(oldValue => [...oldValue, ticket])
+    }
+
+    const removeTicketType = (descriptionName) => {
+
+        const indexOfTicket = shoppingCart.map(a => a.descriptionName).indexOf(descriptionName);
+        const newShoppingCart = [...shoppingCart];
+
+        if (indexOfTicket !== -1) {
+            newShoppingCart.splice(indexOfTicket, 1);
+            setShoppingCart(newShoppingCart);
+        }
     }
 
     useEffect(() => {
@@ -127,7 +139,7 @@ const PurchaseProvider = ({ children }) => {
     }, [shoppingCart])
 
 
-    return <PurchaseContext.Provider value={{ checkedEula, setCheckedEula, paymentOk, setPaymentOk, shoppingCart, addTicketType, payForTicket, userUnpaidEventTickets, totalPrice, ticketTypesList, selectedMainEventId, setSelectedMainEventId, userTickets, setUserTickets }}>{children}</PurchaseContext.Provider>;
+    return <PurchaseContext.Provider value={{ setShoppingCart, removeTicketType, checkedEula, setCheckedEula, paymentOk, setPaymentOk, shoppingCart, addTicketType, payForTicket, userUnpaidEventTickets, totalPrice, ticketTypesList, selectedMainEventId, setSelectedMainEventId, userTickets, setUserTickets }}>{children}</PurchaseContext.Provider>;
 
 };
 

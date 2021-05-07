@@ -37,6 +37,18 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
+        /// Returns all upcoming events with endtime later than now
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("upcomingevents")]
+        [AllowAnonymous]
+        public async Task<List<MainEventListVm>> GetUpcomingEventsAsync()
+        {
+            return await _mainEventService.GetUpcomingEventsAsync();
+        }
+
+        /// <summary>
         /// Returns a specific Event.
         /// </summary>
         /// <param name="id"></param>  

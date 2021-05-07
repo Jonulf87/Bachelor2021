@@ -11,12 +11,12 @@ export default function EventUserList() {
     const [isReady, setIsReady] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState();
 
-    const { selectedMainEventId, setSelectedMainEventId } = usePurchase();
+    const { selectedMainEventId, setSelectedMainEventId, setShoppingCart } = usePurchase();
 
     useEffect(() => {
         const getEvents = async () => {
 
-            const response = await fetch('/api/events/eventslist');
+            const response = await fetch('/api/events/upcomingevents');
             const result = await response.json();
             setEventsList(result);
         }
@@ -46,6 +46,7 @@ export default function EventUserList() {
     }, [selectedMainEventId])
 
     const otherEvents = () => {
+        setShoppingCart([]);
         setSelectedMainEventId(0);
         setSelectedEvent(null);
     }
@@ -101,7 +102,7 @@ export default function EventUserList() {
                             </TableRow>)
                             :
                             (<>
-                                {eventsList.map((event) => (
+                                {eventsList.sort((a, b) => (a.startDateTime > b.startDateTime) ? 1 : (a.startDateTime < b.startDateTime) ? -1 : 0).map((event) => (
                                     <EventUserListRow {...event} key={event.id} />
                                 ))
                                 }
