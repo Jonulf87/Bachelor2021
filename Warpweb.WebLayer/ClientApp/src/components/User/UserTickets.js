@@ -5,6 +5,8 @@ import {
     Table, TableContainer, TableHead, TableBody, TableRow, TableCell
 } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
+import { Redirect, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -20,17 +22,24 @@ const useStyles = makeStyles((theme) =>
 
 export default function TicketList() {
 
-    const [userTicketList, setUserTicketList] = useState([]);
+    const [events, setEvents] = useState([]);
     const { isAuthenticated, token } = useAuth();
     const [isReady, setIsReady] = useState(false);
+    const { setSelectedEvent } = useCurrentEvent();
+    const history = useHistory();
 
     const classes = useStyles();
 
+    const handleClick = (eventId) => {
+        setSelectedEvent(eventId);
+        history.push('/userseatmap')
+    }
+
     useEffect(() => {
-        const getUserTickets = async () => {
+        const getUserEvents = async () => {
             if (isAuthenticated) {
 
-                const response = await fetch('/api/tickets/usertickets', {
+                const response = await fetch('/api/events/eventsparticipation', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -38,16 +47,16 @@ export default function TicketList() {
 
                 if (response.ok) {
                     const result = await response.json();
-                    setUserTicketList(result);
+                    setEvents(result);
                     setIsReady(true);
                 }
                 else {
-                    setUserTicketList([]);
+                    setEvents([]);
                 }
             }
         }
 
-        getUserTickets();
+        getUserEvents();
     }, [isAuthenticated])
 
     return (
@@ -61,23 +70,21 @@ export default function TicketList() {
                         <Table aria-label="Billett tabell">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align="left">Billettnr.</TableCell>
-                                    <TableCell align="left">Arrangement</TableCell>
-                                    <TableCell align="left">Billettype</TableCell>
-                                    <TableCell align="left">Seterad</TableCell>
-                                    <TableCell align="left">Setenr.</TableCell>
+                                    <TableCell align="left">Navn</TableCell>
+                                    <TableCell align="left">Start</TableCell>
+                                    <TableCell align="left">Slutt</TableCell>
+                                    <TableCell align="left">Sted</TableCell>
                                     <TableCell align="left">Detaljer</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {userTicketList.map((ticket) => (
-                                    <TableRow key={ticket.id}>
-                                        <TableCell align="left">{ticket.id}</TableCell>
-                                        <TableCell align="left">{ticket.mainEventName}</TableCell>
-                                        <TableCell align="left">{ticket.ticketType}</TableCell>
-                                        <TableCell align="left">{ticket.rowName}</TableCell>
-                                        <TableCell align="left">{ticket.seatNumber}</TableCell>
-                                        <TableCell align="left"><Button color="primary" variant="contained" size="small">Vis info</Button></TableCell>
+                                {events.map((event) => (
+                                    <TableRow key={event.name}>
+                                        <TableCell align="left">{event.name}</TableCell>
+                                        <TableCell align="left">{event.start}</TableCell>
+                                        <TableCell align="left">{event.end}</TableCell>
+                                        <TableCell align="left">{event.venue}</TableCell>
+                                        <TableCell align="left"><Button color="primary" variant="contained" size="small" onClick={() => handleClick(event.id)}>Se billetter</Button></TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

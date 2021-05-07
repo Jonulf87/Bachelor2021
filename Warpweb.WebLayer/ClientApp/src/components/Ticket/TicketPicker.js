@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import usePurchase from '../../hooks/usePurchase';
 import TicketTypeListRow from './TicketTypeListRow';
+import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
+import RemoveCircleRoundedIcon from '@material-ui/icons/RemoveCircleRounded';
+
 
 export default function TicketPicker() {
 
-    const { ticketTypesList, totalPrice, shoppingCart } = usePurchase();
+    const { ticketTypesList, totalPrice, shoppingCart, removeTicketType, addTicketType } = usePurchase();
 
     const sortFunction = (a, b) => {
         if (a.basePrice === b.basePrice) {
@@ -18,7 +21,6 @@ export default function TicketPicker() {
 
 
     const shoppingCartUnique = [...new Set(shoppingCart.map(a => a.descriptionName))];
-
 
     return (
         <>
@@ -51,35 +53,68 @@ export default function TicketPicker() {
 
                     </TableBody>
                     <TableBody>
+                        <TableRow
+                            style={{
+                                backgroundColor: "#becadb"
+                            }}
+                        >
+                            <TableCell>
+                                <strong>Handlekurv</strong>
+                            </TableCell>
+                            <TableCell>
+                            </TableCell>
+                            <TableCell>
+
+                            </TableCell>
+                            <TableCell>
+                            </TableCell>
+                        </TableRow>
+
                         {shoppingCartUnique.length > 0
-                            ? shoppingCartUnique.map((ticket) => (
+                            ? shoppingCartUnique.sort((a, b) => (a > b) ? 1 : (a < b) ? - 1 : 0).map((ticket) => (
                             <TableRow key={ticket}>
                                 <TableCell>
                                     {ticket}
                                 </TableCell>
                                 <TableCell>
                                 </TableCell>
-                                <TableCell>
-                                    x {shoppingCart.filter(a => a.descriptionName === ticket).length}
+                                    <TableCell>
+                                        <RemoveCircleRoundedIcon
+                                            onClick={() => removeTicketType(ticket)}
+                                            style={{
+                                                cursor: "pointer"
+                                            }}
+                                        />
+                                        <strong>{shoppingCart.filter(a => a.descriptionName === ticket).length}</strong>
+                                        <AddCircleRoundedIcon
+                                            onClick={() => addTicketType(shoppingCart.find(a => a.descriptionName === ticket).id, ticket)}
+                                            style={{
+                                                cursor: "pointer"
+                                            }}
+                                        />
                                 </TableCell>
                                 <TableCell>
                                     {shoppingCart.filter(a => a.descriptionName === ticket).length * ticketTypesList.find(a => a.descriptionName === ticket).basePrice}
                                 </TableCell>
                             </TableRow>
                             ))
-                            : <CircularProgress />
+                            : <></>
                         }
-                        <TableRow>
+                        <TableRow
+                            style={{
+                                backgroundColor: "#becadb"
+                            }}
+                        >
                             <TableCell>
-                                Totalpris
                             </TableCell>
                             <TableCell>
-                                {totalPrice}
                             </TableCell>
                             <TableCell>
 
+                                <strong>Totalpris</strong>
                             </TableCell>
                             <TableCell>
+                                {totalPrice}
 
                             </TableCell>
 

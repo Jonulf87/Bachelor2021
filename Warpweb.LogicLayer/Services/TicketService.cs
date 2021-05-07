@@ -59,6 +59,7 @@ namespace Warpweb.LogicLayer.Services
                     SeatNumber = a.Seat.SeatNumber,
                     TicketType = a.Type.DescriptionName,
                     MainEventName = a.MainEvent.Name,
+                    MainEventId = a.MainEventId,
                     Start = a.MainEvent.StartDateTime,
                     End = a.MainEvent.EndDateTime,
                     VenueName = a.MainEvent.Venue.Name,
@@ -238,16 +239,17 @@ namespace Warpweb.LogicLayer.Services
         /// </summary>
         /// <param name="ticketId"></param>
         /// <param name="seatId"></param>
-        /// <param name="userId"></param>
-        public async Task ReserveSeatAsync(int ticketId, int seatId, string userId)
+        public async Task ReserveSeatAsync(int ticketId, int seatId)
         {
             var seat = await _dbContext.Seats
                 .Include(a => a.Row)
+                .ThenInclude(a => a.TicketTypes)
+                .IgnoreQueryFilters()
                 .Where(a => a.Id == seatId)
                 .SingleOrDefaultAsync();
 
             var ticket = await _dbContext.Tickets
-                .Where(a => a.Id == ticketId && a.ApplicationUserId == userId)
+                .Where(a => a.Id == ticketId)
                 .SingleOrDefaultAsync();
 
             if (seat == null)
@@ -271,6 +273,7 @@ namespace Warpweb.LogicLayer.Services
             }
 
             ticket.SeatId = seatId;
+            seat.IsReserved = true;
 
             await _dbContext.SaveChangesAsync();
         }

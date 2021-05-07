@@ -19,7 +19,7 @@ export default function EventUserMain() {
     useEffect(() => {
         const getEvents = async () => {
 
-            const responseEvents = await fetch('/api/events/eventslist');
+            const responseEvents = await fetch('/api/events/upcomingevents');
             const resultEvents = await responseEvents.json();
             setEventsList(resultEvents);
             setIsReady(true);
@@ -30,7 +30,7 @@ export default function EventUserMain() {
     return (
         <List
         >
-            {isReady && eventsList.map((event) => (
+            {isReady && eventsList.sort((a, b) => (a.startDateTime > b.startDateTime) ? 1 : (a.startDateTime < b.startDateTime) ? -1 : 0).map((event) => (
                 <ListItem className={classes.root} key={event.id}>
                     <EventCard {...event} />
                 </ListItem>

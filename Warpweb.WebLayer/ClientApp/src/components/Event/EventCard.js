@@ -32,7 +32,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
  
     const classes = useStyles();
     const history = useHistory();
-    const { setSelectedMainEventId, userTickets } = usePurchase();
+    const { setSelectedMainEventId, userTickets, setShoppingCart } = usePurchase();
     const { setSelectedEvent, currentEvent } = useCurrentEvent();
     const { setRows } = useSeatMapAdmin();
 
@@ -42,6 +42,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
             setRows([]);
         }
         else {
+            setShoppingCart([]);
             setSelectedMainEventId(id)
             history.push(`/userticket`);
         }

@@ -9,13 +9,7 @@ namespace Warpweb.DataAccessLayer.Models
     {
         public int Id { get; set; }
         public int SeatNumber { get; set; }
-        public bool IsReserved
-        {
-            get
-            {
-                return Ticket != null;
-            }
-        }
+        public bool IsReserved { get; set; }
 
         public virtual Ticket Ticket { get; set; }
 

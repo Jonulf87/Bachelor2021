@@ -2,11 +2,18 @@
 import React from 'react';
 import { format, parseISO } from 'date-fns';
 import useSeatMap from '../../hooks/useSeatMap';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 
-export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketType, mainEventName, userFirstName, userLastName, start, end, venueName }) {
+export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketType, mainEventName, mainEventId, userFirstName, userLastName, start, end, venueName }) {
 
-    const { setActiveTicket } = useSeatMap();
+    const { setSelectedEvent } = useCurrentEvent();
+    const { getSeatMap, setActiveTicket } = useSeatMap();
 
+    const handleClick = () => {
+        setSelectedEvent(mainEventId);
+        setActiveTicket(id);
+        getSeatMap(mainEventId);
+    }
 
     return (
         <>
@@ -21,7 +28,7 @@ export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketTy
 
                         <div className="info departure">
                             <div className="info__item">Start</div>
-                            <div className="info__detail">{format(parseISO(start), 'dd.MM.yyyy HH:mm' )} </div>
+                            <div className="info__detail">{format(parseISO(start), 'dd.MM.yyyy HH:mm')} </div>
                         </div>
                         <div className="info arrival">
                             <div className="info__item">Slutt</div>
@@ -41,17 +48,7 @@ export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketTy
                         </div>
                         <div className="info seat">
                             <div className="info__item">Sete</div>
-                            <div className="info__detail">{seatNumber
-                                ? seatNumber
-                                : <Button
-                                    variant="contained"
-                                    color="primary"
-                                    style={{ margin: "0px", padding: "2px" }}
-                                    onClick={setActiveTicket(id)}
-                                >
-                                    Reserver
-                                </Button>
-                            }
+                            <div className="info__detail">{seatNumber}
                             </div>
                         </div>
                     </div>
@@ -60,7 +57,29 @@ export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketTy
                     </div>
                 </div>
             </div>
+            {seatNumber
+                ? (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginTop: "5px", float: "right" }}
+                        onClick={() => handleClick()}
+                    >
+                        Endre sete
+                    </Button>
 
+                )
+                : (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginTop: "5px", float: "right" }}
+                        onClick={() => handleClick()}
+                    >
+                        Reserver sete
+                    </Button>
+                )
+            }
         </>
     )
 }

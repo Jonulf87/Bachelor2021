@@ -42,6 +42,24 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        public async Task<List<MainEventListVm>> GetUpcomingEventsAsync()
+        {
+            return await _dbContext.MainEvents
+                .Where(a => a.EndDateTime > DateTime.Now)
+                .Select(a => new MainEventListVm
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime,
+                    VenueName = a.Venue.Name,
+                    OrganizerName = a.Organizer.Name,
+                    InfoComments = a.InfoComments,
+                    OrganizerWebPage = a.OrganizerWebPage
+                })
+                .ToListAsync();
+        }
+
         /// <summary>
         /// Returns a specific Event.
         /// </summary>
@@ -170,6 +188,23 @@ namespace Warpweb.LogicLayer.Services
             _dbContext.Update(existingMainEvent);
             await _dbContext.SaveChangesAsync();
 
+        }
+
+        public async Task<List<UserMainEventsVm>> GetMainEventsOfUserParticipationAsync(string userId)
+        {
+            return await _dbContext.Tickets
+                .Where(a => a.ApplicationUserId == userId)
+                .IgnoreQueryFilters()
+                .Select(c => new UserMainEventsVm
+                {
+                    Id = c.MainEventId,
+                    Name = c.MainEvent.Name,
+                    End = c.MainEvent.EndDateTime,
+                    Start = c.MainEvent.StartDateTime,
+                    Venue = c.MainEvent.Venue.Name
+                })
+                .Distinct()
+                .ToListAsync();
         }
 
         /// <summary>
