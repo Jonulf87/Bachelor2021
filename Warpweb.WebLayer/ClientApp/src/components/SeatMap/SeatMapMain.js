@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
     paper: {
         width: 'fit-content',
         padding: '20px',
-        paddingBottom: '55px'
+        paddingBottom: '20px'
     }
 }));
 
@@ -28,38 +28,37 @@ export default function SeatMapMain() {
     }, [isAuthenticated])
 
     return (
-        <Grid
-            container
+        <Paper
+            className={classes.paper}
+            elevation={3}
         >
             <Grid
-                item
-                xl={6}
-                xs={12}
+                container
             >
-                <Paper
-                    className={classes.paper}
-                    elevation={3}
+                <Grid
+                    item
+                    xl={6}
+                    xs={12}
                 >
-                        <Typography variant="h3">Setekart</Typography>
-                        <SeatMapFloor />
-                </Paper>
-            </Grid>
-            <Grid
-                item
-                xl={6}
-                xs={12}
-            >
-                <Paper
-                    className={classes.paper}
-                    elevation={3}
+
+                    <Typography variant="h5">{currentEvent} - Setekart</Typography>
+                    <SeatMapFloor />
+
+                </Grid>
+                <Grid
+                    item
+                    xl={6}
+                    xs={12}
                 >
-                    <Typography variant="h3">Mine billetter </Typography>
+
+                    <Typography variant="h5">Mine billetter </Typography>
                     {userUpcomingTickets && userUpcomingTickets.map((ticket) => (
                         <SeatMapTicket {...ticket} key={ticket.id} />
 
                     ))}
-                </Paper>
+
+                </Grid>
             </Grid>
-        </Grid>
+        </Paper>
     )
 }
