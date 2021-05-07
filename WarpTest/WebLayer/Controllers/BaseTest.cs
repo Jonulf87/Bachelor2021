@@ -191,7 +191,7 @@ namespace WarpTest.WebLayer.Controllers
                     Address = "Osloveien 123",
                     ZipCode = "1234",
                     Team = "Team 1",
-                    DateOfBirth = DateTime.Now,
+                    DateOfBirth = DateTime.Now.AddYears(-20),
                     IsAllergic = false,
                     Gender = "Female"
                 }

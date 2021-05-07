@@ -1,102 +1,99 @@
-﻿//using System.Collections.Generic;
-//using System.Threading.Tasks;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore.ChangeTracking;
-//using NUnit.Framework;
-//using Warpweb.DataAccessLayer.Models;
-//using Warpweb.LogicLayer.Services;
-//using Warpweb.LogicLayer.ViewModels;
-//using Warpweb.WebLayer.Controllers;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using NUnit.Framework;
+using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Services;
+using Warpweb.LogicLayer.ViewModels;
+using Warpweb.WebLayer.Controllers;
 
-//namespace WarpTest.WebLayer.Controllers
-//{
-//    public class UserControllerTest : BaseTest
-//    {
-//        private const string _firstName1 = "Ola";
-//        private const string _middleName1 = "";
-//        private const string _lastName1 = "Nordman";
-//        private const string _phoneNumber1 = "12345678";
-//        private const string _address1 = "Test gate 123";
-//        private const string _email1 = "ola@test.com";
-//        private const string _userName1 = "user1";
-//        private const string _firstName2 = "Kari";
-//        private const string _middleName2 = "Testesen";
-//        private const string _lastName2 = "Evensen";
-//        private const string _phoneNumber2 = "98765432";
-//        private const string _address2 = "Test gate 321";
-//        private const string _email2 = "kari@test.com";
-//        private const string _userName2 = "user2";
-//        private UserManager<ApplicationUser> _userManager;
+namespace WarpTest.WebLayer.Controllers
+{
+    public class UserControllerTest : BaseTest
+    {
+        private const string _firstName3 = "Ola";
+        private const string _middleName3 = "";
+        private const string _lastName3 = "Nordman";
+        private const string _address3 = "Test gate 123";
+        private DateTime _dateOfBirth3 = DateTime.Now.AddYears(-20);
+        private const string _firstName4 = "Kari";
+        private const string _middleName4 = "Testesen";
+        private const string _lastName4 = "Evensen";
+        private const string _address4 = "Test gate 321";
+        private DateTime _dateOfBirth4 = DateTime.Now.AddYears(-25);
+        private UserManager<ApplicationUser> _userManager;
+        private  RoleManager<IdentityRole> _roleManager;
 
-//        EntityEntry<ApplicationUser> _user1;
-//        EntityEntry<ApplicationUser> _user2;
+        EntityEntry<ApplicationUser> _createdUser3;
 
-//        [Test]
-//        public async Task ShouldGetUsers()
-//        {
-//            CreateUsers();
+        [Test]
+        public async Task ShouldGetUsers()
+        {
+            CreateUsers();
 
-//            UserService userService = new UserService(_dbContext);
-//            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
-//            UserController userController = new UserController(userService, securityService);
+            UserService userService = new UserService(_dbContext, _userManager);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            UserController userController = new UserController(userService, securityService);
 
-//            List<UserListVm> result = await userController.GetUsersAsync();
+            List<UserListVm> result = await userController.GetUsersAsync();
 
-//            Assert.AreEqual(2, result.Count);
-//            Assert.AreEqual(_user1.Entity.Id, result[0].Id);
-//            Assert.AreEqual(_firstName1, result[0].FirstName);
-//            Assert.AreEqual(_middleName1, result[0].MiddleName);
-//            Assert.AreEqual(_lastName1, result[0].LastName);
-//            Assert.AreEqual(_user2.Entity.Id, result[1].Id);
-//            Assert.AreEqual(_firstName2, result[1].FirstName);
-//            Assert.AreEqual(_middleName2, result[1].MiddleName);
-//            Assert.AreEqual(_lastName2, result[1].LastName);
-//        }
+            Assert.AreEqual(4, result.Count);
+            Assert.AreEqual(_createdUser2.Entity.Id, result[1].Id);
+            Assert.AreEqual("Line", result[1].FirstName);
+            Assert.AreEqual("", result[1].MiddleName);
+            Assert.AreEqual("Evensen", result[1].LastName);
 
-//        [Test]
-//        public async Task ShouldGetUserById()
-//        {
-//            CreateUsers();
+            Assert.AreEqual(_createdUser3.Entity.Id, result[2].Id);
+            Assert.AreEqual(_firstName3, result[2].FirstName);
+            Assert.AreEqual(_middleName3, result[2].MiddleName);
+            Assert.AreEqual(_lastName3, result[2].LastName);
+        }
+        
+        [Test]
+        public async Task ShouldGetUserById()
+        {
+            CreateUsers();
 
-//            UserService userService = new UserService(_dbContext);
-//            SecurityService securityService = new SecurityService(_dbContext, _userManager);
-//            UserController userController = new UserController(userService, securityService);
+            UserService userService = new UserService(_dbContext, _userManager);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            UserController userController = new UserController(userService, securityService);
 
-//            SetUser(userController, _user1.Entity.Id);
-//            ActionResult<UserVm> result1 = await userController.GetUserAsync();
+            SetUser(userController, _createdUser2.Entity.Id);
+            ActionResult<UserVm> result = await userController.GetUserAsync(_createdUser2.Entity.Id);
 
-//            UserVm returnedUser1 = result1.Value;
-//            Assert.AreEqual(_user1.Entity.Id, returnedUser1.Id);
-//            Assert.AreEqual(_firstName1, returnedUser1.FirstName);
-//            Assert.AreEqual(_middleName1, returnedUser1.MiddleName);
-//            Assert.AreEqual(_lastName1, returnedUser1.LastName);
-//            Assert.AreEqual(_phoneNumber1, returnedUser1.PhoneNumber);
-//            Assert.AreEqual(_address1, returnedUser1.Address);
-//            Assert.AreEqual(_email1, returnedUser1.EMail);
-//            Assert.AreEqual(_userName1, returnedUser1.UserName);
+            UserVm returnedUser = result.Value;
+            Assert.AreEqual(_createdUser2.Entity.Id, returnedUser.Id);
+            Assert.AreEqual("Line", returnedUser.FirstName);
+            Assert.AreEqual("", returnedUser.MiddleName);
+            Assert.AreEqual("Evensen", returnedUser.LastName);
+            Assert.AreEqual("Osloveien 123", returnedUser.Address);
 
-//            SetUser(userController, _user2.Entity.Id);
-//            ActionResult<UserVm> result2 = await userController.GetUserAsync();
+            SetUser(userController, _createdUser3.Entity.Id);
+            ActionResult<UserVm> result1 = await userController.GetUserAsync(_createdUser3.Entity.Id);
 
-//            UserVm returnedUser2 = result2.Value;
-//            Assert.AreEqual(_user2.Entity.Id, returnedUser2.Id);
-//            Assert.AreEqual(_firstName2, returnedUser2.FirstName);
-//            Assert.AreEqual(_middleName2, returnedUser2.MiddleName);
-//            Assert.AreEqual(_lastName2, returnedUser2.LastName);
-//            Assert.AreEqual(_phoneNumber2, returnedUser2.PhoneNumber);
-//            Assert.AreEqual(_address2, returnedUser2.Address);
-//            Assert.AreEqual(_email2, returnedUser2.EMail);
-//            Assert.AreEqual(_userName2, returnedUser2.UserName);
-//        }
+            UserVm returnedUser1 = result1.Value;
+            Assert.AreEqual(_createdUser3.Entity.Id, returnedUser1.Id);
+            Assert.AreEqual(_firstName3, returnedUser1.FirstName);
+            Assert.AreEqual(_middleName3, returnedUser1.MiddleName);
+            Assert.AreEqual(_lastName3, returnedUser1.LastName);
+            Assert.AreEqual(_address3, returnedUser1.Address);
 
-//        // Helper methods
-//        private void CreateUsers()
-//        {
-//            _user1 = _dbContext.ApplicationUsers.Add(new ApplicationUser { FirstName = _firstName1, MiddleName = _middleName1, LastName = _lastName1, PhoneNumber = _phoneNumber1, Address = _address1, Email = _email1, UserName = _userName1 });
-//            _dbContext.SaveChanges();
-//            _user2 = _dbContext.ApplicationUsers.Add(new ApplicationUser { FirstName = _firstName2, MiddleName = _middleName2, LastName = _lastName2, PhoneNumber = _phoneNumber2, Address = _address2, Email = _email2, UserName = _userName2 });
-//            _dbContext.SaveChanges();
-//        }
-//    }
-//}
+        }
+   
+        // Helper methods
+        private void CreateUsers()
+        {
+            _createdUser3 = _dbContext.ApplicationUsers.Add(new ApplicationUser 
+            { 
+                FirstName = _firstName3, 
+                MiddleName = _middleName3, 
+                LastName = _lastName3, 
+                Address = _address3, 
+                DateOfBirth = _dateOfBirth3 });
+            _dbContext.SaveChanges(); 
+        }
+    }
+}
