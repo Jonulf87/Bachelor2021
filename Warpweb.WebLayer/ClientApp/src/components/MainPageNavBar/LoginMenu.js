@@ -1,16 +1,23 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { Button, ButtonGroup } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         color: theme.palette.primary.contrastText
-    }
+    },
+    buttonRight: {
+        marginLeft: "auto",
+        '&:hover': {
+            color: theme.palette.secondary,
+        },
+    },
 }));
 
 export default function LoginMenu() {
@@ -20,12 +27,14 @@ export default function LoginMenu() {
     const classes = useStyles();
 
     return (
-        <>
+        <ButtonGroup
+            className={classes.buttonRight}
+        >
             {isAuthenticated && (
                 <>
                     <Button
-                        className={classes.root}
-                        startIcon={<PersonIcon />}
+                        className={classes.root}          
+                        startIcon= {<PersonIcon />}
                         component={Link}
                         to='/user'
                     >
@@ -59,6 +68,6 @@ export default function LoginMenu() {
                     </Button>
                 </>
             )}
-        </>
+        </ButtonGroup>
     );
 }

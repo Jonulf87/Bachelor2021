@@ -3,14 +3,16 @@ import useCurrentEvent from '../../hooks/useCurrentEvent';
 import useAuth from '../../hooks/useAuth';
 
 import MenuIcon from '@material-ui/icons/Menu';
-import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, ButtonGroup, Drawer, Hidden, Divider, Toolbar, IconButton } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { AppBar, Drawer, Hidden, Divider, Toolbar, IconButton } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import AdminMainMenu from './AdminMainMenu';
 import UserMainMenu from './UserMainMenu';
 import CrewMainMenu from './CrewMainMenu';
 import NavBarHeader from './NavBarHeader';
 import LoginMenu from './LoginMenu';
+import LoginMenuMobile from './LoginMenuMobile';
 
 const drawerWidth = 240;
 
@@ -85,6 +87,9 @@ export default function MainMenu({ window }) {
     const [orgAdmins, setOrgAdmins] = useState([]);
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
     const { isAuthenticated, token, roles } = useAuth();
+
+    const theme = useTheme();
+    const ButtonsOrMenu = useMediaQuery(theme.breakpoints.up('sm'));
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -170,9 +175,7 @@ export default function MainMenu({ window }) {
                         <MenuIcon />
                     </IconButton>
                     <NavBarHeader />
-                    <ButtonGroup className={classes.buttonRight}>
-                        <LoginMenu />
-                    </ButtonGroup>
+                        {ButtonsOrMenu ? <LoginMenu /> : <LoginMenuMobile/>}
                 </Toolbar>
             </AppBar>
 
