@@ -12,8 +12,55 @@ import DateFnsUtils from '@date-io/date-fns';
 import { intervalToDuration } from 'date-fns/esm/fp';
 import PopupWindow from '../PopupWindow/PopupWindow';
 import useAuth from '../../hooks/useAuth';
+import { Field, useFormik } from 'formik';
+import * as yup from 'yup';
 
 export default function UserRegister() {
+
+    const formik = useFormik({
+        initialValues: {
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            phoneNumber: "",
+            address: "",
+            zipCode: "",
+            eMail: "",
+            userName: "",
+            dateOfBirth: null,
+            gender: "",
+            isAllergic: false,
+            allergyDescription: "",
+            comments: "",
+            team: "",
+            password: "",
+            passwordCheck: "",
+            parentFirstName: "",
+            parentLastName: "",
+            parentPhoneNumber: "",
+            parentEMail: ""
+        },
+        onSubmit: async (values) => {
+            const response = await fetch('/api/users/register', {
+                headers: {
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(values)
+            });
+            if (response.ok) {
+                setIsRegistered(true);
+            }
+            else {
+                const result = await response.json();
+                const errorMessages = Object.keys(result.errors).reduce((accumulator, currentValue) => {
+                    return accumulator + " " + currentValue + ": " + result.errors[currentValue];
+                }, "");
+                setError(errorMessages);
+                setOpen(true);
+            }
+        }
+    })
 
     // Styling
     const useStyles = makeStyles((theme) => ({
@@ -51,6 +98,7 @@ export default function UserRegister() {
     const [comments, setComments] = useState("");
     const [team, setTeam] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordCheck, setPasswordCheck] = useState("");
 
     //statevariabler til posting av foresatte
     const [parentFirstName, setParentFirstName] = useState("");
@@ -106,7 +154,7 @@ export default function UserRegister() {
         }
         const checkUserName = async () => {
 
-            
+
             const responseCheck = await fetch(`/api/users/checkusername/${debouncedUserName}`, {
                 headers: {
                     'content-type': 'application/json'
@@ -133,15 +181,6 @@ export default function UserRegister() {
 
 
     useEffect(() => {
-        ValidatorForm.addValidationRule('userNameUnavailable', () => {
-            return !userNameUnavailable;
-        });
-
-        return () => { ValidatorForm.removeValidationRule('userNameUnavailable') }
-        
-    }, []);
-
-    useEffect(() => {
         const checkDateOfBirth = () => {
 
             const diff = intervalToDuration({
@@ -159,58 +198,13 @@ export default function UserRegister() {
         checkDateOfBirth();
     }, [dateOfBirth]);
 
-    const submitForm = async (e) => {
-        e.preventDefault();
-        const userDataToBeSent = {
-            'firstName': firstName,
-            'middleName': middleName,
-            'lastName': lastName,
-            'phoneNumber': phoneNumber,
-            'address': address,
-            'zipCode': zipCode,
-            'eMail': eMail,
-            'userName': userName,
-            'dateOfBirth': dateOfBirth,
-            'gender': gender,
-            'isAllergic': isAllergic,
-            'allergyDescription': allergyDescription,
-            'comments': comments,
-            'team': team,
-            'password': password,
-            'parentFirstName': parentFirstName,
-            'parentLastName': parentLastName,
-            'parentPhoneNumber': parentPhoneNumber,
-            'parentEMail': parentEMail
-        }
-
-        const response = await fetch('/api/users/register', {
-            headers: {
-                'content-type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(userDataToBeSent)
-        });
-        if (response.ok) {
-            setIsRegistered(true);
-        }
-        else {
-            const result = await response.json();
-            const errorMessages = Object.keys(result.errors).reduce((accumulator, currentValue) => {
-                return accumulator + " " + currentValue + ": " + result.errors[currentValue];
-            }, "");
-            setError(errorMessages);
-            setOpen(true);
-        }
-    }
-
-
 
     if (isRegistered) {
         if (ticket == 1) {
             return <Redirect to={'/userticket/2'} />
         }
         else {
-            return <Redirect to={'/login?userName=' + userName} />
+            return <Redirect to={'/login'} />
         }
     }
 
@@ -220,287 +214,159 @@ export default function UserRegister() {
                 elevation={3}
                 className={classes.paper}
             >
-                <ValidatorForm
-                    autoComplete="off"
-                    noValidate
-                    onSubmit={submitForm}
-                    debounceTime={1000}
-                >
-                    <Grid
-                        alignItems="flex-start"
-                        className={classes.root}
-                        container spacing={2}
-                    >
-
-                        <PopupWindow open={open} onClose={() => setOpen(false)} text={error} />
-
-                        <Grid item xs={12}>
-                            <Typography variant="h6" component="h3">Fullt Navn</Typography>{/*usikker på om disse skal brukes of evt hvordan grupperes */}
-                        </Grid>
-                        <Grid item xs={12} lg={4} >
-                            <TextValidator
-                                id="firstName"
-                                label="Fornavn"
-                                type="text"
-                                required
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                validators={['matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
-                                errorMessages={['Ugyldig navn', 'Ugyldig navn', 'Navn må oppgis', 'Ugyldig navn']}
-                            />
-                        </Grid>
-                        <Grid item xs={12} lg={4} >
-                            <TextValidator
-                                id="middleName"
-                                label="Mellomnavn"
-                                type="text"
-                                value={middleName}
-                                onChange={(e) => setMiddleName(e.target.value)}
-                                validators={['matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]*$']}
-                                errorMessages={['Ugyldig mellomnavn']}
-                            />
-                        </Grid>
-                        <Grid item xs={12} lg={4} >
-                            <TextValidator
-                                id="lastName"
-                                label="Etternavn"
-                                type="text"
-                                required
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                validators={['required', 'matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
-                                errorMessages={['Etternavn må oppgis', 'Ugyldig etternavn', 'Ugyldig etternavn', 'Ugyldig etternavn']}
-                            />
-                        </Grid>
-                        <Grid item container xs={12}>
-                            <Typography variant="h6" component="h3">Brukerinfo</Typography>
-                        </Grid>
-                        <Grid item xs={12}>{/*Input epost*/}
-                            <TextValidator
-                                id="eMail"
-                                label="Epost"
-                                type="email"
-                                required
-                                value={eMail}
-                                onChange={(e) => setEMail(e.target.value)}
-                                validators={['required', 'isEmail']}
-                                errorMessages={['Epost må oppgis', 'Ugyldig epost']}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>{/*Input brukernavn*/}
-                            <TextValidator
-                                id="userName"
-                                label="Brukernavn"
-                                type="text"
-                                required
-                                value={userName}
-                                onChange={(e) => setUserName(e.target.value)}
-                                validators={['required', 'userNameUnavailable']}
-                                errorMessages={['Brukernavn må oppgis', 'Brukernavn eksisterer allerede']}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>{/*Input passord*/}
-                            <TextValidator
-                                id="password"
-                                label="Passord"
-                                type="password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                validators={['required', 'minStringLength:10', 'matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})', 'matchRegexp:^(?=.{10,})']}
-                                errorMessages={['Passord må oppgis', 'Passord må bestå av minst 10 tegn', 'Passord må ha både store og små bokstaver', 'Passord må bestå av minst 10 tegn']}
-                                helperText="Passord må bestå av: minst 10 tegn. Både store og små bokstaver"
-                            // matchRegexp:^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{14,}) - Regex for 14 tegn - sifre, både store og små bokstaver og symboler
-                            />
-                        </Grid>
-                        <Grid item xs={12} >{/*Input telefon*/}
-                            <TextValidator
-                                id="phoneNumber"
-                                label="Telefon"
-                                type="tel"
-                                required
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                validators={['required', 'matchRegexp:^[0-9]{8}$']}
-                                errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
-                            />
-                        </Grid>{/*Input adresse og postnummer*/}
-                        <Grid item xs={12} md={9}>
-                            <TextValidator
-                                id="address"
-                                label="Adresse"
-                                type="text"
-                                required
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                                validators={['required']}
-                                errorMessages={['Adresse må oppgis']}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={3}>
-                            <TextValidator
-                                id="zipCode"
-                                label="Postnr"
-                                type="text"
-                                required
-                                value={zipCode}
-                                onChange={(e) => setZipCode(e.target.value)}
-                                validators={['required', 'matchRegexp:^[0-9]{4}$']}
-                                errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
-                                inputProps={{ maxLength: 4 }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} >{/*Input kjønn*/}
-                            <FormControl>
-                                <InputLabel id="gender">Kjønn</InputLabel>
-                                <Select
-                                    labelId="gender"
-                                    id="gender"
-                                    value={gender}
-                                    onChange={(e) => setGender(e.target.value)}
-                                    label="Kjønn"
-                                    required
-                                >
-                                    {genders.map((gender) => (
-                                        <MenuItem key={gender.value} value={gender.value}>
-                                            {gender.label}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12} >{/*Input fødselsdag*/}
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <DatePicker
-                                    autoOk
-                                    required
-                                    id="dateOfBirth"
-                                    label="Fødselsdato"
-                                    openTo="year"
-                                    views={["year", "month", "date"]}
-                                    disableFuture
-                                    format="dd/MM/yyyy"
-                                    placeholder="DD/MM/ÅÅÅÅ"
-                                    margin="normal"
-                                    value={dateOfBirth}
-                                    onChange={(dateEvent) => setDateOfBirth(dateEvent)}
-                                />
-                            </MuiPickersUtilsProvider>
-
-                        </Grid>
-                        {/*Input forelder*/}
-                        {showParents &&
-                            <>
-                                <Grid item xs={12} >
-                                    <TextValidator
-                                        id="firstName"
-                                        label="Foresatte fornavn"
-                                        type="text"
-                                        required
-                                        value={parentFirstName}
-                                        onChange={(e) => setParentFirstName(e.target.value)}
-                                        validators={['matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
-                                        errorMessages={['Navn må oppgis', 'Ugyldig navn', 'Ugyldig navn', 'Ugyldig navn']}
-
-                                    />
-                                </Grid>
-                                <Grid item xs={12} >
-                                    <TextValidator
-                                        id="lastName"
-                                        label="Foresatte etternavn"
-                                        type="text"
-                                        required
-                                        value={parentLastName}
-                                        onChange={(e) => setParentLastName(e.target.value)}
-                                        validators={['required', 'matchRegexp:^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$', 'minStringLength:1', 'trim']}
-                                        errorMessages={['Etternavn må oppgis', 'Ugyldig etternavn', 'Ugyldig etternavn', 'Ugyldig etternavn']}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} >
-                                    <TextValidator
-                                        id="parentPhoneNumber"
-                                        label="Foresatte telefon"
-                                        type="tel"
-                                        required
-                                        value={parentPhoneNumber}
-                                        onChange={(e) => setParentPhoneNumber(e.target.value)}
-                                        validators={['required', 'matchRegexp:^[0-9]{8}$']}
-                                        errorMessages={['Telefonnummer må oppgis', 'Ugyldig telefonnummer']}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} >
-                                    <TextValidator
-                                        id="parentEMail"
-                                        label="Foresatte e-post"
-                                        type="email"
-                                        required
-                                        value={parentEMail}
-                                        onChange={(e) => setParentEMail(e.target.value)}
-                                    />
-                                </Grid>
-                            </>
-                        }
-                        {/*Input allergi*/}
-                        <Grid item xs={12} >
-                            <InputLabel>
-                                har du noen allergier?
-                            </InputLabel>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        inputProps={{ 'aria-label': 'is allergic' }}
-                                        checked={isAllergic}
-                                        onChange={(e) => setCheckBox(e.target.checked)}
-                                    />
-                                }
-                                label="ja"
-                            />
-                        </Grid>
-                        <Collapse component={Grid} item xs={12} in={isAllergic}>
-
-                            <TextField
-                                id="allergyDescription"
-                                label="Allergibeskrivelse"
-                                required
-                                multiline
-                                disabled={!isAllergic}
-                                value={allergyDescription}
-                                onChange={(e) => setAllergyDescription(e.target.value)}
-                            />
-
-                        </Collapse>
-                        <Grid item xs={12} > {/*Input team/klan*/}
-                            <TextField
-                                id="team"
-                                label="Lag/klan"
-                                value={team}
-                                onChange={(e) => setTeam(e.target.value)}
-                                helperText="Er du med i en klan eller lag?"
-                            />
-                        </Grid>
-                        <Grid item xs={12} >{/*Input kommentarer*/}
-                            <TextField
-                                id="comments"
-                                label="Tilleggsinformasjon"
-                                multiline
-                                value={comments}
-                                onChange={(e) => setComments(e.target.value)}
-                                helperText="Er det noe vi burde vite? Spesielle behov eller tilpasninger vi skal vite om?"
-                            />
-                        </Grid>
-                        <Grid item xs={12} >
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                type="submit"
-                            >
-                                Bekreft
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </ValidatorForm>
+                <form>
+                    <TextField
+                        id="firstName"
+                        name="firstName"
+                        label="Fornavn"
+                        value={formik.values.firstName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    
+                    <TextField
+                        id="middleName"
+                        name="middleName"
+                        label="Mellomnavn"
+                        value={formik.values.middleName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="lastName"
+                        name="lastName"
+                        label="Etternavn"
+                        value={formik.values.lastName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="eMail"
+                        name="eMail"
+                        label="E-post"
+                        value={formik.values.eMail}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="userName"
+                        name="userName"
+                        label="Brukernavn"
+                        value={formik.values.userName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="password"
+                        name="password"
+                        label="Passord"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="passwordCheck"
+                        name="passwordCheck"
+                        label="Gjenta passord"
+                        value={formik.values.passwordCheck}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        label="Telefon"
+                        value={formik.values.phoneNumber}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="address"
+                        name="address"
+                        label="Adresse"
+                        value={formik.values.address}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="zipCode"
+                        name="zipCode"
+                        label="Postnr"
+                        value={formik.values.zipCode}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <FormControl>
+                        <InputLabel id="gender">Kjønn</InputLabel>
+                        <Select
+                            labelId="gender"
+                            id="gender"
+                            name="gender"
+                            label="Kjønn"
+                            value={formik.values.gender}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        >
+                            {genders.map((gender) => (
+                                <MenuItem key={gender.value} value={gender.value}>
+                                    {gender.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <DatePicker
+                            autoOk
+                            required
+                            id="dateOfBirth"
+                            label="Fødselsdato"
+                            openTo="year"
+                            views={["year", "month", "date"]}
+                            disableFuture
+                            format="dd/MM/yyyy"
+                            placeholder="DD/MM/ÅÅÅÅ"
+                            margin="normal"
+                            value={formik.values.dateOfBirth}
+                            onChange={formik.handleChange}
+                            onBLur={formik.handleBlur}
+                        />
+                    </MuiPickersUtilsProvider>
+                    <TextField
+                        id="parentFirstName"
+                        name="parentFirstName"
+                        label="Foresatte fornavn"
+                        value={formik.values.parentFirstName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="parentLastName"
+                        name="parentLastName"
+                        label="Foresatte etternavn"
+                        value={formik.values.parentLastName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="parentPhoneNumber"
+                        name="parentPhoneNumber"
+                        label="Foresatte telefon"
+                        value={formik.values.parentPhoneNumber}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <TextField
+                        id="parentEMail"
+                        name="parentEMail"
+                        label="Foresatte E-post"
+                        value={formik.values.parentEMail}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <Typography>
+                        har du noen allergier?
+                    </Typography>
+                </form>
             </Paper>
         </Container>
     );

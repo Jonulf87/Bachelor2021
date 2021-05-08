@@ -30,7 +30,7 @@ namespace Warpweb.LogicLayer.ViewModels
         public string ZipCode { get; set; }
 
         [Required]
-        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string EMail { get; set; }
         [Required]
         public string UserName { get; set; }
@@ -45,9 +45,10 @@ namespace Warpweb.LogicLayer.ViewModels
         [Required]
         [DataType(DataType.Password)]
         [MinLength(10)]
-        //[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.{10,})$", ErrorMessage = "Passord må bestå av minst 10 tegn")]
-        //Dette er en git test
         public string Password { get; set; }
+        [Compare("Password")]
+        [Required]
+        public string PasswordCheck { get; set; }
 
         [RegularExpression(@"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-]+$", ErrorMessage = "Ugyldig navn")]
         public string ParentFirstName { get; set; }

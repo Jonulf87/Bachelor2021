@@ -8,6 +8,7 @@ using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
+
 namespace Warpweb.WebLayer.Controllers
 {
     [Route("api/tickets")]
@@ -74,15 +75,10 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<List<TicketListVm>>> GetAllTiccketsUserEventAsync(int eventId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            try
-            {
-                var tickets = await _ticketService.GetAllTicketsUserEventAsync(userId, eventId);
-                return Ok(tickets);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+
+            var tickets = await _ticketService.GetAllTicketsUserEventAsync(userId, eventId);
+            return Ok(tickets);
+
         }
 
         /// <summary>
@@ -121,9 +117,10 @@ namespace Warpweb.WebLayer.Controllers
                 await _ticketService.CreateTicketsAsync(tickets, userId);
                 return Ok();
             }
-            catch (HttpException)
+            catch (NoGuardianSetForMinorException)
             {
-                return BadRequest();
+                ModelState.AddModelError("", "Foresatte info mangler");
+                return BadRequest(ModelState);
             }
         }
 

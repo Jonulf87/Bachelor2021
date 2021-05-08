@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warpweb.LogicLayer.Exceptions
 {
-    class NoGuardianSetForMinorException : Exception
+    public class NoGuardianSetForMinorException : Exception
     {
     }
 }
