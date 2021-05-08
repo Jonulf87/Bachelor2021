@@ -40,14 +40,6 @@ export default function CrewMain() {
         const getCrews = async () => {
             if (isAuthenticated) {
 
-                const responseCrew = await fetch(`/api/crews/getcrew/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const resultCrew = await responseCrew.json();
-                setCrew(resultCrew);
-
                 //fetch for if-sjekk nedenfor
                 const responseMyCrews = await fetch('/api/crews/mycrews', {
                     headers: {
@@ -57,7 +49,15 @@ export default function CrewMain() {
                 });
                 const resultMyCrews = await responseMyCrews.json();
 
-                if (resultMyCrews.some(a => a.id === resultCrew.crewId)) {//sjekk om brukeren er med i arbeidslag
+                if (resultMyCrews.some(a => a.id == id)) {//sjekk om brukeren er med i arbeidslag
+                    const responseCrew = await fetch(`/api/crews/getcrew/${id}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const resultCrew = await responseCrew.json();
+                    setCrew(resultCrew);
+                    
                     const responseCrewMembers = await fetch(`/api/crews/crewmembers/${id}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
