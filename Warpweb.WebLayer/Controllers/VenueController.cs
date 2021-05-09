@@ -34,9 +34,7 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "VenueAdmin")]
         public async Task<List<VenueListVm>> GetVenuesAsync()
         {
-
             return await _venueService.GetVenuesAsync();
-
         }
 
         /// <summary>
@@ -61,20 +59,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "VenueAdmin")]
         public async Task<ActionResult<VenueVm>> GetVenueAsync(int venueId)
         {
-
-            try {
-                var venue = await _venueService.GetVenueAsync(venueId);
-                return venue;
-            }
-
-            catch (HttpException)
-            {
-                return NotFound("Fant ingen lokaler");
-            }
-            catch (Exception)
-            {
-                return BadRequest("Noe gikk galt");
-            }
+            var venue = await _venueService.GetVenueAsync(venueId);
+            return venue;
         }
 
         /// <summary>
@@ -94,20 +80,8 @@ namespace Warpweb.WebLayer.Controllers
                 return Forbid();
             }
 
-            try
-            {
-                await _venueService.CreateVenueAsync(venueVm);
-                return Ok();
-            }
-            catch (HttpException)
-            {
-                return Conflict($"Lokalet med navn: {venueVm.Name} eksisterer fra før");
-            }
-            catch (Exception)
-            {
-                return BadRequest("Noe gikk galt.");
-            }
-
+            await _venueService.CreateVenueAsync(venueVm);
+            return Ok();
         }
 
         /// <summary>
@@ -119,19 +93,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "VenueAdmin")]
         public async Task<ActionResult> UpdateVenueAsync(VenueVm venueVm)
         {
-            try
-            {
-                await _venueService.UpdateVenueAsync(venueVm);
-                return Ok();
-            }
-            catch (HttpException)
-            {
-                return NotFound("Fant ikke lokalet");
-            }
-            catch (Exception)
-            {
-                return BadRequest("Noe gikk galt");
-            }
+            await _venueService.UpdateVenueAsync(venueVm);
+            return Ok();
         }
 
     }

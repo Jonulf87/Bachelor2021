@@ -23,7 +23,8 @@ code {
     }
 
 .seatMapFloor {
-    width: 600px;
+    width: auto;
+    min-width: 600px;
     height: 600px;
     position: relative;
     background-color: #ccc;

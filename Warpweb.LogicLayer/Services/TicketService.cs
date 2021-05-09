@@ -170,7 +170,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (user == null)
             {
-                throw new Exception();
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke brukeren");
             }
 
             if (user.DateOfBirth > DateTime.Now.AddYears(-16) && user.Guardian?.EMail == null && user.Guardian?.PhoneNumber == null)
@@ -196,7 +196,7 @@ namespace Warpweb.LogicLayer.Services
                 }
                 if (ticketType == null)
                 {
-                    throw new Exception();
+                    throw new HttpException(HttpStatusCode.NotFound, "Fant ikke billettypen");
                 }
 
                 newTickets.Add(
@@ -289,7 +289,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingTicket == null)
             {
-                throw new NotImplementedException();
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke billetten");
             }
 
             existingTicket.Id = ticketVm.Id;
@@ -313,7 +313,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (ticketToBeDeleted == null)
             {
-                throw new NotImplementedException();
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke billetten");
             }
 
             _dbContext.Remove<Ticket>(ticketToBeDeleted);

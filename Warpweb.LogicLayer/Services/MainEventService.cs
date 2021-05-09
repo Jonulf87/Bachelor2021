@@ -44,6 +44,9 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Returns all future events
+        /// </summary>
         public async Task<List<MainEventListVm>> GetUpcomingEventsAsync()
         {
             return await _dbContext.MainEvents
@@ -103,7 +106,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingMainEvent != null)
             {
-                throw new Exception();
+                throw new HttpException(HttpStatusCode.Conflict, $"Arrangementet: {existingMainEvent.Name} eksisterer allerede");
             }
 
             var leaderCrew = new Crew
@@ -171,14 +174,14 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingMainEvent != null)
             {
-                throw new Exception("Arrangenent med dette navnet eksisterer allerede");
+                throw new HttpException(HttpStatusCode.Conflict, $"Arrangementet: {existingMainEvent.Name} eksisterer allerede");
             }
 
             existingMainEvent = _dbContext.MainEvents.Find(maineventVm.Id);
 
             if (existingMainEvent == null)
             {
-                throw new NotImplementedException();
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke arrangementet");
             }     
 
             existingMainEvent.Id = maineventVm.Id;
@@ -192,6 +195,10 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
+        /// <summary>
+        /// Returns all events where user is participant
+        /// </summary>
+        /// <param name="userId"></param> 
         public async Task<List<UserMainEventsVm>> GetMainEventsOfUserParticipationAsync(string userId)
         {
 

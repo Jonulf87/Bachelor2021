@@ -23,7 +23,6 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
-
         public async Task SetRowsAsync(List<RowVm> rowInfo)
         {
             var existingRowIds = rowInfo.Where(a => a.Id != 0).Select(a => a.Id).ToList();

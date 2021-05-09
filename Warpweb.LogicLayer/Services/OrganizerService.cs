@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
 
 namespace Warpweb.LogicLayer.Services
@@ -68,7 +70,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingOrganizer != null)
             {
-                throw new NotImplementedException();
+                throw new HttpException(HttpStatusCode.Conflict, $"Arrangøren: {existingOrganizer.Name} eksisterer allerede");
             }
 
             var organizer = new Organizer
@@ -94,7 +96,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (existingOrganizer == null)
             {
-                throw new NotImplementedException();
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke arrangøren");
             }
 
             existingOrganizer.Id = organizerVm.Id;
@@ -189,7 +191,7 @@ namespace Warpweb.LogicLayer.Services
 
             if(user == null)
             {
-                throw new Exception();
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke brukeren");
             }
 
             var existingOrgAdmin = await _dbContext.Organizers
@@ -199,7 +201,7 @@ namespace Warpweb.LogicLayer.Services
 
             if(existingOrgAdmin == null)
             {
-                throw new Exception();
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke arrangøren");
             }
             existingOrgAdmin.Admins.Remove(user);
             await _dbContext.SaveChangesAsync();

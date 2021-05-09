@@ -29,15 +29,9 @@ namespace Warpweb.WebLayer.Controllers
         [Route("participantsgenderreport")]
         public async Task<ActionResult<GendersReportVm>> GetGendersReportAsync()
         {
-            try
-            {
+
                 GendersReportVm report = await _reportsService.GetGendersReportAsync();
                 return Ok(report);
-            }
-            catch
-            {
-                return BadRequest();
-            }
         }
 
         /// <summary>

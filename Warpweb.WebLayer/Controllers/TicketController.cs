@@ -22,7 +22,10 @@ namespace Warpweb.WebLayer.Controllers
         {
             _ticketService = ticketService;
         }
-
+        /// <summary>
+        /// Gets all tickets of user
+        /// </summary>
+        /// <returns>TicketListVm</returns>
         [HttpGet]
         [Route("usertickets")]
         public async Task<ActionResult<List<TicketListVm>>> GetAllTicketsOfUserAsync()
@@ -34,7 +37,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Gets all tickets of user of upcoming events
         /// </summary>
-        /// <returns></returns>
+        /// <returns>UserTicketsUpcomingVm</returns>
         [HttpGet]
         [Route("userticketsupcoming")]
         public async Task<ActionResult<List<UserTicketsUpcomingVm>>> GetAllUserTicketsUpcomingAsync()
@@ -75,7 +78,6 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<List<TicketListVm>>> GetAllTiccketsUserEventAsync(int eventId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             var tickets = await _ticketService.GetAllTicketsUserEventAsync(userId, eventId);
             return Ok(tickets);
 
@@ -91,15 +93,8 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<List<TicketListVm>>> GetAllTicketsUserEventUnpaidAsync(int eventId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            try
-            {
-                var tickets = await _ticketService.GetAllTicketsUserEventUnpaidAsync(userId, eventId);
-                return Ok(tickets);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            var tickets = await _ticketService.GetAllTicketsUserEventUnpaidAsync(userId, eventId);
+            return Ok(tickets);
         }
 
         /// <summary>
@@ -133,15 +128,8 @@ namespace Warpweb.WebLayer.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            try
-            {
-                await _ticketService.PurchaseTicketsAsync(tickets, userId);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest("HAHA! NO MONEY!");
-            }
+            await _ticketService.PurchaseTicketsAsync(tickets, userId);
+            return Ok();
         }
 
         /// <summary>
@@ -154,15 +142,8 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> ReserveSeatAsync(int ticketId, int seatId)
         {
 
-            try
-            {
-                await _ticketService.ReserveSeatAsync(ticketId, seatId);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest("Kunne ikke reservere sete");
-            }
+            await _ticketService.ReserveSeatAsync(ticketId, seatId);
+            return Ok();
         }
 
         /// <summary>
@@ -173,15 +154,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Admins")]
         public async Task<ActionResult> UpdateTicketAsync(TicketVm ticketVm)
         {
-            try
-            {
-                await _ticketService.UpdateTicketAsync(ticketVm);
-            }
 
-            catch (HttpException)
-            {
-                return BadRequest();
-            }
+            await _ticketService.UpdateTicketAsync(ticketVm);
             return Ok(ticketVm);
         }
 
@@ -192,15 +166,8 @@ namespace Warpweb.WebLayer.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteTicketAsync(TicketVm ticketVm)
         {
-            try
-            {
-                await _ticketService.DeleteTicketAsync(ticketVm);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
 
+            await _ticketService.DeleteTicketAsync(ticketVm);
             return Ok(ticketVm);
         }
     }

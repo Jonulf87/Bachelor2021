@@ -25,7 +25,10 @@ namespace Warpweb.LogicLayer.Services
             _dbContext = dbContext;
             _userManager = userManager;
         }
-
+        /// <summary>
+        /// Returns all users
+        /// </summary>
+        /// <returns>UserListVm</returns>
         public async Task<List<UserListVm>> GetUsersAsync()
         {
 
@@ -46,6 +49,11 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Returns currently active user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>UserVm</returns>
         public async Task<UserVm> GetCurrentUserAsync(string userId)
         {
             return await _dbContext.ApplicationUsers
@@ -75,6 +83,11 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Returns user with Id == userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>UserVm</returns>
         public async Task<UserVm> GetUserAsync(string userId)
         {
             return await _dbContext.ApplicationUsers
@@ -104,6 +117,11 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Checks that username is available
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns>UserNameCheckVm</returns>
         public async Task<UserNameCheckVm> CheckUserNameAsync(string userName)
         {
             var userNameUnavailable = await _dbContext.ApplicationUsers
@@ -116,6 +134,9 @@ namespace Warpweb.LogicLayer.Services
             };
         }
 
+        /// <summary>
+        /// Updates user
+        /// </summary>
         public async Task UpdateUserAsync(UserUpdateVm userVm)
         {
             var existingUser = _dbContext.ApplicationUsers.Where(a => a.Id == userVm.Id).SingleOrDefault();

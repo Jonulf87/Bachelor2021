@@ -58,13 +58,7 @@ namespace Warpweb.WebLayer.Controllers
         {
             var mainevent = await _mainEventService.GetMainEventAsync(id);
 
-
-            if (mainevent == null)
-            {
-                return NotFound();
-            }
-
-            return mainevent;
+            return Ok(mainevent);
         }
 
         /// <summary>
@@ -84,15 +78,8 @@ namespace Warpweb.WebLayer.Controllers
                 return Forbid();
             }
 
-            try
-            {
-                await _mainEventService.CreateMainEventAsync(mainEventVm, userId);
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            await _mainEventService.CreateMainEventAsync(mainEventVm, userId);
+            return Ok();
         }
 
         /// <summary>
@@ -109,19 +96,8 @@ namespace Warpweb.WebLayer.Controllers
                 return Forbid();
             }
 
-            try
-            {
-                await _mainEventService.UpdateMainEventAsync(mainEventVm);
-                return Ok();
-            }
-            catch (HttpException)
-            {
-                return BadRequest();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            await _mainEventService.UpdateMainEventAsync(mainEventVm);
+            return Ok();
 
         }
 
@@ -135,15 +111,8 @@ namespace Warpweb.WebLayer.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            try
-            {
-                await _mainEventService.SetCurrentEventAsync(eventId, userId);
-                return Ok();
-            }
-            catch (HttpException)
-            {
-                return BadRequest();
-            }
+            await _mainEventService.SetCurrentEventAsync(eventId, userId);
+            return Ok();
         }
 
         /// <summary>
@@ -155,14 +124,7 @@ namespace Warpweb.WebLayer.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            try
-            {
-                return await _mainEventService.GetCurrentMainEventAsync(userId);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            return await _mainEventService.GetCurrentMainEventAsync(userId);
         }
 
         /// <summary>

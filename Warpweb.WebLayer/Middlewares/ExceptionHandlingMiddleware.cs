@@ -12,7 +12,6 @@ namespace Warpweb.WebLayer.Controllers
     /// Custom Exception Handling Middleware. The exception handler will intercept all exceptions
     /// and return either a Http status code message, or a 500 error.
     /// </summary>
-    
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;

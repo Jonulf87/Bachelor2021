@@ -88,20 +88,8 @@ namespace Warpweb.WebLayer.Controllers
         [Route("register")]
         public async Task<ActionResult> RegisterUserAsync(UserVm user)
         {
-            try
-            {
                 await _securityService.RegisterUserAsync(user);
                 return Ok();
-            }
-            catch (HttpException)
-            {
-                return Conflict("Brukeren eksisterer allerede");
-            }
-            catch (Exception)
-            {
-                return BadRequest("Noe gikk galt.");
-            }
-            
         }
 
         [HttpPut]

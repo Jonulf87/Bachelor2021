@@ -30,15 +30,9 @@ namespace Warpweb.WebLayer.Controllers
         [Route("eventtickettypes/{eventId}")]
         public async Task<ActionResult<List<TicketTypeListVm>>> GetTicketTypesForEventAsync(int eventId)
         {
-            try
-            {
-                var tickets = await _ticketTypeService.GetTicketTypesForEventAsync(eventId);
-                return Ok(tickets);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+
+            var tickets = await _ticketTypeService.GetTicketTypesForEventAsync(eventId);
+            return Ok(tickets);
         }
 
         /// <summary>
@@ -60,16 +54,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "TicketAdmin")]
         public async Task<ActionResult<TicketTypeVm>> GetTicketTypeAsync(int ticketTypeId)
         {
-            try
-            {
-                var ticketType = await _ticketTypeService.GetTicketTypeAsync(ticketTypeId);
-                return Ok(ticketType);
-            }
-            catch (Exception)
-            {
-
-                return BadRequest();
-            }
+            var ticketType = await _ticketTypeService.GetTicketTypeAsync(ticketTypeId);
+            return Ok(ticketType);
         }
 
         /// <summary>
@@ -82,16 +68,8 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> CreateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
 
-            try
-            {
-                await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-
+            await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
+            return Ok();
         }
 
         /// <summary>
@@ -103,16 +81,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "TicketAdmin")]
         public async Task<ActionResult> UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
-            try
-            {
-                await _ticketTypeService.UpdateTicketTypeAsync(ticketTypeVm);
-                return Ok();
-            }
-            catch (HttpException)
-            {
-                return BadRequest();
-            }
-
+            await _ticketTypeService.UpdateTicketTypeAsync(ticketTypeVm);
+            return Ok();
         }
 
         /// <summary>
@@ -124,15 +94,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "TicketAdmin")]
         public async Task<ActionResult> DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
-            try
-            {
-                await _ticketTypeService.DeleteTicketTypeAsync(ticketTypeVm);
-                return Ok();
-            }
-            catch (HttpException)
-            {
-                return BadRequest();
-            }
+            await _ticketTypeService.DeleteTicketTypeAsync(ticketTypeVm);
+            return Ok();
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Warpweb.WebLayer.Controllers
         [Route("allcrews")]
         public async Task<List<CrewListVm>> GetCrewsAsync()
         {
-            return await _crewService.GetCrewsAsync();   
+            return await _crewService.GetCrewsAsync();
         }
 
         /// <summary>
@@ -55,15 +55,10 @@ namespace Warpweb.WebLayer.Controllers
         [Route("createcrew/{crewName}")]
         public async Task<ActionResult> CreateCrewAsync(string crewName)
         {
-            try
-            {
-                await _crewService.CreateCrewAsync(crewName);
-                return Ok();
-            }
-            catch (HttpException)
-            {
-                return BadRequest();
-            }
+
+            await _crewService.CreateCrewAsync(crewName);
+            return Ok();
+
         }
 
         /// <summary>
@@ -75,16 +70,9 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "CrewAdmin")]
         public async Task<ActionResult> UpdateCrewAsync(CrewVm crewVm)
         {
-            try
-            {
-                await _crewService.UpdateCrewAsync(crewVm);
-                return Ok();
-            }
 
-            catch (HttpException)
-            {
-                return BadRequest();
-            }
+            await _crewService.UpdateCrewAsync(crewVm);
+            return Ok();
         }
 
         /// <summary>
@@ -96,16 +84,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "CrewAdmin")]
         public async Task<ActionResult> DeleteCrewAsync(CrewVm crewVm)
         {
-            try
-            {
-                await _crewService.DeleteCrewAsync(crewVm);
-                return Ok();
-            }
-            catch (HttpException)
-            {
-                return BadRequest();
-            }
-
+            await _crewService.DeleteCrewAsync(crewVm);
+            return Ok();
         }
 
         /// <summary>
@@ -116,15 +96,9 @@ namespace Warpweb.WebLayer.Controllers
         [Route("crewmembers/{crewId}")]
         public async Task<ActionResult<List<CrewMembersListVm>>> GetCrewMembersAsync(int crewId)
         {
-            try
-            {
-                var membersList = await _crewService.GetCrewMembersAsync(crewId);
-                return Ok(membersList);
-            }
-            catch (HttpException)
-            {
-                return NotFound("Arbeidslaget eksisterer ikke");
-            }
+            var membersList = await _crewService.GetCrewMembersAsync(crewId);
+            return Ok(membersList);
+
         }
 
         /// <summary>
@@ -137,15 +111,8 @@ namespace Warpweb.WebLayer.Controllers
         [Route("addcrewmember/{crewId}")]
         public async Task<ActionResult> AddCrewMemberAsync(int crewId, [FromBody] string userId)
         {
-            try
-            {
-                await _crewService.AddCrewMemberAsync(crewId, userId);
-                return Ok();
-            }
-            catch(Exception)
-            {
-                return BadRequest("Kunne ikke legge til crewmedlem!");
-            }
+            await _crewService.AddCrewMemberAsync(crewId, userId);
+            return Ok();
         }
 
         /// <summary>
@@ -156,15 +123,8 @@ namespace Warpweb.WebLayer.Controllers
         [Route("crewleaders/{crewId}")]
         public async Task<ActionResult<List<CrewMembersListVm>>> GetCrewLeadersAsync(int crewId)
         {
-            try
-            {
-                var leaderList = await _crewService.GetCrewLeadersAsync(crewId);
-                return Ok(leaderList);
-            }
-            catch (HttpException)
-            {
-                return NotFound("Arbeidslaget eksisterer ikke");
-            }
+            var leaderList = await _crewService.GetCrewLeadersAsync(crewId);
+            return Ok(leaderList);
         }
 
         /// <summary>
@@ -177,15 +137,9 @@ namespace Warpweb.WebLayer.Controllers
         [Route("addcrewleader/{crewId}")]
         public async Task<ActionResult> AddCrewLeaderAsync(int crewId, [FromBody] string userId)
         {
-            try
-            {
-                await _crewService.AddCrewLeaderAsync(crewId, userId);
-                return Ok();
-            }
-            catch(HttpException)
-            {
-                return BadRequest("Kunne ikke legge til arbeidslagsleder!");
-            }
+
+            await _crewService.AddCrewLeaderAsync(crewId, userId);
+            return Ok();
         }
 
         /// <summary>
@@ -197,15 +151,8 @@ namespace Warpweb.WebLayer.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            try
-            {
-                var crews = await _crewService.GetCrewsUserIsMemberOfAsync(userId);
-                return Ok(crews);
-            }
-            catch(HttpException)
-            {
-                return BadRequest();
-            }
+            var crews = await _crewService.GetCrewsUserIsMemberOfAsync(userId);
+            return Ok(crews);
         }
     }
 }
