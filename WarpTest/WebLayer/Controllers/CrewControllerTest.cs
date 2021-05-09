@@ -29,14 +29,14 @@ namespace WarpTest.WebLayer.Controllers
             CrewController crewController = new CrewController(crewService);
 
             ActionResult<List<CrewListVm>> result = await crewController.GetCrewsAsync();
-            List<CrewListVm> returnedCrewMembers = (List<CrewListVm>)((OkObjectResult)result.Result).Value;
+            List<CrewListVm> returnedCrews = (List<CrewListVm>)((OkObjectResult)result.Result).Value;
 
             // There was already 1 crew from BaseTest + we have created 2 crews
-            Assert.AreEqual(3, returnedCrewMembers.Count);
-            Assert.AreEqual(2, returnedCrewMembers[1].Id);
-            Assert.AreEqual(_crewName2, returnedCrewMembers[1].Name);
-            Assert.AreEqual(3, returnedCrewMembers[2].Id);
-            Assert.AreEqual(_crewName3, returnedCrewMembers[2].Name);
+            Assert.AreEqual(3, returnedCrews.Count);
+            Assert.AreEqual(2, returnedCrews[1].Id);
+            Assert.AreEqual(_crewName2, returnedCrews[1].Name);
+            Assert.AreEqual(3, returnedCrews[2].Id);
+            Assert.AreEqual(_crewName3, returnedCrews[2].Name);
         }
 
         [Test]
@@ -52,6 +52,7 @@ namespace WarpTest.WebLayer.Controllers
 
             ActionResult<CrewVm> result1 = await crewController.GetCrewAsync(2);
             CrewVm returnedCrew1 = (CrewVm)((OkObjectResult)result1.Result).Value;
+
             Assert.AreEqual(2, returnedCrew1.CrewId);
             Assert.AreEqual(_crewName2, returnedCrew1.CrewName);
 
@@ -116,6 +117,7 @@ namespace WarpTest.WebLayer.Controllers
         }
 
         [Test]
+
         public void ShouldNotUpdateCrewIfDoesntExist()
         {
             CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
@@ -159,6 +161,7 @@ namespace WarpTest.WebLayer.Controllers
 
         [Test]
         public void ShouldNotDeleteCrewIfDoesntExist()
+
         {
             CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
             CrewController crewController = new CrewController(crewService);
@@ -243,6 +246,7 @@ namespace WarpTest.WebLayer.Controllers
         {
             CrewService crewService = new CrewService(_dbContext, _mainEventProvider);
             CrewController crewController = new CrewController(crewService);
+
 
             var ex = Assert.ThrowsAsync<HttpException>(async () =>
             {

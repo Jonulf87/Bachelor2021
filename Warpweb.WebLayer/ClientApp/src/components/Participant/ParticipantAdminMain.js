@@ -1,4 +1,4 @@
-﻿import { Typography, Button, Grid, CircularProgress } from '@material-ui/core';
+﻿import { Typography, Grid, CircularProgress } from '@material-ui/core';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
@@ -21,7 +21,7 @@ export default function ParticipantAdminMain() {
         const getParticipants = async () => {
             if (isAuthenticated) {
 
-                const responseParticipants = await fetch('/api/users/userslist', {
+                const responseParticipants = await fetch(`/api/users/participantslist`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
