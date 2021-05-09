@@ -57,7 +57,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crew == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke arbeidslaget");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke arbeidslaget med id {id}");
             }
 
             return crew;
@@ -234,7 +234,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crew == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen arbeidslagsledere");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen arbeidslagsledere til arbeidslaget med id {crewId}");
             }
 
             return crew.Users
@@ -262,7 +262,7 @@ namespace Warpweb.LogicLayer.Services
 
             if (crewToBeDeleted == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke arbeidslaget");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke arbeidslaget: {crewVm.CrewName}");
             }
 
             _dbContext.Remove<Crew>(crewToBeDeleted);

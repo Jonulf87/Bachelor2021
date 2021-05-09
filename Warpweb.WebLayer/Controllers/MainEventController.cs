@@ -31,9 +31,10 @@ namespace Warpweb.WebLayer.Controllers
         [HttpGet]
         [Route("eventslist")]
         [AllowAnonymous]
-        public async Task<List<MainEventListVm>> GetMainEventsAsync()
+        public async Task<ActionResult<List<MainEventListVm>>> GetMainEventsAsync()
         {
-            return await _mainEventService.GetMainEventsAsync();
+            var mainEvents = await _mainEventService.GetMainEventsAsync();
+            return Ok(mainEvents);
         }
 
         /// <summary>
@@ -43,9 +44,10 @@ namespace Warpweb.WebLayer.Controllers
         [HttpGet]
         [Route("upcomingevents")]
         [AllowAnonymous]
-        public async Task<List<MainEventListVm>> GetUpcomingEventsAsync()
+        public async Task<ActionResult<List<MainEventListVm>>> GetUpcomingEventsAsync()
         {
-            return await _mainEventService.GetUpcomingEventsAsync();
+            var upcomingEvents = await _mainEventService.GetUpcomingEventsAsync();
+            return Ok(upcomingEvents);
         }
 
         /// <summary>
@@ -57,7 +59,6 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<MainEventVm>> GetMainEventAsync(int id)
         {
             var mainevent = await _mainEventService.GetMainEventAsync(id);
-
             return Ok(mainevent);
         }
 
@@ -123,7 +124,6 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<CurrentMainEventVm>> GetCurrentMainEventAsync()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
             return await _mainEventService.GetCurrentMainEventAsync(userId);
         }
 

@@ -29,7 +29,7 @@ namespace Warpweb.LogicLayer.Services
         /// </summary>
         public async Task<List<MainEventListVm>> GetMainEventsAsync()
         {
-            return await _dbContext.MainEvents
+            var mainEvents = await _dbContext.MainEvents
                 .Select(a => new MainEventListVm
                 {
                     Id = a.Id,
@@ -42,6 +42,15 @@ namespace Warpweb.LogicLayer.Services
                     OrganizerWebPage = a.OrganizerWebPage
                 })
                 .ToListAsync();
+
+            if(mainEvents == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Finner ingen arrangementer");
+            }
+            else
+            {
+                return mainEvents;
+            }    
         }
 
         /// <summary>
@@ -49,7 +58,7 @@ namespace Warpweb.LogicLayer.Services
         /// </summary>
         public async Task<List<MainEventListVm>> GetUpcomingEventsAsync()
         {
-            return await _dbContext.MainEvents
+            var upcomingMainEvents = await _dbContext.MainEvents
                 .Where(a => a.EndDateTime > DateTime.Now)
                 .Select(a => new MainEventListVm
                 {
@@ -63,6 +72,15 @@ namespace Warpweb.LogicLayer.Services
                     OrganizerWebPage = a.OrganizerWebPage
                 })
                 .ToListAsync();
+
+            if(upcomingMainEvents == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Finner ingen fremtidige arrangementer");
+            }
+            else
+            {
+                return upcomingMainEvents;
+            }
         }
 
         /// <summary>
@@ -71,7 +89,7 @@ namespace Warpweb.LogicLayer.Services
         /// <param name="id"></param>  
         public async Task<MainEventVm> GetMainEventAsync(int id)
         {
-            return await _dbContext.MainEvents
+            var mainEvent = await _dbContext.MainEvents
                 .Where(a => a.Id == id)
                 .Select(a => new MainEventVm
                 {
@@ -87,6 +105,16 @@ namespace Warpweb.LogicLayer.Services
                     OrganizerName = a.Organizer.Name
                 })
                 .SingleOrDefaultAsync();
+
+            if (mainEvent == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen arrangementer med id: {id}");
+            }
+            else
+            {
+                return mainEvent;
+            }
+            
         }
 
         /// <summary>
@@ -202,7 +230,7 @@ namespace Warpweb.LogicLayer.Services
         public async Task<List<UserMainEventsVm>> GetMainEventsOfUserParticipationAsync(string userId)
         {
 
-            return await _dbContext.Tickets
+            var mainEventsOfUserParticipation = await _dbContext.Tickets
                 .Where(a => a.ApplicationUserId == userId)
                 .IgnoreQueryFilters()
                 .Select(c => new UserMainEventsVm
@@ -215,6 +243,17 @@ namespace Warpweb.LogicLayer.Services
                 })
                 .Distinct()
                 .ToListAsync();
+
+            if(mainEventsOfUserParticipation == null)
+            {
+
+                    throw new HttpException(HttpStatusCode.NotFound, $"Finner ingen arrangementer der bruker med id: {userId} deltar");
+            }
+            else
+            {
+                return mainEventsOfUserParticipation;
+            }
+            
         }
 
         /// <summary>
@@ -268,9 +307,13 @@ namespace Warpweb.LogicLayer.Services
 
             if(events == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, "Ingen events registrert på brukeren.");
+                throw new HttpException(HttpStatusCode.NotFound, $"Ingen arrangementer registrert på bruker med id {userId} ");
             }
-            return events;
+            else
+            {
+                return events;
+            }
+            
         }
     }
 }
