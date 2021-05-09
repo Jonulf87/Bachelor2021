@@ -40,6 +40,18 @@ namespace Warpweb.WebLayer.Controllers
         }
 
         /// <summary>
+        /// Returns all users participating in specific event
+        /// </summary>
+        /// <returns>ParticipantListVM</returns>
+        [HttpGet]
+        [Route("participantslist")]
+        public async Task<List<ParticipantListVm>> GetParticipantsAsync()
+        {
+
+            return await _userService.GetParticipantsAsync();
+        }
+
+        /// <summary>
         /// Returns current logged in user
         /// </summary>
         /// <returns>UserVM</returns>
@@ -92,6 +104,10 @@ namespace Warpweb.WebLayer.Controllers
                 return Ok();
         }
 
+        /// <summary>
+        /// Update user
+        /// </summary>
+        /// <param name="user"></param>
         [HttpPut]
         [Route("updateuser")]
         public async Task<ActionResult> UpdateUserAsync(UserUpdateVm user)
@@ -100,6 +116,10 @@ namespace Warpweb.WebLayer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Check if username exists
+        /// </summary>
+        /// <param name="userName"></param>
         [HttpGet]
         [Route("checkusername/{userName}")]
         [AllowAnonymous]

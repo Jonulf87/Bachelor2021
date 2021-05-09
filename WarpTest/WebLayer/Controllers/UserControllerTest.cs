@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
@@ -25,6 +26,7 @@ namespace WarpTest.WebLayer.Controllers
         private DateTime _dateOfBirth3 = DateTime.Now.AddYears(-20);
         private UserManager<ApplicationUser> _userManager;
         private  RoleManager<IdentityRole> _roleManager;
+        private IMainEventProvider _mainEventProvider;
 
         EntityEntry<ApplicationUser> _createdUser3;
 
@@ -33,7 +35,7 @@ namespace WarpTest.WebLayer.Controllers
         {
             CreateUsers();
 
-            UserService userService = new UserService(_dbContext, _userManager);
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             UserController userController = new UserController(userService, securityService);
 
@@ -60,7 +62,7 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public async Task ShouldGetCurrentUser()
         {
-            UserService userService = new UserService(_dbContext, _userManager);
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             UserController userController = new UserController(userService, securityService);
 
@@ -81,7 +83,7 @@ namespace WarpTest.WebLayer.Controllers
         {
             CreateUsers();
 
-            UserService userService = new UserService(_dbContext, _userManager);
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             UserController userController = new UserController(userService, securityService);
 
@@ -110,7 +112,7 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public async Task ShouldUpdateUser()
         {
-            UserService userService = new UserService(_dbContext, _userManager);
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             UserController userController = new UserController(userService, securityService);
 
@@ -134,7 +136,7 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public void ShouldNotUpdateUserWithInvalidId()
         {
-            UserService userService = new UserService(_dbContext, _userManager);
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             UserController userController = new UserController(userService, securityService);
 
