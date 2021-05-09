@@ -28,7 +28,7 @@ namespace Warpweb.LogicLayer.Services
         /// </summary>
         public async Task<List<OrganizerListVm>> GetOrganizersAsync()
         {
-            return await _dbContext.Organizers
+            var organizers = await _dbContext.Organizers
                 .Select(a => new OrganizerListVm
                 {
                     Id = a.Id,
@@ -37,6 +37,15 @@ namespace Warpweb.LogicLayer.Services
                     Description = a.Description
                 })
                 .ToListAsync();
+
+            if(organizers == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Fant ingen arrangører");
+            }
+            else
+            {
+                return organizers;
+            }
         }
 
         /// <summary>
@@ -45,7 +54,8 @@ namespace Warpweb.LogicLayer.Services
         /// <param name="orgId"></param> 
         public async Task<OrganizerVm> GetOrganizerAsync(int id)
         {
-            return await _dbContext.Organizers
+
+            var organizer = await _dbContext.Organizers
                 .Where(a => a.Id == id)
                 .Select(a => new OrganizerVm
                 {
@@ -56,6 +66,15 @@ namespace Warpweb.LogicLayer.Services
                     ContactName = a.ContactId
                 })
                 .SingleOrDefaultAsync();
+
+            if(organizer == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen arrangører med id: {id}");
+            }
+            else
+            {
+                return organizer;
+            }
         }
 
         /// <summary>
@@ -86,7 +105,7 @@ namespace Warpweb.LogicLayer.Services
         }
 
         /// <summary>
-        /// Create tenant/organizer
+        /// Update tenant/organizer
         /// </summary>
         /// <param name="organizerVm"></param> 
         public async Task UpdateOrganizerAsync(OrganizerVm organizerVm)
@@ -113,7 +132,7 @@ namespace Warpweb.LogicLayer.Services
         /// Returns active contact person for organization
         /// </summary>
         /// <param name="orgId"></param> 
-        public async Task<List<OrganizerVm>> GetOrganizerContactAsync(int orgId)
+        public async Task<OrganizerVm> GetOrganizerContactAsync(int orgId)
         {
             var contact = await _dbContext.Organizers
                 .Where(a => a.Id == orgId)
@@ -125,9 +144,17 @@ namespace Warpweb.LogicLayer.Services
                     ContactName = a.Contact.FirstName + " " + a.Contact.LastName,
                     ContactPhone = a.Contact.PhoneNumber,
                     ContactMail = a.Contact.Email
-                }).ToListAsync();
+                }).SingleOrDefaultAsync();
 
-            return contact;
+            if (contact == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen kontaktpersoner for organisasjon med id: {orgId}");
+            }
+            else
+            {
+                return contact;
+            }
+            
         }
 
         /// <summary>
@@ -169,7 +196,7 @@ namespace Warpweb.LogicLayer.Services
         /// <param name="userId"></param> 
         public async Task<List<OrganizerListVm>> GetOrgsWhereUserIsAdminAsync(string userId)
         {
-            return await _dbContext.Organizers
+            var organizationsWhereUserIsAdmin = await _dbContext.Organizers
                 .Where(a => a.Admins.Any(b => b.Id == userId))
                 .Select(a => new OrganizerListVm
                 {
@@ -178,6 +205,15 @@ namespace Warpweb.LogicLayer.Services
                     Description = a.Description,
                     OrgNumber = a.OrgNumber
                 }).ToListAsync();
+
+            if (organizationsWhereUserIsAdmin == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Bruker med id {userId} er ikke administrator i noen organisasjoner");
+            }
+            else
+            {
+                return organizationsWhereUserIsAdmin;
+            }
         }
 
         /// <summary>
@@ -191,7 +227,7 @@ namespace Warpweb.LogicLayer.Services
 
             if(user == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke brukeren");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke brukeren med id: {userId}");
             }
 
             var existingOrgAdmin = await _dbContext.Organizers
@@ -199,10 +235,11 @@ namespace Warpweb.LogicLayer.Services
                 .Include(a => a.Admins)
                 .SingleOrDefaultAsync(a => a.Admins.Contains(user));
 
-            if(existingOrgAdmin == null)
+            if (existingOrgAdmin == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, "Fant ikke arrangøren");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke arrangøren med id: {orgId}");
             }
+
             existingOrgAdmin.Admins.Remove(user);
             await _dbContext.SaveChangesAsync();
         }
@@ -232,7 +269,10 @@ namespace Warpweb.LogicLayer.Services
                 return admins;
             }
 
-            return null;
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>

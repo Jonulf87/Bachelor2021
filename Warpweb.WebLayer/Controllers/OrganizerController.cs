@@ -28,7 +28,7 @@ namespace Warpweb.WebLayer.Controllers
         [HttpGet]
         [Route("gettenants")]
         [Authorize(Roles = "Admin")]
-        public async Task<List<OrganizerListVm>> GetOrganizersAsync()
+        public async Task<ActionResult<List<OrganizerListVm>>> GetOrganizersAsync()
         {
             var organizers = await _organizerService.GetOrganizersAsync();
             return organizers;
@@ -80,7 +80,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="orgId"></param> 
         [HttpGet]
         [Route("getcontact/{orgId}")]
-        public async Task<ActionResult<List<OrganizerVm>>> GetOrganizerContactAsync(int orgId)
+        public async Task<ActionResult<OrganizerVm>> GetOrganizerContactAsync(int orgId)
         {
 
                 var contact = await _organizerService.GetOrganizerContactAsync(orgId);
