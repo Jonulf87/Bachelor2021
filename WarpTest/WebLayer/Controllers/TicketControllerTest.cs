@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 using Warpweb.WebLayer.Controllers;
@@ -194,13 +195,17 @@ namespace WarpTest.WebLayer.Controllers
          */
 
         [Test]
-        public async Task ShouldNotDeleteTicketIfDoesntExist()
+        public void ShouldNotDeleteTicketIfDoesntExist()
         {
             TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
             TicketController ticketController = new TicketController(ticketService);
 
-            StatusCodeResult result = (StatusCodeResult)await ticketController.DeleteTicketAsync(new TicketVm { Id = 123});
-            Assert.AreEqual((int)HttpStatusCode.BadRequest, result.StatusCode);
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                ActionResult<TicketVm> result = await ticketController.DeleteTicketAsync(new TicketVm { Id = 123 });
+            });
+            Assert.That(ex.Message == "Fant ikke billetten");
+           
         }
 
 

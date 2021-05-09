@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
+using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.ViewModels;
@@ -19,12 +20,15 @@ namespace Warpweb.LogicLayer.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMainEventProvider _mainEventProvider;
 
-        public UserService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public UserService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, IMainEventProvider mainEventProvider)
         {
             _dbContext = dbContext;
             _userManager = userManager;
+            _mainEventProvider = mainEventProvider;
         }
+
         /// <summary>
         /// Returns all users
         /// </summary>
@@ -36,6 +40,31 @@ namespace Warpweb.LogicLayer.Services
                 .OrderBy(a => a.FirstName)
                 .ThenBy(a => a.LastName)
                 .Select(a => new UserListVm
+                {
+                    Id = a.Id,
+                    FirstName = a.FirstName,
+                    MiddleName = a.MiddleName,
+                    LastName = a.LastName,
+                    EMail = a.Email,
+                    PhoneNumber = a.PhoneNumber,
+                    UserName = a.UserName,
+                    DateOfBirth = a.DateOfBirth
+                })
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns all participants of specific event
+        /// </summary>
+        /// <returns>ParticipantListVm</returns>
+        public async Task<List<ParticipantListVm>> GetParticipantsAsync()
+        {
+ 
+            return await _dbContext.ApplicationUsers
+                .Where(a => a.CurrentMainEventId == _mainEventProvider.MainEventId)
+                .OrderBy(a => a.FirstName)
+                .ThenBy(a => a.LastName)
+                .Select(a => new ParticipantListVm
                 {
                     Id = a.Id,
                     FirstName = a.FirstName,
