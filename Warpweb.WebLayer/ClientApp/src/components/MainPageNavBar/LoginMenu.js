@@ -20,54 +20,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function LoginMenu() {
-
+export default function LoginMenu({ menuItems }) {
     const { isAuthenticated } = useAuth();
-
     const classes = useStyles();
 
     return (
         <ButtonGroup
             className={classes.buttonRight}
         >
-            {isAuthenticated && (
-                <>
+            {menuItems.map((item) => (
                     <Button
                         className={classes.root}          
-                        startIcon= {<PersonIcon />}
+                        startIcon= {item.itemIcon}
                         component={Link}
-                        to='/user'
+                        to={item.destination}
+                        key={item.itemText}
                     >
-                        Min side
+                        {item.itemText}
                     </Button>
-                    <Button
-                        className={classes.root}
-                        startIcon={<ExitToAppIcon />}
-                        component={Link}
-                        to='/logout'>
-                        Logg ut
-                    </Button>
-                </>
-            )}
-            {!isAuthenticated && (
-                <>
-                    <Button
-                        className={classes.root}
-                        startIcon={<PersonIcon />}
-                        component={Link}
-                        to='/register'
-                    >
-                        Registrer
-                    </Button>
-                    <Button
-                        className={classes.root}
-                        startIcon={<ExitToAppIcon />}
-                        component={Link}
-                        to='/login'>
-                        Logg inn
-                    </Button>
-                </>
-            )}
+            ))}
         </ButtonGroup>
     );
 }

@@ -23,9 +23,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function LoginMenuMobile() {
+export default function LoginMenuMobile({ menuItems }) {
     const [anchorEl, setAnchorEl] = useState(null);
-    const { isAuthenticated } = useAuth();
     const classes = useStyles();
     const open = Boolean(anchorEl);
 
@@ -37,8 +36,7 @@ export default function LoginMenuMobile() {
         setAnchorEl(null);
       };
 
-
-    return (
+      return (
         <>
             <IconButton className={classes.buttonRight} aria-haspopup="true" aria-controls="bruker-meny" onClick={handleClick}>
                 <AccountCircle />
@@ -51,62 +49,21 @@ export default function LoginMenuMobile() {
                 open={open}
                 onClose={handleClose}
             >
-                {isAuthenticated && (
-                    <>
+                {menuItems.map((item) => (
                         <MenuItem
                             component={Link}
-                            to='/user'
+                            to={item.destination}
                             onClick={handleClose}
+                            key={item.itemText}
                         >
                             <ListItemIcon>
-                                <PersonIcon />
+                                {item.itemIcon}
                             </ListItemIcon>
                             <Typography variant="inherit" noWrap>
-                                Min side
+                                {item.itemText}
                             </Typography>
                         </MenuItem>
-                        <MenuItem
-                            component={Link}
-                            to='/logout'
-                            onClick={handleClose}
-                        >
-                            <ListItemIcon>
-                                <ExitToAppIcon />
-                            </ListItemIcon>
-                            <Typography variant="inherit" noWrap>
-                                Logg ut
-                            </Typography>
-                        </MenuItem>
-                    </>
-                )}
-                {!isAuthenticated && (
-                    <>
-                        <MenuItem
-                            component={Link}
-                            to='/register'
-                            onClick={handleClose}
-                        >
-                            <ListItemIcon>
-                                <PersonIcon />
-                            </ListItemIcon>
-                            <Typography variant="inherit" noWrap>
-                                Registrer
-                            </Typography>
-                        </MenuItem>
-                        <MenuItem
-                            component={Link}
-                            to='/login'
-                            onClick={handleClose}
-                        >
-                            <ListItemIcon>
-                                <ExitToAppIcon />
-                            </ListItemIcon>
-                            <Typography variant="inherit" noWrap>
-                                Registrer
-                            </Typography>
-                        </MenuItem>
-                    </>
-                )}
+                ))}
             </Menu>
         </>
     );

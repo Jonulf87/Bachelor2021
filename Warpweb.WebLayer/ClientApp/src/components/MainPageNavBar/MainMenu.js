@@ -3,6 +3,8 @@ import useCurrentEvent from '../../hooks/useCurrentEvent';
 import useAuth from '../../hooks/useAuth';
 
 import MenuIcon from '@material-ui/icons/Menu';
+import PersonIcon from '@material-ui/icons/Person';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { AppBar, Drawer, Hidden, Divider, Toolbar, IconButton } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -32,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
             zIndex: theme.zIndex.drawer + 1,
             marginLeft: drawerWidth,
         },
-        boxShadow: 'none',
         height: '80px'
     },
     menuButton: {
@@ -161,6 +162,22 @@ export default function MainMenu({ window }) {
         )
     }
 
+    //
+    const userMenuItem = (destination, itemText, itemIcon) => ({destination, itemText, itemIcon});
+    
+    const loggedInMenu = [
+        userMenuItem('/user','Min side',<PersonIcon />),
+        userMenuItem('/logout','Logg ut',<ExitToAppIcon />)
+    ];
+
+        
+    const loggedOutMenu = [
+        userMenuItem('/register','Registrer',<PersonIcon />),
+        userMenuItem('/login','Logg inn',<ExitToAppIcon />)
+    ];
+
+    const userMenuItems = isAuthenticated ? loggedInMenu : loggedOutMenu;
+
     return (
         <>
             <AppBar position="fixed" className={classes.appBar}>
@@ -175,7 +192,7 @@ export default function MainMenu({ window }) {
                         <MenuIcon />
                     </IconButton>
                     <NavBarHeader />
-                        {ButtonsOrMenu ? <LoginMenu /> : <LoginMenuMobile/>}
+                        {ButtonsOrMenu ? <LoginMenu menuItems={userMenuItems} /> : <LoginMenuMobile menuItems={userMenuItems}/>}
                 </Toolbar>
             </AppBar>
 
