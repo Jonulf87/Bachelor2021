@@ -30,7 +30,7 @@ namespace Warpweb.LogicLayer.ViewModels
         public string ZipCode { get; set; }
 
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Du må oppgi en gyldig e-post adresse")]
         public string EMail { get; set; }
         [Required]
         public string UserName { get; set; }

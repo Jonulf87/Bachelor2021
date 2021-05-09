@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default function UserMainMenu({ crews }) {
+export default function CrewMainMenu({ crews }) {
 
     const classes = useStyles();
     
