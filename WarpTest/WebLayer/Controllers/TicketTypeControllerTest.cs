@@ -75,88 +75,81 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_amountAvailable1, returnedTicketType2.AmountAvailable);
         }
 
-        /*
         [Test]
         public async Task ShouldCreateTicketType()
         {
+            TicketTypeService ticketTypeService = new TicketTypeService(_dbContext, _mainEventProvider);
+            TicketTypeController ticketTypeController = new TicketTypeController(ticketTypeService);
             CreateTicketTypes();
+
+            List<TicketTypeListVm> result = await ticketTypeController.GetTicketTypesAsync();
+
+            Assert.AreEqual(2, result.Count);
 
             string descrName3 = "Description name 3";
             int basePrice3 = 30;
             int amountAvailable3 = 250;
 
-            TicketTypeService ticketTypeService = new TicketTypeService(_dbContext, _mainEventProvider);
-            TicketTypeController ticketTypeController = new TicketTypeController(ticketTypeService);
 
             TicketTypeVm ticketTypeVm = new TicketTypeVm { DescriptionName = descrName3, BasePrice = basePrice3, AmountAvailable = amountAvailable3 };
 
-            ActionResult<TicketTypeVm> result = await ticketTypeController.CreateTicketTypeAsync(ticketTypeVm);
+            await ticketTypeController.CreateTicketTypeAsync(ticketTypeVm);
 
-            TicketTypeVm createdTicketType = (TicketTypeVm)((OkObjectResult)result.Result).Value;
+            List<TicketTypeListVm> newResult = await ticketTypeController.GetTicketTypesAsync();
 
-            // Check object that is returned from the controller
-            Assert.AreEqual(3, createdTicketType.Id);
-            Assert.AreEqual(descrName3, createdTicketType.DescriptionName);
-            Assert.AreEqual(basePrice3, createdTicketType.BasePrice);
-            Assert.AreEqual(amountAvailable3, createdTicketType.AmountAvailable);
-
-            // Check what we really have in the DB
-            TicketType ticketType1 = _dbContext.TicketTypes.Find(3);
-            Assert.AreEqual(3, ticketType1.Id);
-            Assert.AreEqual(descrName3, ticketType1.DescriptionName);
-            Assert.AreEqual(basePrice3, ticketType1.BasePrice);
-            Assert.AreEqual(amountAvailable3, ticketType1.AmountAvailable);
+            Assert.AreEqual(3, newResult.Count);
+            Assert.That(newResult, Has.Exactly(1).Matches<TicketTypeListVm>(ticketType => ticketType.Id == 3 &&
+                                                                           ticketType.DescriptionName == descrName3 &&
+                                                                           ticketType.BasePrice == basePrice3 &&
+                                                                           ticketType.AmountAvailable == amountAvailable3));
         }
-        */
-        //[Test]
-        //public async Task ShouldUpdateTicketType()
-        //{
-        //    CreateTicketTypes();
 
-        //    string newdescrName = "New descr name";
-        //    int newBasePrice = 80;
-        //    int newAmmount = 350;
+        [Test]
+        public async Task ShouldUpdateTicketType()
+        {
+            CreateTicketTypes();
 
-        //    TicketTypeService ticketTypeService = new TicketTypeService(_dbContext);
-        //    TicketTypeController ticketTypeController = new TicketTypeController(ticketTypeService);
+            string newdescrName = "New descr name";
+            int newBasePrice = 80;
+            int newAmmount = 350;
 
-        //    TicketTypeVm ticketTypeVm = new TicketTypeVm { Id = 1, DescriptionName = newdescrName, BasePrice = newBasePrice, AmountAvailable = newAmmount };
+            TicketTypeService ticketTypeService = new TicketTypeService(_dbContext, _mainEventProvider);
+            TicketTypeController ticketTypeController = new TicketTypeController(ticketTypeService);
 
-        //    await ticketTypeController.UpdateTicketType(ticketTypeVm);
+            TicketTypeVm ticketTypeVm = new TicketTypeVm { Id = 1, DescriptionName = newdescrName, BasePrice = newBasePrice, AmountAvailable = newAmmount };
 
-        //    // Check that only one has been changed
-        //    TicketType ticketType1 = _dbContext.TicketTypes.Find(1);
-        //    Assert.AreEqual(newdescrName, ticketType1.DescriptionName);
-        //    Assert.AreEqual(newBasePrice, ticketType1.BasePrice);
-        //    Assert.AreEqual(newAmmount, ticketType1.AmountAvailable);
+            await ticketTypeController.UpdateTicketTypeAsync(ticketTypeVm);
 
-        //    TicketType ticketType2 = _dbContext.TicketTypes.Find(2);
-        //    Assert.AreEqual(_descrName2, ticketType2.DescriptionName);
-        //    Assert.AreEqual(_basePrice2, ticketType2.BasePrice);
-        //    Assert.AreEqual(_amountAvailable2, ticketType2.AmountAvailable);
-        //}
+            // Check that only one has been changed
+            TicketType ticketType1 = _dbContext.TicketTypes.Find(1);
+            Assert.AreEqual(newdescrName, ticketType1.DescriptionName);
+            Assert.AreEqual(newBasePrice, ticketType1.BasePrice);
+            Assert.AreEqual(newAmmount, ticketType1.AmountAvailable);
 
-        //[Test]
-        //public async Task ShouldDeleteTicketType()
-        //{
-        //    CreateTicketTypes();
+            TicketType ticketType2 = _dbContext.TicketTypes.Find(2);
+            Assert.AreEqual(_descrName1, ticketType2.DescriptionName);
+            Assert.AreEqual(_basePrice1, ticketType2.BasePrice);
+            Assert.AreEqual(_amountAvailable1, ticketType2.AmountAvailable);
+        }
 
-        //    TicketTypeService ticketTypeService = new TicketTypeService(_dbContext);
-        //    TicketTypeController ticketTypeController = new TicketTypeController(ticketTypeService);
+        [Test]
+        public async Task ShouldDeleteTicketType()
+        {
+            CreateTicketTypes();
 
-        //    TicketTypeVm ticketTypeVm = new TicketTypeVm { Id = 1 };
+            TicketTypeService ticketTypeService = new TicketTypeService(_dbContext, _mainEventProvider);
+            TicketTypeController ticketTypeController = new TicketTypeController(ticketTypeService);
 
-        //    ActionResult<TicketTypeVm> result = await ticketTypeController.DeleteTicketType(ticketTypeVm);
-        //    TicketTypeVm deletedTicketType = (TicketTypeVm)((OkObjectResult)result.Result).Value;
+            TicketTypeVm ticketTypeVm = new TicketTypeVm { Id = 1 };
 
-        //    Assert.AreEqual(1, deletedTicketType.Id);
+            await ticketTypeController.DeleteTicketTypeAsync(ticketTypeVm);
 
-        //    // Check that we have deleted only the first, but not the other
-        //    TicketType ticketType1 = _dbContext.TicketTypes.Find(1);
-        //    Assert.IsNull(ticketType1);
-        //    TicketType ticketType2 = _dbContext.TicketTypes.Find(2);
-        //    Assert.IsNotNull(ticketType2);
-        //}
+            // Check that we have deleted only the first, but not the other
+            TicketType ticketType1 = _dbContext.TicketTypes.Find(1);
+            Assert.IsNull(ticketType1);
+            TicketType ticketType2 = _dbContext.TicketTypes.Find(2);
+            Assert.IsNotNull(ticketType2);
+        }
 
         // Helper methods
         private void CreateTicketTypes()
