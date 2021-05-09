@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
@@ -11,6 +16,7 @@ using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 using Warpweb.WebLayer.Controllers;
+using static IdentityModel.ClaimComparer;
 
 namespace WarpTest.WebLayer.Controllers
 {
@@ -24,8 +30,8 @@ namespace WarpTest.WebLayer.Controllers
         private const string _phone3 = "95265985";
         private const string _userName3 = "OlavNordman";
         private DateTime _dateOfBirth3 = DateTime.Now.AddYears(-20);
-        private UserManager<ApplicationUser> _userManager;
-        private  RoleManager<IdentityRole> _roleManager;
+        private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+        private Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
         private IMainEventProvider _mainEventProvider;
 
         EntityEntry<ApplicationUser> _createdUser3;
@@ -154,15 +160,21 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public async Task ShouldRegisterUser()
         {
-            _userManager = new Mock<UserManager<ApplicationUser>>();
+            // var store = new Mock<Microsoft.AspNetCore.Identity.IUserStore<ApplicationUser>>();
+            var store1 = new UserStore<ApplicationUser>(_dbContext);
+            var userManagerMock = new Mock<Microsoft.AspNetCore.Identity.UserManager<ApplicationUser>>(store1, null, null, null, null, null, null, null, null);
+            
+            //userManagerMock
+            //  .Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+            //.Returns(Task.FromResult(Microsoft.AspNetCore.Identity.IdentityResult.Success));
+            
+            var userManager = new Microsoft.AspNetCore.Identity.UserManager<ApplicationUser>(store1, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, null);
 
-
-            UserService userService = new UserService(_dbContext, _userManager);
-            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            UserService userService = new UserService(_dbContext, userManager, _mainEventProvider);
+            SecurityService securityService = new SecurityService(_dbContext, userManager, _roleManager);
             UserController userController = new UserController(userService, securityService);
 
             UserVm newUser = new UserVm {
-                //Id = "1",
                 FirstName = "Anna",
                 MiddleName = "",
                 LastName = "Svensen",
@@ -178,17 +190,21 @@ namespace WarpTest.WebLayer.Controllers
                 Password = "PassWord"
             };
 
-            ActionResult<UserVm> result = await userController.RegisterUserAsync(newUser);
-            UserVm returnedUser = result.Value;
+            await userController.RegisterUserAsync(newUser);
 
-           // Assert.AreEqual(_createdUser3.Entity.Id, returnedUser.Id);
-            Assert.AreEqual(newUser.FirstName, returnedUser.FirstName);
-            Assert.AreEqual(newUser.MiddleName, returnedUser.MiddleName);
-            Assert.AreEqual(newUser.LastName, returnedUser.LastName);
-            Assert.AreEqual(newUser.Address, returnedUser.Address);
+            List<UserListVm> newResult = await userController.GetUsersAsync();
+
+            Assert.AreEqual(3, newResult.Count);
+            Assert.That(newResult, Has.Exactly(1).Matches<UserListVm>(user => user.FirstName == newUser.FirstName &&
+                                                                           user.MiddleName == newUser.MiddleName &&
+                                                                           user.LastName == newUser.LastName &&
+                                                                           user.EMail == newUser.EMail &&
+                                                                           user.UserName == newUser.UserName &&
+                                                                           user.PhoneNumber == newUser.PhoneNumber &&
+                                                                           user.DateOfBirth == newUser.DateOfBirth));
 
         }
-      */
+    */
 
         // Helper methods
         private void CreateUsers()

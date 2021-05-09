@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
@@ -21,56 +22,51 @@ namespace WarpTest.WebLayer.Controllers
         private readonly DateTime _endTime2 = DateTime.Now.AddDays(9);
 
         private EntityEntry<ApplicationUser> _createdUser;
+        private UserManager<ApplicationUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
 
-        //[Test]
-        //public async Task ShouldGetMainEvents()
-        //{
-        //    CreateMainEvents();
+        [Test]
+        public async Task ShouldGetMainEvents()
+        {
+            CreateMainEvents();
 
-        //    // Check
-        //    MainEventService mainEventService = new MainEventService(_dbContext);
-        //    SecurityService securityService = new SecurityService(_dbContext);
+            MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
 
-        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
-        //    List<MainEventListVm> result = await mainEventController.GetMainEvents();
+            ActionResult<List<MainEventListVm>> result = await mainEventController.GetMainEventsAsync();
+            List<MainEventListVm> returnedMainEvents = (List<MainEventListVm>)((OkObjectResult)result.Result).Value;
 
-        //    Assert.AreEqual(2, result.Count);
-        //    Assert.AreEqual(1, result[0].Id);
-        //    Assert.AreEqual(_eventName1, result[0].Name);
-        //    Assert.AreEqual(_startTime1, result[0].StartTime);
-        //    Assert.AreEqual(_endTime1, result[0].EndTime);
-        //    Assert.AreEqual(2, result[1].Id);
-        //    Assert.AreEqual(_eventName2, result[1].Name);
-        //    Assert.AreEqual(_startTime2, result[1].StartTime);
-        //    Assert.AreEqual(_endTime2, result[1].EndTime);
-        //}
+            Assert.AreEqual(2, returnedMainEvents.Count);
+            Assert.AreEqual(1, returnedMainEvents[0].Id);
+            Assert.AreEqual("Event 1", returnedMainEvents[0].Name);
 
-        //[Test]
-        //public async Task ShouldGetMainEventById()
-        //{
-        //    CreateMainEvents();
+            Assert.AreEqual(2, returnedMainEvents[1].Id);
+            Assert.AreEqual(_eventName2, returnedMainEvents[1].Name);
+        }
 
-        //    // Check that we can get both by id
-        //    MainEventService mainEventService = new MainEventService(_dbContext);
-        //    SecurityService securityService = new SecurityService(_dbContext);
+        [Test]
+        public async Task ShouldGetMainEventById()
+        {
+            CreateMainEvents();
 
-        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+            // Check that we can get both by id
+            MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
 
-        //    ActionResult<MainEventVm> result1 = await mainEventController.GetMainEvent(1);
-        //    MainEventVm returnedMainEvent = result1.Value;
-        //    Assert.AreEqual(1, returnedMainEvent.Id);
-        //    Assert.AreEqual(_eventName1, returnedMainEvent.Name);
-        //    Assert.AreEqual(_startTime1, returnedMainEvent.StartTime);
-        //    Assert.AreEqual(_endTime1, returnedMainEvent.EndTime);
+            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
-        //    ActionResult<MainEventVm> result2 = await mainEventController.GetMainEvent(2);
-        //    MainEventVm returnedMainEvent2 = result2.Value;
-        //    Assert.AreEqual(2, returnedMainEvent2.Id);
-        //    Assert.AreEqual(_eventName2, returnedMainEvent2.Name);
-        //    Assert.AreEqual(_startTime2, returnedMainEvent2.StartTime);
-        //    Assert.AreEqual(_endTime2, returnedMainEvent2.EndTime);
-        //}
+            ActionResult<MainEventVm> result1 = await mainEventController.GetMainEventAsync(1);
+            MainEventVm returnedMainEvent = (MainEventVm)((OkObjectResult)result1.Result).Value;
+            Assert.AreEqual(1, returnedMainEvent.Id);
+            Assert.AreEqual("Event 1", returnedMainEvent.Name);
+
+            ActionResult<MainEventVm> result2 = await mainEventController.GetMainEventAsync(2);
+            MainEventVm returnedMainEvent2 = (MainEventVm)((OkObjectResult)result2.Result).Value;
+            Assert.AreEqual(2, returnedMainEvent2.Id);
+            Assert.AreEqual(_eventName2, returnedMainEvent2.Name);
+        }
 
         //[Test]
         //public async Task ShouldCreateMainEvent()
@@ -183,39 +179,72 @@ namespace WarpTest.WebLayer.Controllers
                     FirstName = "Test",
                     MiddleName = "",
                     LastName = "Testesen",
-                    Address = "Blabla gate 123",
-                    DateOfBirth = DateTime.Now,
-                    IsAllergic = false
+                    Address = "Testing gate 123",
+                    DateOfBirth = DateTime.Now.AddYears(-20),
+                    IsAllergic = false,
+                    Gender = "Female",
+                    Email = "test@test.no",
+                    PhoneNumber = "98765433"
                 }
             );
         }
 
         private void CreateOrganizers()
         {
-            _dbContext.Organizers.Add(new Organizer { Name = "Org 1", OrgNumber = "1", Description = "Org Descr 1", ContactId = _createdUser.Entity.Id });
-            _dbContext.SaveChanges();
-            _dbContext.Organizers.Add(new Organizer { Name = "Org 2", OrgNumber = "2", Description = "Org Descr 2", ContactId = _createdUser.Entity.Id });
+            _dbContext.Organizers.Add(
+                new Organizer
+                {
+                    Name = "Organizer 2",
+                    OrgNumber = "654123",
+                    Description = "Description"
+                    /*
+                    Admins = new List<ApplicationUser>()
+                    {
+                        // _createdUser.Entity
+                        new ApplicationUser
+                        {
+                            Id = _createdUser.Entity.Id
+                        }
+                    }
+                    */
+                }
+            );
             _dbContext.SaveChanges();
         }
 
-        //private void CreateVenues()
-        //{
-        //    _dbContext.Venues.Add(new Venue { Name = "Venue Name 1", Address = "Venueveien 1", AreaAvailable = 1, Capacity = 1 });
-        //    _dbContext.SaveChanges();
-        //    _dbContext.Venues.Add(new Venue { Name = "Venue Name 2", Address = "Venueveien 2", AreaAvailable = 2, Capacity = 2 });
-        //    _dbContext.SaveChanges();
-        //}
+        private void CreateVenues()
+        {
+            _dbContext.Venues.Add(
+                new Venue
+                {
+                    Name = "Venue 2",
+                    Address = "Venue gate 321",
+                    PostalCode = "1246",
+                    ContactPhone = "12345987",
+                    ContactEMail = "venue2@test.no",
+                    OrganizerId = 1
+                }
+            );
+            _dbContext.SaveChanges();
+        }
 
-        ////private void CreateMainEvents()
-        //{
-        //    CreateUser();
-        //    CreateOrganizers();
-        //    CreateVenues();            
+        private void CreateMainEvents()
+        {
+        CreateUser();
+        CreateOrganizers();
+        CreateVenues();
 
-        //    _dbContext.MainEvents.Add(new MainEvent { Name = _eventName1, StartTime = _startTime1, EndTime = _endTime1, VenueId = 1, OrganizerId = 1 });
-        //    _dbContext.SaveChanges();
-        //    _dbContext.MainEvents.Add(new MainEvent { Name = _eventName2, StartTime = _startTime2, EndTime = _endTime2, VenueId = 2, OrganizerId = 2 });
-        //    _dbContext.SaveChanges();
-        //}
+            _dbContext.MainEvents.Add(
+                    new MainEvent
+                    {
+                        Name = _eventName2,
+                        StartDateTime = DateTime.Now,
+                        EndDateTime = DateTime.Now,
+                        OrganizerId = 2,
+                        VenueId = 2
+                    }
+                );
+            _dbContext.SaveChanges();
+        }
     }
 }
