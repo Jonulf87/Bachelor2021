@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Security.Claims;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -87,6 +87,7 @@ namespace WarpTest.WebLayer.Controllers
                     IsAllergic = false,
                     Gender = "Male",
                     Email = "ola@test.no",
+                    NormalizedEmail = "ola@test.no", // Actually used by UserManager.FindByEmailAsync()
                     PhoneNumber = "12345678"
                 }
             );
@@ -199,6 +200,7 @@ namespace WarpTest.WebLayer.Controllers
                     IsAllergic = false,
                     Gender = "Female",
                     Email = "Line@test.no",
+                    NormalizedEmail = "Line@test.no", // Actually used by UserManager.FindByEmailAsync()
                     PhoneNumber = "98765432"
                 }
             );
@@ -206,56 +208,65 @@ namespace WarpTest.WebLayer.Controllers
 
             // Add
             _dbContext.CrewUsers.Add(
-               new CrewUser
-               {
-                   ApplicationUserId = _createdUser2.Entity.Id,
-                   IsLeader = true,
-                   CrewId = 1
-               }
-           );
+                new CrewUser
+                {
+                    ApplicationUserId = _createdUser2.Entity.Id,
+                    IsLeader = true,
+                    CrewId = 1
+                }
+            );
             _dbContext.SaveChanges();
 
             _dbContext.Rows.Add(
-              new Row
-              {
-                  Name = "Test row name",
-                  MainEventId = 1
-              }
-          );
+                new Row
+                {
+                    Name = "Test row name",
+                    MainEventId = 1
+                }
+            );
             _dbContext.SaveChanges();
 
             _dbContext.Seats.Add(
-              new Seat
-              {
-                  SeatNumber = 1,
-                  RowId = 1
-              }
-          );
+                new Seat
+                {
+                    SeatNumber = 1,
+                    RowId = 1
+                }
+            );
             _dbContext.SaveChanges();
 
             _dbContext.TicketTypes.Add(
-              new TicketType
-              {
-                  DescriptionName = "Test ticket type",
-                  BasePrice = 10,
-                  AmountAvailable = 20,
-                  MainEventId = 1
-              }
-          );
+                new TicketType
+                {
+                    DescriptionName = "Test ticket type",
+                    BasePrice = 10,
+                    AmountAvailable = 20,
+                    MainEventId = 1
+                }
+            );
             _dbContext.SaveChanges();
 
             _dbContext.Tickets.Add(
-              new Ticket
-              {
-                  Price = 15,
-                  IsCheckedIn = false,
-                  IsPaid = false,
-                  TicketTypeId = 1,
-                  MainEventId = 1,
-                  ApplicationUserId = _createdUser1.Entity.Id,
-                  SeatId = 1
-              }
-          );
+                new Ticket
+                {
+                    Price = 15,
+                    IsCheckedIn = false,
+                    IsPaid = false,
+                    TicketTypeId = 1,
+                    MainEventId = 1,
+                    ApplicationUserId = _createdUser1.Entity.Id,
+                    SeatId = 1
+                }
+            );
+            _dbContext.SaveChanges();
+
+            _dbContext.Roles.Add(
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "User"
+                }
+            );
             _dbContext.SaveChanges();
         }
     }
