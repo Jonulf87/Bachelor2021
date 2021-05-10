@@ -50,7 +50,7 @@ export default function UserLogin({ fromTicket }) {
 
     return (
         <>
-            <PopupWindow open={open} onClose={() => setOpen(false)} text={showErrors(errors)} />
+            {/*<PopupWindow open={open} onClose={() => setOpen(false)} text={showErrors(errors)} />*/}
             <Container maxWidth="xs">
                 <form onSubmit={logInSubmit}>
                     <Grid container spacing={2} alignContent="center">

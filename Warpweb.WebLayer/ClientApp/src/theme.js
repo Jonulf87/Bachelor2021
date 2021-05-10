@@ -30,6 +30,9 @@ const theme = createMuiTheme({
         background: {
             paper: '#F3F5F5',
         },
+        text: {
+            secondary: 'rgba(0,0,0,0.60)'
+        }
     },
     overrides: {
         MuiButton: {

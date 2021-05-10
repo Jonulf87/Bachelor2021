@@ -127,5 +127,13 @@ namespace Warpweb.WebLayer.Controllers
         {
             return await _userService.CheckUserNameAsync(userName);
         }
+
+        [HttpGet]
+        [Route("checkemail/{eMail}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<EMailCheckVm>> CheckEMailAsync(string eMail)
+        {
+            return await _userService.CheckEMailAsync(eMail);
+        }
     }
 }

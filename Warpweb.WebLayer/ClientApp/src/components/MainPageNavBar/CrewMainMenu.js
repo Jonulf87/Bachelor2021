@@ -17,8 +17,9 @@ export default function CrewMainMenu({ crews }) {
     
     return (
         <List
+            component='nav'    
             subheader={
-                <ListSubheader color="primary">
+                <ListSubheader color="inherit" component='h1'>
                     Mine arbeidslag
                 </ListSubheader>
             }

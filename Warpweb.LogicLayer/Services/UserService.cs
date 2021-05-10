@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Interfaces;
@@ -112,6 +113,8 @@ namespace Warpweb.LogicLayer.Services
                 }).SingleOrDefaultAsync();
         }
 
+
+
         /// <summary>
         /// Returns user with Id == userId
         /// </summary>
@@ -160,6 +163,18 @@ namespace Warpweb.LogicLayer.Services
             return new UserNameCheckVm
             {
                 IsUnavailable = userNameUnavailable
+            };
+        }
+
+        public async Task<ActionResult<EMailCheckVm>> CheckEMailAsync(string eMail)
+        {
+            var eMailUnavailable = await _dbContext.ApplicationUsers
+                .Where(a => a.Email == eMail)
+                .AnyAsync();
+
+            return new EMailCheckVm
+            {
+                IsUnavailable = eMailUnavailable
             };
         }
 

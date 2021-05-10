@@ -1,34 +1,72 @@
 ﻿import React, { useState, useEffect } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@material-ui/core';
 
 
-export default function PopupWindow({ open, handleClose, title, text, }) {
+export default function PopupWindow({ open, handleClose, error, clearError, errors, clearErrors }) {
+
+    const [internalErrorsArray, setInternalErrorsArray] = useState([]);
+
+    const endDialog = () => {
+        if (error !== null) {
+            clearError("");
+            setInternalErrorsArray([]);
+        }
+        else if (errors !== null) {
+            clearErrors([]);
+            setInternalErrorsArray([]);
+        }
+
+        handleClose(false);
+    }
+
+    useEffect(() => {
+
+        if (errors !== null) {
+            const keys = Object.keys(errors);
+            const tempErrorsArray = [];
+
+            keys.map(key => errors[key].map(error => tempErrorsArray.push(error)))
+            setInternalErrorsArray(tempErrorsArray);
+
+            console.log(tempErrorsArray);
+        }
+    }, [errors])
 
     return (
         <div>
             <Dialog
                 open={open}
-                onClose={handleClose}
-                aria-describedby="alert-dialog-description"
+                onClose={endDialog}
+                aria-describedby="error-dialog"
             >
-                {title && <DialogTitle id="alert-dialog-title">{title}</DialogTitle>}
-                <DialogContent>
-                    <DialogContentText
-                        component="div"
-                        id="alert-dialog-description"
-                        style={{ color: 'black', font: 'bold', fontSize: 'large', textAlign: 'center' }}
-                    >
-                        {text}
-                    </DialogContentText>
-                </DialogContent>
+                <DialogTitle id="error-dialog">Det skjedde en feil!</DialogTitle>
+                {error && (
+                    <DialogContent>
+                        <DialogContentText
+                            component="div"
+                            id="alert-dialog-description"
+                            style={{ color: 'black', font: 'bold', fontSize: 'large', textAlign: 'center' }}
+                        >
+                            {error}
+                        </DialogContentText>
+                    </DialogContent>
+                )}
+                {internalErrorsArray.length > 0 && (
+                    <DialogContent>
+                        <DialogContentText
+                            component="div"
+                            id="alert-dialog-description"
+                            style={{ color: 'black', font: 'bold', fontSize: 'large' }}
+                        >
+                            {internalErrorsArray.map((error, i) => (
+                                <Typography key={i}>{error}</Typography>
+                            ))}
+                        </DialogContentText>
+                    </DialogContent>
+                )}
                 <DialogActions>
                     <Button
-                        onClick={handleClose}
+                        onClick={endDialog}
                         variant="contained"
                         color="primary"
                         size="large">
