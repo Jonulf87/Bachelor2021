@@ -176,7 +176,12 @@ export default function UserRegister() {
             then: yup.string().email('Fyll inn gyldig e-post').required('Fyll e-post til foresatt'),
             otherwise: yup.string()
         }),
-        allergyDescription: yup.string().required('Fyll inn allergien din for din og vår sikkerhets skyld')
+        isAllergic: yup.bool(),
+        allergyDescription: yup.string().when('isAllergic', {
+            is: true,
+            then: yup.string().required('Fyll inn allergien din for din og vår sikkerhets skyld'),
+            otherwise: yup.string()
+        })
 
     });
 

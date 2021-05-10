@@ -21,13 +21,15 @@ export default function PopupWindow({ open, handleClose, error, clearError, erro
 
     useEffect(() => {
 
-        const keys = Object.keys(errors);
-        const tempErrorsArray = [];
+        if (errors !== null) {
+            const keys = Object.keys(errors);
+            const tempErrorsArray = [];
 
-        keys.map(key => errors[key].map(error => tempErrorsArray.push(error)))
-        setInternalErrorsArray(tempErrorsArray);
+            keys.map(key => errors[key].map(error => tempErrorsArray.push(error)))
+            setInternalErrorsArray(tempErrorsArray);
 
-        console.log(tempErrorsArray);
+            console.log(tempErrorsArray);
+        }
     }, [errors])
 
     return (
