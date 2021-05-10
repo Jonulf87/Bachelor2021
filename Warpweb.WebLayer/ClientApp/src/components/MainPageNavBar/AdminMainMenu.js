@@ -25,10 +25,11 @@ export default function AdminMainMenu({ policies, roles}) {
 
     return (
         <List
+            component='nav'    
             subheader={
-                <ListSubheader color="primary">
+                <ListSubheader color="inherit" component='h1'>
                     Administrasjon
-            </ListSubheader>
+                </ListSubheader>
             }
         >
 

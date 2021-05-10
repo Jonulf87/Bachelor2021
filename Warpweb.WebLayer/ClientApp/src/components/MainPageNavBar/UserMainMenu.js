@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { List, ListItem, ListItemText, ListItemIcon, ListSubheader } from '@material-ui/core';
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
 import EventSeatIcon from '@material-ui/icons/EventSeat';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
@@ -24,9 +24,9 @@ export default function UserMainMenu() {
 
     return (
         <List
-            
+            component='nav'
             subheader={
-                <ListSubheader color="primary" style={{}}>
+                <ListSubheader color='inherit' component='h1'>
                     Meny
                 </ListSubheader>
             }
