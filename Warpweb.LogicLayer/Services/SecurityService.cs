@@ -135,11 +135,18 @@ namespace Warpweb.LogicLayer.Services
 
         public async Task RegisterUserAsync(UserVm user)
         {
-            var userExists = await _userManager.FindByEmailAsync(user.EMail);
+            var userEmailExists = await _userManager.FindByEmailAsync(user.EMail);
 
-            if (userExists != null)
+            if (userEmailExists != null)
             {
-                throw new HttpException(HttpStatusCode.Conflict, $"Bruker med e-post: {user.EMail} eksisterer allerede");
+                throw new HttpException(HttpStatusCode.Conflict, $"Bruker med e-post {user.EMail} eksisterer allerede");
+            }
+
+            var userNameExists = await _userManager.FindByNameAsync(user.UserName);
+
+            if (userNameExists != null)
+            {
+                throw new HttpException(HttpStatusCode.Conflict, $"Bruker med brukernavn {user.UserName} eksisterer allerede");
             }
 
             var userDataToBeStored = new ApplicationUser

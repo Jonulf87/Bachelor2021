@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { Select, FormControl, InputLabel, TextField, Button, Grid, Checkbox, FormControlLabel, MenuItem, Typography, Paper, Container, Collapse } from '@material-ui/core';
@@ -13,30 +13,105 @@ import PopupWindow from '../PopupWindow/PopupWindow';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& .MuiTextField-root': {
+            width: "100%",
+
+        },
+        '& .MuiFormControl-root': {
+            width: "100%",
+        },
+        '& .MuiFormControlLabel-root': {
+
+            width: "100%"
+        },
+    },
+    paper: {
+        padding: "10px"
+    }
+}));
+
 export default function UserRegister() {
 
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [isRegistered, setIsRegistered] = useState(false);
+    const [showParents, setShowParents] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+    const { ticket } = useParams();
+    const classes = useStyles();
+
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
+
+    const cacheTestEMail = (asyncValidate) => {
+        let _valid = false;
+        let _value = "";
+
+        return async (value) => {
+            if (value !== _value) {
+                const response = await asyncValidate(value);
+                _value = value;
+                _valid = response;
+                return response;
+            }
+            return _valid;
+        };
+    };
+
+    const cacheTestUserName = (asyncValidate) => {
+        let _valid = false;
+        let _value = "";
+
+        return async (value) => {
+            if (value !== _value) {
+                const response = await asyncValidate(value);
+                _value = value;
+                _valid = response;
+                return response;
+            }
+            return _valid;
+        };
+    };
+
+    const checkEmailAsync = async (value) => {
+        const responseCheck = await fetch(`/api/users/checkemail/${value}`, {
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+        const result = await responseCheck.json();
+        return !result.isUnavailable;
+    }
+
+    const checkUserNameAsync = async (value) => {
+        const responseCheck = await fetch(`/api/users/checkusername/${value}`, {
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+        const result = await responseCheck.json();
+        return !result.isUnavailable;
+    }
+
+    const emailUnique = useRef(cacheTestEMail(checkEmailAsync));
+    const userNameUnique = useRef(cacheTestUserName(checkUserNameAsync));
 
     const registerSchema = yup.object().shape({
         firstName: yup.string().min(2, 'For kort').max(50, 'For langt').required('Du må fylle inn navn'),
         middleName: yup.string(),
         lastName: yup.string().min(2, 'For kort').max(50, 'For langt').required('Du må fylle inn navn'),
-        phoneNumber: yup.string().matches(/^((\+|00)47[-]?)?\d{8}$/, 'Fyll inn gyldig norsk telefonnummer'),
-        address: yup.string(),
-        zipCode: yup.string().matches(/^\d{4}$/, 'Fyll inn gyldig postnummer'),
-        eMail: yup.string().email('Fyll inn gyldig e-post'),
-        userName: yup.string().required('Fyll inn et brukernavn').test('checkUserName', 'Brukernavn er allerede i bruk',
-            async (value) => {
-                const responseCheck = await fetch(`/api/users/checkusername/${value}`, {
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                })
-                const result = await responseCheck.json();
-                return !result.isUnavailable;
-            }),
-        password: yup.string().min(12, 'Minimum 12 karakterer i passordet').required(),
-        passwordCheck: yup.string().oneOf([yup.ref('password')], 'Passordene er ikke like').required(),
-        dateOfBirth: yup.date().nullable().required(),
+        phoneNumber: yup.string().matches(/^((\+|00)47[-]?)?\d{8}$/, 'Fyll inn gyldig norsk telefonnummer').required('Fyll inn telefonnummer'),
+        address: yup.string().required('Fyll inn adresse'),
+        zipCode: yup.string().matches(/^\d{4}$/, 'Fyll inn gyldig postnummer').required('Fyll inn postnummer'),
+        eMail: yup.string().email('Fyll inn gyldig e-post').required('Fyll inn e-post').test('checkEMail', 'E-post er allerede i bruk', emailUnique.current),
+        userName: yup.string().required('Fyll inn et brukernavn').test('checkUserName', 'Brukernavn er allerede i bruk', userNameUnique.current),
+        password: yup.string().min(12, 'Minimum 12 karakterer i passordet').required('Oppgi et passord'),
+        passwordCheck: yup.string().oneOf([yup.ref('password')], 'Passordene er ikke like').required('Gjenta passord'),
+        dateOfBirth: yup.date().nullable().required('Fyll inn fødselsdato'),
         parentFirstName: yup.string().when('dateOfBirth', {
             is: () => {
                 const diff = intervalToDuration({
@@ -50,23 +125,60 @@ export default function UserRegister() {
                     return false;
                 }
             },
-            then: yup.string().required(),
+            then: yup.string().required('Fyll inn navn på foresatt'),
             otherwise: yup.string()
-        })
+        }),
+        parentLastName: yup.string().when('dateOfBirth', {
+            is: () => {
+                const diff = intervalToDuration({
+                    start: new Date(formik.values.dateOfBirth),
+                    end: new Date()
+                });
+                if (diff.years < 16) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            },
+            then: yup.string().required('Fyll inn navn på foresatt'),
+            otherwise: yup.string()
+        }),
+        parentPhoneNumber: yup.string().when('dateOfBirth', {
+            is: () => {
+                const diff = intervalToDuration({
+                    start: new Date(formik.values.dateOfBirth),
+                    end: new Date()
+                });
+                if (diff.years < 16) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            },
+            then: yup.string().matches(/^((\+|00)47[-]?)?\d{8}$/, 'Fyll inn gyldig norsk telefonnummer').required('Fyll inn telefonnummer til foresatt'),
+            otherwise: yup.string()
+        }),
+        parentEMail: yup.string().when('dateOfBirth', {
+            is: () => {
+                const diff = intervalToDuration({
+                    start: new Date(formik.values.dateOfBirth),
+                    end: new Date()
+                });
+                if (diff.years < 16) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            },
+            then: yup.string().email('Fyll inn gyldig e-post').required('Fyll e-post til foresatt'),
+            otherwise: yup.string()
+        }),
+        allergyDescription: yup.string().required('Fyll inn allergien din for din og vår sikkerhets skyld')
 
     });
-
-    //const diff = intervalToDuration({
-    //            start: new Date(dateOfBirth),
-    //            end: new Date()
-    //        })
-
-    //        if (diff.years < 16) {
-    //            setShowParents(true);
-    //        }
-    //        else {
-    //            setShowParents(false);
-    //        }
 
 
     const formik = useFormik({
@@ -80,7 +192,7 @@ export default function UserRegister() {
             eMail: "",
             userName: "",
             dateOfBirth: null,
-            gender: "",
+            gender: "Vil ikke oppgi",
             isAllergic: false,
             allergyDescription: "",
             comments: "",
@@ -92,53 +204,32 @@ export default function UserRegister() {
             parentPhoneNumber: "",
             parentEMail: ""
         },
-        onSubmit: async (values) => {
+        onSubmit: async (values, e) => {
+            console.log(values);
             const response = await fetch('/api/users/register', {
                 headers: {
                     'content-type': 'application/json'
                 },
                 method: 'POST',
-                body: JSON.stringify({
-                    ...values, 
-                })
+                body: JSON.stringify(values)
             });
             if (response.ok) {
                 setIsRegistered(true);
             }
+            else if (response.status === 400) {
+                const errorResult = await response.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
             else {
-                const result = await response.json();
-                const errorMessages = Object.keys(result.errors).reduce((accumulator, currentValue) => {
-                    return accumulator + " " + currentValue + ": " + result.errors[currentValue];
-                }, "");
-                setError(errorMessages);
-                setOpen(true);
+                const errorResult = await response.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
             }
         },
-        validationSchema: registerSchema 
+        validationSchema: registerSchema
     })
 
-    // Styling
-    const useStyles = makeStyles((theme) => ({
-        root: {
-            '& .MuiTextField-root': {
-                width: "100%",
-
-            },
-            '& .MuiFormControl-root': {
-                width: "100%",
-            },
-            '& .MuiFormControlLabel-root': {
-
-                width: "100%"
-            },
-        },
-        paper: {
-            padding: "10px"
-        }
-    }));
-
-
-    //Kjønn: gutt, jente, annet, ønsker ikke å oppgi
     const genders = [
         {
             value: 'Gutt',
@@ -157,34 +248,21 @@ export default function UserRegister() {
         },
     ]
 
-    const [error, setError] = useState();
-    const [isRegistered, setIsRegistered] = useState(false);
-    const [showParents, setShowParents] = useState(false);
-    const [open, setOpen] = useState(false);
-
-    const { ticket } = useParams();
-
-    const classes = useStyles();
-
-
-    //useEffect(() => {
-    //    const checkDateOfBirth = () => {
-
-    //        const diff = intervalToDuration({
-    //            start: new Date(dateOfBirth),
-    //            end: new Date()
-    //        })
-
-    //        if (diff.years < 16) {
-    //            setShowParents(true);
-    //        }
-    //        else {
-    //            setShowParents(false);
-    //        }
-    //    }
-    //    checkDateOfBirth();
-    //}, [formik.values.dateOfBirth]);
-
+    useEffect(() => {
+        const showParents = () => {
+            const diff = intervalToDuration({
+                start: new Date(formik.values.dateOfBirth),
+                end: new Date()
+            });
+            if (diff.years < 16) {
+                setShowParents(true);
+            }
+            else {
+                setShowParents(false);
+            }
+        }
+        showParents();
+    }, [formik.values.dateOfBirth])
 
     if (isRegistered) {
         if (ticket == 1) {
@@ -195,13 +273,17 @@ export default function UserRegister() {
         }
     }
 
-    return (
+    return (<>
+        <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
         <Container maxWidth="sm" >
             <Paper
                 elevation={3}
                 className={classes.paper}
             >
-                <form>
+                <form
+                    onSubmit={formik.handleSubmit}
+                    noValidate
+                >
                     <Grid
                         container
                         spacing={2}
@@ -215,6 +297,7 @@ export default function UserRegister() {
                             item
                         >
                             <TextField
+                                required
                                 id="firstName"
                                 name="firstName"
                                 label="Fornavn"
@@ -247,6 +330,7 @@ export default function UserRegister() {
                             item
                         >
                             <TextField
+                                required
                                 id="lastName"
                                 name="lastName"
                                 label="Etternavn"
@@ -259,10 +343,10 @@ export default function UserRegister() {
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={4}
                             item
                         >
                             <TextField
+                                required
                                 id="eMail"
                                 name="eMail"
                                 label="E-post"
@@ -275,10 +359,10 @@ export default function UserRegister() {
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={4}
                             item
                         >
                             <TextField
+                                required
                                 id="userName"
                                 name="userName"
                                 label="Brukernavn"
@@ -291,10 +375,10 @@ export default function UserRegister() {
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={4}
                             item
                         >
                             <TextField
+                                required
                                 id="password"
                                 name="password"
                                 label="Passord"
@@ -307,10 +391,10 @@ export default function UserRegister() {
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={4}
                             item
                         >
                             <TextField
+                                required
                                 id="passwordCheck"
                                 name="passwordCheck"
                                 label="Gjenta passord"
@@ -323,30 +407,35 @@ export default function UserRegister() {
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={4}
                             item
                         >
                             <TextField
+                                required
                                 id="phoneNumber"
                                 name="phoneNumber"
                                 label="Telefon"
                                 value={formik.values.phoneNumber}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
+                                error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                                helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                             />
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={4}
+                            lg={8}
                             item
                         >
                             <TextField
+                                required
                                 id="address"
                                 name="address"
                                 label="Adresse"
                                 value={formik.values.address}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
+                                error={formik.touched.address && Boolean(formik.errors.address)}
+                                helperText={formik.touched.address && formik.errors.address}
                             />
                         </Grid>
                         <Grid
@@ -355,17 +444,19 @@ export default function UserRegister() {
                             item
                         >
                             <TextField
+                                required
                                 id="zipCode"
                                 name="zipCode"
                                 label="Postnr"
                                 value={formik.values.zipCode}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
+                                error={formik.touched.zipCode && Boolean(formik.errors.zipCode)}
+                                helperText={formik.touched.zipCode && formik.errors.zipCode}
                             />
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={4}
                             item
                         >
                             <FormControl>
@@ -389,7 +480,6 @@ export default function UserRegister() {
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={4}
                             item
                         >
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -409,67 +499,74 @@ export default function UserRegister() {
                                 />
                             </MuiPickersUtilsProvider>
                         </Grid>
+                        {showParents && (<>
+                            <Grid
+                                xs={12}
+                                item
+                            >
+                                <TextField
+                                    required
+                                    id="parentFirstName"
+                                    name="parentFirstName"
+                                    label="Foresatte fornavn"
+                                    value={formik.values.parentFirstName}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.parentFirstName && Boolean(formik.errors.parentFirstName)}
+                                    helperText={formik.touched.parentFirstName && formik.errors.parentFirstName}
+                                />
+                            </Grid>
+                            <Grid
+                                xs={12}
+                                item
+                            >
+                                <TextField
+                                    required
+                                    id="parentLastName"
+                                    name="parentLastName"
+                                    label="Foresatte etternavn"
+                                    value={formik.values.parentLastName}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.parentLastName && Boolean(formik.errors.parentLastName)}
+                                    helperText={formik.touched.parentLastName && formik.errors.parentLastName}
+                                />
+                            </Grid>
+                            <Grid
+                                xs={12}
+                                item
+                            >
+                                <TextField
+                                    required
+                                    id="parentPhoneNumber"
+                                    name="parentPhoneNumber"
+                                    label="Foresatte telefon"
+                                    value={formik.values.parentPhoneNumber}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.parentPhoneNumber && Boolean(formik.errors.parentPhoneNumber)}
+                                    helperText={formik.touched.parentPhoneNumber && formik.errors.parentPhoneNumber}
+                                />
+                            </Grid>
+                            <Grid
+                                xs={12}
+                                item
+                            >
+                                <TextField
+                                    required
+                                    id="parentEMail"
+                                    name="parentEMail"
+                                    label="Foresatte E-post"
+                                    value={formik.values.parentEMail}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.parentEMail && Boolean(formik.errors.parentEMail)}
+                                    helperText={formik.touched.parentEMail && formik.errors.parentEMail}
+                                />
+                            </Grid>
+                        </>)}
                         <Grid
                             xs={12}
-                            lg={4}
-                            item
-                        >
-                            <TextField
-                                id="parentFirstName"
-                                name="parentFirstName"
-                                label="Foresatte fornavn"
-                                value={formik.values.parentFirstName}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                error={formik.touched.parentFirstName && Boolean(formik.errors.parentFirstName)}
-                                helperText={formik.touched.parentFirstName && formik.errors.parentFirstName}
-                            />
-                        </Grid>
-                        <Grid
-                            xs={12}
-                            lg={4}
-                            item
-                        >
-                            <TextField
-                                id="parentLastName"
-                                name="parentLastName"
-                                label="Foresatte etternavn"
-                                value={formik.values.parentLastName}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                            />
-                        </Grid>
-                        <Grid
-                            xs={12}
-                            lg={4}
-                            item
-                        >
-                            <TextField
-                                id="parentPhoneNumber"
-                                name="parentPhoneNumber"
-                                label="Foresatte telefon"
-                                value={formik.values.parentPhoneNumber}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                            />
-                        </Grid>
-                        <Grid
-                            xs={12}
-                            lg={4}
-                            item
-                        >
-                            <TextField
-                                id="parentEMail"
-                                name="parentEMail"
-                                label="Foresatte E-post"
-                                value={formik.values.parentEMail}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                            />
-                        </Grid>
-                        <Grid
-                            xs={12}
-                            lg={4}
                             item
                         >
                             <FormControlLabel
@@ -482,23 +579,26 @@ export default function UserRegister() {
                                 label="Jeg er allergisk"
                             />
                         </Grid>
+                        {formik.values.isAllergic && (
+                            <Grid
+                                xs={12}
+                                item
+                            >
+                                <TextField
+                                    required
+                                    id="allergyDescription"
+                                    name="allergyDescription"
+                                    label="Beskrivelse allergi"
+                                    value={formik.values.allergyDescription}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.allergyDescription && Boolean(formik.errors.allergyDescription)}
+                                    helperText={formik.touched.allergyDescription && formik.errors.allergyDescription}
+                                />
+                            </Grid>
+                        )}
                         <Grid
                             xs={12}
-                            lg={4}
-                            item
-                        >
-                            <TextField
-                                id="allergyDescription"
-                                name="allergyDescription"
-                                label="Beskrivelse allergi"
-                                value={formik.values.allergyDescription}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                            />
-                        </Grid>
-                        <Grid
-                            xs={12}
-                            lg={4}
                             item
                         >
                             <TextField
@@ -510,9 +610,22 @@ export default function UserRegister() {
                                 onBlur={formik.handleBlur}
                             />
                         </Grid>
+                        <Grid
+                            xs={12}
+                            item
+                        >
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                size="large"
+                                type="submit"
+                            >
+                                Registrer meg!
+                            </Button>
+                        </Grid>
                     </Grid>
                 </form>
             </Paper>
         </Container>
-    );
+    </>);
 }
