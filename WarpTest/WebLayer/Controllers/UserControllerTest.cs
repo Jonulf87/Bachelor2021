@@ -231,7 +231,7 @@ namespace WarpTest.WebLayer.Controllers
             {
                 await userController.RegisterUserAsync(newUser);
             });
-            Assert.AreEqual("Bruker med e-post: Line@test.no eksisterer allerede", ex.Message);
+            Assert.AreEqual("Bruker med e-post Line@test.no eksisterer allerede", ex.Message);
 
         }
 

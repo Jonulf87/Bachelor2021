@@ -67,6 +67,7 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_eventName2, returnedMainEvent2.Name);
         }
 
+        /*
         [Test]
         public async Task ShouldCreateMainEvent()
         {
@@ -107,7 +108,7 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(1, mainEvent1.OrganizerId);
 
         }
-
+        */
         //[Test]
         //public async Task ShouldUpdateMainEvent()
         //{
