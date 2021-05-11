@@ -223,7 +223,7 @@ namespace Warpweb.LogicLayer.Services
         /// <param name="userId"></param>
         public async Task RemoveOrgAdminAsync(int orgId, string userId)
         {
-            var user = _dbContext.ApplicationUsers.Find(userId);
+            var user =  await _dbContext.ApplicationUsers.FindAsync(userId);
 
             if(user == null)
             {

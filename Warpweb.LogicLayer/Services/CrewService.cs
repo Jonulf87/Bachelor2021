@@ -189,6 +189,28 @@ namespace Warpweb.LogicLayer.Services
             return crewUsers;
         }
 
+        public async Task RemoveCrewMemberAsync(RemoveCrewMemberVm crewMember)
+        {
+            var user = await _dbContext.ApplicationUsers.FindAsync(crewMember.UserId);
+
+            if (user == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke brukeren med id: {crewMember.UserId}");
+            }
+
+            var crewMemberExisting = await _dbContext.CrewUsers
+                .Where(a => a.CrewId == crewMember.CrewId && a.ApplicationUserId == crewMember.UserId)
+                .FirstOrDefaultAsync();
+
+            if (crewMemberExisting == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Brukeren er ikke i arbeidslaget, og kan derfor ikke fjernes");
+            }
+
+            _dbContext.CrewUsers.Remove(crewMemberExisting);
+            await _dbContext.SaveChangesAsync();
+        }
+
 
         /// <summary>
         /// Add crewleader to crew with specific ID
