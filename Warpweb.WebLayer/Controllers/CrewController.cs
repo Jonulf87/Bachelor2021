@@ -156,5 +156,25 @@ namespace Warpweb.WebLayer.Controllers
             var crews = await _crewService.GetCrewsUserIsMemberOfAsync(userId);
             return Ok(crews);
         }
+
+        /// <summary>
+        /// Removes crewmember from crew
+        /// </summary>
+        [HttpPost]
+        [Route("removecrewmember")]
+        public async Task<ActionResult> RemoveCrewMemberAsync(RemoveCrewMemberVm crewMember)
+        {
+            await _crewService.RemoveCrewMemberAsync(crewMember);
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("checkusercrewmemberatevent/{eventId}")]
+        public async Task<ActionResult<bool>> CheckUserIsCrewMemberAtEventAsync(int eventId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var orgs = await _crewService.CheckUserIsCrewMemberAtEventAsync(userId, eventId);
+            return Ok(orgs);
+        }
     }
 }

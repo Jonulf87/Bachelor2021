@@ -60,9 +60,8 @@ namespace Warpweb.LogicLayer.Services
         /// <returns>ParticipantListVm</returns>
         public async Task<List<ParticipantListVm>> GetParticipantsAsync()
         {
- 
             return await _dbContext.ApplicationUsers
-                .Where(a => a.CurrentMainEventId == _mainEventProvider.MainEventId)
+                .Where(a => a.Tickets.Any(a => a.MainEventId == _mainEventProvider.MainEventId))
                 .OrderBy(a => a.FirstName)
                 .ThenBy(a => a.LastName)
                 .Select(a => new ParticipantListVm
@@ -166,6 +165,11 @@ namespace Warpweb.LogicLayer.Services
             };
         }
 
+        /// <summary>
+        /// Checks that email is available
+        /// </summary>
+        /// <param name="eMail"></param>
+        /// <returns>EMailCheckVm</returns>
         public async Task<ActionResult<EMailCheckVm>> CheckEMailAsync(string eMail)
         {
             var eMailUnavailable = await _dbContext.ApplicationUsers

@@ -3,6 +3,7 @@ import { TableCell, TableRow, Typography, Button } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
 import { format, parseISO } from 'date-fns';
 import EditEvent from './EditEvent';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 
 
 export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigger }) {
@@ -14,6 +15,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
     const [triggerUpdate, setTriggerUpdate] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
+    const { setSelectedEvent } = useCurrentEvent();
 
     const handleDialogEditEventClose = () => {
         setDialogEditEventOpen(false);
@@ -54,12 +56,22 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 <TableCell colSpan={1}>
                 </TableCell>
                 <TableCell colSpan={1}>
-                    <Typography variant="subtitle1" >
+                    <Typography
+                        variant="subtitle1"
+                        style={{
+                            maxWidth: "fit-content"
+                        }}
+                    >
                         Navn
                     </Typography>
                 </TableCell>
                 <TableCell colSpan={2}>
-                    <Typography variant="subtitle1" >
+                    <Typography
+                        variant="subtitle1"
+                        style={{
+                            maxWidth: "fit-content"
+                        }}
+                    >
                         {event.name}
                     </Typography>
                 </TableCell>
@@ -69,7 +81,12 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 <TableCell colSpan={1}>
                 </TableCell>
                 <TableCell colSpan={1}>
-                    <Typography variant="subtitle1" >
+                    <Typography
+                        variant="subtitle1"
+                        style={{
+                            maxWidth: "fit-content"
+                        }}
+                    >
                         Start
                     </Typography>
                 </TableCell>
@@ -84,7 +101,12 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 <TableCell colSpan={1}>
                 </TableCell>
                 <TableCell colSpan={1}>
-                    <Typography variant="subtitle1" >
+                    <Typography
+                        variant="subtitle1"
+                        style={{
+                            maxWidth: "fit-content"
+                        }}
+                    >
                         Slutt
                     </Typography>
                 </TableCell>
@@ -97,8 +119,18 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
             <TableRow>
                 <TableCell colSpan={1}>
                 </TableCell>
-                <TableCell colSpan={1}>
-                    <Typography variant="subtitle1" >
+                <TableCell
+                    colSpan={1}
+                    style={{
+                        maxWidth: "fit-content"
+                    }}
+                >
+                    <Typography
+                        variant="subtitle1"
+                        style={{
+                            maxWidth: "fit-content"
+                        }}
+                    >
                         Lokale
                     </Typography>
                 </TableCell>
@@ -111,7 +143,31 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
             <TableRow>
                 <TableCell colSpan={1}>
                 </TableCell>
-                <TableCell colSpan={3}>
+                <TableCell
+                    colSpan={1}
+                    style={{
+                        maxWidth: "fit-content"
+                    }}
+                >
+                    <Typography
+                        variant="subtitle1"
+                        style={{
+                            maxWidth: "fit-content"
+                        }}
+                    >
+                        Arrangør
+                    </Typography>
+                </TableCell>
+                <TableCell colSpan={2}>
+                    <Typography variant="subtitle1" >
+                        {event.organizerName}
+                    </Typography>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell colSpan={1}>
+                </TableCell>
+                <TableCell colSpan={1}>
                     <Button
                         variant="contained"
                         color="primary"
@@ -120,6 +176,21 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                     >
                         Endre arrangement
                     </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        onClick={() => setSelectedEvent(openEventId)}
+                        style={{
+                            marginLeft: "10px"
+                        }}
+                    >
+                        Sett som aktiv
+                    </Button>
+                </TableCell>
+                <TableCell colSpan={1}>
+                </TableCell>
+                <TableCell colSpan={1}>
                 </TableCell>
             </TableRow>
             <EditEvent

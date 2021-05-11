@@ -38,7 +38,7 @@ export default function LoginMenuMobile({ menuItems }) {
 
       return (
         <>
-            <IconButton className={classes.buttonRight} aria-haspopup="true" aria-controls="bruker-meny" onClick={handleClick}>
+            <IconButton className={classes.buttonRight} aria-haspopup="true" aria-label="åpne-bruker-meny" aria-controls="bruker-meny" onClick={handleClick}>
                 <AccountCircle />
             </IconButton>
             <Menu

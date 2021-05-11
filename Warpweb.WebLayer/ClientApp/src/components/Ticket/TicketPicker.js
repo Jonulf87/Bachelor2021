@@ -31,14 +31,12 @@ export default function TicketPicker() {
                         <TableRow>
                             <TableCell>
                                 Navn
-                        </TableCell>
+                            </TableCell>
                             <TableCell>
                                 Pris
-                        </TableCell>
-                            <TableCell>
+                            </TableCell>
+                            <TableCell colSpan="2">
                                 Tilgjengelig
-                        </TableCell>
-                            <TableCell>
                             </TableCell>
                         </TableRow>
                     </TableHead>

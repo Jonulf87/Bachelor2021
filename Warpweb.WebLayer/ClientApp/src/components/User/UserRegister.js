@@ -34,15 +34,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserRegister() {
 
+    //Statevariabler for error popup vindu
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
     const [isRegistered, setIsRegistered] = useState(false);
     const [showParents, setShowParents] = useState(false);
-    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const { ticket } = useParams();
     const classes = useStyles();
 
+    //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
     }
@@ -218,6 +221,7 @@ export default function UserRegister() {
                 method: 'POST',
                 body: JSON.stringify(values)
             });
+            //If setninger for error popupvindu
             if (response.ok) {
                 setIsRegistered(true);
             }
@@ -277,8 +281,9 @@ export default function UserRegister() {
             return <Redirect to={'/login'} />
         }
     }
-
+    //I topp ligger error popupvinduet.
     return (<>
+        
         <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
         <Container maxWidth="sm" >
             <Paper

@@ -27,6 +27,7 @@ namespace Warpweb.LogicLayer.Services
         /// <summary>
         /// Returns all crews
         /// </summary>
+        /// <returns>List of CrewListVm</returns>
         public async Task<List<CrewListVm>> GetCrewsAsync()
         {
             var crewsList = await _dbContext.Crews
@@ -44,6 +45,7 @@ namespace Warpweb.LogicLayer.Services
         /// Return specific crew
         /// </summary>
         /// <param name="crewId"></param> 
+        /// <returns>CrewVm</returns>
         public async Task<CrewVm> GetCrewAsync(int id)
         {
 
@@ -66,9 +68,14 @@ namespace Warpweb.LogicLayer.Services
         /// <summary>
         /// Create crew
         /// </summary>
-        /// <param name="crewName"></param> 
+        /// <param name="crewName"></param>
         public async Task CreateCrewAsync(string crewName)
         {
+            if (crewName == null)
+            {
+                throw new HttpException(HttpStatusCode.InternalServerError, "Du kan ikke sende en tom streng som navn til arbeidslaget");
+            }
+
             var existingCrew = _dbContext.Crews
              .Where(a => a.Name == crewName)
              .SingleOrDefault();
@@ -150,6 +157,7 @@ namespace Warpweb.LogicLayer.Services
         /// Returns crewmembers in crew with specific ID
         /// </summary>
         /// <param name="crewId"></param> 
+        /// <returns>CrewMemberListVm</returns>
         public async Task<List<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
         {
             var crew = await _dbContext.Crews
@@ -182,6 +190,45 @@ namespace Warpweb.LogicLayer.Services
             }
 
             return crewUsers;
+        }
+
+        public async Task<bool> CheckUserIsCrewMemberAtEventAsync(string userId, int eventId)
+        {
+            var user = await _dbContext.ApplicationUsers.Where(a => a.Id == userId).SingleOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new HttpException(HttpStatusCode.InternalServerError, "Brukeren eksisterer ikke");
+            }
+
+            return await _dbContext.Crews
+                .Where(a => a.MainEventId == eventId && a.Users.Any(a => a.ApplicationUserId == userId))
+                .AnyAsync();
+        }
+
+        /// <summary>
+        /// Removes crewmember from crew
+        /// </summary>
+        public async Task RemoveCrewMemberAsync(RemoveCrewMemberVm crewMember)
+        {
+            var user = await _dbContext.ApplicationUsers.FindAsync(crewMember.UserId);
+
+            if (user == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ikke brukeren med id: {crewMember.UserId}");
+            }
+
+            var crewMemberExisting = await _dbContext.CrewUsers
+                .Where(a => a.CrewId == crewMember.CrewId && a.ApplicationUserId == crewMember.UserId)
+                .FirstOrDefaultAsync();
+
+            if (crewMemberExisting == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, "Brukeren er ikke i arbeidslaget, og kan derfor ikke fjernes");
+            }
+
+            _dbContext.CrewUsers.Remove(crewMemberExisting);
+            await _dbContext.SaveChangesAsync();
         }
 
 

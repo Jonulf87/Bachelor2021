@@ -6,7 +6,7 @@ import {
 
 import UserAdminMain from './UserAdmin/UserAdminMain';
 import CrewMain from './Crew/CrewMain';
-import CrewAdminMain from './CrewAdmin/CrewAdminMain';
+import CrewAdminList from './CrewAdmin/CrewAdminList';
 import EventAdminMain from './EventAdmin/EventAdminMain';
 import EventUserMain from './Event/EventUserMain';
 import ParticipantAdminMain from './Participant/ParticipantAdminMain';
@@ -63,11 +63,13 @@ export default function AppRouter() {
             <Route path='/register/:ticket?' component={UserRegister} />
             <Route path='/login' component={UserLogin} />
             <Route path='/logout' component={LogOut} />
-            <Route path='/event' component={EventAdminMain} />
+            <Route path='/event'>
+                {!isAuthenticated ? <NotAuthenticated /> : <EventAdminMain />}
+            </Route>
             <Route path='/user'>
                 {!isAuthenticated ? <NotAuthenticated /> : <UserMain /> }
             </Route>
-            <Route exact path='/crew/:id' component={CrewMain} >
+            <Route exact path='/crew/:id'>
                 {!isAuthenticated ? <NotAuthenticated /> : <CrewMain />}
             </Route>           
             <Route path='/venue'>
@@ -78,7 +80,7 @@ export default function AppRouter() {
             <Route path='/crewadmin'>
                 {!isAuthenticated ? <NotAuthenticated /> 
                 : !policies.some(a => a === 1) ? <Unauthorized />
-                : <CrewAdminMain />}
+                : <CrewAdminList />}
             </Route>
             <Route path='/useradmin'>
                 {!isAuthenticated ? <NotAuthenticated /> 

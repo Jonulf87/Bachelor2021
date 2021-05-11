@@ -10,6 +10,7 @@ import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
 import 'date-fns';
 import { nb } from 'date-fns/locale';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 
 
@@ -29,28 +30,98 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EventCard({ id, name, startDateTime, endDateTime, infoComments, venueName, organizerName, organizerWebPage }) {
 
- 
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
     const classes = useStyles();
     const history = useHistory();
+    const [orgsUserIsAdminAt, setOrgsUserIsAdimAt] = useState([]);
+    const [userIsInCrew, setUserIsInCrew] = useState(false);
     const { setSelectedMainEventId, userTickets, setShoppingCart } = usePurchase();
     const { setSelectedEvent, currentEvent } = useCurrentEvent();
     const { setRows } = useSeatMapAdmin();
+    const { isOrgAdmin, isAuthenticated, token } = useAuth();
+
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
+
+    useEffect(() => {
+        const getOrgsUserIsAdminAt = async () => {
+
+            if (isAuthenticated) {
+                const response = await fetch('/api/tenants/getaorgsadmin', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    setOrgsUserIsAdimAt(result);
+                }
+                else if (response.status === 400) {
+                    setOrgsUserIsAdimAt([]);
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    setOrgsUserIsAdimAt([]);
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
+            }
+        }
+        getOrgsUserIsAdminAt();
+    }, [isOrgAdmin]);
+
+    useEffect(() => {
+        const checkUserCrewStatus = async () => {
+            if (isAuthenticated) {
+                const response = await fetch(`/api/crews/checkusercrewmemberatevent/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    setUserIsInCrew(result);
+                }
+                else if (response.status === 400) {
+                    setUserIsInCrew(false);
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    setUserIsInCrew(false);
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
+            }
+        }
+        checkUserCrewStatus();
+    }, [isAuthenticated])
 
     const handleClick = () => {
-        if (userTickets.some(a => a.mainEventName === name && currentEvent !== name)) {
+        if (orgsUserIsAdminAt.some(a => a.name === organizerName) || userIsInCrew) {
             setSelectedEvent(id);
-            setRows([]);
-        }
-        else {
-            setShoppingCart([]);
-            setSelectedMainEventId(id)
-            history.push(`/userticket`);
         }
     }
 
+    const handlePurchaseClick = () => {
+        setShoppingCart([]);
+        setSelectedMainEventId(id)
+        history.push(`/userticket`);
+    }
+
     const buttonSelector = () => {
-        
-        if (userTickets.some(a => a.mainEventName === name) && currentEvent !== name) {
+        if ((orgsUserIsAdminAt.some(a => a.name === organizerName) || userIsInCrew) && currentEvent !== name) {
             return (
                 <Button
                     variant="contained"
@@ -61,15 +132,14 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
                 </Button>
             )
         }
-        else if (userTickets.some(a => a.mainEventName === name) && currentEvent === name) {
+        else if ((orgsUserIsAdminAt.some(a => a.name === organizerName) || userIsInCrew) && currentEvent === name) {
             return (
                 <Button
                     variant="contained"
-                    onClick={() => handleClick()}
                     disabled
                 >
                     Aktivt arrangement
-                 </Button>
+                </Button>
             )
         }
         else {
@@ -77,7 +147,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleClick()}
+                    onClick={() => handlePurchaseClick()}
                 >
                     Kjøp billett
                 </Button>
@@ -85,14 +155,14 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
         }
     }
 
-    return (
-
-        <Card
-        className={classes.root}
+    return (<>
+        <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+        <Card 
+            className={classes.root}
         >
             <CardHeader
-            title={name}
-            subheader={`Arrangør: ${organizerName}`}
+                title={name}
+                subheader={`Arrangør: ${organizerName}`}
             />
             <CardContent>
                 <Grid
@@ -107,7 +177,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
                         <Typography
                             variant="body1"
                         >
-                            {format(parseISO(startDateTime), 'dd.LLLL yyyy', {locale: nb })} til&nbsp;{format(parseISO(endDateTime), 'dd.LLLL yyyy', {locale: nb })}
+                            {format(parseISO(startDateTime), 'dd.LLLL yyyy', { locale: nb })} til&nbsp;{format(parseISO(endDateTime), 'dd.LLLL yyyy', { locale: nb })}
                         </Typography>
                     </Grid>
                     <Grid
@@ -116,8 +186,8 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
                         sm={6}
                     >
                         <Typography
-                                variant="body1"
-                            >
+                            variant="body1"
+                        >
                             {venueName}
                         </Typography>
                     </Grid>
@@ -139,13 +209,13 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
                         </Typography>
                     </Grid>
 
-                            
-                            
-                </Grid>        
+
+
+                </Grid>
             </CardContent>
             <CardActions>
                 {buttonSelector()}
             </CardActions>
         </Card>
-    )
+    </>)
 }

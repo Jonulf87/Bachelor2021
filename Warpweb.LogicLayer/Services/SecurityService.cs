@@ -26,6 +26,11 @@ namespace Warpweb.LogicLayer.Services
             _roleManager = roleManager;
         }
 
+        /// <summary>
+        /// Returns List of Policies for user
+        /// </summary>
+        /// <param name="userId">userId</param>
+        /// <returns>List of CrewPermissionTypes</returns>
         public async Task<List<CrewPermissionType>> GetPoliciesAsync(string userId)
         {
             return await _dbContext.CrewUsers
@@ -37,6 +42,11 @@ namespace Warpweb.LogicLayer.Services
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Returns List of Policies for crew
+        /// </summary>
+        /// <param name="crewId">crewId</param>
+        /// <returns>List of CrewPermissionVm</returns>
         public async Task<List<CrewPermissionsVm>> GetAllPoliciesAsync(int crewId)
         {
 
@@ -59,6 +69,9 @@ namespace Warpweb.LogicLayer.Services
             return listToSend;
         }
 
+        /// <summary>
+        /// Sets List of Policies for crew
+        /// </summary>
         public async Task SetPoliciesAsync(List<CrewPermissionsVm> permissions, int crewId)
         {
 
@@ -105,6 +118,11 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Returns List of Organizations where active user is Admin
+        /// </summary>
+        /// <param name="userId">userId</param>
+        /// <returns>List of OrganizerListVm</returns>
         public async Task<List<OrganizerListVm>> GetOrganizersUserIsAdminAtAsync(string userId)
         {
             return await _dbContext.Organizers
@@ -118,6 +136,11 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
+        /// <summary>
+        /// Returns List of User Roles for active user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>List of UserRoles</returns>
         public async Task<List<UserRolesListVm>> GetUserRolesAsync(string id)
         {
 
@@ -133,6 +156,9 @@ namespace Warpweb.LogicLayer.Services
             }).ToList();
         }
 
+        /// <summary>
+        /// Register a new user
+        /// </summary>
         public async Task RegisterUserAsync(UserVm user)
         {
             var userEmailExists = await _userManager.FindByEmailAsync(user.EMail);
@@ -192,6 +218,11 @@ namespace Warpweb.LogicLayer.Services
             await _userManager.AddToRoleAsync(userDataToBeStored, "User");
         }
 
+        /// <summary>
+        /// Check if user has permission types
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="crewPermissionType"></param>
         public async Task<bool> HasCrewPermissionAsync(string userId, CrewPermissionType crewPermissionType)
         {
             return await _dbContext.Crews
