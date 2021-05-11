@@ -29,8 +29,7 @@ namespace Warpweb.LogicLayer.ViewModels
         public string Address { get; set; }
 
         [Required]
-        //[RegularExpression(@"^[0-9]{4}$", ErrorMessage= "Postnummer må inneholde 4 sifre")] Temp kommentert ut for testing. Hvis du finner denne kommentaren og en annen regex aktiv under er det bare å fjerne den og gjøre denne aktiv igjen
-        [RegularExpression(@"^[2-5]{2}$", ErrorMessage = "Testpostnummeret ditt feilet helt korrekt")]
+        [RegularExpression(@"^[0-9]{4}$", ErrorMessage= "Postnummer må inneholde 4 sifre")] 
         public string ZipCode { get; set; }
 
         [Required]
@@ -60,8 +59,7 @@ namespace Warpweb.LogicLayer.ViewModels
         [RegularExpression(@"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \'-.]+$", ErrorMessage = "Ugyldig etternavn")]
         public string ParentLastName { get; set; }
 
-        //[RegularExpression(@"^((\+|00)47[-]?)?[0-9]{8}$", ErrorMessage = "Ugyldig telefonnummer")] Temp kommentert ut for testing. Hvis du finner denne kommentaren og en annen regex aktiv under er det bare å fjerne den og gjøre denne aktiv igjen
-        [RegularExpression(@"^[0-9]{8}$", ErrorMessage = "Testnummeret ditt er ugyldig")]
+        [RegularExpression(@"^((\+|00)47[-]?)?[0-9]{8}$", ErrorMessage = "Ugyldig telefonnummer")] 
         public string ParentPhoneNumber { get; set; }
 
         [EmailAddress(ErrorMessage = "Du må oppgi en gyldig e-post adresse")]
