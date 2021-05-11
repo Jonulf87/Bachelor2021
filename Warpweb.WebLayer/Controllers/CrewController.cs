@@ -157,6 +157,9 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(crews);
         }
 
+        /// <summary>
+        /// Removes crewmember from crew
+        /// </summary>
         [HttpPost]
         [Route("removecrewmember")]
         public async Task<ActionResult> RemoveCrewMemberAsync(RemoveCrewMemberVm crewMember)

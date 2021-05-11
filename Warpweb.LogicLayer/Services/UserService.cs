@@ -165,6 +165,11 @@ namespace Warpweb.LogicLayer.Services
             };
         }
 
+        /// <summary>
+        /// Checks that email is available
+        /// </summary>
+        /// <param name="eMail"></param>
+        /// <returns>EMailCheckVm</returns>
         public async Task<ActionResult<EMailCheckVm>> CheckEMailAsync(string eMail)
         {
             var eMailUnavailable = await _dbContext.ApplicationUsers

@@ -128,6 +128,10 @@ namespace Warpweb.WebLayer.Controllers
             return await _userService.CheckUserNameAsync(userName);
         }
 
+        /// <summary>
+        /// Check if email exists
+        /// </summary>
+        /// <param eMail="eMail"></param>
         [HttpGet]
         [Route("checkemail/{eMail}")]
         [AllowAnonymous]

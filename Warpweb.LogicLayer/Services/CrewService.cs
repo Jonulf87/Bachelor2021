@@ -27,6 +27,7 @@ namespace Warpweb.LogicLayer.Services
         /// <summary>
         /// Returns all crews
         /// </summary>
+        /// <returns>List of CrewListVm</returns>
         public async Task<List<CrewListVm>> GetCrewsAsync()
         {
             var crewsList = await _dbContext.Crews
@@ -44,6 +45,7 @@ namespace Warpweb.LogicLayer.Services
         /// Return specific crew
         /// </summary>
         /// <param name="crewId"></param> 
+        /// <returns>CrewVm</returns>
         public async Task<CrewVm> GetCrewAsync(int id)
         {
 
@@ -66,7 +68,7 @@ namespace Warpweb.LogicLayer.Services
         /// <summary>
         /// Create crew
         /// </summary>
-        /// <param name="crewName"></param> 
+        /// <param name="crewName"></param>
         public async Task CreateCrewAsync(string crewName)
         {
             if (crewName == null)
@@ -155,6 +157,7 @@ namespace Warpweb.LogicLayer.Services
         /// Returns crewmembers in crew with specific ID
         /// </summary>
         /// <param name="crewId"></param> 
+        /// <returns>CrewMemberListVm</returns>
         public async Task<List<CrewMembersListVm>> GetCrewMembersAsync(int crewId)
         {
             var crew = await _dbContext.Crews
@@ -189,6 +192,9 @@ namespace Warpweb.LogicLayer.Services
             return crewUsers;
         }
 
+        /// <summary>
+        /// Removes crewmember from crew
+        /// </summary>
         public async Task RemoveCrewMemberAsync(RemoveCrewMemberVm crewMember)
         {
             var user = await _dbContext.ApplicationUsers.FindAsync(crewMember.UserId);

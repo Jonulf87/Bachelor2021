@@ -140,6 +140,9 @@ namespace Warpweb.WebLayer.Controllers
             return Ok(events);
         }
 
+        /// <summary>
+        /// Returns events where current user is participant
+        /// </summary>
         [HttpGet]
         [Route("eventsparticipation")]
         public async Task<ActionResult<List<UserMainEventsVm>>> GetMainEventsOfUserParticipationAsync()

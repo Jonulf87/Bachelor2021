@@ -23,6 +23,9 @@ namespace Warpweb.LogicLayer.Services
             _mainEventProvider = mainEventProvider;
         }
 
+        /// <summary>
+        /// Creates a new Row in a list of rows
+        /// </summary>
         public async Task SetRowsAsync(List<RowVm> rowInfo)
         {
             var existingRowIds = rowInfo.Where(a => a.Id != 0).Select(a => a.Id).ToList();
@@ -112,6 +115,9 @@ namespace Warpweb.LogicLayer.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Returns List of Rows available for orgadmin
+        /// </summary>
         public async Task<IEnumerable<RowVm>> GetSeatMapAsync()
         {
             return await _dbContext.Rows
@@ -128,6 +134,9 @@ namespace Warpweb.LogicLayer.Services
                 }).ToListAsync();
         }
 
+        /// <summary>
+        /// Returns List of Rows available for public
+        /// </summary>
         public async Task<IEnumerable<PublicRowVm>> GetPublicSeatMapAsync(int mainEventId)
         {
             var rows = await _dbContext.Rows
