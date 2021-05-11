@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
@@ -14,9 +15,6 @@ namespace WarpTest.WebLayer.Controllers
 {
     class MainEventControllerTest : BaseTest
     {
-        private const string _eventName1 = "Test Event 1";
-        private readonly DateTime _startTime1 = DateTime.Now.AddDays(3);
-        private readonly DateTime _endTime1 = DateTime.Now.AddDays(5);
         private const string _eventName2 = "Test Event 2";
         private readonly DateTime _startTime2 = DateTime.Now.AddDays(7);
         private readonly DateTime _endTime2 = DateTime.Now.AddDays(9);
@@ -28,6 +26,7 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public async Task ShouldGetMainEvents()
         {
+            CreateUser();
             CreateMainEvents();
 
             MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
@@ -49,6 +48,7 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public async Task ShouldGetMainEventById()
         {
+            CreateUser();
             CreateMainEvents();
 
             // Check that we can get both by id
@@ -67,7 +67,7 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_eventName2, returnedMainEvent2.Name);
         }
 
-        /*
+
         [Test]
         public async Task ShouldCreateMainEvent()
         {
@@ -84,91 +84,87 @@ namespace WarpTest.WebLayer.Controllers
             CreateOrganizers();
             CreateVenues();
 
-            MainEventVm mainEventVm = new MainEventVm { Name = name, StartDateTime = startDateTime, EndDateTime = endDateTime, VenueId = 2, OrganizerId = 1 };
+            MainEventVm mainEventVm = new MainEventVm { Name = name, StartDateTime = startDateTime, EndDateTime = endDateTime, VenueId = 2, OrganizerId = 2 };
 
-            ActionResult<MainEventVm> result = await mainEventController.CreateMainEventAsync(mainEventVm);
+            await mainEventController.CreateMainEventAsync(mainEventVm);
 
-            MainEventVm createdMainEvent = (MainEventVm)((OkObjectResult)result.Result).Value;
+            ActionResult<List<MainEventListVm>> result = await mainEventController.GetMainEventsAsync();
+            List<MainEventListVm> returnedMainEvents = (List<MainEventListVm>)((OkObjectResult)result.Result).Value;
 
-            // Check object that is returned from the controller
-            Assert.AreEqual(1, createdMainEvent.Id);
-            Assert.AreEqual(name, createdMainEvent.Name);
-            Assert.AreEqual(startDateTime, createdMainEvent.StartDateTime);
-            Assert.AreEqual(endDateTime, createdMainEvent.EndDateTime);
-            Assert.AreEqual(2, createdMainEvent.VenueId);
-            Assert.AreEqual(1, createdMainEvent.OrganizerId);
+            Assert.AreEqual(2, returnedMainEvents.Count);
+            Assert.AreEqual(mainEventVm.Name, returnedMainEvents[1].Name);
+            Assert.AreEqual(mainEventVm.StartDateTime, returnedMainEvents[1].StartDateTime);
+            Assert.AreEqual(mainEventVm.EndDateTime, returnedMainEvents[1].EndDateTime);
+        }
 
-            // Check what we really have in the DB
-            MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
-            Assert.AreEqual(1, mainEvent1.Id);
-            Assert.AreEqual(name, mainEvent1.Name);
-            Assert.AreEqual(startDateTime, mainEvent1.StartDateTime);
-            Assert.AreEqual(endDateTime, mainEvent1.EndDateTime);
-            Assert.AreEqual(2, mainEvent1.VenueId);
-            Assert.AreEqual(1, mainEvent1.OrganizerId);
+       
+         [Test]
+         public async Task ShouldUpdateMainEvent()
+         {
+             MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
+             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+             MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
+             CreateUser();
+             SetUser(mainEventController, _createdUser.Entity.Id);
+             CreateMainEvents();
+
+             string newName = "Test name 3";
+             DateTime newStartTime = DateTime.Now.AddDays(4);
+             DateTime newEndTime = DateTime.Now.AddDays(8);       
+
+             MainEventVm mainEventVm = new MainEventVm { Id = 2, Name = newName, StartDateTime = newStartTime, EndDateTime = newEndTime, VenueId = 2, OrganizerId = 2 };
+
+             await mainEventController.UpdateMainEventAsync(mainEventVm);
+
+             // Check that only one has been changed
+             MainEvent mainEvent1 = _dbContext.MainEvents.Find(2);
+             Assert.AreEqual(newName, mainEvent1.Name);
+             Assert.AreEqual(newStartTime, mainEvent1.StartDateTime);
+             Assert.AreEqual(newEndTime, mainEvent1.EndDateTime);
+         }
+            
+
+        [Test]
+         public async Task ShouldSetMainEvent()
+         {
+            UserStore<ApplicationUser> store = new UserStore<ApplicationUser>(_dbContext);
+            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(store, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, null);
+
+            MainEventService mainEventService = new MainEventService(_dbContext, userManager);
+             SecurityService securityService = new SecurityService(_dbContext, userManager, _roleManager);
+             MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+
+             CreateUser();
+             SetUser(mainEventController, _createdUser.Entity.Id);
+             CreateMainEvents();
+
+             await mainEventController.SetCurrentEventAsync(2);
+
+             ApplicationUser usr = _dbContext.Users.Find(_createdUser.Entity.Id);
+
+             Assert.AreEqual(usr.CurrentMainEventId, _createdUser.Entity.CurrentMainEventId);
+
+         }
+    
+        /*
+        [Test]
+        public async Task ShouldGetMainEvent()
+        {
+            MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+
+            //CreateUser();
+            SetUser(mainEventController, _createdUser1.Entity.Id);
+            // CreateMainEvents();
+
+
+            // In BaseTest we set currentMainEventId = 1
+            ActionResult<CurrentMainEventVm>  result = await mainEventController.GetCurrentMainEventAsync();
+            Assert.AreEqual("Event 1", result.Value.Name);
         }
         */
-        //[Test]
-        //public async Task ShouldUpdateMainEvent()
-        //{
-        //    CreateMainEvents();
-
-        //    string newName = "Test name 3";
-        //    DateTime newStartTime = DateTime.Now.AddDays(4);
-        //    DateTime newEndTime = DateTime.Now.AddDays(8);
-
-        //    MainEventService mainEventService = new MainEventService(_dbContext);
-        //    SecurityService securityService = new SecurityService(_dbContext);
-
-        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
-
-        //    MainEventVm mainEventVm = new MainEventVm { Id = 1, Name = newName, StartTime = newStartTime, EndTime = newEndTime, VenueId = 3, OrganizerId = 3 };
-
-        //    await mainEventController.UpdateMainEvent(mainEventVm);
-
-        //    // Check that only one has been changed
-        //    MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
-        //    Assert.AreEqual(newName, mainEvent1.Name);
-        //    Assert.AreEqual(newStartTime, mainEvent1.StartTime);
-        //    Assert.AreEqual(newEndTime, mainEvent1.EndTime);
-        //    Assert.AreEqual(1, mainEvent1.VenueId);
-        //    Assert.AreEqual(1, mainEvent1.OrganizerId);
-
-        //    MainEvent mainEvent2 = _dbContext.MainEvents.Find(2);
-        //    Assert.AreEqual(_eventName2, mainEvent2.Name);
-        //    Assert.AreEqual(_startTime2, mainEvent2.StartTime);
-        //    Assert.AreEqual(_endTime2, mainEvent2.EndTime);
-        //    Assert.AreEqual(2, mainEvent2.VenueId);
-        //    Assert.AreEqual(2, mainEvent2.OrganizerId);
-        //}
-
-        //[Test]
-        //public async Task ShouldDeleteMainEvent()
-        //{
-        //    CreateMainEvents();
-
-        //    MainEventService mainEventService = new MainEventService(_dbContext);
-        //    SecurityService securityService = new SecurityService(_dbContext);
-
-        //    MainEventController mainEventController = new MainEventController(mainEventService, securityService);
-
-        //    MainEventVm mainEventVm = new MainEventVm
-        //    {
-        //        Id = 1
-        //    };
-
-        //    ActionResult<MainEventVm> result = await mainEventController.DeleteMainEvent(mainEventVm);
-        //    MainEventVm deletedMainEvent = (MainEventVm)((OkObjectResult)result.Result).Value;
-
-        //    Assert.AreEqual(1, deletedMainEvent.Id);
-
-        //    // Check that we have deleted only the first, but not the other
-        //    MainEvent mainEvent1 = _dbContext.MainEvents.Find(1);
-        //    Assert.IsNull(mainEvent1);
-        //    MainEvent mainEvent2 = _dbContext.MainEvents.Find(2);
-        //    Assert.IsNotNull(mainEvent2);
-        //}
 
         // Helper methods
         private void CreateUser()
@@ -186,7 +182,7 @@ namespace WarpTest.WebLayer.Controllers
                     Email = "test@test.no",
                     PhoneNumber = "98765433"
                 }
-            );
+            ) ;
         }
 
         private void CreateOrganizers()
@@ -196,17 +192,14 @@ namespace WarpTest.WebLayer.Controllers
                 {
                     Name = "Organizer 2",
                     OrgNumber = "654123",
-                    Description = "Description"
-                    /*
+                    Description = "Description",
+                    
                     Admins = new List<ApplicationUser>()
                     {
-                        // _createdUser.Entity
-                        new ApplicationUser
-                        {
-                            Id = _createdUser.Entity.Id
-                        }
+                         _createdUser.Entity
+                        
                     }
-                    */
+                    
                 }
             );
             _dbContext.SaveChanges();
@@ -230,20 +223,19 @@ namespace WarpTest.WebLayer.Controllers
 
         private void CreateMainEvents()
         {
-        CreateUser();
-        CreateOrganizers();
-        CreateVenues();
+            CreateOrganizers();
+            CreateVenues();
 
             _dbContext.MainEvents.Add(
-                    new MainEvent
-                    {
-                        Name = _eventName2,
-                        StartDateTime = DateTime.Now,
-                        EndDateTime = DateTime.Now,
-                        OrganizerId = 2,
-                        VenueId = 2
-                    }
-                );
+                new MainEvent
+                {
+                    Name = _eventName2,
+                    StartDateTime = _startTime2,
+                    EndDateTime = _endTime2,
+                    OrganizerId = 2,
+                    VenueId = 2
+                }
+            );
             _dbContext.SaveChanges();
         }
     }

@@ -268,6 +268,15 @@ namespace WarpTest.WebLayer.Controllers
                 }
             );
             _dbContext.SaveChanges();
+
+            _dbContext.Roles.Add(
+               new IdentityRole
+               {
+                   Name = "Admin",
+                   NormalizedName = "Admin"
+               }
+           );
+            _dbContext.SaveChanges();
         }
     }
 }
