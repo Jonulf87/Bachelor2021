@@ -146,25 +146,27 @@ namespace WarpTest.WebLayer.Controllers
              Assert.AreEqual(usr.CurrentMainEventId, _createdUser.Entity.CurrentMainEventId);
 
          }
+
+
     
-        /*
         [Test]
         public async Task ShouldGetMainEvent()
         {
-            MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
-            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            UserStore<ApplicationUser> store = new UserStore<ApplicationUser>(_dbContext);
+            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(store, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, null);
+            MainEventService mainEventService = new MainEventService(_dbContext, userManager);
+            SecurityService securityService = new SecurityService(_dbContext, userManager, _roleManager);
             MainEventController mainEventController = new MainEventController(mainEventService, securityService);
 
-            //CreateUser();
-            SetUser(mainEventController, _createdUser1.Entity.Id);
-            // CreateMainEvents();
+            CreateUser();
+            SetUser(mainEventController, _createdUser.Entity.Id);
+            CreateMainEvents();
+            await mainEventController.SetCurrentEventAsync(2);
 
-
-            // In BaseTest we set currentMainEventId = 1
             ActionResult<CurrentMainEventVm>  result = await mainEventController.GetCurrentMainEventAsync();
-            Assert.AreEqual("Event 1", result.Value.Name);
+            Assert.AreEqual(_eventName2, result.Value.Name);
         }
-        */
+
 
         // Helper methods
         private void CreateUser()
