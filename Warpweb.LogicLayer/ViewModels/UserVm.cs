@@ -62,7 +62,7 @@ namespace Warpweb.LogicLayer.ViewModels
         [RegularExpression(@"^((\+|00)47[-]?)?[0-9]{8}$", ErrorMessage = "Ugyldig telefonnummer")] 
         public string ParentPhoneNumber { get; set; }
 
-        [EmailAddress(ErrorMessage = "Du må oppgi en gyldig e-post adresse")]
+        //[EmailAddress(ErrorMessage = "Du må oppgi en gyldig e-post adresse til forelder")] Det må skrives en custom tag som sjekker for korrekt epost bare hvis bruker er under 16 år.
         public string ParentEMail { get; set; }
     }
 }

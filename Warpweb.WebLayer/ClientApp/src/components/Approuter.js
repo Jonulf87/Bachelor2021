@@ -6,7 +6,7 @@ import {
 
 import UserAdminMain from './UserAdmin/UserAdminMain';
 import CrewMain from './Crew/CrewMain';
-import CrewAdminMain from './CrewAdmin/CrewAdminMain';
+import CrewAdminList from './CrewAdmin/CrewAdminList';
 import EventAdminMain from './EventAdmin/EventAdminMain';
 import EventUserMain from './Event/EventUserMain';
 import ParticipantAdminMain from './Participant/ParticipantAdminMain';
@@ -78,7 +78,7 @@ export default function AppRouter() {
             <Route path='/crewadmin'>
                 {!isAuthenticated ? <NotAuthenticated /> 
                 : !policies.some(a => a === 1) ? <Unauthorized />
-                : <CrewAdminMain />}
+                : <CrewAdminList />}
             </Route>
             <Route path='/useradmin'>
                 {!isAuthenticated ? <NotAuthenticated /> 

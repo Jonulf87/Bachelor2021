@@ -69,6 +69,11 @@ namespace Warpweb.LogicLayer.Services
         /// <param name="crewName"></param> 
         public async Task CreateCrewAsync(string crewName)
         {
+            if (crewName == null)
+            {
+                throw new HttpException(HttpStatusCode.InternalServerError, "Du kan ikke sende en tom streng som navn til arbeidslaget");
+            }
+
             var existingCrew = _dbContext.Crews
              .Where(a => a.Name == crewName)
              .SingleOrDefault();

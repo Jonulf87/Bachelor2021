@@ -3,11 +3,20 @@ import useAuth from '../../hooks/useAuth';
 import CrewAdminRowDetails from './CrewAdminRowDetails';
 import { Button, TextField } from '@material-ui/core';
 import MUIDataTable from 'mui-datatables';
+import { Check } from '@material-ui/icons';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 export default function OrganizerAdminList() {
 
+    //Statevariabler for error popup vindu
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
     const [crewList, setCrewList] = useState([]);
     const [crewName, setCrewName] = useState("");
+    const [crewNameError, setCrewNameError] = useState(false);
+    const [crewNameErrorSpec, setCrewNameErrorSpec] = useState("");
     const [updateList, setUpdateList] = useState(false);
     const [rowsExpanded, setRowsExpanded] = useState([]);
 
@@ -16,6 +25,25 @@ export default function OrganizerAdminList() {
     const triggerUpdate = () => {
         setUpdateList(oldValue => !oldValue);
     }
+
+    //Metode for error popup vindu
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
+
+    useEffect(() => {
+        const checkCrewName = () => {
+            if (crewList.some(a => a.name === crewName)) {
+                setCrewNameError(true);
+                setCrewNameErrorSpec("Du kan ikke bruke samme navn som et annet arbeidslag");
+            }
+            else {
+                setCrewNameError(false);
+                setCrewNameErrorSpec("");
+            }
+        }
+        checkCrewName();
+    }, [crewName])
 
     useEffect(() => {
         const getCrews = async () => {
@@ -26,8 +54,20 @@ export default function OrganizerAdminList() {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                const result = await response.json();
-                setCrewList(result);
+                if (response.ok) {
+                    const result = await response.json();
+                    setCrewList(result);
+                }
+                else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
             }
         }
 
@@ -35,15 +75,27 @@ export default function OrganizerAdminList() {
     }, [isAuthenticated, updateList])
 
     const addCrew = async () => {
-        if (isAuthenticated) {
-            await fetch(`/api/crews/createcrew/${crewName}`, {
+        if (isAuthenticated && crewName !== "") {
+            const response = await fetch(`/api/crews/createcrew/${crewName}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
                 },
                 method: 'POST'
             });
-            triggerUpdate();
+            if (response.ok) {
+                triggerUpdate();
+            }
+            else if (response.status === 400) {
+                const errorResult = await response.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
+            else {
+                const errorResult = await response.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
+            }
         }
     }
 
@@ -114,6 +166,7 @@ export default function OrganizerAdminList() {
 
     return (
         <>
+            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
             <MUIDataTable
                 title={<>
                     <TextField
@@ -123,6 +176,8 @@ export default function OrganizerAdminList() {
                         required
                         value={crewName}
                         onChange={(e) => setCrewName(e.target.value)}
+                        error={crewNameError}
+                        helperText={crewNameErrorSpec}
                     />
 
                     <Button

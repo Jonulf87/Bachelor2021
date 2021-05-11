@@ -27,8 +27,6 @@ export default function PopupWindow({ open, handleClose, error, clearError, erro
 
             keys.map(key => errors[key].map(error => tempErrorsArray.push(error)))
             setInternalErrorsArray(tempErrorsArray);
-
-            console.log(tempErrorsArray);
         }
     }, [errors])
 
