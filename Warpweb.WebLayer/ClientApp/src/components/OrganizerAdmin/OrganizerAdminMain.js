@@ -1,4 +1,4 @@
-﻿import { Button, Grid, GridItem, Toolbar, Typography } from '@material-ui/core';
+﻿import { Button, CircularProgress, Grid, GridItem, Toolbar, Typography } from '@material-ui/core';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
@@ -103,7 +103,7 @@ export default function OrganizerAdminMain() {
     };
 
     if (!organizerList) {
-        return (<p>Loading...</p>);
+        return (<CircularProgress />);
     };
 
     return (

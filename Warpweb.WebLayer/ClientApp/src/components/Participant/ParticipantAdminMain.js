@@ -2,9 +2,15 @@
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import PopupWindow from '../PopupWindow/PopupWindow';
 import ParticipantAdminRowDetails from './ParticipantAdminRowDetails';
 
 export default function ParticipantAdminMain() {
+
+    //Statevariabler for error popup vindu
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const [participantList, setParticipantList] = useState([]);
     const [updateList, setUpdateList] = useState([]);
@@ -17,6 +23,11 @@ export default function ParticipantAdminMain() {
         setUpdateList(oldValue => !oldValue);
     }
 
+    //Metode for error popup vindu
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
+
     useEffect(() => {
         const getParticipants = async () => {
             if (isAuthenticated) {
@@ -27,15 +38,17 @@ export default function ParticipantAdminMain() {
                         'content-type': 'application/json'
                     }
                 });
-
                 if (responseParticipants.ok) {
                     const resultParticipants = await responseParticipants.json();
                     setParticipantList(resultParticipants);
+                    setIsLoading(false);
                 }
                 else {
+                    const errorResult = await responseParticipants.json();
+                    setError(errorResult.message);
                     setParticipantList([]);
+                    setErrorDialogOpen(true);
                 }
-                setIsLoading(false);
             }
         }
         getParticipants();
@@ -101,6 +114,7 @@ export default function ParticipantAdminMain() {
 
     return (
         <>
+            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
             <MUIDataTable
                 title={<>
                     <Grid container>
