@@ -67,10 +67,8 @@ export default function EventUserList() {
                             <TableCell>
                                 Når
                         </TableCell>
-                            <TableCell>
+                            <TableCell colSpan="2">
                                 Hvem
-                            </TableCell>
-                            <TableCell>
                             </TableCell>
                         </TableRow>
                     </TableHead>
