@@ -192,7 +192,7 @@ namespace Warpweb.LogicLayer.Services
             return crewUsers;
         }
 
-        public async Task<bool> CheckUserIsCrewMemberAtEventAsync(string userId, int eventId)
+        public async Task<bool> CheckUserIsCrewMemberAtEventAsync(string userId, EventIdVm eventVm)
         {
             var user = await _dbContext.ApplicationUsers.Where(a => a.Id == userId).SingleOrDefaultAsync();
 
@@ -201,9 +201,12 @@ namespace Warpweb.LogicLayer.Services
                 throw new HttpException(HttpStatusCode.InternalServerError, "Brukeren eksisterer ikke");
             }
 
-            return await _dbContext.Crews
-                .Where(a => a.MainEventId == eventId && a.Users.Any(a => a.ApplicationUserId == userId))
+            var result = await _dbContext.Crews
+                .Where(a => a.MainEventId == eventVm.eventId && a.Users.Any(a => a.ApplicationUserId == userId))
+                .IgnoreQueryFilters()
                 .AnyAsync();
+
+            return result;
         }
 
         /// <summary>

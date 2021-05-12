@@ -6,7 +6,7 @@ import MUIDataTable from 'mui-datatables';
 import { Check } from '@material-ui/icons';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
-export default function OrganizerAdminList() {
+export default function CrewAdminList() {
 
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
@@ -169,8 +169,8 @@ export default function OrganizerAdminList() {
             <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
             <MUIDataTable
                 title={<>
-                    <TextField
-                        id="crewName"
+                     <TextField 
+                        name="crewName"
                         label="Arbeidslag"
                         style={{ margin: 8 }}
                         required

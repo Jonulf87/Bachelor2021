@@ -81,11 +81,17 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
     useEffect(() => {
         const checkUserCrewStatus = async () => {
             if (isAuthenticated) {
-                const response = await fetch(`/api/crews/checkusercrewmemberatevent/${id}`, {
+
+                const body = {
+                    eventId: id
+                }
+                const response = await fetch(`/api/crews/checkusercrewmemberatevent`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify(body),
+                    method: 'POST'
                 });
                 if (response.ok) {
                     const result = await response.json();

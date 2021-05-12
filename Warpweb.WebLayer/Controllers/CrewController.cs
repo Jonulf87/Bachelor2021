@@ -168,12 +168,12 @@ namespace Warpweb.WebLayer.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [Route("checkusercrewmemberatevent/{eventId}")]
-        public async Task<ActionResult<bool>> CheckUserIsCrewMemberAtEventAsync(int eventId)
+        [HttpPost]
+        [Route("checkusercrewmemberatevent")]
+        public async Task<ActionResult<bool>> CheckUserIsCrewMemberAtEventAsync(EventIdVm eventVm)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var orgs = await _crewService.CheckUserIsCrewMemberAtEventAsync(userId, eventId);
+            var orgs = await _crewService.CheckUserIsCrewMemberAtEventAsync(userId, eventVm);
             return Ok(orgs);
         }
     }
