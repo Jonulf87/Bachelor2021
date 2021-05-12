@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { Select, FormControl, InputLabel, TextField, Button, Grid, Checkbox, FormControlLabel, MenuItem, Typography, Paper, Container, Collapse } from '@material-ui/core';
+import { Select, FormControl, InputLabel, TextField, Button, Grid, Checkbox, FormControlLabel, MenuItem, Typography, Paper, Container, Collapse, Toolbar } from '@material-ui/core';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: "10px"
     }
+
 }));
 
 export default function UserRegister() {
@@ -285,11 +286,19 @@ export default function UserRegister() {
     return (<>
         
         <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+
         <Container maxWidth="sm" >
+              
             <Paper
                 elevation={3}
                 className={classes.paper}
             >
+                <Toolbar>
+                    <Typography variant="h4" component="h1">
+                        Opprett bruker
+                    </Typography>
+                </Toolbar>
+           
                 <form
                     onSubmit={formik.handleSubmit}
                     noValidate
@@ -300,56 +309,13 @@ export default function UserRegister() {
                         alignItems="flex-start"
                         className={classes.root}
                     >
-
                         <Grid
-                            xs={12}
-                            lg={4}
                             item
-                        >
-                            <TextField
-                                required
-                                id="firstName"
-                                name="firstName"
-                                label="Fornavn"
-                                value={formik.values.firstName}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-                                helperText={formik.touched.firstName && formik.errors.firstName}
-                            />
-                        </Grid>
-                        <Grid
                             xs={12}
-                            lg={4}
-                            item
                         >
-                            <TextField
-                                id="middleName"
-                                name="middleName"
-                                label="Mellomnavn"
-                                value={formik.values.middleName}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                error={formik.touched.middleName && Boolean(formik.errors.middleName)}
-                                helperText={formik.touched.middleName && formik.errors.middleName}
-                            />
-                        </Grid>
-                        <Grid
-                            xs={12}
-                            lg={4}
-                            item
-                        >
-                            <TextField
-                                required
-                                id="lastName"
-                                name="lastName"
-                                label="Etternavn"
-                                value={formik.values.lastName}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-                                helperText={formik.touched.lastName && formik.errors.lastName}
-                            />
+                            <Typography variant="h6" component="h2">
+                                Kontoinformasjon
+                            </Typography>
                         </Grid>
                         <Grid
                             xs={12}
@@ -416,36 +382,44 @@ export default function UserRegister() {
                             />
                         </Grid>
                         <Grid
+                            item
                             xs={12}
+                        >
+                            <Typography variant="h6" component="h2">
+                                Personopplysninger
+                            </Typography>
+                        </Grid>
+                        <Grid
+                            xs={12}
+                            lg={4}
                             item
                         >
                             <TextField
                                 required
-                                id="phoneNumber"
-                                name="phoneNumber"
-                                label="Telefon"
-                                value={formik.values.phoneNumber}
+                                id="firstName"
+                                name="firstName"
+                                label="Fornavn"
+                                value={formik.values.firstName}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
-                                helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                                error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                                helperText={formik.touched.firstName && formik.errors.firstName}
                             />
                         </Grid>
                         <Grid
                             xs={12}
-                            lg={8}
+                            lg={4}
                             item
                         >
                             <TextField
-                                required
-                                id="address"
-                                name="address"
-                                label="Adresse"
-                                value={formik.values.address}
+                                id="middleName"
+                                name="middleName"
+                                label="Mellomnavn"
+                                value={formik.values.middleName}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                error={formik.touched.address && Boolean(formik.errors.address)}
-                                helperText={formik.touched.address && formik.errors.address}
+                                error={formik.touched.middleName && Boolean(formik.errors.middleName)}
+                                helperText={formik.touched.middleName && formik.errors.middleName}
                             />
                         </Grid>
                         <Grid
@@ -455,14 +429,14 @@ export default function UserRegister() {
                         >
                             <TextField
                                 required
-                                id="zipCode"
-                                name="zipCode"
-                                label="Postnr"
-                                value={formik.values.zipCode}
+                                id="lastName"
+                                name="lastName"
+                                label="Etternavn"
+                                value={formik.values.lastName}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                error={formik.touched.zipCode && Boolean(formik.errors.zipCode)}
-                                helperText={formik.touched.zipCode && formik.errors.zipCode}
+                                error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                                helperText={formik.touched.lastName && formik.errors.lastName}
                             />
                         </Grid>
                         <Grid
@@ -506,10 +480,82 @@ export default function UserRegister() {
                                     margin="normal"
                                     value={formik.values.dateOfBirth}
                                     onChange={(dob) => { formik.setFieldValue('dateOfBirth', dob) }}
+                                    helperText={showParents && "deltagere under 16 må oppgi en foresatt"}
                                 />
                             </MuiPickersUtilsProvider>
                         </Grid>
+                        <Grid
+                            item
+                            xs={12}
+                        >
+                            <Typography variant="h6" component="h2">
+                                Kontaktinfo
+                            </Typography>
+                        </Grid>
+                        <Grid
+                            xs={12}
+                            item
+                        >
+                            <TextField
+                                required
+                                id="phoneNumber"
+                                name="phoneNumber"
+                                label="Telefon"
+                                value={formik.values.phoneNumber}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                                helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                            />
+                        </Grid>
+                        <Grid
+                            xs={12}
+                            lg={8}
+                            item
+                        >
+                            <TextField
+                                required
+                                id="address"
+                                name="address"
+                                label="Adresse"
+                                value={formik.values.address}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.address && Boolean(formik.errors.address)}
+                                helperText={formik.touched.address && formik.errors.address}
+                            />
+                        </Grid>
+                        <Grid
+                            xs={12}
+                            lg={4}
+                            item
+                        >
+                            <TextField
+                                required
+                                id="zipCode"
+                                name="zipCode"
+                                label="Postnummer"
+                                value={formik.values.zipCode}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.zipCode && Boolean(formik.errors.zipCode)}
+                                helperText={formik.touched.zipCode && formik.errors.zipCode}
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            xs={12}
+                        ></Grid>                        
                         {showParents && (<>
+                            
+                            <Grid
+                            item
+                            xs={12}
+                        >
+                            <Typography variant="h6" component="h2">
+                                Foresatt informasjon
+                            </Typography>
+                        </Grid>
                             <Grid
                                 xs={12}
                                 item
@@ -618,6 +664,7 @@ export default function UserRegister() {
                                 value={formik.values.comments}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
+                                helperText="noe vi bør vite før du deltar på et arrangement?"
                             />
                         </Grid>
                         <Grid
