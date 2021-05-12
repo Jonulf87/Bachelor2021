@@ -74,6 +74,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
         const getVenues = async () => {
 
             if (isAuthenticated) {
+                // Skjer noe her?
                 const response = await fetch(`/api/venues/venueslist`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,

@@ -9,6 +9,7 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -21,6 +22,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpdate }) {
+
+    //Statevariabler for error popup vindu
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+    //Metode for error popup vindu
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
 
     const classes = useStyles();
 
@@ -51,11 +62,25 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                         'Content-Type': 'application/json'
                     }
                 });
-                const result = await response.json();
-                setOrganizers(result);
-                if (result.length === 1) {
-                    setOrganizerId(result[0].id);
+                if (response.ok) {
+                    const result = await response.json();
+                    setOrganizers(result);
+
+                    if (result.length === 1) {
+                        setOrganizerId(result[0].id);
+                    }
                 }
+                else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
+
             }
         }
         getOrganizers();
@@ -71,8 +96,20 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                         'content-type': 'application/json'
                     }
                 });
-                const result = await response.json();
-                setVenues(result);
+                if (response.ok) {
+                    const result = await response.json();
+                    setVenues(result);
+                }
+                else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
             }
         }
         getVenues();
@@ -90,7 +127,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     // NB - Må sjekke at det er gjort valg i skjema før innsending
     const submitForm = async () => {
         if (isAuthenticated) {
-            await fetch('/api/events/createmainevent', {
+            const response = await fetch('/api/events/createmainevent', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
@@ -98,12 +135,24 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                 method: 'POST',
                 body: JSON.stringify(mainEventDataToBeSent)
             });
-            triggerUpdate();
-            refreshToken(0, () => {
-                setCurrentEvent(name);
-                setCurrentEventChangeCompleteTrigger(oldValue => !oldValue);
-                history.push('/crewadmin');
-            });
+            if (response.ok) {
+                triggerUpdate();
+                refreshToken(0, () => {
+                    setCurrentEvent(name);
+                    setCurrentEventChangeCompleteTrigger(oldValue => !oldValue);
+                    history.push('/crewadmin');
+                });
+            }
+            else if (response.status === 400) {
+                const errorResult = await response.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
+            else {
+                const errorResult = await response.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
+            }
             handleDialogClose();
         }
     }
@@ -114,6 +163,8 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
             open={dialogOpen}
             onClose={handleDialogClose}
         >
+            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+
             <Paper
                 variant="outlined"
                 elevation={0}
