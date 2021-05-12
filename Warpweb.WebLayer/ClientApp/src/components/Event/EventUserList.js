@@ -3,13 +3,23 @@ import { CircularProgress, Button, Table, TableHead, TableRow, TableCell, TableB
 import { format, parseISO } from 'date-fns';
 import EventUserListRow from './EventUserListRow';
 import usePurchase from '../../hooks/usePurchase';
-
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 export default function EventUserList() {
+
+    //Statevariabler for error popup vindu
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState();
+
+    //Metode for error popup vindu
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
 
     const { selectedMainEventId, setSelectedMainEventId, setShoppingCart } = usePurchase();
 
@@ -17,8 +27,21 @@ export default function EventUserList() {
         const getEvents = async () => {
 
             const response = await fetch('/api/events/upcomingevents');
-            const result = await response.json();
-            setEventsList(result);
+
+            if (response.ok) {
+                const result = await response.json();
+                setEventsList(result);
+            }
+            else if (response.status === 400) {
+                const errorResult = await response.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
+            else {
+                const errorResult = await response.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
+            }
         }
 
         getEvents();
@@ -37,8 +60,20 @@ export default function EventUserList() {
                         'content-type': 'application/json'
                     }
                 });
-                const eventResult = await eventResponse.json();
-                setSelectedEvent(eventResult);
+                if (eventResponse.ok) {
+                    const eventResult = await eventResponse.json();
+                    setSelectedEvent(eventResult);   
+                }
+                else if (eventResponse.status === 400) {
+                    const errorResult = await eventResponse.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    const errorResult = await eventResponse.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
             }
             setIsReady(true);
         }
@@ -51,9 +86,9 @@ export default function EventUserList() {
         setSelectedEvent(null);
     }
 
-
     return (
         <>
+            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
             {isReady ?
                 <Table>
                     <TableHead>
