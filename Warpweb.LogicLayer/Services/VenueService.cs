@@ -52,17 +52,19 @@ namespace Warpweb.LogicLayer.Services
         /// <returns>VenueListVm</returns>
         public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
+            var orgId = await _dbContext.MainEvents
+                .Where(a => a.Id == _mainEventProvider.MainEventId)
+                .Select(a => a.OrganizerId)
+                .SingleAsync();
+
             var organizerVenuesList = await _dbContext.Venues
-                .Where(a => a.MainEvents.Any(b => b.Id == _mainEventProvider.MainEventId))
+                .Where(a => a.OrganizerId == orgId)
                 .Select(a => new VenueListVm
                 {
                     Id = a.Id,
                     Name = a.Name
                 }).ToListAsync();
-            if (organizerVenuesList == null)
-            {
-                throw new HttpException(HttpStatusCode.NotFound, "Fant ingen lokaler");
-            }
+
             return organizerVenuesList;
         }
 

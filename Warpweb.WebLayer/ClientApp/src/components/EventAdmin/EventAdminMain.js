@@ -1,4 +1,4 @@
-﻿import { Grid, Typography, Button, Toolbar } from '@material-ui/core';
+﻿import { Grid, Typography, Button, Toolbar, CircularProgress } from '@material-ui/core';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
@@ -6,6 +6,10 @@ import CreateEvent from './CreateEvent';
 import EventAdminRowDetails from './EventAdminRowDetails';
 
 export default function EventAdminList() {
+
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const [eventList, setEventList] = useState([]);
     const [updateList, setUpdateList] = useState(false);
@@ -26,6 +30,10 @@ export default function EventAdminList() {
         setDialogCreateEventOpen(false);
     };
 
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
+
     useEffect(() => {
         const getEvents = async () => {
             if (isAuthenticated) {
@@ -40,9 +48,19 @@ export default function EventAdminList() {
                     const result = await response.json();
                     setEventList(result);
                 }
-                else {
+                else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
                     setEventList([]);
                 }
+                else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                    setEventList([]);
+                }
+
             }
         }
 
@@ -106,9 +124,6 @@ export default function EventAdminList() {
     };
 
 
-    if (eventList.length === 0) {
-        return (<p>Loading...</p>);
-    };
 
 
     return (

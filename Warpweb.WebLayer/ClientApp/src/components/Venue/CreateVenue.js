@@ -4,6 +4,7 @@ import { Button, Dialog, DialogTitle, FormControl, TextField, MenuItem, Containe
 import SaveIcon from '@material-ui/icons/Save';
 import useAuth from '../../hooks/useAuth';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreateVenueOpen, triggerUpdate }) {
 
     const [isSending, setIsSending] = useState(false);
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     // Create constants for each field
     const [enteredName, setEnteredName] = useState('');
@@ -37,6 +41,10 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
+
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
 
     useEffect(() => {
         const getOrganizers = async () => {
@@ -94,13 +102,8 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
             method: 'POST',
             body: JSON.stringify(data)
         });
-
-        if (response.status !== 200) {
-            alert(response.body);
-        } else {
-
+        if (response.ok) {
             triggerUpdate();
-
             setEnteredName('');
             setEnteredAddress('');
             setEnteredPostalCode('');
@@ -109,13 +112,23 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
             setEnteredContactPhone('');
             setOrganizerId('');
         }
-
+        else if (response.status === 400) {
+            const errorResult = await response.json();
+            setErrors(errorResult.errors);
+            setErrorDialogOpen(true);
+        }
+        else {
+            const errorResult = await response.json();
+            setError(errorResult.message);
+            setErrorDialogOpen(true);
+        }
         handleDialogCreateVenueClose();
         setIsSending(false);
     };
 
 
-    return (
+    return (<>
+        <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
         <Dialog
             open={dialogCreateVenueOpen}
             onClose={handleDialogCreateVenueClose}
@@ -240,5 +253,5 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
                 </ValidatorForm>
             </Container>
         </Dialog>
-    );
+    </>);
 }

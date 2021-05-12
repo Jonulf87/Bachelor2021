@@ -4,9 +4,14 @@ import VenueAdminRowDetails from './VenueAdminRowDetails';
 import useAuth from "../../hooks/useAuth";
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import CreateVenue from "./CreateVenue";
+import PopupWindow from "../PopupWindow/PopupWindow";
 
 
 export default function VenueMain() {
+
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const [venueList, setVenueList] = useState([]);
     const [rowsExpanded, setRowsExpanded] = useState([]);
@@ -27,10 +32,14 @@ export default function VenueMain() {
         setDialogCreateVenueOpen(false);
     }
 
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
+
     useEffect(() => {
         const getVenues = async () => {
             if (isAuthenticated) {
-                const responseVenues = await fetch('/api/venues/venueslist', {
+                const responseVenues = await fetch('/api/venues/organizervenueslist', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
@@ -41,8 +50,17 @@ export default function VenueMain() {
                     const resultVenues = await responseVenues.json();
                     setVenueList(resultVenues);
                 }
+                else if (responseVenues.status === 400) {
+                    setVenueList([]);
+                    const errorResult = await responseVenues.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
                 else {
                     setVenueList([]);
+                    const errorResult = await responseVenues.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
                 }
             }
         }
@@ -92,12 +110,10 @@ export default function VenueMain() {
         }
     };
 
-    if (!venueList) {
-        return (<CircularProgress />);
-    }
 
     return (
         <>
+            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
             <CreateVenue handleDialogCreateVenueClose={handleDialogCreateVenueClose} dialogCreateVenueOpen={dialogCreateVenueOpen} triggerUpdate={triggerUpdate} />
             <MUIDataTable
                 title={

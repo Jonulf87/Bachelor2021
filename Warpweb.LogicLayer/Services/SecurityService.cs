@@ -214,8 +214,6 @@ namespace Warpweb.LogicLayer.Services
                 var resultparent = _dbContext.Guardians.Add(parentToBeStored);
                 var test = _dbContext.SaveChanges();
             }
-
-            await _userManager.AddToRoleAsync(userDataToBeStored, "User");
         }
 
         /// <summary>

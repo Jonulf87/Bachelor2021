@@ -31,8 +31,8 @@ import SeatMapMain from './SeatMap/SeatMapMain';
 export default function AppRouter() {
     const [policies, setPolicies] = useState([]);
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
-    const { isAuthenticated, token, roles } = useAuth();
-
+    const { isAuthenticated, token, roles, orgsIsAdminAt } = useAuth();
+    console.log(orgsIsAdminAt);
     useEffect(() => {
         if (isAuthenticated) {
             const getPolicies = async () => {
@@ -44,7 +44,6 @@ export default function AppRouter() {
                 });
                 const resultPolicies = await responsePolicies.json();
                 setPolicies(resultPolicies);
-
             }
             getPolicies();
         }
@@ -109,7 +108,7 @@ export default function AppRouter() {
                 : <SeatMapAdminMain />}
             </Route>
             <Route path='/organizer' component={OrganizerAdminMain} >
-                {roles.some(a => a === "Admin") ? <OrganizerAdminMain /> : <Unauthorized />}
+                {(roles.some(a => a === "Admin") || orgsIsAdminAt.length > 0) ? <OrganizerAdminMain /> : <Unauthorized />}
             </Route>
 
             <Route component={PageNotFound}/>

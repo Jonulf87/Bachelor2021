@@ -7,11 +7,11 @@ export default function PopupWindow({ open, handleClose, error, clearError, erro
     const [internalErrorsArray, setInternalErrorsArray] = useState([]);
 
     const endDialog = () => {
-        if (error !== null) {
+        if (error !== null && error !== undefined) {
             clearError("");
             setInternalErrorsArray([]);
         }
-        else if (errors !== null) {
+        else if (errors !== null && error !== undefined) {
             clearErrors([]);
             setInternalErrorsArray([]);
         }
@@ -21,7 +21,7 @@ export default function PopupWindow({ open, handleClose, error, clearError, erro
 
     useEffect(() => {
 
-        if (errors !== null) {
+        if (errors !== null && errors !== undefined) {
             const keys = Object.keys(errors);
             const tempErrorsArray = [];
 
