@@ -142,6 +142,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
             return (
                 <Button
                     variant="contained"
+                    color="primary"
                     disabled
                 >
                     Aktivt arrangement
@@ -201,13 +202,6 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
                         item
                         xs={12}
                     >
-                        <Link
-                            href={organizerWebPage}
-                            variant="body2"
-                            target="_blank"
-                        >
-                            {organizerName}s Nettside
-                        </Link>
                         <Typography
                             variant="body2"
                         >
@@ -219,8 +213,12 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
 
                 </Grid>
             </CardContent>
+            {/*href={organizerWebPage}*/} 
             <CardActions>
                 {buttonSelector()}
+                <Button variant=""  href="google.com" >
+                    {organizerName}s Nettside
+                </Button>
             </CardActions>
         </Card>
     </>)

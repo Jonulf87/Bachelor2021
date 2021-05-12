@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { List, ListItem } from '@material-ui/core';
+import { List, ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EventCard from './EventCard';
 import PopupWindow from '../PopupWindow/PopupWindow';
@@ -8,6 +8,9 @@ const useStyles = makeStyles({
     root: {
         justifyContent: "center"
     },
+    header: {
+        textAlign: "center"
+    }
 });
 
 export default function EventUserMain() {
@@ -54,16 +57,19 @@ export default function EventUserMain() {
     }, []);
 
     return (
-        <List
-        >
+        <>
+            <Typography className={classes.header} component="h1" variant="h5" >
+                Kommende Arrangementer
+            </Typography>
             <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+            <List>
+                {isReady && eventsList.sort((a, b) => (a.startDateTime > b.startDateTime) ? 1 : (a.startDateTime < b.startDateTime) ? -1 : 0).map((event) => (
+                    <ListItem className={classes.root} key={event.id}>
+                        <EventCard {...event} />
+                    </ListItem>
 
-            {isReady && eventsList.sort((a, b) => (a.startDateTime > b.startDateTime) ? 1 : (a.startDateTime < b.startDateTime) ? -1 : 0).map((event) => (
-                <ListItem className={classes.root} key={event.id}>
-                    <EventCard {...event} />
-                </ListItem>
-
-            ))}
-        </List>
+                ))}
+            </List>
+        </>
     );
 }

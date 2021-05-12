@@ -25,6 +25,7 @@ export default function UserMainMenu() {
     return (
         <List
             component='nav'
+            role='navigation'
             subheader={
                 <ListSubheader color='inherit' component='h1'>
                     Meny
