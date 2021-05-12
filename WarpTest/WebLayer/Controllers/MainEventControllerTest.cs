@@ -84,8 +84,6 @@ namespace WarpTest.WebLayer.Controllers
         }
 
 
-
-
         [Test]
         public async Task ShouldCreateMainEvent()
         {
