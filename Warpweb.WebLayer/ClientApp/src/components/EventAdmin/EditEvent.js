@@ -75,7 +75,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
 
             if (isAuthenticated) {
                 // Skjer noe her?
-                const response = await fetch(`/api/venues/venueslist`, {
+                const response = await fetch(`/api/venues/organizervenueslist`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
@@ -175,7 +175,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         id="venue"
                         label="Lokale"
                         fullWidth
-                        value={event.venueId}
+                        value={event.venueId || ""}
                         onChange={(e) => setEvent(oldValues => ({ ...oldValues, venueId: e.target.value }))}
                     >
                         {venues.map((venue) => (

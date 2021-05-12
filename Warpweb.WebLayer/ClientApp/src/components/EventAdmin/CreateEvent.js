@@ -90,7 +90,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
         const getVenues = async () => {
 
             if (isAuthenticated) {
-                const response = await fetch(`/api/venues/venueslist`, {
+                const response = await fetch(`/api/venues/organizervenueslist`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'

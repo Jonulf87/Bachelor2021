@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default function AdminMainMenu({ policies, roles}) {
+export default function AdminMainMenu({ policies, roles, orgAdmins}) {
 
     const classes = useStyles();
 
@@ -95,7 +95,7 @@ export default function AdminMainMenu({ policies, roles}) {
                 </ListItem>
 
 
-            {roles.some(a => a === "Admin") &&
+            {(roles.some(a => a === "Admin") || orgAdmins.length > 0) &&
                 (<ListItem button component={NavLink} activeClassName={classes.root} to='/organizer'>
                 <ListItemIcon><BusinessIcon color="primary"/></ListItemIcon>
                     <ListItemText primary='Organisasjoner' />

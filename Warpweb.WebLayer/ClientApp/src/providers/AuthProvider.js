@@ -7,10 +7,9 @@ const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null);
     const [roles, setRoles] = useState([]);
+    const [orgsIsAdminAt, setOrgsIsAdminAt] = useState([]);
     const [isOrgAdmin, setOrgAdmin] = useState(false);
     const refreshTokenTimeoutId = useRef(null);
-
-
 
     const refreshToken = (delay, callback) => {
         if (refreshTokenTimeoutId.current) {
@@ -40,6 +39,7 @@ const AuthProvider = ({ children }) => {
                 } else {
                     setRoles([])
                 }
+
                 setIsAuthenticated(true);
             } else {
                 setIsAuthenticated(false);
@@ -114,6 +114,7 @@ const AuthProvider = ({ children }) => {
         setToken(null);
         setRoles([]);
         setOrgAdmin(false);
+        setOrgsIsAdminAt([]);
 
         if (refreshTokenTimeoutId.current) {
             clearTimeout(refreshTokenTimeoutId.current);
@@ -160,7 +161,32 @@ const AuthProvider = ({ children }) => {
         };
     }, []);
 
-    return <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout, refreshToken, isOrgAdmin }}>{children}</AuthContext.Provider>;
+    useEffect(() => {
+        if (isAuthenticated) {
+            const getOrgsUserIsAdminAt = async () => {
+
+                const responseOrgIsAdminAt = await fetch('/api/tenants/getaorgsadmin', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+                });
+
+                const resultOrgAdmins = await responseOrgIsAdminAt.json();
+
+                if (Array.isArray(resultOrgAdmins)) {
+                    setOrgsIsAdminAt(resultOrgAdmins);
+                } else if (resultOrgAdmins) {
+                    setOrgsIsAdminAt([resultOrgAdmins])
+                } else {
+                    setOrgsIsAdminAt([])
+                }
+            }
+            getOrgsUserIsAdminAt();
+        }
+    }, [isAuthenticated])
+
+    return <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout, refreshToken, isOrgAdmin, orgsIsAdminAt }}>{children}</AuthContext.Provider>;
 
 };
 

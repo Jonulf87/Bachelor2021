@@ -197,7 +197,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 eventId={openEventId}
                 dialogEditEventOpen={dialogEditEventOpen}
                 handleDialogEditEventClose={handleDialogEditEventClose}
-                updateListTrigger={updateListTrigger}
+                updateListTrigger={updateList}
             />
         </>
     )

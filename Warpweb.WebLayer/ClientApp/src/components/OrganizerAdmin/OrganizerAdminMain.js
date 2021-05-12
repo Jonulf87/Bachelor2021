@@ -4,15 +4,20 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import OrganizerAdminRowDetails from './OrganizerAdminRowDetails';
 import CreateOrganizer from './CreateOrganizer';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 export default function OrganizerAdminMain() {
+
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const [organizerList, setOrganizerList] = useState([]);
     const [rowsExpanded, setRowsExpanded] = useState([]);
     const [updateList, setUpdateList] = useState(false);
     const [dialogCreateOrganizerOpen, setDialogCreateOrganizerOpen] = useState(false);
 
-    const { isAuthenticated, token } = useAuth();
+    const { isAuthenticated, token, roles, orgsIsAdminAt } = useAuth();
 
     const triggerUpdate = () => {
         setUpdateList(oldValue => !oldValue);
@@ -26,21 +31,34 @@ export default function OrganizerAdminMain() {
         setDialogCreateOrganizerOpen(false);
     };
 
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
+
 
     useEffect(() => {
         const getOrganizers = async () => {
             if (isAuthenticated) {
-
-                const responseOrganizers = await fetch('/api/tenants/gettenants', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
+                if (roles.some(a => a === "Admin")) {
+                    const responseOrganizers = await fetch('/api/tenants/gettenants', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'content-type': 'application/json'
+                        }
+                    });
+                    if (responseOrganizers.ok) {
+                        const resultOrganizers = await responseOrganizers.json();
+                        setOrganizerList(resultOrganizers);
                     }
-                });
-
-                if (responseOrganizers.ok) {
-                    const resultOrganizers = await responseOrganizers.json();
-                    setOrganizerList(resultOrganizers);
+                    else {
+                        setOrganizerList([]);
+                        const errorResult = await responseOrganizers.json();
+                        setError(errorResult.message);
+                        setErrorDialogOpen(true);
+                    }
+                }
+                else if (orgsIsAdminAt.length > 0) {
+                    setOrganizerList(orgsIsAdminAt);
                 }
                 else {
                     setOrganizerList([]);
@@ -108,12 +126,13 @@ export default function OrganizerAdminMain() {
 
     return (
         <>
+            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
             <CreateOrganizer handleDialogCreateOrganizerClose={handleDialogCreateOrganizerClose} dialogCreateOrganizerOpen={dialogCreateOrganizerOpen} triggerUpdate={triggerUpdate} />
             <MUIDataTable
                 title={<>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography variant="h6" style={{ marginTop: '15px' }, {marginLeft: '15px' }}>
+                            <Typography variant="h6" style={{ marginTop: '15px' }, { marginLeft: '15px' }}>
                                 Organisasjoner
                         </Typography>
                         </Grid>

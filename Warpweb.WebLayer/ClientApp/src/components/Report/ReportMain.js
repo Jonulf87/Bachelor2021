@@ -13,6 +13,7 @@ export default function ReportMain() {
     const [genderData, setGenderData] = useState([]);
     const [allergicsData, setAllergicsData] = useState([]);
     const [ticketTypesData, setTicketTypesData] = useState([]);
+    const [isMounted, setIsMounted] = useState(true);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -27,7 +28,9 @@ export default function ReportMain() {
                     }
                 });
                 const resultUsers = await responseUsers.json();
-                setUserData(resultUsers);
+                if (isMounted) {
+                    setUserData(resultUsers);
+                }
 
                 const responseGender = await fetch('/api/reports/participantsgenderreport', {
                     headers: {
@@ -36,7 +39,9 @@ export default function ReportMain() {
                     }
                 });
                 const resultGender = await responseGender.json();
-                setGenderData(resultGender);
+                if (isMounted) {
+                    setGenderData(resultGender);
+                }
 
                 const responseAllergics = await fetch('/api/reports/allergiesreport', {
                     headers: {
@@ -45,7 +50,9 @@ export default function ReportMain() {
                     }
                 });
                 const resultAllergics = await responseAllergics.json();
-                setAllergicsData(resultAllergics);
+                if (isMounted) {
+                    setAllergicsData(resultAllergics);
+                }
 
                 const responseTicketTypes = await fetch('/api/reports/tickettypesreport', {
                     headers: {
@@ -54,12 +61,19 @@ export default function ReportMain() {
                     }
                 });
                 const resultTicketTypes = await responseTicketTypes.json();
-                setTicketTypesData(resultTicketTypes);
+                if (isMounted) {
+                    setTicketTypesData(resultTicketTypes);
+                }
             }
         }
         getReports();
-
     }, [isAuthenticated]);
+
+    useEffect(() => {
+        return () => {
+            setIsMounted(false);
+        }
+    }, [])
 
     return (
         <Paper>

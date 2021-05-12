@@ -151,7 +151,7 @@ export default function MainMenu({ window }) {
                 <Divider />
                 {(policies.length !== 0 || roles.some(a => a === "Admin") || orgAdmins.length !== 0) &&
                     <>
-                        <AdminMainMenu policies={policies} roles={roles} />
+                    <AdminMainMenu policies={policies} roles={roles} orgAdmins={orgAdmins} />
                         <Divider />
                     </>
                 }

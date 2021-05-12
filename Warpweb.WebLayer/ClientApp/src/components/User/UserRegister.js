@@ -480,7 +480,7 @@ export default function UserRegister() {
                                     margin="normal"
                                     value={formik.values.dateOfBirth}
                                     onChange={(dob) => { formik.setFieldValue('dateOfBirth', dob) }}
-                                    helperText={showParents && "deltagere under 16 må oppgi en foresatt"}
+                                    helperText={showParents && "Deltagere under 16 år må oppgi foresatt"}
                                 />
                             </MuiPickersUtilsProvider>
                         </Grid>
