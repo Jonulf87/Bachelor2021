@@ -25,7 +25,8 @@ export default function AdminMainMenu({ policies, roles, orgAdmins}) {
 
     return (
         <List
-            component='nav'    
+            component='nav'
+            role='navigation'    
             subheader={
                 <ListSubheader color="inherit" component='h1'>
                     Administrasjon

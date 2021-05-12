@@ -17,7 +17,8 @@ export default function CrewMainMenu({ crews }) {
     
     return (
         <List
-            component='nav'    
+            component='nav'
+            role='navigation'    
             subheader={
                 <ListSubheader color="inherit" component='h1'>
                     Mine arbeidslag

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 using Warpweb.WebLayer.Controllers;
@@ -67,6 +68,23 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_eventName2, returnedMainEvent2.Name);
         }
 
+        [Test]
+        public void ShouldNotGetMainEventWithInvalidId()
+        {
+            MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+            
+
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                await mainEventController.GetMainEventAsync(123);
+            });
+            Assert.AreEqual("Fant ingen arrangementer med id: 123", ex.Message);
+        }
+
+
+
 
         [Test]
         public async Task ShouldCreateMainEvent()
@@ -123,8 +141,8 @@ namespace WarpTest.WebLayer.Controllers
              Assert.AreEqual(newStartTime, mainEvent1.StartDateTime);
              Assert.AreEqual(newEndTime, mainEvent1.EndDateTime);
          }
-            
 
+        
         [Test]
          public async Task ShouldSetMainEvent()
          {
@@ -147,7 +165,6 @@ namespace WarpTest.WebLayer.Controllers
 
          }
 
-
     
         [Test]
         public async Task ShouldGetMainEvent()
@@ -167,7 +184,41 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_eventName2, result.Value.Name);
         }
 
+        [Test]
+        public async Task ShouldGetMainEventsForOrgAdmin()
+        {
+            CreateUser();
+            CreateMainEvents();
 
+            MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+
+            SetUser(mainEventController, _createdUser.Entity.Id);
+
+            ActionResult<List<MainEventListVm>> result = await mainEventController.GetMainEventsForOrgAdminAsync();
+            List<MainEventListVm> returnedMainEvents = (List<MainEventListVm>)((OkObjectResult)result.Result).Value;
+
+            Assert.AreEqual(2, returnedMainEvents[0].Id);
+        }
+
+        [Test]
+        public async Task ShouldGetMainEventsOfUserParticipation()
+        {
+
+            MainEventService mainEventService = new MainEventService(_dbContext, _userManager);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            MainEventController mainEventController = new MainEventController(mainEventService, securityService);
+
+            SetUser(mainEventController, _createdUser1.Entity.Id);
+
+            ActionResult <List<UserMainEventsVm>> result = await mainEventController.GetMainEventsOfUserParticipationAsync();
+            List<UserMainEventsVm> returnedMainEvents = (List<UserMainEventsVm>)((OkObjectResult)result.Result).Value;
+
+            Assert.AreEqual(1, returnedMainEvents[0].Id);
+        }
+
+       
         // Helper methods
         private void CreateUser()
         {
