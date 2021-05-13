@@ -105,7 +105,7 @@ namespace WarpTest.WebLayer.Controllers
 
             CreateUser();
             CreateVenues();
-            SetUser(venueController, _createdUser.Entity.Id);
+            SetUser(venueController, _createdUser2.Entity.Id);
             
 
             VenueVm venueVm = new VenueVm { Name = venueName3, Address = venueAddress3, PostalCode = "0258", ContactEMail = "venue3@test.no", ContactPhone = "1234578", OrganizerId = 2};
@@ -174,12 +174,13 @@ namespace WarpTest.WebLayer.Controllers
                      Name = "Organizer 2",
                      OrgNumber = "1234567",
                      Description = "Description",
-                   
-                    Admins = new List<ApplicationUser>()
-                    {
-                       _createdUser.Entity
 
-                    }                  
+                     Admins = new List<ApplicationUser>()
+                     {
+                        _createdUser2.Entity
+                        
+                     }
+
                  }
              );
             _dbContext.SaveChanges();
@@ -195,18 +196,6 @@ namespace WarpTest.WebLayer.Controllers
                     OrganizerId = 2
                 }
             );
-            _dbContext.SaveChanges();
-
-            _dbContext.MainEvents.Add(
-               new MainEvent
-               {
-                   Name = "Event 2",
-                   StartDateTime = DateTime.Now,
-                   EndDateTime = DateTime.Now,
-                   OrganizerId = 2,
-                   VenueId = 2
-               }
-           );
             _dbContext.SaveChanges();
         }
     }
