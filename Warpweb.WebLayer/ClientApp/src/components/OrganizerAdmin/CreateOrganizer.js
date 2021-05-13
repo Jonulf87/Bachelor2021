@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
 import useAuth from '../../hooks/useAuth';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -15,6 +16,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dialogCreateOrganizerOpen, triggerUpdate }) {
+
+    //Statevariabler for error popup vindu
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+    //Metode for error popup vindu
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
 
     const [organizerName, setOrganizerName] = useState("");
     const [organizerNumber, setOrganizerNumber] = useState("");
@@ -45,6 +56,16 @@ export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dial
                 setOrganizerName("");
                 setOrganizerNumber("");
                 setOrganizerDescription("");
+            }
+            else if (response.status === 400) {
+                const errorResult = await response.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
+            else {
+                const errorResult = await response.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
             }
             handleDialogCreateOrganizerClose();
         }
