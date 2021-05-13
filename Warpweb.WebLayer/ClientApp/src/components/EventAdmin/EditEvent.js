@@ -28,7 +28,16 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
     const [venues, setVenues] = useState([]);
     const [organizerId, setOrganizerId] = useState("");
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState("");
+
+    //Statevariabler for error popup vindu
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+    //Metode for error popup vindu
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
@@ -42,8 +51,20 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         'content-type': 'application/json'
                     }
                 });
-                const resultEvent = await responseEvent.json();
-                setEvent(resultEvent);
+                if (responseEvent.ok) {
+                    const resultEvent = await responseEvent.json();
+                    setEvent(resultEvent);
+                }
+                else if (responseEvent.status === 400) {
+                    const errorResult = await responseEvent.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    const errorResult = await responseEvent.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
             }
         }
         getEvent();
@@ -60,10 +81,22 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         'Content-Type': 'application/json'
                     }
                 });
-                const result = await response.json();
-                setOrganizers(result);
-                if (result.length === 1) {
-                    setOrganizerId(result[0].id);
+                if (response.ok) {
+                    const result = await response.json();
+                    setOrganizers(result);
+                    if (result.length === 1) {
+                        setOrganizerId(result[0].id);
+                    }
+                }
+                else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
                 }
             }
         }
@@ -74,15 +107,26 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
         const getVenues = async () => {
 
             if (isAuthenticated) {
-                // Skjer noe her?
                 const response = await fetch(`/api/venues/organizervenueslist`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'content-type': 'application/json'
                     }
                 });
-                const result = await response.json();
-                setVenues(result);
+                if (response.ok) {
+                    const result = await response.json();
+                    setVenues(result);
+                }
+                else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                }
+                else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
             }
         }
         getVenues();
@@ -102,11 +146,16 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
             if (response.ok) {
                 handleDialogEditEventClose();
                 updateListTrigger();
-            } else {
-                response.text().then(function (text) {
-                    setError(text);
-                    setOpen(true);
-                });
+            }
+            else if (response.status === 400) {
+                const errorResult = await response.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
+            else {
+                const errorResult = await response.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
             }
         }
     }
@@ -117,6 +166,8 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
             open={dialogEditEventOpen}
             onClose={handleDialogEditEventClose}
         >
+            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+
             <Paper>
                 <DialogTitle>
                     Endre arrangement
@@ -125,7 +176,6 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                     className={classes.root}
                     onSubmit={submitForm}
                 >
-                    <PopupWindow open={open} onClose={() => setOpen(false)} text={error} />
                     <TextField
                         className={classes.textField}
                         id="eventName"

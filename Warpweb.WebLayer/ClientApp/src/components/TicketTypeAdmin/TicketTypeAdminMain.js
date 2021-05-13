@@ -128,7 +128,7 @@ export default function TicketTypeAdminMain() {
                             style={{ margin: "15px" }}
                             onClick={handleDialogCreateTicketTypeOpen}
                         >
-                                Ny bilett-type
+                                Ny billett-type
                         </Button>
                         </Grid>
                     </Grid>
