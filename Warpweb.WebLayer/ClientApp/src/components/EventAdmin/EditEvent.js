@@ -203,6 +203,25 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                             ))}
                         </TextField>
                     )}
+                    <TextField
+                        className={classes.textField}
+                        id="eventComment"
+                        label="Kommentarer"
+                        fullWidth
+                        variant="outlined"
+                        value={event.infoComments}
+                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, infoComments: e.target.value }))}
+                    />
+                    <TextField
+                        className={classes.textField}
+                        id="organizerWebsite"
+                        label="Arrangementets nettside"
+                        required
+                        fullWidth
+                        variant="outlined"
+                        value={event.organizerWebPage}
+                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, organizerWebPage: e.target.value }))}
+                    />
                     <Button
                         variant='contained'
                         color='primary'

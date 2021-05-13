@@ -12,8 +12,6 @@ import 'date-fns';
 import { nb } from 'date-fns/locale';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
-
-
 const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.down('xs')]: {
@@ -216,7 +214,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
             {/*href={organizerWebPage}*/} 
             <CardActions>
                 {buttonSelector()}
-                <Button variant=""  href="google.com" >
+                <Button variant="outlined" href={organizerWebPage} target="_blank" rel="noopener noreferrer" >
                     {organizerName}s Nettside
                 </Button>
             </CardActions>

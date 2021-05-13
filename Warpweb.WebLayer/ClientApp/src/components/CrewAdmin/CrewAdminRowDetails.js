@@ -174,6 +174,7 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
     return (
         <>
             <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+            <>
             <TableRow>
                 <TableCell colSpan={2} style={{ backgroundColor: "#becadb" }}>
                 </TableCell>
@@ -353,7 +354,8 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
 
                 </TableCell>
 
-            </TableRow>
+                </TableRow>
+                </>
         </>
     )
 }
