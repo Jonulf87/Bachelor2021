@@ -1,7 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Dialog, DialogTitle, makeStyles, Paper, TextField } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, makeStyles, Paper, TextField } from '@material-ui/core';
 import useAuth from '../../hooks/useAuth';
-import { Button } from 'reactstrap';
 
 const useStyles = makeStyles((theme) => ({
     root: {

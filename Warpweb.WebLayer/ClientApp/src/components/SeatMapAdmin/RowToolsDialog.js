@@ -1,8 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import { MenuItem, Select, TextField, Checkbox, FormControlLabel, Paper, FormControl, } from '@material-ui/core';
+import { Button, MenuItem, Select, TextField, Checkbox, FormControlLabel, Paper, FormControl, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button } from 'reactstrap/lib';
 import useAuth from '../../hooks/useAuth';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 

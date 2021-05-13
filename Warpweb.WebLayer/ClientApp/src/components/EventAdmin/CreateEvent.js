@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
 import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, FormControl } from '@material-ui/core';
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { Form } from 'reactstrap';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
@@ -173,7 +172,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                 <DialogTitle>
                     Nytt arrangement
                 </DialogTitle>
-                <Form className={classes.root}>
+                <form className={classes.root}>
                     <TextField
                         className={classes.textField}
                         id="eventName"
@@ -267,7 +266,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             Lagre
                         </Button>
                     </FormControl>
-                </Form>
+                </form>
             </Paper>
         </Dialog>
     );
