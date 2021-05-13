@@ -43,6 +43,7 @@ export default function RowToolsDialog({ open, handleClose, row }) {
     const submitForm = (e) => {
         e.preventDefault();
         updateRowData(row.rowName, name, numberOfSeats, ticketTypesSelected);
+        handleClose();
     }
 
     if (row === null) {

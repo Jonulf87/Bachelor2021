@@ -32,7 +32,7 @@ export default function AppRouter() {
     const [policies, setPolicies] = useState([]);
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
     const { isAuthenticated, token, roles, orgsIsAdminAt } = useAuth();
-    console.log(orgsIsAdminAt);
+
     useEffect(() => {
         if (isAuthenticated) {
             const getPolicies = async () => {

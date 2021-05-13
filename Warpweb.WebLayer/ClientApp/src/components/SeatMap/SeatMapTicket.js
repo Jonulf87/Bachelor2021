@@ -4,7 +4,7 @@ import { format, parseISO } from 'date-fns';
 import useSeatMap from '../../hooks/useSeatMap';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 
-export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketType, mainEventName, mainEventId, userFirstName, userLastName, start, end, venueName }) {
+export default function SeatMapTicket({ id, price, seatNumber, seatId, rowName, ticketType, ticketTypeId, mainEventName, mainEventId, userFirstName, userLastName, start, end, venueName }) {
 
     const { setSelectedEvent } = useCurrentEvent();
     const { getSeatMap, setActiveTicket } = useSeatMap();
@@ -12,7 +12,7 @@ export default function SeatMapTicket({ id, price, seatNumber, rowName, ticketTy
     const handleClick = () => {
         setSelectedEvent(mainEventId);
         setActiveTicket(id);
-        getSeatMap(mainEventId);
+        getSeatMap();
     }
 
     return (

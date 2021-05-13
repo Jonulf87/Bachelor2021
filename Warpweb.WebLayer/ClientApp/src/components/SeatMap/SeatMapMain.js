@@ -5,6 +5,7 @@ import useSeatMap from '../../hooks/useSeatMap';
 import SeatMapTicket from './SeatMapTicket';
 import { Box, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles(() => ({
     paper: {
@@ -19,15 +20,16 @@ export default function SeatMapMain() {
     const classes = useStyles();
 
     const { isAuthenticated } = useAuth();
-    const { getSeatMap, getUserTicketsForUpcomingEvents, userUpcomingTickets, rows, errors } = useSeatMap();
+    const { getSeatMap, getUserTicketsForUpcomingEvents, userUpcomingTickets, rows, errors, error, setError, setErrors, errorDialogOpen, handleErrorDialogClose } = useSeatMap();
     const { currentEvent } = useCurrentEvent();
 
     useEffect(() => {
-
+        getSeatMap();
         getUserTicketsForUpcomingEvents();
     }, [isAuthenticated])
 
-    return (
+    return (<>
+        <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
         <Paper
             className={classes.paper}
             elevation={3}
@@ -60,5 +62,5 @@ export default function SeatMapMain() {
                 </Grid>
             </Grid>
         </Paper>
-    )
+    </>)
 }

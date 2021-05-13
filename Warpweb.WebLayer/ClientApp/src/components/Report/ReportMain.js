@@ -97,7 +97,7 @@ export default function ReportMain() {
                                 Bruker-rapport
                             </TableCell>
                             <TableCell align="left">
-
+                                
                                 <PDFDownloadLink
                                     document={<UsersReport data={userData} />}
                                     fileName='Brukerrapport.pdf'

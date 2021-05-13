@@ -27,7 +27,7 @@ const CurrentEventProvider = ({ children }) => {
         getCurrentMainEvent();
     }, [isAuthenticated, newEventSet]);
 
-    const setSelectedEvent = async (eventId) => {  
+    const setSelectedEvent = async (eventId, callback) => {  
         if (isAuthenticated) {
             await fetch('/api/events/setcurrentevent', {
                 headers: {
@@ -41,8 +41,13 @@ const CurrentEventProvider = ({ children }) => {
             setNewEventSet(oldValue => !oldValue);
             refreshToken(0, () => {
                 setCurrentEventChangeCompleteTrigger(oldvalue => !oldvalue);
+
+                if (callback !== undefined) {
+                    callback();
+                }
             });
         }
+
     }
 
 

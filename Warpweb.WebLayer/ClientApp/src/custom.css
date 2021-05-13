@@ -23,8 +23,7 @@ code {
     }
 
 .seatMapFloor {
-    width: auto;
-    min-width: 600px;
+    width: 600px;
     height: 600px;
     position: relative;
     background-color: #ccc;
@@ -41,8 +40,7 @@ code {
     cursor: pointer;
 }
 
-.seatAvailable {
-    background-color: chartreuse;
+.publicSeat {
     border-right: 1px rgba(0,0,0,0.4) solid;
     border-top: 1px rgba(0,0,0,0.4) solid;
     border-bottom: 1px rgba(0,0,0,0.4) solid;
@@ -51,35 +49,34 @@ code {
     height: 20px;
     font-size: 9px;
     text-align: center;
+}
+    .publicSeat:first-child {
+        border-left: 1px rgba(0,0,0,0.4) solid;
+    }
+
+.seatAvailable {
+    background-color: chartreuse;
     cursor: pointer;
+    
 }
 
 .seatOccupied {
     background-color: crimson;
-    border-right: 1px rgba(0,0,0,0.4) solid;
-    border-top: 1px rgba(0,0,0,0.4) solid;
-    border-bottom: 1px rgba(0,0,0,0.4) solid;
-    float: left;
-    width: 20px;
-    height: 20px;
-    font-size: 9px;
-    text-align: center;
-    cursor: pointer;
+    cursor: not-allowed;
 }
+
 
 .seatUnavailable {
     background-color: dimgray;
-    border-right: 1px rgba(0,0,0,0.4) solid;
-    border-top: 1px rgba(0,0,0,0.4) solid;
-    border-bottom: 1px rgba(0,0,0,0.4) solid;
-    float: left;
-    width: 20px;
-    height: 20px;
-    font-size: 9px;
-    text-align: center;
     cursor: not-allowed;
-    
 }
+
+
+.seatOccupiedByUser {
+    background-color: cornflowerblue;
+    cursor: no-drop;
+}
+
 
 /*Styling for ticket*/
 

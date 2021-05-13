@@ -1,6 +1,7 @@
 ﻿import { Shop } from '@material-ui/icons';
 import React, { useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
+import useCurrentEvent from '../hooks/useCurrentEvent';
 
 export const PurchaseContext = React.createContext();
 
@@ -16,6 +17,7 @@ const PurchaseProvider = ({ children }) => {
     const [checkedEula, setCheckedEula] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
+    const { setSelectedEvent } = useCurrentEvent();
 
     useEffect(() => {
         const getTicketTypes = async () => {
@@ -119,6 +121,7 @@ const PurchaseProvider = ({ children }) => {
 
             });
             if (paymentResponse.ok) {
+                setSelectedEvent(selectedMainEventId);
                 setShoppingCart([]);
                 setUnpaidUserEventsTickets([]);
                 setTotalPrice(0);

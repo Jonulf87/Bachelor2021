@@ -137,10 +137,10 @@ namespace Warpweb.LogicLayer.Services
         /// <summary>
         /// Returns List of Rows available for public
         /// </summary>
-        public async Task<IEnumerable<PublicRowVm>> GetPublicSeatMapAsync(int mainEventId)
+        public async Task<IEnumerable<PublicRowVm>> GetPublicSeatMapAsync()
         {
             var rows = await _dbContext.Rows
-                .Where(a => a.MainEventId == mainEventId)
+                .Where(a => a.MainEventId == _mainEventProvider.MainEventId)
                 .IgnoreQueryFilters()
                 .Select(a => new PublicRowVm
                 {

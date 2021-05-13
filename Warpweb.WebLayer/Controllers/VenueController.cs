@@ -41,7 +41,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>VenueListVm</returns>
         [HttpGet]
         [Route("organizervenueslist")]
-        [Authorize(Policy = "VenueAdmin")]
+        [Authorize(Policy = "VenueAdmin")] // Sjekk manuelt i metoden og sjekk for policy eller orgadmin
         public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
         {
             return await _venueService.GetOrganizerVenuesAsync();

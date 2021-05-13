@@ -43,7 +43,7 @@ export default function SeatMapAdminMenu() {
                             label="Navn på rad"
                             placeholder="Navn"
                             onChange={(e) => setRowName(e.target.value)}
-                            error={error}
+                            error={Boolean(error)}
                             helperText={error}
                         />
                     </Grid>

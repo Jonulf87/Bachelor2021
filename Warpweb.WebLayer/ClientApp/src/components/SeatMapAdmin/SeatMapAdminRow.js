@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 import SeatMapAdminSeat from './SeatMapAdminSeat';
 
@@ -8,21 +8,10 @@ export default function SeatMapAdminRow({ xPos, yPos, numberOfSeats, rowName, is
 
     const [style, setStyle] = useState({ display: 'none', zIndex: '9999' });
 
-    const { updateRowPosition, gridSize } = useSeatMapAdmin();
+    const { updateRowPosition, gridSize, ticketTypes } = useSeatMapAdmin();
 
     const handleDrag = (e, data) => {
         updateRowPosition(rowName, data.x, data.y)
-    }
-
-    const renderSeats = () => {
-        const seatsToBeRendered = [];
-
-        for (let i = 1; i <= numberOfSeats; i++) {
-            seatsToBeRendered.push(<SeatMapAdminSeat key={i} seatNumber={i} />)
-
-
-        }
-        return seatsToBeRendered;
     }
 
     return (
@@ -39,10 +28,21 @@ export default function SeatMapAdminRow({ xPos, yPos, numberOfSeats, rowName, is
                 style={{
                     width: `${gridSize * numberOfSeats}px`,
                     height: `${gridSize}px`,
-                    position: "absolute"
+                    position: "absolute",
+                    backgroundColor: "#83D6B7"
                 }}>
-                {renderSeats()}
+                <div
+                    style={{
+                        border: "1px solid #000",
+                        height: "inherit"
+                    }}
+                >
+                    <Typography style={{ fontSize: "14px" }}>Radnavn: {rowName}, antall seter: {numberOfSeats}</Typography>
+                </div>
+
                 <Button
+                    variant="contained"
+                    color="primary"
                     style={style}
                     onClick={(e) =>  handleOpen(rowName) }
                 >

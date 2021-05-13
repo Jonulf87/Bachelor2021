@@ -50,14 +50,15 @@ namespace Warpweb.LogicLayer.Services
         {
             return await _dbContext.Tickets
                 .Where(a => a.MainEvent.StartDateTime > DateTime.Now && a.User.Id == userId)
-                .IgnoreQueryFilters()
                 .Select(a => new UserTicketsUpcomingVm
                 {
                     Id = a.Id,
                     Price = a.Price,
                     RowName = a.Seat.Row.Name,
                     SeatNumber = a.Seat.SeatNumber,
+                    SeatId = a.SeatId,
                     TicketType = a.Type.DescriptionName,
+                    TicketTypeId = a.TicketTypeId,
                     MainEventName = a.MainEvent.Name,
                     MainEventId = a.MainEventId,
                     Start = a.MainEvent.StartDateTime,
@@ -249,8 +250,14 @@ namespace Warpweb.LogicLayer.Services
                 .SingleOrDefaultAsync();
 
             var ticket = await _dbContext.Tickets
+                .Include(a => a.Seat)
                 .Where(a => a.Id == ticketId)
                 .SingleOrDefaultAsync();
+
+            if (ticket.Seat?.IsReserved ?? false)
+            {
+                ticket.Seat.IsReserved = false;
+            }
 
             if (seat == null)
             {

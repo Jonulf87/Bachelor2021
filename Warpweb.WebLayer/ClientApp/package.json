@@ -11,7 +11,6 @@
     "axios": "^0.21.1",
     "date-fns": "^2.19.0",
     "formik": "^2.2.6",
-    "jquery": "^3.5.1",
     "jspdf-autotable": "^3.5.14",
     "jwt-decode": "^3.1.2",
     "merge": "^2.1.1",

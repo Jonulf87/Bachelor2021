@@ -31,8 +31,7 @@ export default function TicketList() {
     const classes = useStyles();
 
     const handleClick = (eventId) => {
-        setSelectedEvent(eventId);
-        history.push('/userseatmap')
+        setSelectedEvent(eventId, () => history.push('/userseatmap'));
     }
 
     useEffect(() => {

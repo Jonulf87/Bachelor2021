@@ -9,12 +9,14 @@ const SeatMapProvider = ({ children }) => {
     const [userUpcomingTickets, setUserUpcomingTickets] = useState([]);
     const [activeTicket, setActiveTicket] = useState(null);
     const { isAuthenticated, token } = useAuth();
-    const [errors, setErrors] = useState("");
+    const [errors, setErrors] = useState([]);
+    const [error, setError] = useState();
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
-    const getSeatMap = async (mainEventId) => {
+    const getSeatMap = async () => {
 
         if (isAuthenticated) {
-            const responseSeatMap = await fetch(`/api/seatmap/publicseatmap/${mainEventId}`, {
+            const responseSeatMap = await fetch(`/api/seatmap/publicseatmap`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
@@ -23,10 +25,17 @@ const SeatMapProvider = ({ children }) => {
             if (responseSeatMap.ok) {
                 setRows(await responseSeatMap.json());
             }
-            
+            else if (responseSeatMap.status === 400) {
+                setRows([]);
+                const errorResult = await responseSeatMap.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
             else {
-                const error = await responseSeatMap.json(); 
-                setErrors(error.message);
+                setRows([]);
+                const errorResult = await responseSeatMap.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
             }
         }
     }
@@ -39,7 +48,21 @@ const SeatMapProvider = ({ children }) => {
                     'content-type': 'application/json'
                 }
             });
-            setUserUpcomingTickets(await responseTickets.json());
+            if (responseTickets.ok) {
+                setUserUpcomingTickets(await responseTickets.json());
+            }
+            else if (responseTickets.status === 400) {
+                setUserUpcomingTickets([]);
+                const errorResult = await responseTickets.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
+            else {
+                setUserUpcomingTickets([]);
+                const errorResult = await responseTickets.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
+            }
         }
     }
 
@@ -55,15 +78,33 @@ const SeatMapProvider = ({ children }) => {
                 },
                 method: 'POST'
             });
-
             if (ticketUpdateResponse.ok) {
-                setActiveTicket(null);
                 getUserTicketsForUpcomingEvents();
+                getSeatMap();
+            }
+            else if (ticketUpdateResponse.status === 400) {
+                const errorResult = await ticketUpdateResponse.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
+            else {
+                const errorResult = await ticketUpdateResponse.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
             }
         }
     }
 
-    return <SeatMapContext.Provider value={{ errors, reserveSeat, setActiveTicket, getSeatMap, rows, getUserTicketsForUpcomingEvents, userUpcomingTickets }}>{children}</SeatMapContext.Provider>;
+    const getActiveTicket = () => {
+        return userUpcomingTickets.find(a => a.id === activeTicket);
+    }
+
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
+
+
+    return <SeatMapContext.Provider value={{ handleErrorDialogClose, errorDialogOpen, getActiveTicket, errors, setErrors, error, setError, reserveSeat, setActiveTicket, getSeatMap, rows, getUserTicketsForUpcomingEvents, userUpcomingTickets, setUserUpcomingTickets, setRows }}>{children}</SeatMapContext.Provider>;
 
 };
 

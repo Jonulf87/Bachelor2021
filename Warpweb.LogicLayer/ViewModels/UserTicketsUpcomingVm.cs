@@ -11,8 +11,10 @@ namespace Warpweb.LogicLayer.ViewModels
         public int Id { get; set; }
         public  int Price { get; set; }
         public int? SeatNumber { get; set; }
+        public int? SeatId { get; set; }
         public string RowName { get; set; }
         public string TicketType { get; set; }
+        public int TicketTypeId { get; set; }
         public string MainEventName { get; set; }
         public int MainEventId { get; set; }
         public DateTime Start { get; set; }

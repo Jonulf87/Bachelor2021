@@ -56,6 +56,7 @@ const SeatMapAdminProvider = ({ children }) => {
     }
 
     const updateRowData = (oldRowName, newRowName, newNumberOfSeats, newTicketTypeIds) => {
+        const oldArrayWithoutEditedRow = [...rows.filter(r => r.rowName !== oldRowName)];
         const row = rows.find(r => r.rowName === oldRowName);
         const oldNumberOfSeats = row.numberOfSeats;
 
@@ -73,7 +74,9 @@ const SeatMapAdminProvider = ({ children }) => {
                 });
             }
         }
-        setRows(oldValue => [...oldValue.filter(r => r.rowName !== oldRowName), row])
+        oldArrayWithoutEditedRow.push(row);
+        setRows(oldArrayWithoutEditedRow);
+        //setRows(oldValue => [...oldValue.filter(r => r.rowName !== oldRowName), row])
     }
 
     const submitRows = async () => {

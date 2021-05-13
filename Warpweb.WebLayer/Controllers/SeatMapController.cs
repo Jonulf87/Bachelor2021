@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
@@ -49,13 +50,12 @@ namespace Warpweb.WebLayer.Controllers
         /// <summary>
         /// Gets seatmap meant for the public
         /// </summary>
-        /// <param name="mainEventId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("publicseatmap/{mainEventId}")]
-        public async Task<ActionResult<IEnumerable<PublicRowVm>>> GetPublicSeatMapAsync(int mainEventId)
+        [Route("publicseatmap")]
+        public async Task<ActionResult<IEnumerable<PublicRowVm>>> GetPublicSeatMapAsync()
         {
-            var seatMap = await _seatMapService.GetPublicSeatMapAsync(mainEventId);
+            var seatMap = await _seatMapService.GetPublicSeatMapAsync();
             return Ok(seatMap);
         }
 

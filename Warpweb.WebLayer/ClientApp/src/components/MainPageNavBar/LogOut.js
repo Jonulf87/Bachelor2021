@@ -1,8 +1,9 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import usePurchase from '../../hooks/usePurchase';
+import useSeatMap from '../../hooks/useSeatMap';
 
 export default function LogOut() {
 
@@ -11,6 +12,7 @@ export default function LogOut() {
     const { logout } = useAuth();
     const { setCurrentEvent } = useCurrentEvent();
     const { setUserTickets } = usePurchase();
+    const { setActiveTicket, setRows, setUserUpcomingTickets} = useSeatMap();
 
     useEffect(() => {
         const logOutFunction = async () => {
@@ -18,6 +20,9 @@ export default function LogOut() {
             setCurrentEvent("");
             setUserTickets([]);
             setIsLoggedOut(true);
+            setActiveTicket(null);
+            setRows([]);
+            setUserUpcomingTickets([]);
         }
         logOutFunction();
     }, []);
