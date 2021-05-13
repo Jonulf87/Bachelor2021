@@ -219,8 +219,8 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         required
                         fullWidth
                         variant="outlined"
-                        value={event.organizerWebsite}
-                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, organizerWebsite: e.target.value }))}
+                        value={event.organizerWebPage}
+                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, organizerWebPage: e.target.value }))}
                     />
                     <Button
                         variant='contained'

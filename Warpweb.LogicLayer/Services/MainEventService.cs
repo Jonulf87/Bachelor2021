@@ -170,6 +170,8 @@ namespace Warpweb.LogicLayer.Services
                 EndDateTime = maineventVm.EndDateTime,
                 OrganizerId = maineventVm.OrganizerId,
                 VenueId = maineventVm.VenueId,
+                InfoComments = maineventVm.InfoComments,
+                OrganizerWebPage = maineventVm.OrganizerWebPage,
                 Crews = new List<Crew>
                 { 
                     leaderCrew
@@ -217,6 +219,8 @@ namespace Warpweb.LogicLayer.Services
             existingMainEvent.StartDateTime = maineventVm.StartDateTime;
             existingMainEvent.EndDateTime = maineventVm.EndDateTime;
             existingMainEvent.VenueId = maineventVm.VenueId;
+            existingMainEvent.InfoComments = maineventVm.InfoComments;
+            existingMainEvent.OrganizerWebPage = maineventVm.OrganizerWebPage;
 
             _dbContext.Update(existingMainEvent);
             await _dbContext.SaveChangesAsync();
