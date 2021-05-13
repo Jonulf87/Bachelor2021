@@ -1,5 +1,4 @@
 ﻿import { Button, Grid, TextField } from '@material-ui/core';
-import { Form } from 'reactstrap';
 import React, { useState } from 'react';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
@@ -12,7 +11,7 @@ export default function SeatMapAdminMenu() {
 
         <div className="addingMenu">
 
-            <Form>
+            <form>
                 <Grid
                     container
                     spacing={2}
@@ -62,7 +61,7 @@ export default function SeatMapAdminMenu() {
                         <Button variant="contained" color="secondary" onClick={submitRows} >Lagre</Button>
                     </Grid>
                 </Grid>
-            </Form>
+            </form>
         </div>
 
     )

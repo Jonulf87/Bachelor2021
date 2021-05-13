@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
-import { Button } from 'reactstrap/lib';
+import { Button } from '@material-ui/core';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 import SeatMapAdminSeat from './SeatMapAdminSeat';
 

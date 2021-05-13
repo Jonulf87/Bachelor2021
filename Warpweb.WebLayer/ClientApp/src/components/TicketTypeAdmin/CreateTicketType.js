@@ -1,6 +1,5 @@
-﻿import { Container, Dialog, DialogTitle, FormControl, makeStyles, Paper, TextField } from '@material-ui/core';
+﻿import { Button, Container, Dialog, DialogTitle, FormControl, makeStyles, Paper, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
-import { Button, Form } from 'reactstrap/lib';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +59,7 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                 <DialogTitle>
                     Ny billettype
                 </DialogTitle>
-                <Form
+                <form
                     onSubmit={submitForm}
                     
                 >
@@ -104,7 +103,7 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                         </Button>
                     </FormControl>
                         
-                </Form>
+                </form>
             </Container>
         </Dialog>
     )
