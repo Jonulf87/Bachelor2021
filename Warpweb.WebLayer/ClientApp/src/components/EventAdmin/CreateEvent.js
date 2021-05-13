@@ -40,6 +40,8 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     const [endDateTime, setEndDateTime] = useState(new Date())
     const [organizerId, setOrganizerId] = useState("");
     const [venueId, setVenueId] = useState("");
+    const [eventComment, setEventComment] = useState("");
+    const [organizerWebsite, setOrganizerWebsite] = useState("");
 
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
     const [organizers, setOrganizers] = useState([]);
@@ -120,7 +122,9 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
         'startDateTime': startDateTime,
         'endDateTime': endDateTime,
         'organizerId': organizerId,
-        'venueId': venueId
+        'venueId': venueId,
+        'infoComments': eventComment,
+        'organizerWebsite': organizerWebsite
     }
 
     // NB - Må sjekke at det er gjort valg i skjema før innsending
@@ -254,6 +258,26 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             ))}
                         </TextField>
                     )}
+                    <TextField
+                        className={classes.textField}
+                        id="eventComment"
+                        label="Kommentarer"
+                        required
+                        fullWidth
+                        variant="outlined"
+                        value={eventComment}
+                        onChange={(e) => setEventComment(e.target.value)}
+                    />
+                    <TextField
+                        className={classes.textField}
+                        id="organizerWebsite"
+                        label="Arrangørens nettside"
+                        required
+                        fullWidth
+                        variant="outlined"
+                        value={organizerWebsite}
+                        onChange={(e) => setOrganizerWebsite(e.target.value)}
+                    />
                     <FormControl style={{ padding: '8px' }}>
                         <Button
                             variant="contained"
