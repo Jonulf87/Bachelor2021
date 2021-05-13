@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
 using Warpweb.DataAccessLayer.Models;
+using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 using Warpweb.WebLayer.Controllers;
@@ -72,95 +73,101 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(_decsr1, returnedOrganizer2.Description);
         }
 
-        //        [Test]
-        //        public async Task ShouldCreateOrganizer()
-        //        {
-        //            CreateOrganizers();
+        [Test]
+        public void ShouldNotGetOrganizerByIdIfDoesntExist()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
 
-        //            string orgName = "Org 3";
-        //            string orgNummer = "3";
-        //            string decsr = "Org Descr 3";
-
-        //            EntityEntry<ApplicationUser> user = _dbContext.ApplicationUsers.Add(
-        //                new ApplicationUser
-        //                {
-        //                    FirstName = "Test",
-        //                    MiddleName = "",
-        //                    LastName = "Testesen",
-        //                    Address = "Testing gate 123",
-        //                    DateOfBirth = DateTime.Now,
-        //                    IsAllergic = false
-        //                }
-        //            );
-
-        //            OrganizerService organizerService = new OrganizerService(_dbContext);
-        //            OrganizerController organizerController = new OrganizerController(organizerService);
-
-        //            OrganizerVm organizerVm = new OrganizerVm { Name = orgName, OrgNumber = orgNummer, Description = decsr, ContactName = user.Entity.Id };
-
-        //            ActionResult<OrganizerVm> result = await organizerController.CreateOrganizer(organizerVm);
-
-        //            OrganizerVm createdOrganizer = (OrganizerVm)((OkObjectResult)result.Result).Value;
-
-        //            // Check object that is returned from the controller
-        //            Assert.AreEqual(3, createdOrganizer.Id);
-        //            Assert.AreEqual(orgName, createdOrganizer.Name);
-        //            Assert.AreEqual(orgNummer, createdOrganizer.OrgNumber);
-        //            Assert.AreEqual(decsr, createdOrganizer.Description);
-        //            Assert.AreEqual(user.Entity.Id, createdOrganizer.ContactName);
-
-        //            // Check what we really have in the DB
-        //            Organizer organizer1 = _dbContext.Organizers.Find(3);
-        //            Assert.AreEqual(3, organizer1.Id);
-        //            Assert.AreEqual(orgName, organizer1.Name);
-        //            Assert.AreEqual(orgNummer, organizer1.OrgNumber);
-        //            Assert.AreEqual(decsr, organizer1.Description);
-        //            Assert.AreEqual(user.Entity.Id, organizer1.ContactId);
-        //        }
-
-        //        [Test]
-        //        public async Task ShouldUpdateOrganizer()
-        //        {
-        //            CreateOrganizers();
-
-        //            string newName = "Org 4";
-        //            string newOrgNummer = "4";
-        //            string decsr = "Org Descr 4";
-
-        //            EntityEntry<ApplicationUser> user4 = _dbContext.ApplicationUsers.Add(
-        //                new ApplicationUser
-        //                {
-        //                    FirstName = "Test",
-        //                    MiddleName = "",
-        //                    LastName = "Testesen",
-        //                    Address = "Testing gate 123",
-        //                    DateOfBirth = DateTime.Now,
-        //                    IsAllergic = false
-        //                }
-        //            );
-
-        //            OrganizerService organizerService = new OrganizerService(_dbContext);
-        //            OrganizerController organizerController = new OrganizerController(organizerService);
-
-        //            OrganizerVm organizerVm = new OrganizerVm { Id = 1, Name = newName, OrgNumber = newOrgNummer, Description = decsr, ContactName = user4.Entity.Id };
-
-        //            await organizerController.UpdateOrganizer(organizerVm);
-
-        //            // Check that only one has been changed
-        //            Organizer organizer1 = _dbContext.Organizers.Find(1);
-        //            Assert.AreEqual(newName, organizer1.Name);
-        //            Assert.AreEqual(newOrgNummer, organizer1.OrgNumber);
-        //            Assert.AreEqual(decsr, organizer1.Description);
-        //            Assert.AreEqual(user4.Entity.Id, organizer1.ContactId);
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                ActionResult<OrganizerVm> result1 = await organizerController.GetOrganizerAsync(123);
+            });
+            Assert.That(ex.Message == "Fant ingen arrangører med id: 123");
+        }
 
 
-        //            Organizer organizer2 = _dbContext.Organizers.Find(2);
-        //            Assert.AreEqual(_orgName2, organizer2.Name);
-        //            Assert.AreEqual(_orgNummer2, organizer2.OrgNumber);
-        //            Assert.AreEqual(_decsr2, organizer2.Description);
-        //            Assert.AreEqual(_user2.Entity.Id, organizer2.ContactId);
-        //        }
+        [Test]
+        public async Task ShouldCreateOrganizer()
+        {
+            CreateOrganizers();
 
+            string orgName = "Org 3";
+            string orgNummer = "3";
+            string decsr = "Org Descr 3";
+
+            EntityEntry<ApplicationUser> user = _dbContext.ApplicationUsers.Add(
+                new ApplicationUser
+                {
+                    FirstName = "Test",
+                    MiddleName = "",
+                    LastName = "Testesen",
+                    Address = "Testing gate 123",
+                    DateOfBirth = DateTime.Now,
+                    IsAllergic = false
+                }
+            );
+
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+
+            OrganizerVm organizerVm = new OrganizerVm { Name = orgName, OrgNumber = orgNummer, Description = decsr, ContactName = user.Entity.Id };
+
+            await organizerController.CreateOrganizerAsync(organizerVm);
+
+            ActionResult<List<OrganizerListVm>> organizers = await organizerController.GetOrganizersAsync();
+            List<OrganizerListVm> returnedOrganizers = organizers.Value;
+
+            Organizer newOrganizer = _dbContext.Organizers.Find(4);
+            Assert.That(returnedOrganizers, Has.Exactly(1).Matches<OrganizerListVm>(organizer => organizer.Id == newOrganizer.Id &&
+                                                                           organizer.Name == newOrganizer.Name &&
+                                                                           organizer.OrgNumber == newOrganizer.OrgNumber
+                                                                           ));
+        }
+        /*
+        [Test]
+        public async Task ShouldUpdateOrganizer()
+        {
+            CreateOrganizers();
+
+            string newName = "Org 4";
+            string newOrgNummer = "4";
+            string decsr = "Org Descr 4";
+
+            EntityEntry<ApplicationUser> user4 = _dbContext.ApplicationUsers.Add(
+                new ApplicationUser
+                {
+                    FirstName = "Test",
+                    MiddleName = "",
+                    LastName = "Testesen",
+                    Address = "Testing gate 123",
+                    DateOfBirth = DateTime.Now,
+                    IsAllergic = false
+                }
+            );
+
+            OrganizerService organizerService = new OrganizerService(_dbContext);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+
+            OrganizerVm organizerVm = new OrganizerVm { Id = 1, Name = newName, OrgNumber = newOrgNummer, Description = decsr, ContactName = user4.Entity.Id };
+
+            await organizerController.UpdateOrganizer(organizerVm);
+
+            // Check that only one has been changed
+            Organizer organizer1 = _dbContext.Organizers.Find(1);
+            Assert.AreEqual(newName, organizer1.Name);
+            Assert.AreEqual(newOrgNummer, organizer1.OrgNumber);
+            Assert.AreEqual(decsr, organizer1.Description);
+            Assert.AreEqual(user4.Entity.Id, organizer1.ContactId);
+
+
+            Organizer organizer2 = _dbContext.Organizers.Find(2);
+            Assert.AreEqual(_orgName2, organizer2.Name);
+            Assert.AreEqual(_orgNummer2, organizer2.OrgNumber);
+            Assert.AreEqual(_decsr2, organizer2.Description);
+            Assert.AreEqual(_user2.Entity.Id, organizer2.ContactId);
+        }
+        */
         //        [Test]
         //        public async Task ShouldDeleteMainEvent()
         //        {
