@@ -262,7 +262,6 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                         className={classes.textField}
                         id="eventComment"
                         label="Kommentarer"
-                        required
                         fullWidth
                         variant="outlined"
                         value={eventComment}
@@ -271,7 +270,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                     <TextField
                         className={classes.textField}
                         id="organizerWebsite"
-                        label="Arrangørens nettside"
+                        label="Arrangementets nettside"
                         required
                         fullWidth
                         variant="outlined"
