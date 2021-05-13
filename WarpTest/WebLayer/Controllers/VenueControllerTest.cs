@@ -46,6 +46,21 @@ namespace WarpTest.WebLayer.Controllers
         }
 
         [Test]
+        public async Task ShouldGetOrganizerVenues()
+        {
+            CreateVenues();
+            VenueService venueService = new VenueService(_dbContext, _mainEventProvider);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            VenueController venueController = new VenueController(venueService, securityService);
+
+            List<VenueListVm> result = await venueController.GetOrganizerVenuesAsync();
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(1, result[0].Id);
+            Assert.AreEqual("Venue 1", result[0].Name);
+        }
+
+        [Test]
         public async Task ShouldGetVenueById()
         {
             CreateVenues();
