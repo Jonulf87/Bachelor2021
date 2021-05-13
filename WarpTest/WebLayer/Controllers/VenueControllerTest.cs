@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -75,7 +76,7 @@ namespace WarpTest.WebLayer.Controllers
         }
 
         [Test]
-        public void ShouldNotGetVenueInvalidId()
+        public void ShouldNotGetVenueWithInvalidId()
         {
             VenueService venueService = new VenueService(_dbContext, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
@@ -88,74 +89,83 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual("Ugyldig Id", ex.Message);
         }
 
-        //[Test]
-        //public async Task ShouldCreateVenue()
-        //{
-        //    CreateVenues();
 
-        //    string venueName3 = "Venue name 3";
-        //    string venueAddress3 = "Testing gate 215";
-        //    int venueAreaAvailable3 = 30;
-        //    int venueCapacity3 = 3;
 
-        //    VenueService venueService = new VenueService(_dbContext);
-        //    VenueController venueController = new VenueController(venueService);
+        [Test]
+        public async Task ShouldCreateVenue()
+        {
+           
+            string venueName3 = "Venue name 3";
+            string venueAddress3 = "Testing gate 215";
 
-        //    VenueVm venueVm = new VenueVm { VenueName = venueName3, VenueAddress = venueAddress3, VenueAreaAvailable = venueAreaAvailable3, VenueCapacity = venueCapacity3 };
 
-        //    ActionResult<VenueVm> result = await venueController.CreateVenue(venueVm);
+            VenueService venueService = new VenueService(_dbContext, _mainEventProvider);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            VenueController venueController = new VenueController(venueService, securityService);
 
-        //    VenueVm createdVenue = (VenueVm)((OkObjectResult)result.Result).Value;
+            CreateUser();
+            CreateVenues();
+            SetUser(venueController, _createdUser2.Entity.Id);
+            
 
-        //    // Check object that is returned from the controller
-        //    Assert.AreEqual(3, createdVenue.VenueId);
-        //    Assert.AreEqual(venueName3, createdVenue.VenueName);
-        //    Assert.AreEqual(venueAddress3, createdVenue.VenueAddress);
-        //    Assert.AreEqual(venueAreaAvailable3, createdVenue.VenueAreaAvailable);
-        //    Assert.AreEqual(venueCapacity3, createdVenue.VenueCapacity);
+            VenueVm venueVm = new VenueVm { Name = venueName3, Address = venueAddress3, PostalCode = "0258", ContactEMail = "venue3@test.no", ContactPhone = "1234578", OrganizerId = 2};
 
-        //    // Check what we really have in the DB
-        //    Venue venue1 = _dbContext.Venues.Find(3);
-        //    Assert.AreEqual(3, venue1.VenueId);
-        //    Assert.AreEqual(venueName3, venue1.VenueName);
-        //    Assert.AreEqual(venueAddress3, venue1.VenueAddress);
-        //    Assert.AreEqual(venueAreaAvailable3, venue1.VenueAreaAvailable);
-        //    Assert.AreEqual(venueCapacity3, venue1.VenueCapacity);
-        //}
+            await venueController.CreateVenueAsync(venueVm);
 
-        //[Test]
-        //public async Task ShouldUpdateVenue()
-        //{
-        //    CreateVenues();
+            List<VenueListVm> venues = await venueController.GetVenuesAsync();
+            Venue createdVenue = _dbContext.Venues.Find(3);
 
-        //    string newVenueName = "Venue name ";
-        //    string newVenueAddress = "Testing gate 216";
-        //    int newVenueAreaAvailable = 40;
-        //    int newVenueCapacity = 4;
+            Assert.AreEqual(3, venues.Count);
+            Assert.That(venues, Has.Exactly(1).Matches<VenueListVm>(venue => venue.Id == createdVenue.Id &&
+                                                                           venue.Name == createdVenue.Name &&
+                                                                           venue.Address == createdVenue.Address
+                                                                           ));
+        }
 
-        //    VenueService venueService = new VenueService(_dbContext);
-        //    VenueController venueController = new VenueController(venueService);
+        [Test]
+        public async Task ShouldUpdateVenue()
+        {
+            string newVenueName = "Venue name ";
+            string newVenueAddress = "Testing gate 216";
 
-        //    VenueVm venueVm = new VenueVm { VenueId = 1, VenueName = newVenueName, VenueAddress = newVenueAddress, VenueAreaAvailable = newVenueAreaAvailable, VenueCapacity = newVenueCapacity };
+            VenueService venueService = new VenueService(_dbContext, _mainEventProvider);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            VenueController venueController = new VenueController(venueService, securityService);
 
-        //    await venueController.UpdateVenue(venueVm);
+            CreateUser();
+            CreateVenues();
+            SetUser(venueController, _createdUser.Entity.Id);
 
-        //    // Check that only one has been changed
-        //    Venue venue1 = _dbContext.Venues.Find(1);
-        //    Assert.AreEqual(newVenueName, venue1.VenueName);
-        //    Assert.AreEqual(newVenueAddress, venue1.VenueAddress);
-        //    Assert.AreEqual(newVenueAreaAvailable, venue1.VenueAreaAvailable);
-        //    Assert.AreEqual(newVenueCapacity, venue1.VenueCapacity);
+            VenueVm venueVm = new VenueVm { Id = 2, Name = newVenueName, Address = newVenueAddress, PostalCode = _postalCode2, ContactEMail = _contactEMail2, ContactPhone = _contactPhone2, OrganizerId = 2};
 
-        //    Venue venue2 = _dbContext.Venues.Find(2);
-        //    Assert.AreEqual(_venueName2, venue2.VenueName);
-        //    Assert.AreEqual(_venueAddress2, venue2.VenueAddress);
-        //    Assert.AreEqual(_venueAreaAvailable2, venue2.VenueAreaAvailable);
-        //    Assert.AreEqual(_venueCapacity2, venue2.VenueCapacity);
-        //}
+            await venueController.UpdateVenueAsync(venueVm);
+
+            // Check that only one has been changed
+            Venue venue2 = _dbContext.Venues.Find(2);
+            Assert.AreEqual(newVenueName, venue2.Name);
+            Assert.AreEqual(newVenueAddress, venue2.Address);          
+        }
 
 
         // Helper methods
+
+        private void CreateUser()
+        {
+            _createdUser = _dbContext.ApplicationUsers.Add(
+                new ApplicationUser
+                {
+                    FirstName = "Test",
+                    MiddleName = "",
+                    LastName = "Testesen",
+                    Address = "Testing gate 123",
+                    DateOfBirth = DateTime.Now.AddYears(-20),
+                    IsAllergic = false,
+                    Gender = "Female",
+                    Email = "test@test.no",
+                    PhoneNumber = "98765433"
+                }
+            );
+        }
         private void CreateVenues()
         {
             _dbContext.Organizers.Add(
@@ -163,17 +173,14 @@ namespace WarpTest.WebLayer.Controllers
                  {
                      Name = "Organizer 2",
                      OrgNumber = "1234567",
-                     Description = "Description"
-                    /*
-                    Admins = new List<ApplicationUser>()
-                    {
-                        // _createdUser.Entity
-                        new ApplicationUser
-                        {
-                            Id = _createdUser.Entity.Id
-                        }
-                    }
-                    */
+                     Description = "Description",
+
+                     Admins = new List<ApplicationUser>()
+                     {
+                        _createdUser2.Entity
+                        
+                     }
+
                  }
              );
             _dbContext.SaveChanges();
