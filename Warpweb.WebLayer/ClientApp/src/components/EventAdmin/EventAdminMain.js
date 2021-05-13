@@ -6,7 +6,6 @@ import CreateEvent from './CreateEvent';
 import EventAdminRowDetails from './EventAdminRowDetails';
 
 export default function EventAdminList() {
-
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -19,8 +18,8 @@ export default function EventAdminList() {
     const { isAuthenticated, token } = useAuth();
 
     const triggerUpdate = () => {
-        setUpdateList(oldValue => !oldValue);
-    }
+        setUpdateList((oldValue) => !oldValue);
+    };
 
     const handleDialogCreateEventOpen = () => {
         setDialogCreateEventOpen(true);
@@ -32,42 +31,36 @@ export default function EventAdminList() {
 
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
     useEffect(() => {
         const getEvents = async () => {
             if (isAuthenticated) {
-
                 const response = await fetch('/api/events/orgadminmainevents', {
                     headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
 
                 if (response.ok) {
                     const result = await response.json();
                     setEventList(result);
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     const errorResult = await response.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
                     setEventList([]);
-                }
-                else {
+                } else {
                     const errorResult = await response.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                     setEventList([]);
                 }
-
             }
-        }
+        };
 
         getEvents();
-    }, [isAuthenticated, updateList])
-
-
+    }, [isAuthenticated, updateList]);
 
     const columns = [
         {
@@ -75,25 +68,25 @@ export default function EventAdminList() {
             label: 'Id',
             options: {
                 display: false,
-                filter: false
-            }
+                filter: false,
+            },
         },
         {
             name: 'name',
-            label: ' '
+            label: ' ',
         },
         {
             name: '',
             options: {
-                filter: false
-            }
+                filter: false,
+            },
         },
         {
             name: '',
             options: {
-                filter: false
-            }
-        }
+                filter: false,
+            },
+        },
     ];
 
     const options = {
@@ -109,51 +102,51 @@ export default function EventAdminList() {
         expandableRowsHeader: false,
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
-            return (
-                <EventAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />
-            )
+            return <EventAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />;
         },
         onRowClick: (rowData, rowMeta) => {
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
                 setRowsExpanded([]);
+            } else {
+                setRowsExpanded([rowMeta.dataIndex]);
             }
-            else {
-                setRowsExpanded([rowMeta.dataIndex])
-            }
-        }
+        },
     };
-
-
-
 
     return (
         <>
-            <CreateEvent dialogOpen={dialogCreateEventOpen} handleDialogClose={handleDialogCreateEventClose} triggerUpdate={triggerUpdate} />
+            <CreateEvent
+                dialogOpen={dialogCreateEventOpen}
+                handleDialogClose={handleDialogCreateEventClose}
+                triggerUpdate={triggerUpdate}
+            />
             <MUIDataTable
-                title={<>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <Typography variant="h6" style={{ marginTop: "15px" }, { marginLeft: '15px' }}>
-                            Arrangementer
-                        </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="medium"
-                            style={{ margin: "15px" }}
-                            onClick={handleDialogCreateEventOpen}
-                        >
-                                Nytt arrangement
-                        </Button>
+                title={
+                    <>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" style={({ marginTop: '15px' }, { marginLeft: '15px' })}>
+                                    Arrangementer
+                                </Typography>
                             </Grid>
-                    </Grid>
-                </>}
+                            <Grid item xs={12}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="medium"
+                                    style={{ margin: '15px' }}
+                                    onClick={handleDialogCreateEventOpen}
+                                >
+                                    Nytt arrangement
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </>
+                }
                 data={eventList}
                 columns={columns}
                 options={options}
             />
         </>
-    )
+    );
 }

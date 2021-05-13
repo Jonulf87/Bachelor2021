@@ -5,10 +5,7 @@ import { format, parseISO } from 'date-fns';
 import EditEvent from './EditEvent';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 
-
 export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigger }) {
-
-
     const [event, setEvent] = useState(null);
     const openEventId = rowData[0];
     const [dialogEditEventOpen, setDialogEditEventOpen] = useState(false);
@@ -19,47 +16,51 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
 
     const handleDialogEditEventClose = () => {
         setDialogEditEventOpen(false);
-    }
+    };
 
     const handleDialogEditEventOpen = () => {
         setDialogEditEventOpen(true);
-    }
+    };
 
     const updateList = () => {
-        setTriggerUpdate(oldvalue => !oldvalue);
+        setTriggerUpdate((oldvalue) => !oldvalue);
         updateListTrigger();
-    }
+    };
 
     useEffect(() => {
         const getEvent = async () => {
             if (isAuthenticated) {
                 const responseEvent = await fetch(`/api/events/getmainevent/${openEventId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const resultEvent = await responseEvent.json();
                 setEvent(resultEvent);
             }
-        }
+        };
         getEvent();
-    }, [isAuthenticated, triggerUpdate])
+    }, [isAuthenticated, triggerUpdate]);
 
-
-    if (event === null) return (<TableRow><TableCell colSpan={4}><p>Lading...</p></TableCell></TableRow>);
+    if (event === null)
+        return (
+            <TableRow>
+                <TableCell colSpan={4}>
+                    <p>Lading...</p>
+                </TableCell>
+            </TableRow>
+        );
 
     return (
         <>
-
             <TableRow>
-                <TableCell colSpan={1}>
-                </TableCell>
+                <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography
                         variant="subtitle1"
                         style={{
-                            maxWidth: "fit-content"
+                            maxWidth: 'fit-content',
                         }}
                     >
                         Navn
@@ -69,7 +70,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                     <Typography
                         variant="subtitle1"
                         style={{
-                            maxWidth: "fit-content"
+                            maxWidth: 'fit-content',
                         }}
                     >
                         {event.name}
@@ -78,102 +79,84 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
             </TableRow>
 
             <TableRow>
-                <TableCell colSpan={1}>
-                </TableCell>
+                <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography
                         variant="subtitle1"
                         style={{
-                            maxWidth: "fit-content"
+                            maxWidth: 'fit-content',
                         }}
                     >
                         Start
                     </Typography>
                 </TableCell>
                 <TableCell colSpan={2}>
-                    <Typography variant="subtitle1" >
-                        {format(parseISO(event.startDateTime), 'dd.MM.yyyy HH:mm')}
-                    </Typography>
+                    <Typography variant="subtitle1">{format(parseISO(event.startDateTime), 'dd.MM.yyyy HH:mm')}</Typography>
                 </TableCell>
             </TableRow>
 
             <TableRow>
-                <TableCell colSpan={1}>
-                </TableCell>
+                <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography
                         variant="subtitle1"
                         style={{
-                            maxWidth: "fit-content"
+                            maxWidth: 'fit-content',
                         }}
                     >
                         Slutt
                     </Typography>
                 </TableCell>
                 <TableCell colSpan={2}>
-                    <Typography variant="subtitle1" >
-                        {format(parseISO(event.endDateTime), 'dd.MM.yyyy HH:mm')}
-                    </Typography>
+                    <Typography variant="subtitle1">{format(parseISO(event.endDateTime), 'dd.MM.yyyy HH:mm')}</Typography>
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell colSpan={1}>
-                </TableCell>
+                <TableCell colSpan={1}></TableCell>
                 <TableCell
                     colSpan={1}
                     style={{
-                        maxWidth: "fit-content"
+                        maxWidth: 'fit-content',
                     }}
                 >
                     <Typography
                         variant="subtitle1"
                         style={{
-                            maxWidth: "fit-content"
+                            maxWidth: 'fit-content',
                         }}
                     >
                         Lokale
                     </Typography>
                 </TableCell>
                 <TableCell colSpan={2}>
-                    <Typography variant="subtitle1" >
-                        {event.venueName}
-                    </Typography>
+                    <Typography variant="subtitle1">{event.venueName}</Typography>
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell colSpan={1}>
-                </TableCell>
+                <TableCell colSpan={1}></TableCell>
                 <TableCell
                     colSpan={1}
                     style={{
-                        maxWidth: "fit-content"
+                        maxWidth: 'fit-content',
                     }}
                 >
                     <Typography
                         variant="subtitle1"
                         style={{
-                            maxWidth: "fit-content"
+                            maxWidth: 'fit-content',
                         }}
                     >
                         Arrangør
                     </Typography>
                 </TableCell>
                 <TableCell colSpan={2}>
-                    <Typography variant="subtitle1" >
-                        {event.organizerName}
-                    </Typography>
+                    <Typography variant="subtitle1">{event.organizerName}</Typography>
                 </TableCell>
             </TableRow>
             <TableRow>
+                <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
-                </TableCell>
-                <TableCell colSpan={1}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        onClick={handleDialogEditEventOpen}
-                    >
+                    <Button variant="contained" color="primary" size="large" onClick={handleDialogEditEventOpen}>
                         Endre arrangement
                     </Button>
                     <Button
@@ -182,16 +165,14 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                         size="large"
                         onClick={() => setSelectedEvent(openEventId)}
                         style={{
-                            marginLeft: "10px"
+                            marginLeft: '10px',
                         }}
                     >
                         Sett som aktiv
                     </Button>
                 </TableCell>
-                <TableCell colSpan={1}>
-                </TableCell>
-                <TableCell colSpan={1}>
-                </TableCell>
+                <TableCell colSpan={1}></TableCell>
+                <TableCell colSpan={1}></TableCell>
             </TableRow>
             <EditEvent
                 eventId={openEventId}
@@ -200,5 +181,5 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 updateListTrigger={updateList}
             />
         </>
-    )
+    );
 }

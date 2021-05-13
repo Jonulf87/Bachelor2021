@@ -12,21 +12,20 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
             padding: theme.spacing(1),
-            width: '100%'
+            width: '100%',
         },
         '& .MuiButtonBase-root': {
             padding: '7px',
-            margin: '12px'
-        }
-    }
-}))
+            margin: '12px',
+        },
+    },
+}));
 
 export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEditEventClose, updateListTrigger }) {
-
-    const [event, setEvent] = useState("");
+    const [event, setEvent] = useState('');
     const [organizers, setOrganizers] = useState([]);
     const [venues, setVenues] = useState([]);
-    const [organizerId, setOrganizerId] = useState("");
+    const [organizerId, setOrganizerId] = useState('');
     const [open, setOpen] = useState(false);
 
     //Statevariabler for error popup vindu
@@ -37,7 +36,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
@@ -47,39 +46,35 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
             if (isAuthenticated) {
                 const responseEvent = await fetch(`/api/events/getmainevent/${eventId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 if (responseEvent.ok) {
                     const resultEvent = await responseEvent.json();
                     setEvent(resultEvent);
-                }
-                else if (responseEvent.status === 400) {
+                } else if (responseEvent.status === 400) {
                     const errorResult = await responseEvent.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     const errorResult = await responseEvent.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getEvent();
-
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
 
     useEffect(() => {
         const getOrganizers = async () => {
-
             if (isAuthenticated) {
                 const response = await fetch('/api/tenants/getaorgsadmin', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
                 });
                 if (response.ok) {
                     const result = await response.json();
@@ -87,48 +82,43 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                     if (result.length === 1) {
                         setOrganizerId(result[0].id);
                     }
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     const errorResult = await response.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     const errorResult = await response.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getOrganizers();
     }, [isAuthenticated]);
 
     useEffect(() => {
         const getVenues = async () => {
-
             if (isAuthenticated) {
                 const response = await fetch(`/api/venues/organizervenueslist`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 if (response.ok) {
                     const result = await response.json();
                     setVenues(result);
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     const errorResult = await response.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     const errorResult = await response.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getVenues();
     }, [isAuthenticated]);
 
@@ -137,45 +127,41 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
         if (isAuthenticated) {
             const response = await fetch('/api/events', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
                 },
                 method: 'PUT',
-                body: JSON.stringify(event)
+                body: JSON.stringify(event),
             });
             if (response.ok) {
                 handleDialogEditEventClose();
                 updateListTrigger();
-            }
-            else if (response.status === 400) {
+            } else if (response.status === 400) {
                 const errorResult = await response.json();
                 setErrors(errorResult.errors);
                 setErrorDialogOpen(true);
-            }
-            else {
+            } else {
                 const errorResult = await response.json();
                 setError(errorResult.message);
                 setErrorDialogOpen(true);
             }
         }
-    }
-
+    };
 
     return (
-        <Dialog
-            open={dialogEditEventOpen}
-            onClose={handleDialogEditEventClose}
-        >
-            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+        <Dialog open={dialogEditEventOpen} onClose={handleDialogEditEventClose}>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
 
             <Paper>
-                <DialogTitle>
-                    Endre arrangement
-                </DialogTitle>
-                <form
-                    className={classes.root}
-                    onSubmit={submitForm}
-                >
+                <DialogTitle>Endre arrangement</DialogTitle>
+                <form className={classes.root} onSubmit={submitForm}>
                     <TextField
                         className={classes.textField}
                         id="eventName"
@@ -184,7 +170,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         fullWidth
                         variant="outlined"
                         value={event.name}
-                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, name: e.target.value }))}
+                        onChange={(e) => setEvent((oldValues) => ({ ...oldValues, name: e.target.value }))}
                     />
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDateTimePicker
@@ -196,9 +182,9 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                             ampm={false}
                             format="dd.MM.yyyy HH:mm"
                             value={event.startDateTime}
-                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, startDateTime: e }))}
+                            onChange={(e) => setEvent((oldValues) => ({ ...oldValues, startDateTime: e }))}
                             KeyboardButtonProps={{
-                                "aria-label": "Endre start dato og tid",
+                                'aria-label': 'Endre start dato og tid',
                             }}
                         />
                     </MuiPickersUtilsProvider>
@@ -212,9 +198,9 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                             ampm={false}
                             format="dd.MM.yyyy HH:mm"
                             value={event.endDateTime}
-                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, endDateTime: e }))}
+                            onChange={(e) => setEvent((oldValues) => ({ ...oldValues, endDateTime: e }))}
                             KeyboardButtonProps={{
-                                "aria-label": "Endre slutt dato og tid",
+                                'aria-label': 'Endre slutt dato og tid',
                             }}
                         />
                     </MuiPickersUtilsProvider>
@@ -225,17 +211,16 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         id="venue"
                         label="Lokale"
                         fullWidth
-                        value={event.venueId || ""}
-                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, venueId: e.target.value }))}
+                        value={event.venueId || ''}
+                        onChange={(e) => setEvent((oldValues) => ({ ...oldValues, venueId: e.target.value }))}
                     >
                         {venues.map((venue) => (
-                            <MenuItem key={venue.id} value={venue.id} >
+                            <MenuItem key={venue.id} value={venue.id}>
                                 {venue.name}
                             </MenuItem>
                         ))}
                     </TextField>
                     {organizers.length > 1 && (
-
                         <TextField
                             select
                             variant="outlined"
@@ -244,10 +229,10 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                             label="Organisator"
                             fullWidth
                             value={event.organizerId}
-                            onChange={(e) => setEvent(oldValues => ({ ...oldValues, descriptionName: e.target.value }))}
+                            onChange={(e) => setEvent((oldValues) => ({ ...oldValues, descriptionName: e.target.value }))}
                         >
                             {organizers.map((organizer) => (
-                                <MenuItem key={organizer.id} value={organizer.id} >
+                                <MenuItem key={organizer.id} value={organizer.id}>
                                     {organizer.name}
                                 </MenuItem>
                             ))}
@@ -260,7 +245,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         fullWidth
                         variant="outlined"
                         value={event.infoComments}
-                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, infoComments: e.target.value }))}
+                        onChange={(e) => setEvent((oldValues) => ({ ...oldValues, infoComments: e.target.value }))}
                     />
                     <TextField
                         className={classes.textField}
@@ -270,12 +255,12 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                         fullWidth
                         variant="outlined"
                         value={event.organizerWebPage}
-                        onChange={(e) => setEvent(oldValues => ({ ...oldValues, organizerWebPage: e.target.value }))}
+                        onChange={(e) => setEvent((oldValues) => ({ ...oldValues, organizerWebPage: e.target.value }))}
                     />
                     <Button
-                        variant='contained'
-                        color='primary'
-                        type='submit'
+                        variant="contained"
+                        color="primary"
+                        type="submit"
                         size="large"
                         className={classes.button}
                         startIcon={<SaveIcon />}
@@ -285,5 +270,5 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                 </form>
             </Paper>
         </Dialog>
-    )
+    );
 }

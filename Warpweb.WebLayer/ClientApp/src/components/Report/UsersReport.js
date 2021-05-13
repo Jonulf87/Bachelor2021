@@ -2,7 +2,6 @@
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
 export default function UsersReport({ data }) {
-
     const styles = StyleSheet.create({
         page: {
             backgroundColor: '#ffffff',
@@ -17,8 +16,8 @@ export default function UsersReport({ data }) {
             fontSize: 12,
             margin: 2,
             padding: 2,
-        }
-    })
+        },
+    });
 
     return (
         <Document>
@@ -26,14 +25,14 @@ export default function UsersReport({ data }) {
                 <View style={styles.section}>
                     <Text>Bruker-rapport</Text>
                 </View>
-               
+
                 <View style={styles.section}>
                     {data.map((user) => (
-                        <Text key= {user.id} style={styles.text}>
+                        <Text key={user.id} style={styles.text}>
                             {user.firstName} {user.lastName} | {user.userName} | {user.eMail}
                         </Text>
                     ))}
-                    </View>
+                </View>
             </Page>
         </Document>
     );

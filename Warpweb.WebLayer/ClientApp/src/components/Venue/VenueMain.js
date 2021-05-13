@@ -1,14 +1,12 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from 'react';
 import { Grid, GridItem, CircularProgress, Toolbar, Typography, Button } from '@material-ui/core';
 import VenueAdminRowDetails from './VenueAdminRowDetails';
-import useAuth from "../../hooks/useAuth";
+import useAuth from '../../hooks/useAuth';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
-import CreateVenue from "./CreateVenue";
-import PopupWindow from "../PopupWindow/PopupWindow";
-
+import CreateVenue from './CreateVenue';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 export default function VenueMain() {
-
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -21,49 +19,47 @@ export default function VenueMain() {
     const { isAuthenticated, token } = useAuth();
 
     const triggerUpdate = () => {
-        setUpdateList(oldValue => !oldValue);
-    }
+        setUpdateList((oldValue) => !oldValue);
+    };
 
     const handleDialogCreateVenueOpen = () => {
         setDialogCreateVenueOpen(true);
-    }
+    };
 
     const handleDialogCreateVenueClose = () => {
         setDialogCreateVenueOpen(false);
-    }
+    };
 
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
     useEffect(() => {
         const getVenues = async () => {
             if (isAuthenticated) {
                 const responseVenues = await fetch('/api/venues/organizervenueslist', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
 
                 if (responseVenues.ok) {
                     const resultVenues = await responseVenues.json();
                     setVenueList(resultVenues);
-                }
-                else if (responseVenues.status === 400) {
+                } else if (responseVenues.status === 400) {
                     setVenueList([]);
                     const errorResult = await responseVenues.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     setVenueList([]);
                     const errorResult = await responseVenues.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getVenues();
     }, [isAuthenticated, updateList]);
 
@@ -73,15 +69,15 @@ export default function VenueMain() {
             label: 'Id',
             options: {
                 display: false,
-            }
+            },
         },
         {
             name: 'name',
-            label: 'Navn'
+            label: 'Navn',
         },
         {
             name: 'address',
-            label: 'Addresse'
+            label: 'Addresse',
         },
     ];
 
@@ -96,33 +92,40 @@ export default function VenueMain() {
         expandableRowsHeder: false,
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
-            return (
-                <VenueAdminRowDetails rowData={rowData} rowMeta={rowMeta} />
-            );
+            return <VenueAdminRowDetails rowData={rowData} rowMeta={rowMeta} />;
         },
         onRowClick: (rowData, rowMeta) => {
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
                 setRowsExpanded([]);
+            } else {
+                setRowsExpanded([rowMeta.dataIndex]);
             }
-            else {
-                setRowsExpanded([rowMeta.dataIndex])
-            }
-        }
+        },
     };
-
 
     return (
         <>
-            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
-            <CreateVenue handleDialogCreateVenueClose={handleDialogCreateVenueClose} dialogCreateVenueOpen={dialogCreateVenueOpen} triggerUpdate={triggerUpdate} />
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
+            <CreateVenue
+                handleDialogCreateVenueClose={handleDialogCreateVenueClose}
+                dialogCreateVenueOpen={dialogCreateVenueOpen}
+                triggerUpdate={triggerUpdate}
+            />
             <MUIDataTable
                 title={
                     <>
                         <Grid container>
                             <Grid item xs={12}>
-                                <Typography variant="h6" style={{ marginTop: '15px' }, {marginLeft: '15px' }}>
+                                <Typography variant="h6" style={({ marginTop: '15px' }, { marginLeft: '15px' })}>
                                     Lokaler
-                            </Typography>
+                                </Typography>
                             </Grid>
                             <Grid item xs={12}>
                                 <Button
@@ -133,7 +136,7 @@ export default function VenueMain() {
                                     onClick={handleDialogCreateVenueOpen}
                                 >
                                     Nytt lokale
-                            </Button>
+                                </Button>
                             </Grid>
                         </Grid>
                     </>

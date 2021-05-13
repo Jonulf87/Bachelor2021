@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
             zIndex: theme.zIndex.drawer + 1,
             marginLeft: drawerWidth,
         },
-        height: '80px'
+        height: '80px',
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     buttonRight: {
-        marginLeft: "auto",
+        marginLeft: 'auto',
         '&:hover': {
             color: theme.palette.secondary,
         },
@@ -52,11 +52,11 @@ const useStyles = makeStyles((theme) => ({
     // nødvendig for innhold nendefor baren
     toolbar: {
         [theme.breakpoints.up('md')]: {
-            height: '80px'
+            height: '80px',
         },
         [theme.breakpoints.down('sm')]: {
-            height: '0px'
-        }
+            height: '0px',
+        },
     },
 
     drawerPaper: {
@@ -64,24 +64,22 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         color: theme.palette.primary,
         '& .MuiListItemIcon-root': {
-            color: theme.palette.primary
+            color: theme.palette.primary,
         },
         '& .MuiListSubheader-root': {
-            color: theme.palette.primary
-        }
-
+            color: theme.palette.primary,
+        },
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
     },
     link: {
-        textDecoration: 'none'
-    }
+        textDecoration: 'none',
+    },
 }));
 
 export default function MainMenu({ window }) {
-
     const [mobileOpen, setMobileOpen] = useState(false);
     const [policies, setPolicies] = useState([]);
     const [crews, setCrews] = useState([]);
@@ -94,7 +92,6 @@ export default function MainMenu({ window }) {
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
-
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
@@ -106,42 +103,39 @@ export default function MainMenu({ window }) {
             const getPoliciesAndCrewsAndOrgAdmins = async () => {
                 const responsePolicies = await fetch('/api/security/policies', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const resultPolicies = await responsePolicies.json();
                 setPolicies(resultPolicies);
 
                 const responseCrews = await fetch('/api/crews/mycrews', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const resultCrews = await responseCrews.json();
                 setCrews(resultCrews);
 
                 const responseOrgAdmins = await fetch('/api/tenants/getaorgsadmin', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const resultOrgAdmins = await responseOrgAdmins.json();
                 setOrgAdmins(resultOrgAdmins);
-
-
-            }
+            };
 
             getPoliciesAndCrewsAndOrgAdmins();
-        }
-        else {
+        } else {
             setPolicies([]);
             setCrews([]);
             setOrgAdmins([]);
         }
-    }, [currentEventChangeCompleteTrigger, isAuthenticated])
+    }, [currentEventChangeCompleteTrigger, isAuthenticated]);
 
     const NavContents = () => {
         return (
@@ -149,32 +143,23 @@ export default function MainMenu({ window }) {
                 <div className={classes.toolbar} />
                 <UserMainMenu />
                 <Divider />
-                {(policies.length !== 0 || roles.some(a => a === "Admin") || orgAdmins.length !== 0) &&
+                {(policies.length !== 0 || roles.some((a) => a === 'Admin') || orgAdmins.length !== 0) && (
                     <>
-                    <AdminMainMenu policies={policies} roles={roles} orgAdmins={orgAdmins} />
+                        <AdminMainMenu policies={policies} roles={roles} orgAdmins={orgAdmins} />
                         <Divider />
                     </>
-                }
-                {crews.length !== 0 &&
-                    <CrewMainMenu crews={crews} />
-                }
+                )}
+                {crews.length !== 0 && <CrewMainMenu crews={crews} />}
             </>
-        )
-    }
+        );
+    };
 
     //
-    const userMenuItem = (destination, itemText, itemIcon) => ({destination, itemText, itemIcon});
-    
-    const loggedInMenu = [
-        userMenuItem('/user','Min side',<PersonIcon />),
-        userMenuItem('/logout','Logg ut',<ExitToAppIcon />)
-    ];
+    const userMenuItem = (destination, itemText, itemIcon) => ({ destination, itemText, itemIcon });
 
-        
-    const loggedOutMenu = [
-        userMenuItem('/register','Registrer',<PersonIcon />),
-        userMenuItem('/login','Logg inn',<ExitToAppIcon />)
-    ];
+    const loggedInMenu = [userMenuItem('/user', 'Min side', <PersonIcon />), userMenuItem('/logout', 'Logg ut', <ExitToAppIcon />)];
+
+    const loggedOutMenu = [userMenuItem('/register', 'Registrer', <PersonIcon />), userMenuItem('/login', 'Logg inn', <ExitToAppIcon />)];
 
     const userMenuItems = isAuthenticated ? loggedInMenu : loggedOutMenu;
 
@@ -192,7 +177,7 @@ export default function MainMenu({ window }) {
                         <MenuIcon />
                     </IconButton>
                     <NavBarHeader />
-                        {ButtonsOrMenu ? <LoginMenu menuItems={userMenuItems} /> : <LoginMenuMobile menuItems={userMenuItems}/>}
+                    {ButtonsOrMenu ? <LoginMenu menuItems={userMenuItems} /> : <LoginMenuMobile menuItems={userMenuItems} />}
                 </Toolbar>
             </AppBar>
 
@@ -201,7 +186,7 @@ export default function MainMenu({ window }) {
                     <Drawer
                         container={container}
                         variant="temporary"
-                        anchor='left'
+                        anchor="left"
                         open={mobileOpen}
                         onClose={handleDrawerToggle}
                         classes={{
@@ -227,5 +212,5 @@ export default function MainMenu({ window }) {
                 </Hidden>
             </nav>
         </>
-    )
+    );
 }

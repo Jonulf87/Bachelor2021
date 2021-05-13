@@ -6,13 +6,9 @@ import { Link, Redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
-
-
-
 export default function UserLogin({ fromTicket }) {
-
-    const [userName, setUserName] = useState( "");
-    const [password, setPassword] = useState("");
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [open, setOpen] = useState(false);
     const [errors, setErrors] = useState([]);
@@ -25,28 +21,25 @@ export default function UserLogin({ fromTicket }) {
 
         if (response.token) {
             setLoginSuccess(true);
-        }
-        else {
+        } else {
             setErrors(response.errors);
             setOpen(true);
         }
-    }
+    };
 
     if (loginSuccess) {
         if (!fromTicket) {
-            return (<Redirect to={'/user'} />)
+            return <Redirect to={'/user'} />;
         }
     }
 
     const showErrors = (errors) => {
         if (Array.isArray(errors)) {
-            return errors.map(error => (<p key="">{error}</p>));
+            return errors.map((error) => <p key="">{error}</p>);
+        } else {
+            return 'Ugyldig brukernavn eller passord';
         }
-        else {
-            return "Ugyldig brukernavn eller passord";
-        }
-    }
-
+    };
 
     return (
         <>
@@ -83,26 +76,24 @@ export default function UserLogin({ fromTicket }) {
                         </Grid>
                         <Grid item xs={4}>
                             {/*Logginn knapp*/}
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                type="submit"
-                            >
+                            <Button variant="contained" color="primary" size="large" type="submit">
                                 Logg inn
-                        </Button>
+                            </Button>
                         </Grid>
                         <Grid item xs={8}>
-                            {fromTicket ?
-                                (<Typography variant="body1" >Ingen bruker? <Link to="/register/1">Registrer deg her</Link></Typography>)
-                                :
-                                (<Typography variant="body1" >Ingen bruker? <Link to="/register">Registrer deg her</Link></Typography>)
-                            }
-                            
+                            {fromTicket ? (
+                                <Typography variant="body1">
+                                    Ingen bruker? <Link to="/register/1">Registrer deg her</Link>
+                                </Typography>
+                            ) : (
+                                <Typography variant="body1">
+                                    Ingen bruker? <Link to="/register">Registrer deg her</Link>
+                                </Typography>
+                            )}
                         </Grid>
                     </Grid>
                 </form>
             </Container>
         </>
-    )
+    );
 }

@@ -16,7 +16,6 @@ import TicketPurchaseSummary from './TicketPurchaseSummary';
 import TicketPayment from './TicketPayment';
 import usePurchase from '../../hooks/usePurchase';
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -33,10 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-
 export default function TicketMain() {
-
     const { login } = useParams();
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(parseInt(login) || 0);
@@ -48,26 +44,22 @@ export default function TicketMain() {
     const handleNext = () => {
         if (isAuthenticated && activeStep === 1) {
             setActiveStep(3);
-        }
-        else if (activeStep === 4) {
+        } else if (activeStep === 4) {
             setPaymentOk(false);
-            setActiveStep(oldValue => oldValue + 1);
-        }
-        else {
-            setActiveStep(oldValue => oldValue + 1);
+            setActiveStep((oldValue) => oldValue + 1);
+        } else {
+            setActiveStep((oldValue) => oldValue + 1);
         }
     };
 
     const handleBack = () => {
-        if (isAuthenticated && activeStep === 3 || activeStep == 4) {
+        if ((isAuthenticated && activeStep === 3) || activeStep == 4) {
             setActiveStep(1);
-        }
-        else if (activeStep === 4) {
+        } else if (activeStep === 4) {
             setPaymentOk(false);
-            setActiveStep(oldValue => oldValue + 1);
-        }
-        else {
-            setActiveStep(oldValue => oldValue - 1);
+            setActiveStep((oldValue) => oldValue + 1);
+        } else {
+            setActiveStep((oldValue) => oldValue - 1);
         }
     };
 
@@ -75,22 +67,20 @@ export default function TicketMain() {
         if (activeStep === 2) {
             setActiveStep(3);
         }
-    }, [isAuthenticated])
-
-
+    }, [isAuthenticated]);
 
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return (<EventUserList />);
+                return <EventUserList />;
             case 1:
-                return (<TicketPicker />);
+                return <TicketPicker />;
             case 2:
-                return (<UserLogin fromTicket={true} />);
+                return <UserLogin fromTicket={true} />;
             case 3:
-                return (<TicketPurchaseSummary />);
+                return <TicketPurchaseSummary />;
             case 4:
-                return (<TicketPayment />);
+                return <TicketPayment />;
             case 5:
                 return `Klikk her for å betale.`;
             case 6:
@@ -109,12 +99,7 @@ export default function TicketMain() {
                             <Typography component={'div'}>{getStepContent(index)}</Typography>
                             <div className={classes.actionsContainer}>
                                 <div>
-                                    <Button
-                                        disabled={activeStep === 0}
-                                        variant="outlined"
-                                        onClick={handleBack}
-                                        className={classes.button}
-                                    >
+                                    <Button disabled={activeStep === 0} variant="outlined" onClick={handleBack} className={classes.button}>
                                         Forrige
                                     </Button>
                                     <Button
@@ -122,14 +107,17 @@ export default function TicketMain() {
                                         color="primary"
                                         onClick={handleNext}
                                         className={classes.button}
-                                        disabled={(activeStep > 1 && !isAuthenticated)
-                                            || activeStep === 3 && !checkedEula
-                                            || activeStep === 1 && shoppingCart.length === 0
+                                        disabled={
+                                            (activeStep > 1 && !isAuthenticated) ||
+                                            (activeStep === 3 && !checkedEula) ||
+                                            (activeStep === 1 && shoppingCart.length === 0)
                                         }
                                     >
                                         {activeStep === steps.length - 1 ? 'Fullfør' : 'Neste'}
                                     </Button>
-                                    {(activeStep === 1 && shoppingCart.length === 0) && <Typography color="error">Du må velge minst en billett</Typography>}
+                                    {activeStep === 1 && shoppingCart.length === 0 && (
+                                        <Typography color="error">Du må velge minst en billett</Typography>
+                                    )}
                                 </div>
                             </div>
                         </StepContent>

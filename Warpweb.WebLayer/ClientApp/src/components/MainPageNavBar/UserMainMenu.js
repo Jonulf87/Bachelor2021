@@ -8,41 +8,44 @@ import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     buttonText: {
-        color: "rgba(0,0,0,0.87)",
-        
+        color: 'rgba(0,0,0,0.87)',
     },
     root: {
         background: theme.palette.action.selected,
         borderRight: `5px solid ${theme.palette.primary.main}`,
-    }
-    
+    },
 }));
 
 export default function UserMainMenu() {
-
     const classes = useStyles();
 
     return (
         <List
-            component='nav'
-            role='navigation'
+            component="nav"
+            role="navigation"
             subheader={
-                <ListSubheader color='inherit' component='h1'>
+                <ListSubheader color="inherit" component="h1">
                     Meny
                 </ListSubheader>
             }
         >
-            <ListItem aria-label='Velg arrangement' activeClassName={classes.root} button component={NavLink} to='/userevent'>
-                <ListItemIcon  ><StarIcon color="primary"/></ListItemIcon>
-                <ListItemText primary='Arrangementer' />
+            <ListItem aria-label="Velg arrangement" activeClassName={classes.root} button component={NavLink} to="/userevent">
+                <ListItemIcon>
+                    <StarIcon color="primary" />
+                </ListItemIcon>
+                <ListItemText primary="Arrangementer" />
             </ListItem>
-            <ListItem aria-label='kjøp billett' activeClassName={classes.root} button component={NavLink} to='/userticket'>
-                <ListItemIcon><ConfirmationNumberIcon color="primary"/></ListItemIcon>
-                <ListItemText primary='Kjøp billett' />
+            <ListItem aria-label="kjøp billett" activeClassName={classes.root} button component={NavLink} to="/userticket">
+                <ListItemIcon>
+                    <ConfirmationNumberIcon color="primary" />
+                </ListItemIcon>
+                <ListItemText primary="Kjøp billett" />
             </ListItem>
-            <ListItem aria-label='Setekart activeClassName={classes.root}'button component={NavLink} to='/userseatmap'>
-                <ListItemIcon><EventSeatIcon color="primary"/></ListItemIcon>
-                <ListItemText primary='Setekart' />
+            <ListItem aria-label="Setekart activeClassName={classes.root}" button component={NavLink} to="/userseatmap">
+                <ListItemIcon>
+                    <EventSeatIcon color="primary" />
+                </ListItemIcon>
+                <ListItemText primary="Setekart" />
             </ListItem>
         </List>
     );

@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CreateCrew() {
-
     const classes = useStyles();
     const [event, setEvent] = React.useState('Tom');
     const [crewleader, setCrewleader] = React.useState('Tom');
@@ -88,13 +87,7 @@ export default function CreateCrew() {
                         </TextField>
                     </div>
                 </form>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    className={classes.button}
-                    startIcon={<SaveIcon />}
-                >
+                <Button variant="contained" color="primary" size="large" className={classes.button} startIcon={<SaveIcon />}>
                     Lagre
                 </Button>
             </CardContent>

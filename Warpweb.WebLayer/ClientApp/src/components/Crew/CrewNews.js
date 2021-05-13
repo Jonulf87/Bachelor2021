@@ -6,21 +6,19 @@ import { VariableSizeList as List } from 'react-window';
 
 import useAuth from '../../hooks/useAuth';
 
-
 export default function CrewNews({ crewId }) {
+    const [crew, setCrew] = useState([]);
 
-    const [crew, setCrew] = useState([])
-    
     const { isAuthenticated, token } = useAuth();
 
-    return(
+    return (
         <>
-        <Toolbar>
-            <Typography variant="h6" component="h3">
-                Nyheter
-            </Typography>
-        </Toolbar>
-        {/*<List
+            <Toolbar>
+                <Typography variant="h6" component="h3">
+                    Nyheter
+                </Typography>
+            </Toolbar>
+            {/*<List
         className="list"
         height={400}
         itemCount={rows.length}
@@ -36,5 +34,5 @@ export default function CrewNews({ crewId }) {
             )}
             </List>*/}
         </>
-    )
+    );
 }

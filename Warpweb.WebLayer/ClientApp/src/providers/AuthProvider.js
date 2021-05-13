@@ -3,7 +3,6 @@
 export const AuthContext = React.createContext();
 
 const AuthProvider = ({ children }) => {
-
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null);
     const [roles, setRoles] = useState([]);
@@ -17,7 +16,7 @@ const AuthProvider = ({ children }) => {
         }
         refreshTokenTimeoutId.current = setTimeout(async () => {
             const response = await fetch('/api/auth/refreshtoken', {
-                method: 'POST'
+                method: 'POST',
             });
 
             if (response.ok) {
@@ -28,16 +27,16 @@ const AuthProvider = ({ children }) => {
                 const expires = new Date(jwtToken.exp * 1000);
                 let timeout = expires.getTime() - Date.now() - 15 * 1000;
                 refreshToken(timeout);
-                setOrgAdmin(jwtToken.IsOrgAdmin === "True");
+                setOrgAdmin(jwtToken.IsOrgAdmin === 'True');
 
                 const role = jwtToken.role;
 
                 if (Array.isArray(role)) {
                     setRoles(role);
                 } else if (role) {
-                    setRoles([role])
+                    setRoles([role]);
                 } else {
-                    setRoles([])
+                    setRoles([]);
                 }
 
                 setIsAuthenticated(true);
@@ -53,44 +52,41 @@ const AuthProvider = ({ children }) => {
                 callback();
             }
         }, delay);
-    }
+    };
 
     const login = async (userName, password) => {
-
         const response = await fetch('/api/auth/login', {
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify({ userName, password })
-        })
+            body: JSON.stringify({ userName, password }),
+        });
 
         const result = await response.json();
 
         if (response.ok) {
-            localStorage.setItem("currentUser", result.token);
+            localStorage.setItem('currentUser', result.token);
             setToken(result.token);
 
-
             const jwtToken = JSON.parse(atob(result.token.split('.')[1]));
-            const expires = new Date(jwtToken.exp * 1000)
+            const expires = new Date(jwtToken.exp * 1000);
             let timeout = expires.getTime() - Date.now() - 15 * 1000;
-            setOrgAdmin(jwtToken.IsOrgAdmin === "True");
+            setOrgAdmin(jwtToken.IsOrgAdmin === 'True');
 
             const role = jwtToken.role;
             if (Array.isArray(role)) {
                 setRoles(role);
             } else if (role) {
-                setRoles([role])
+                setRoles([role]);
             } else {
-                setRoles([])
+                setRoles([]);
             }
 
             setIsAuthenticated(true);
             refreshToken(timeout);
-        }
-        else {
-            localStorage.removeItem("currentUser");
+        } else {
+            localStorage.removeItem('currentUser');
             setIsAuthenticated(false);
             setToken(null);
             setRoles([]);
@@ -99,14 +95,12 @@ const AuthProvider = ({ children }) => {
         return result;
     };
 
-
     const logout = async () => {
-
         const response = await fetch('/api/auth/logout', {
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
             },
-            method: 'POST'
+            method: 'POST',
         });
 
         localStorage.removeItem('currentUser');
@@ -123,29 +117,26 @@ const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-
         const currentUser = localStorage.getItem('currentUser');
 
         if (currentUser !== null) {
-
             const jwtToken = JSON.parse(atob(currentUser.split('.')[1]));
             const expires = new Date(jwtToken.exp * 1000);
             let timeout = expires.getTime() - Date.now() - 15 * 1000;
-            setOrgAdmin(jwtToken.IsOrgAdmin === "True");
+            setOrgAdmin(jwtToken.IsOrgAdmin === 'True');
 
             const role = jwtToken.role;
             if (Array.isArray(role)) {
                 setRoles(role);
             } else if (role) {
-                setRoles([role])
+                setRoles([role]);
             } else {
-                setRoles([])
+                setRoles([]);
             }
 
             if (timeout < 0) {
                 timeout = 0;
-            }
-            else {
+            } else {
                 setToken(currentUser);
                 setIsAuthenticated(true);
             }
@@ -164,12 +155,11 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (isAuthenticated) {
             const getOrgsUserIsAdminAt = async () => {
-
                 const responseOrgIsAdminAt = await fetch('/api/tenants/getaorgsadmin', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
 
                 const resultOrgAdmins = await responseOrgIsAdminAt.json();
@@ -177,17 +167,20 @@ const AuthProvider = ({ children }) => {
                 if (Array.isArray(resultOrgAdmins)) {
                     setOrgsIsAdminAt(resultOrgAdmins);
                 } else if (resultOrgAdmins) {
-                    setOrgsIsAdminAt([resultOrgAdmins])
+                    setOrgsIsAdminAt([resultOrgAdmins]);
                 } else {
-                    setOrgsIsAdminAt([])
+                    setOrgsIsAdminAt([]);
                 }
-            }
+            };
             getOrgsUserIsAdminAt();
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
 
-    return <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout, refreshToken, isOrgAdmin, orgsIsAdminAt }}>{children}</AuthContext.Provider>;
-
+    return (
+        <AuthContext.Provider value={{ isAuthenticated, token, roles, login, logout, refreshToken, isOrgAdmin, orgsIsAdminAt }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export default AuthProvider;

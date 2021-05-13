@@ -4,9 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import useAuth from '../../hooks/useAuth';
 
-
 export default function CrewPermissions({ crewId }) {
-
     const [allPermissions, setAllPermissions] = useState([]);
     const [isReady, setIsReady] = useState(false);
 
@@ -14,63 +12,62 @@ export default function CrewPermissions({ crewId }) {
 
     useEffect(() => {
         const getPolicies = async () => {
-
             if (isAuthenticated) {
                 const response = await fetch(`/api/security/allpolicies/${crewId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const result = await response.json();
                 setAllPermissions(result);
                 setIsReady(true);
             }
-        }
+        };
         getPolicies();
-    }, [isAuthenticated, crewId])
-
-
+    }, [isAuthenticated, crewId]);
 
     const updatePermissionsList = async (e) => {
-        const oldPermission = allPermissions.find(a => a.name === e.target.name);
+        const oldPermission = allPermissions.find((a) => a.name === e.target.name);
         oldPermission.crewHasPermission = !oldPermission.crewHasPermission;
-        const newPermissions = [...allPermissions.filter(a => a.name !== e.target.name), oldPermission]
+        const newPermissions = [...allPermissions.filter((a) => a.name !== e.target.name), oldPermission];
         setAllPermissions(newPermissions);
 
         if (isAuthenticated) {
             await fetch(`/api/security/setpolicies/${crewId}`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
                 },
                 method: 'POST',
-                body: JSON.stringify(newPermissions)
+                body: JSON.stringify(newPermissions),
             });
         }
-    }
+    };
 
     if (!isReady) {
-        return (<div>Is loading...</div>)
+        return <div>Is loading...</div>;
     }
 
     return (
         <>
             <FormControl>
-
-                {allPermissions.sort((a, b) => a.name > b.name ? 1 : ((b.name > a.name) ? -1 : 0)).map((crewPermission) => (
-                    <FormControlLabel
-                        key={crewPermission.value}
-                        control={<Checkbox
-                            inputProps={{ 'aria-label': crewPermission.name }}
-                            checked={crewPermission.crewHasPermission}
-                            onChange={updatePermissionsList}
-                            name={crewPermission.name} />}
-                        label={crewPermission.name}
-
-                    />
-                ))}
-
+                {allPermissions
+                    .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
+                    .map((crewPermission) => (
+                        <FormControlLabel
+                            key={crewPermission.value}
+                            control={
+                                <Checkbox
+                                    inputProps={{ 'aria-label': crewPermission.name }}
+                                    checked={crewPermission.crewHasPermission}
+                                    onChange={updatePermissionsList}
+                                    name={crewPermission.name}
+                                />
+                            }
+                            label={crewPermission.name}
+                        />
+                    ))}
             </FormControl>
         </>
     );

@@ -4,8 +4,7 @@ import useAuth from '../hooks/useAuth';
 export const CurrentEventContext = React.createContext();
 
 const CurrentEventProvider = ({ children }) => {
-
-    const [currentEvent, setCurrentEvent] = useState("");
+    const [currentEvent, setCurrentEvent] = useState('');
     const [currentEventChangeCompleteTrigger, setCurrentEventChangeCompleteTrigger] = useState(false);
     const [newEventSet, setNewEventSet] = useState(false);
 
@@ -16,43 +15,52 @@ const CurrentEventProvider = ({ children }) => {
             if (isAuthenticated) {
                 const response = await fetch('/api/events/getcurrentmainevent', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-Type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-Type': 'application/json',
+                    },
                 });
                 const result = await response.json();
                 setCurrentEvent(result.name);
             }
-        }
+        };
         getCurrentMainEvent();
     }, [isAuthenticated, newEventSet]);
 
-    const setSelectedEvent = async (eventId, callback) => {  
+    const setSelectedEvent = async (eventId, callback) => {
         if (isAuthenticated) {
             await fetch('/api/events/setcurrentevent', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
                 },
                 method: 'put',
-                body: JSON.stringify(eventId)
+                body: JSON.stringify(eventId),
             });
 
-            setNewEventSet(oldValue => !oldValue);
+            setNewEventSet((oldValue) => !oldValue);
             refreshToken(0, () => {
-                setCurrentEventChangeCompleteTrigger(oldvalue => !oldvalue);
+                setCurrentEventChangeCompleteTrigger((oldvalue) => !oldvalue);
 
                 if (callback !== undefined) {
                     callback();
                 }
             });
         }
+    };
 
-    }
-
-
-    return <CurrentEventContext.Provider value={{ setSelectedEvent, currentEvent, setCurrentEvent, currentEventChangeCompleteTrigger, setCurrentEventChangeCompleteTrigger }}>{children}</CurrentEventContext.Provider>;
-
+    return (
+        <CurrentEventContext.Provider
+            value={{
+                setSelectedEvent,
+                currentEvent,
+                setCurrentEvent,
+                currentEventChangeCompleteTrigger,
+                setCurrentEventChangeCompleteTrigger,
+            }}
+        >
+            {children}
+        </CurrentEventContext.Provider>
+    );
 };
 
 export default CurrentEventProvider;

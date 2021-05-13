@@ -7,14 +7,13 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
-            width: "100%",
-            marginLeft: 0
-        }
+            width: '100%',
+            marginLeft: 0,
+        },
     },
 }));
 
 export default function CreateTicketType({ dialogOpen, handleDialogClose, triggerUpdate }) {
-
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
@@ -23,7 +22,7 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
     const [name, setName] = useState('');
     const [basePrice, setBasePrice] = useState('');
@@ -34,21 +33,21 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
     const classes = useStyles();
 
     const dataToBeSent = {
-        'descriptionName': name,
-        'basePrice': basePrice,
-        'amountAvailable': amountAvailable
-    }
+        descriptionName: name,
+        basePrice: basePrice,
+        amountAvailable: amountAvailable,
+    };
 
     const submitForm = async (e) => {
         e.preventDefault();
         if (isAuthenticated) {
-            const  response = await fetch('/api/tickettypes/createtickettype', {
+            const response = await fetch('/api/tickettypes/createtickettype', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
                 },
                 method: 'POST',
-                body: JSON.stringify(dataToBeSent)
+                body: JSON.stringify(dataToBeSent),
             });
 
             if (response.ok) {
@@ -57,48 +56,34 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                 setBasePrice('');
                 setAmountAvailable('');
                 handleDialogClose();
-            }
-            else if (response.status === 400) {
+            } else if (response.status === 400) {
                 const errorResult = await response.json();
                 setErrors(errorResult.errors);
                 setErrorDialogOpen(true);
-            }
-            else {
+            } else {
                 const errorResult = await response.json();
                 setError(errorResult.message);
                 setErrorDialogOpen(true);
             }
         }
-    }
+    };
 
     return (
-        <Dialog
-            open={dialogOpen}
-            onClose={handleDialogClose}
-            className={classes.root}
-        >
+        <Dialog open={dialogOpen} onClose={handleDialogClose} className={classes.root}>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
 
-            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+            <Container style={{ padding: '10px' }}>
+                <DialogTitle>Ny billettype</DialogTitle>
 
-            <Container
-                style={{ padding: '10px' }}
-            >
-                <DialogTitle>
-                    Ny billettype
-                </DialogTitle>
-
-                <form
-                    onSubmit={submitForm}
-                    
-                >
-                    <TextField
-                        id="name"
-                        label="Billettype"
-                        required
-                        fullWidth
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
+                <form onSubmit={submitForm}>
+                    <TextField id="name" label="Billettype" required fullWidth value={name} onChange={(e) => setName(e.target.value)} />
 
                     <TextField
                         id="basePrice"
@@ -121,18 +106,12 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                     />
 
                     <FormControl style={{ padding: '8px' }}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            type="submit"
-                        >
+                        <Button variant="contained" color="primary" size="large" type="submit">
                             Lagre
                         </Button>
                     </FormControl>
-                        
                 </form>
             </Container>
         </Dialog>
-    )
+    );
 }

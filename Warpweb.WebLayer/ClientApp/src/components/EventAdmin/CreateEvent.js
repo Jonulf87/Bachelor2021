@@ -11,17 +11,15 @@ import useCurrentEvent from '../../hooks/useCurrentEvent';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles((theme) => ({
-
     root: {
         '& .MuiTextField-root': {
             padding: theme.spacing(1),
-            width: "100%",
+            width: '100%',
         },
     },
 }));
 
 export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpdate }) {
-
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
@@ -30,18 +28,18 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
     const classes = useStyles();
 
     //Her følger variablene til VM for mainEvent til posting
-    const [name, setName] = useState("");
+    const [name, setName] = useState('');
     const [startDateTime, setStartDateTime] = useState(new Date());
-    const [endDateTime, setEndDateTime] = useState(new Date())
-    const [organizerId, setOrganizerId] = useState("");
-    const [venueId, setVenueId] = useState("");
-    const [infoComments, setInfoComments] = useState("");
-    const [organizerWebPage, setOrganizerWebPage] = useState("");
+    const [endDateTime, setEndDateTime] = useState(new Date());
+    const [organizerId, setOrganizerId] = useState('');
+    const [venueId, setVenueId] = useState('');
+    const [infoComments, setInfoComments] = useState('');
+    const [organizerWebPage, setOrganizerWebPage] = useState('');
 
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker
     const [organizers, setOrganizers] = useState([]);
@@ -55,13 +53,12 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     //Henter organizere brukeren er knyttet til
     useEffect(() => {
         const getOrganizers = async () => {
-
             if (isAuthenticated) {
                 const response = await fetch('/api/tenants/getaorgsadmin', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
                 });
                 if (response.ok) {
                     const result = await response.json();
@@ -70,112 +67,100 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                     if (result.length === 1) {
                         setOrganizerId(result[0].id);
                     }
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     const errorResult = await response.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     const errorResult = await response.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
-
             }
-        }
+        };
         getOrganizers();
     }, [isAuthenticated]);
 
     useEffect(() => {
         const getVenues = async () => {
-
             if (isAuthenticated) {
                 const response = await fetch(`/api/venues/organizervenueslist`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 if (response.ok) {
                     const result = await response.json();
                     setVenues(result);
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     const errorResult = await response.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     const errorResult = await response.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getVenues();
     }, [isAuthenticated]);
 
-
     const mainEventDataToBeSent = {
-        'name': name,
-        'startDateTime': startDateTime,
-        'endDateTime': endDateTime,
-        'organizerId': organizerId,
-        'venueId': venueId,
-        'infoComments': infoComments,
-        'organizerWebPage': organizerWebPage
-    }
+        name: name,
+        startDateTime: startDateTime,
+        endDateTime: endDateTime,
+        organizerId: organizerId,
+        venueId: venueId,
+        infoComments: infoComments,
+        organizerWebPage: organizerWebPage,
+    };
 
     // NB - Må sjekke at det er gjort valg i skjema før innsending
     const submitForm = async () => {
         if (isAuthenticated) {
             const response = await fetch('/api/events/createmainevent', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
                 },
                 method: 'POST',
-                body: JSON.stringify(mainEventDataToBeSent)
+                body: JSON.stringify(mainEventDataToBeSent),
             });
             if (response.ok) {
                 triggerUpdate();
                 refreshToken(0, () => {
                     setCurrentEvent(name);
-                    setCurrentEventChangeCompleteTrigger(oldValue => !oldValue);
+                    setCurrentEventChangeCompleteTrigger((oldValue) => !oldValue);
                     history.push('/crewadmin');
                 });
-            }
-            else if (response.status === 400) {
+            } else if (response.status === 400) {
                 const errorResult = await response.json();
                 setErrors(errorResult.errors);
                 setErrorDialogOpen(true);
-            }
-            else {
+            } else {
                 const errorResult = await response.json();
                 setError(errorResult.message);
                 setErrorDialogOpen(true);
             }
             handleDialogClose();
         }
-    }
-
+    };
 
     return (
-        <Dialog
-            open={dialogOpen}
-            onClose={handleDialogClose}
-        >
-            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+        <Dialog open={dialogOpen} onClose={handleDialogClose}>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
 
-            <Paper
-                variant="outlined"
-                elevation={0}
-                style={{ padding: '10px' }}
-            >
-                <DialogTitle>
-                    Nytt arrangement
-                </DialogTitle>
+            <Paper variant="outlined" elevation={0} style={{ padding: '10px' }}>
+                <DialogTitle>Nytt arrangement</DialogTitle>
                 <form className={classes.root}>
                     <TextField
                         className={classes.textField}
@@ -199,7 +184,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             value={startDateTime}
                             onChange={(timeEvent) => setStartDateTime(timeEvent)}
                             KeyboardButtonProps={{
-                                "aria-label": "Endre start dato og tid",
+                                'aria-label': 'Endre start dato og tid',
                             }}
                         />
                     </MuiPickersUtilsProvider>
@@ -215,7 +200,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             value={endDateTime}
                             onChange={(timeEvent) => setEndDateTime(timeEvent)}
                             KeyboardButtonProps={{
-                                "aria-label": "Endre slutt dato og tid",
+                                'aria-label': 'Endre slutt dato og tid',
                             }}
                         />
                     </MuiPickersUtilsProvider>
@@ -231,7 +216,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                         onChange={(e) => setVenueId(e.target.value)}
                     >
                         {venues.map((venue) => (
-                            <MenuItem key={venue.id} value={venue.id} >
+                            <MenuItem key={venue.id} value={venue.id}>
                                 {venue.name}
                             </MenuItem>
                         ))}
@@ -240,7 +225,6 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                     {/*Dropdown for arrangører*/}
 
                     {organizers.length > 1 && (
-
                         <TextField
                             select
                             variant="outlined"
@@ -252,7 +236,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             onChange={(e) => setOrganizerId(e.target.value)}
                         >
                             {organizers.map((organizer) => (
-                                <MenuItem key={organizer.id} value={organizer.id} >
+                                <MenuItem key={organizer.id} value={organizer.id}>
                                     {organizer.name}
                                 </MenuItem>
                             ))}

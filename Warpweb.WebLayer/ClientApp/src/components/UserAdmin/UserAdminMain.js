@@ -4,7 +4,6 @@ import UserList from './UserList';
 import Grid from '@material-ui/core/Grid';
 
 export default function UserAdminMain() {
-
     const useStyles = makeStyles((theme) => ({
         paper: {
             display: 'flex',
@@ -17,7 +16,7 @@ export default function UserAdminMain() {
         },
     }));
 
-    const classes = useStyles(); 
+    const classes = useStyles();
 
     return (
         <Grid container spacing={2}>
@@ -25,6 +24,5 @@ export default function UserAdminMain() {
                 <UserList />
             </Grid>
         </Grid>
-
     );
 }

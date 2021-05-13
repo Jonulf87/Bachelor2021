@@ -1,15 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { MuiThemeProvider, TableRow, TableCell } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import useAuth from '../../hooks/useAuth';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 
-
-
-
 export default function UserList() {
-
     const [getUsersIsReady, setGetUsersIsReady] = useState(false);
     const [getRolesIsReady, setGetRolesIsReady] = useState(false);
 
@@ -23,14 +18,14 @@ export default function UserList() {
             if (isAuthenticated) {
                 const response = await fetch('/api/users/userslist', {
                     headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 const result = await response.json();
                 setUserList(result);
                 setGetUsersIsReady(true);
             }
-        }
+        };
         getUsers();
     }, [isAuthenticated]);
 
@@ -54,25 +49,25 @@ export default function UserList() {
     const columns = [
         {
             name: 'firstName',
-            label: 'Fornavn'
+            label: 'Fornavn',
         },
         {
             name: 'lastName',
-            label: 'Etternavn'
+            label: 'Etternavn',
         },
         {
             name: 'userName',
             label: 'Brukernavn',
-            sort: false //funker ikke. dunno why
+            sort: false, //funker ikke. dunno why
         },
         {
             name: 'phoneNumber',
             label: 'Telefon',
-            sort: false
+            sort: false,
         },
         {
             name: 'eMail',
-            label: 'E-post'
+            label: 'E-post',
         },
     ];
 
@@ -89,7 +84,8 @@ export default function UserList() {
             //if (dataIndex === 3 || dataIndex === 4) return false;
 
             //forhindre expande av any rad når 4 rader allerede åpne. Men tillater lukking av de åpne
-            if (expandedRows.data.length >= 4 && expandedRows.data.filter(data => data.dataIndex === dataIndex).length === 0) return false;
+            if (expandedRows.data.length >= 4 && expandedRows.data.filter((data) => data.dataIndex === dataIndex).length === 0)
+                return false;
             return true;
         },
         rowsExpanded: [0],
@@ -97,32 +93,25 @@ export default function UserList() {
             const colSpan = rowData.length + 1;
             return (
                 <TableRow>
-                    <TableCell colSpan={colSpan}>
-                        {JSON.stringify(rowData)}
-                    </TableCell>
+                    <TableCell colSpan={colSpan}>{JSON.stringify(rowData)}</TableCell>
                 </TableRow>
             );
         },
         //Denne ser ut til å kunne trigge noe ved  åpning. Bruke til å hente roller?
-        onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(`curExpanded:   ${ curExpanded }  allExpanded: ${allExpanded}  rowsExpanded: ${rowsExpanded}`)
+        onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) =>
+            console.log(`curExpanded:   ${curExpanded}  allExpanded: ${allExpanded}  rowsExpanded: ${rowsExpanded}`),
     };
 
     const components = {
         ExpandedButton: function (props) {
             if (props.dataIndex === 3 || props.dataIndex === 4) return <div style={{ width: '24px' }} />;
-            return <ExpandButton {...props} />
-        }
+            return <ExpandButton {...props} />;
+        },
     };
 
     return (
         <>
-            <MUIDataTable
-                title={'Brukere'}
-                data={userList}
-                columns={columns}
-                options={options}
-                components={components}
-                />
+            <MUIDataTable title={'Brukere'} data={userList} columns={columns} options={options} components={components} />
         </>
     );
 }

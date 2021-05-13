@@ -55,9 +55,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateOrganizerAsync(OrganizerVm organizerVm)
         {
-
-                await _organizerService.CreateOrganizerAsync(organizerVm);
-                return Ok();
+            await _organizerService.CreateOrganizerAsync(organizerVm);
+            return Ok();
         }
 
         /// <summary>
@@ -69,9 +68,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateOrganizerAsync(OrganizerVm organizerVm)
         {
-
-                await _organizerService.UpdateOrganizerAsync(organizerVm);
-                return Ok();
+            await _organizerService.UpdateOrganizerAsync(organizerVm);
+            return Ok();
         }
 
         /// <summary>
@@ -82,9 +80,8 @@ namespace Warpweb.WebLayer.Controllers
         [Route("getcontact/{orgId}")]
         public async Task<ActionResult<List<OrganizerVm>>> GetOrganizerContactAsync(int orgId)
         {
-
-                var contact = await _organizerService.GetOrganizerContactAsync(orgId);
-                return Ok(contact);
+            var contact = await _organizerService.GetOrganizerContactAsync(orgId);
+            return Ok(contact);
         }
 
         /// <summary>
@@ -97,9 +94,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<OrganizerVm>> SetOrganizerContactAsync(int orgId, [FromBody] string userId)
         {
-
-                var contact = await _organizerService.SetOrganizerContactAsync(orgId, userId);
-                return Ok(contact);
+            var contact = await _organizerService.SetOrganizerContactAsync(orgId, userId);
+            return Ok(contact);
         }
 
         /// <summary>
@@ -123,8 +119,8 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<List<OrganizerListVm>>> GetOrgsWhereUserIsAdminAsync()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var orgs = await _organizerService.GetOrgsWhereUserIsAdminAsync(userId);
-                return Ok(orgs);
+            var orgs = await _organizerService.GetOrgsWhereUserIsAdminAsync(userId);
+            return Ok(orgs);
         }
 
         /// <summary>
@@ -137,8 +133,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Admin")] //Skal endres til enten role admin eller orgadmin skal adde andre orgadmins
         public async Task<ActionResult> SetOrgAdminAsync(int orgId, [FromBody] string userId)
         {
-                await _organizerService.SetOrgAdminAsync(orgId, userId);
-                return Ok();
+            await _organizerService.SetOrgAdminAsync(orgId, userId);
+            return Ok();
         }
 
         /// <summary>
@@ -151,9 +147,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Roles = "Admin")] // samme som setorgadminasync()
         public async Task<ActionResult> RemoveOrgAdminAsync(int orgId, [FromBody] string userId)
         {
-
-                await _organizerService.RemoveOrgAdminAsync(orgId, userId);
-                return Ok();
+            await _organizerService.RemoveOrgAdminAsync(orgId, userId);
+            return Ok();
         }
 
     }

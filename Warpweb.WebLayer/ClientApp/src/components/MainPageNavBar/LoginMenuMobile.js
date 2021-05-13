@@ -12,14 +12,14 @@ import { AccountCircle } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.primary.contrastText,
     },
     buttonRight: {
-        marginLeft: "auto",
+        marginLeft: 'auto',
         '&:hover': {
             color: theme.palette.secondary,
         },
-        color: theme.palette.primary.contrastText
+        color: theme.palette.primary.contrastText,
     },
 }));
 
@@ -30,39 +30,31 @@ export default function LoginMenuMobile({ menuItems }) {
 
     const handleClick = (e) => {
         setAnchorEl(e.currentTarget);
-      };
-    
-      const handleClose = () => {
-        setAnchorEl(null);
-      };
+    };
 
-      return (
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
         <>
-            <IconButton className={classes.buttonRight} aria-haspopup="true" aria-label="åpne-bruker-meny" aria-controls="bruker-meny" onClick={handleClick}>
+            <IconButton
+                className={classes.buttonRight}
+                aria-haspopup="true"
+                aria-label="åpne-bruker-meny"
+                aria-controls="bruker-meny"
+                onClick={handleClick}
+            >
                 <AccountCircle />
             </IconButton>
-            <Menu
-                className={classes.buttonRight}
-                keepMounted
-                id="bruker-meny"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-            >
+            <Menu className={classes.buttonRight} keepMounted id="bruker-meny" anchorEl={anchorEl} open={open} onClose={handleClose}>
                 {menuItems.map((item) => (
-                        <MenuItem
-                            component={Link}
-                            to={item.destination}
-                            onClick={handleClose}
-                            key={item.itemText}
-                        >
-                            <ListItemIcon>
-                                {item.itemIcon}
-                            </ListItemIcon>
-                            <Typography variant="inherit" noWrap>
-                                {item.itemText}
-                            </Typography>
-                        </MenuItem>
+                    <MenuItem component={Link} to={item.destination} onClick={handleClose} key={item.itemText}>
+                        <ListItemIcon>{item.itemIcon}</ListItemIcon>
+                        <Typography variant="inherit" noWrap>
+                            {item.itemText}
+                        </Typography>
+                    </MenuItem>
                 ))}
             </Menu>
         </>

@@ -6,17 +6,15 @@ import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles((theme) => ({
-
     root: {
         '& .MuiTextField-root': {
             padding: theme.spacing(1),
-            width: "100%",
+            width: '100%',
         },
     },
 }));
 
 export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dialogCreateOrganizerOpen, triggerUpdate }) {
-
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
@@ -25,65 +23,54 @@ export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dial
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
-    const [organizerName, setOrganizerName] = useState("");
-    const [organizerNumber, setOrganizerNumber] = useState("");
-    const [organizerDescription, setOrganizerDescription] = useState("");
+    const [organizerName, setOrganizerName] = useState('');
+    const [organizerNumber, setOrganizerNumber] = useState('');
+    const [organizerDescription, setOrganizerDescription] = useState('');
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
 
     const dataToBeSent = {
-        'name': organizerName,
-        'orgNumber': organizerNumber,
-        'description': organizerDescription
-    }
+        name: organizerName,
+        orgNumber: organizerNumber,
+        description: organizerDescription,
+    };
 
     const submitForm = async (e) => {
         e.preventDefault();
         if (isAuthenticated) {
             const response = await fetch('api/tenants/addorganizer', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
                 },
                 method: 'POST',
-                body: JSON.stringify(dataToBeSent)
+                body: JSON.stringify(dataToBeSent),
             });
             if (response.status === 200) {
                 triggerUpdate();
-                setOrganizerName("");
-                setOrganizerNumber("");
-                setOrganizerDescription("");
-            }
-            else if (response.status === 400) {
+                setOrganizerName('');
+                setOrganizerNumber('');
+                setOrganizerDescription('');
+            } else if (response.status === 400) {
                 const errorResult = await response.json();
                 setErrors(errorResult.errors);
                 setErrorDialogOpen(true);
-            }
-            else {
+            } else {
                 const errorResult = await response.json();
                 setError(errorResult.message);
                 setErrorDialogOpen(true);
             }
             handleDialogCreateOrganizerClose();
         }
-    }
+    };
 
     return (
-        <Dialog
-            open={dialogCreateOrganizerOpen}
-            onClose={handleDialogCreateOrganizerClose}
-        >
-            <Paper
-                variant="outlined"
-                elevation={0}
-                style={{ padding: '10px' }}
-            >
-                <DialogTitle>
-                    Ny organisasjon
-                </DialogTitle>
+        <Dialog open={dialogCreateOrganizerOpen} onClose={handleDialogCreateOrganizerClose}>
+            <Paper variant="outlined" elevation={0} style={{ padding: '10px' }}>
+                <DialogTitle>Ny organisasjon</DialogTitle>
                 <form className={classes.root}>
                     <TextField
                         variant="outlined"
@@ -124,5 +111,5 @@ export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dial
                 </form>
             </Paper>
         </Dialog>
-    )
+    );
 }

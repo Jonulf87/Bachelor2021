@@ -8,7 +8,6 @@ import TicketTypesReport from './TicketTypesReport';
 import useAuth from '../../hooks/useAuth';
 
 export default function ReportMain() {
-
     const [userData, setUserData] = useState([]);
     const [genderData, setGenderData] = useState([]);
     const [allergicsData, setAllergicsData] = useState([]);
@@ -20,12 +19,11 @@ export default function ReportMain() {
     useEffect(() => {
         const getReports = async () => {
             if (isAuthenticated) {
-
                 const responseUsers = await fetch('/api/users/userslist', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const resultUsers = await responseUsers.json();
                 if (isMounted) {
@@ -34,9 +32,9 @@ export default function ReportMain() {
 
                 const responseGender = await fetch('/api/reports/participantsgenderreport', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const resultGender = await responseGender.json();
                 if (isMounted) {
@@ -45,9 +43,9 @@ export default function ReportMain() {
 
                 const responseAllergics = await fetch('/api/reports/allergiesreport', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const resultAllergics = await responseAllergics.json();
                 if (isMounted) {
@@ -56,24 +54,24 @@ export default function ReportMain() {
 
                 const responseTicketTypes = await fetch('/api/reports/tickettypesreport', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 const resultTicketTypes = await responseTicketTypes.json();
                 if (isMounted) {
                     setTicketTypesData(resultTicketTypes);
                 }
             }
-        }
+        };
         getReports();
     }, [isAuthenticated]);
 
     useEffect(() => {
         return () => {
             setIsMounted(false);
-        }
-    }, [])
+        };
+    }, []);
 
     return (
         <Paper>
@@ -81,7 +79,7 @@ export default function ReportMain() {
                 <Grid container item xs={12}>
                     <Typography variant="h6" style={{ margin: '15px' }}>
                         Rapporter
-                            </Typography>
+                    </Typography>
                 </Grid>
                 <Table>
                     <TableHead>
@@ -91,64 +89,47 @@ export default function ReportMain() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-
                         <TableRow>
+                            <TableCell align="left">Bruker-rapport</TableCell>
                             <TableCell align="left">
-                                Bruker-rapport
-                            </TableCell>
-                            <TableCell align="left">
-                                
-                                <PDFDownloadLink
-                                    document={<UsersReport data={userData} />}
-                                    fileName='Brukerrapport.pdf'
-                                >
-                                    {(blob, url, loading, error) => loading ? 'Generer brukerrapport...' : 'Last ned brukerrapport'}
+                                <PDFDownloadLink document={<UsersReport data={userData} />} fileName="Brukerrapport.pdf">
+                                    {(blob, url, loading, error) => (loading ? 'Generer brukerrapport...' : 'Last ned brukerrapport')}
                                 </PDFDownloadLink>
                             </TableCell>
                         </TableRow>
 
                         <TableRow>
+                            <TableCell align="left">Kjønnsfordelings-rapport</TableCell>
                             <TableCell align="left">
-                                Kjønnsfordelings-rapport
-                            </TableCell>
-                            <TableCell align="left">
-                                <PDFDownloadLink
-                                    document={<GendersReport data={genderData} />}
-                                    fileName='Kjonnsfordelingsrapport.pdf'
-                                >
-                                    {(blob, url, loading, error) => loading ? 'Generer kjønnsfordelingsrapport...' : 'Last ned kjønnsfordelingsrapport'}
+                                <PDFDownloadLink document={<GendersReport data={genderData} />} fileName="Kjonnsfordelingsrapport.pdf">
+                                    {(blob, url, loading, error) =>
+                                        loading ? 'Generer kjønnsfordelingsrapport...' : 'Last ned kjønnsfordelingsrapport'
+                                    }
                                 </PDFDownloadLink>
                             </TableCell>
                         </TableRow>
 
                         <TableRow>
+                            <TableCell align="left">Allergiker-rapport</TableCell>
                             <TableCell align="left">
-                                Allergiker-rapport
-                            </TableCell>
-                            <TableCell align="left">
-                                <PDFDownloadLink
-                                    document={<AllergicsReport data={allergicsData} />}
-                                    fileName='Allergikerrapport.pdf'
-                                >
-                                    {(blob, url, loading, error) => loading ? 'Generer allergikerrapport...' : 'Last ned allergikerapport'}
+                                <PDFDownloadLink document={<AllergicsReport data={allergicsData} />} fileName="Allergikerrapport.pdf">
+                                    {(blob, url, loading, error) =>
+                                        loading ? 'Generer allergikerrapport...' : 'Last ned allergikerapport'
+                                    }
                                 </PDFDownloadLink>
                             </TableCell>
                         </TableRow>
 
                         <TableRow>
+                            <TableCell align="left">Billett-rapport</TableCell>
                             <TableCell align="left">
-                                Billett-rapport
-                            </TableCell>
-                            <TableCell align="left">
-                                <PDFDownloadLink
-                                    document={<TicketTypesReport data={ticketTypesData} />}
-                                    fileName='Billettyperapport.pdf'
-                                >
-                                    {(blob, url, loading, error) => loading ? 'Generer billettyperapport...' : 'Last ned billettyperapport'}
+                                <PDFDownloadLink document={<TicketTypesReport data={ticketTypesData} />} fileName="Billettyperapport.pdf">
+                                    {(blob, url, loading, error) =>
+                                        loading ? 'Generer billettyperapport...' : 'Last ned billettyperapport'
+                                    }
                                 </PDFDownloadLink>
                             </TableCell>
                         </TableRow>
-
                     </TableBody>
                 </Table>
             </TableContainer>

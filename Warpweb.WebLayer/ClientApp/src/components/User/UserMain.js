@@ -4,15 +4,9 @@ import UserInfo from './UserInfo';
 import UserTickets from './UserTickets';
 
 export default function PaperSheet() {
-
     return (
-        <Grid
-            container
-            spacing={2}
-        >
-            <Grid item
-
-            >
+        <Grid container spacing={2}>
+            <Grid item>
                 <UserInfo />
                 <UserTickets />
             </Grid>

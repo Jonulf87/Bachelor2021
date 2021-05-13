@@ -3,45 +3,31 @@ import React, { useEffect, useState } from 'react';
 import usePurchase from '../../hooks/usePurchase';
 
 export default function TicketPayment() {
-
     const { payForTicket, shoppingCart, paymentOk } = usePurchase();
     const [noUnpaidTickets, setNoUnpaidTickets] = useState(false);
-
 
     useEffect(() => {
         if (shoppingCart.length === 0) {
             setNoUnpaidTickets(true);
-        }
-        else {
+        } else {
             setNoUnpaidTickets(false);
         }
-    }, [shoppingCart])
+    }, [shoppingCart]);
 
     return (
-
         <Card>
-            { paymentOk ?
+            {paymentOk ? (
                 <CardContent>
-                    <Typography>
-                        Takk for kjøpet. Vi gleder oss til å se deg på arrangementet.
-                    </Typography>
+                    <Typography>Takk for kjøpet. Vi gleder oss til å se deg på arrangementet.</Typography>
                 </CardContent>
-                :
+            ) : (
                 <CardContent>
-                    <Typography>
-                        Trykk på knappen for å "betale", (͡° ͜ʖ ͡°)
-                    </Typography >
-                    <Button
-                        disabled={noUnpaidTickets}
-                        variant="contained"
-                        color="primary"
-                        onClick={payForTicket}
-                    >Betal</Button>
+                    <Typography>Trykk på knappen for å "betale", (͡° ͜ʖ ͡°)</Typography>
+                    <Button disabled={noUnpaidTickets} variant="contained" color="primary" onClick={payForTicket}>
+                        Betal
+                    </Button>
                 </CardContent>
-            }
-        </Card >
-
-
-
-    )
+            )}
+        </Card>
+    );
 }

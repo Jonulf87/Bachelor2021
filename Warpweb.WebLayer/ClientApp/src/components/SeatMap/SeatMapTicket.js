@@ -4,8 +4,22 @@ import { format, parseISO } from 'date-fns';
 import useSeatMap from '../../hooks/useSeatMap';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 
-export default function SeatMapTicket({ id, price, seatNumber, seatId, rowName, ticketType, ticketTypeId, mainEventName, mainEventId, userFirstName, userLastName, start, end, venueName }) {
-
+export default function SeatMapTicket({
+    id,
+    price,
+    seatNumber,
+    seatId,
+    rowName,
+    ticketType,
+    ticketTypeId,
+    mainEventName,
+    mainEventId,
+    userFirstName,
+    userLastName,
+    start,
+    end,
+    venueName,
+}) {
     const { setSelectedEvent } = useCurrentEvent();
     const { getSeatMap, setActiveTicket } = useSeatMap();
 
@@ -13,7 +27,7 @@ export default function SeatMapTicket({ id, price, seatNumber, seatId, rowName, 
         setSelectedEvent(mainEventId);
         setActiveTicket(id);
         getSeatMap();
-    }
+    };
 
     return (
         <>
@@ -23,7 +37,9 @@ export default function SeatMapTicket({ id, price, seatNumber, seatId, rowName, 
                         <div className="header">{mainEventName}</div>
                         <div className="info participant">
                             <div className="info__item">Navn</div>
-                            <div className="info__detail">{userFirstName} {userLastName}</div>
+                            <div className="info__detail">
+                                {userFirstName} {userLastName}
+                            </div>
                         </div>
 
                         <div className="info startdatetime">
@@ -48,8 +64,7 @@ export default function SeatMapTicket({ id, price, seatNumber, seatId, rowName, 
                         </div>
                         <div className="info seat">
                             <div className="info__item">Sete</div>
-                            <div className="info__detail">{seatNumber}
-                            </div>
+                            <div className="info__detail">{seatNumber}</div>
                         </div>
                     </div>
                     <div className="ticket_id">
@@ -57,32 +72,27 @@ export default function SeatMapTicket({ id, price, seatNumber, seatId, rowName, 
                     </div>
                 </div>
                 <div>
-                    {seatNumber
-                        ? (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                style={{ marginTop: "5px", float: "right" }}
-                                onClick={() => handleClick()}
-                            >
-                                Endre sete
-                            </Button>
-
-                        )
-                        : (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                style={{ marginTop: "5px", float: "right" }}
-                                onClick={() => handleClick()}
-                            >
-                                Reserver sete
-                            </Button>
-                        )
-                    }
+                    {seatNumber ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ marginTop: '5px', float: 'right' }}
+                            onClick={() => handleClick()}
+                        >
+                            Endre sete
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ marginTop: '5px', float: 'right' }}
+                            onClick={() => handleClick()}
+                        >
+                            Reserver sete
+                        </Button>
+                    )}
                 </div>
             </div>
-            
         </>
-    )
+    );
 }

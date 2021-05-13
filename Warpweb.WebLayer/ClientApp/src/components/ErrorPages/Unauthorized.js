@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {Grid, Typography } from '@material-ui/core';
-
+import { Grid, Typography } from '@material-ui/core';
 
 export default function Unauthorized() {
     return (
@@ -16,5 +15,5 @@ export default function Unauthorized() {
                 </Typography>
             </Grid>
         </Grid>
-    )
+    );
 }

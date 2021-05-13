@@ -23,11 +23,10 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             minWidth: 580,
         },
-    }
+    },
 }));
 
 export default function EventCard({ id, name, startDateTime, endDateTime, infoComments, venueName, organizerName, organizerWebPage }) {
-
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -43,181 +42,139 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
 
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
     useEffect(() => {
         const getOrgsUserIsAdminAt = async () => {
-
             if (isAuthenticated) {
                 const response = await fetch('/api/tenants/getaorgsadmin', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 if (response.ok) {
                     const result = await response.json();
                     setOrgsUserIsAdimAt(result);
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     setOrgsUserIsAdimAt([]);
                     const errorResult = await response.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     setOrgsUserIsAdimAt([]);
                     const errorResult = await response.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getOrgsUserIsAdminAt();
     }, [isOrgAdmin]);
 
     useEffect(() => {
         const checkUserCrewStatus = async () => {
             if (isAuthenticated) {
-
                 const body = {
-                    eventId: id
-                }
+                    eventId: id,
+                };
                 const response = await fetch(`/api/crews/checkusercrewmemberatevent`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
                     },
                     body: JSON.stringify(body),
-                    method: 'POST'
+                    method: 'POST',
                 });
                 if (response.ok) {
                     const result = await response.json();
                     setUserIsInCrew(result);
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     setUserIsInCrew(false);
                     const errorResult = await response.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     setUserIsInCrew(false);
                     const errorResult = await response.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         checkUserCrewStatus();
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
 
     const handleClick = () => {
-        if (orgsUserIsAdminAt.some(a => a.name === organizerName) || userIsInCrew) {
+        if (orgsUserIsAdminAt.some((a) => a.name === organizerName) || userIsInCrew) {
             setSelectedEvent(id);
         }
-    }
+    };
 
     const handlePurchaseClick = () => {
         setShoppingCart([]);
-        setSelectedMainEventId(id)
+        setSelectedMainEventId(id);
         history.push(`/userticket`);
-    }
+    };
 
     const buttonSelector = () => {
-        if ((orgsUserIsAdminAt.some(a => a.name === organizerName) || userIsInCrew) && currentEvent !== name) {
+        if ((orgsUserIsAdminAt.some((a) => a.name === organizerName) || userIsInCrew) && currentEvent !== name) {
             return (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleClick()}
-                >
+                <Button variant="contained" color="primary" onClick={() => handleClick()}>
                     Sett som aktivt arrangement
                 </Button>
-            )
-        }
-        else if ((orgsUserIsAdminAt.some(a => a.name === organizerName) || userIsInCrew) && currentEvent === name) {
+            );
+        } else if ((orgsUserIsAdminAt.some((a) => a.name === organizerName) || userIsInCrew) && currentEvent === name) {
             return (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    disabled
-                >
+                <Button variant="contained" color="primary" disabled>
                     Aktivt arrangement
                 </Button>
-            )
-        }
-        else {
+            );
+        } else {
             return (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handlePurchaseClick()}
-                >
+                <Button variant="contained" color="primary" onClick={() => handlePurchaseClick()}>
                     Kjøp billett
                 </Button>
-            )
+            );
         }
-    }
+    };
 
-    return (<>
-        <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
-        <Card 
-            className={classes.root}
-        >
-            <CardHeader
-                title={name}
-                subheader={`Arrangør: ${organizerName}`}
+    return (
+        <>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
             />
-            <CardContent>
-                <Grid
-                    container
-                    spacing={2}
-                >
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                    >
-                        <Typography
-                            variant="body1"
-                        >
-                            {format(parseISO(startDateTime), 'dd.LLLL yyyy', { locale: nb })} til&nbsp;{format(parseISO(endDateTime), 'dd.LLLL yyyy', { locale: nb })}
-                        </Typography>
+            <Card className={classes.root}>
+                <CardHeader title={name} subheader={`Arrangør: ${organizerName}`} />
+                <CardContent>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <Typography variant="body1">
+                                {format(parseISO(startDateTime), 'dd.LLLL yyyy', { locale: nb })} til&nbsp;
+                                {format(parseISO(endDateTime), 'dd.LLLL yyyy', { locale: nb })}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Typography variant="body1">{venueName}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="body2">{infoComments}</Typography>
+                        </Grid>
                     </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                    >
-                        <Typography
-                            variant="body1"
-                        >
-                            {venueName}
-                        </Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                    >
-                        <Typography
-                            variant="body2"
-                        >
-                            {infoComments}
-                        </Typography>
-                    </Grid>
-
-
-
-                </Grid>
-            </CardContent>
-            {/*href={organizerWebPage}*/} 
-            <CardActions>
-                {buttonSelector()}
-                <Button variant="outlined" href={organizerWebPage} target="_blank" rel="noopener noreferrer" >
-                    {organizerName}s Nettside
-                </Button>
-            </CardActions>
-        </Card>
-    </>)
+                </CardContent>
+                {/*href={organizerWebPage}*/}
+                <CardActions>
+                    {buttonSelector()}
+                    <Button variant="outlined" href={organizerWebPage} target="_blank" rel="noopener noreferrer">
+                        {organizerName}s Nettside
+                    </Button>
+                </CardActions>
+            </Card>
+        </>
+    );
 }

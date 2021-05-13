@@ -10,10 +10,10 @@ import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.primary.contrastText,
     },
     buttonRight: {
-        marginLeft: "auto",
+        marginLeft: 'auto',
         '&:hover': {
             color: theme.palette.secondary,
         },
@@ -25,19 +25,11 @@ export default function LoginMenu({ menuItems }) {
     const classes = useStyles();
 
     return (
-        <ButtonGroup
-            className={classes.buttonRight}
-        >
+        <ButtonGroup className={classes.buttonRight}>
             {menuItems.map((item) => (
-                    <Button
-                        className={classes.root}          
-                        startIcon= {item.itemIcon}
-                        component={Link}
-                        to={item.destination}
-                        key={item.itemText}
-                    >
-                        {item.itemText}
-                    </Button>
+                <Button className={classes.root} startIcon={item.itemIcon} component={Link} to={item.destination} key={item.itemText}>
+                    {item.itemText}
+                </Button>
             ))}
         </ButtonGroup>
     );

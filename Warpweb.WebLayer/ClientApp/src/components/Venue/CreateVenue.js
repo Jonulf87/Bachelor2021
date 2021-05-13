@@ -11,18 +11,17 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
             minWidth: 300,
-            maxWidth: "100%",
+            maxWidth: '100%',
         },
         '& .MuiContainer-root': {
             padding: '10px',
             display: 'grid',
             justifyContent: 'center',
         },
-    }
+    },
 }));
 
 export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreateVenueOpen, triggerUpdate }) {
-
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
@@ -44,17 +43,16 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
 
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
     useEffect(() => {
         const getOrganizers = async () => {
-
             if (isAuthenticated) {
                 const response = await fetch('/api/tenants/getaorgsadmin', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
                 });
                 const result = await response.json();
                 setOrganizers(result);
@@ -62,12 +60,11 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
                     setOrganizerId(result[0].id);
                 }
             }
-        }
+        };
         getOrganizers();
     }, [isAuthenticated]);
 
     const submitForm = async (e) => {
-
         e.preventDefault();
         // Check that we are already sending data
         // If sending - don`t do it again
@@ -76,7 +73,7 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
         }
 
         if (!isAuthenticated) {
-            alert("Not authorized");
+            alert('Not authorized');
             return;
         }
 
@@ -85,22 +82,22 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
 
         // Create data object
         const data = {
-            'name': enteredName,
-            'address': enteredAddress,
-            'postalCode': enteredPostalCode,
-            'contactName': enteredContactName,
-            'contactEMail': enteredContactEMail,
-            'contactPhone': enteredContactPhone,
-            'organizerId': organizerId
-        }
+            name: enteredName,
+            address: enteredAddress,
+            postalCode: enteredPostalCode,
+            contactName: enteredContactName,
+            contactEMail: enteredContactEMail,
+            contactPhone: enteredContactPhone,
+            organizerId: organizerId,
+        };
 
         const response = await fetch(`/api/venues/createvenue`, {
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
         if (response.ok) {
             triggerUpdate();
@@ -111,13 +108,11 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
             setEnteredContactEMail('');
             setEnteredContactPhone('');
             setOrganizerId('');
-        }
-        else if (response.status === 400) {
+        } else if (response.status === 400) {
             const errorResult = await response.json();
             setErrors(errorResult.errors);
             setErrorDialogOpen(true);
-        }
-        else {
+        } else {
             const errorResult = await response.json();
             setError(errorResult.message);
             setErrorDialogOpen(true);
@@ -126,132 +121,130 @@ export default function CreateVenue({ handleDialogCreateVenueClose, dialogCreate
         setIsSending(false);
     };
 
+    return (
+        <>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
+            <Dialog open={dialogCreateVenueOpen} onClose={handleDialogCreateVenueClose} className={classes.root}>
+                <Container>
+                    <DialogTitle>Nytt lokale</DialogTitle>
 
-    return (<>
-        <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
-        <Dialog
-            open={dialogCreateVenueOpen}
-            onClose={handleDialogCreateVenueClose}
-            className={classes.root}
-        >
-            <Container>
-                <DialogTitle>
-                    Nytt lokale
-                </DialogTitle>
+                    <ValidatorForm autoComplete="off" noValidate onSubmit={submitForm}>
+                        <TextValidator
+                            onChange={(event) => {
+                                setEnteredName(event.target.value);
+                            }}
+                            label="Navn"
+                            name="name"
+                            value={enteredName}
+                            required
+                            validators={['required', 'minStringLength:1', 'trim']}
+                            errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
+                        />
 
-                <ValidatorForm
-                    autoComplete="off"
-                    noValidate
-                    onSubmit={submitForm}
-                >
-                    <TextValidator
-                        onChange={event => {
-                            setEnteredName(event.target.value);
-                        }}
-                        label="Navn"
-                        name="name"
-                        value={enteredName}
-                        required
-                        validators={['required', 'minStringLength:1', 'trim']}
-                        errorMessages={['Navn må oppgis', 'Navn må oppgis', 'Navn må oppgis']}
-                    />
+                        <TextValidator
+                            onChange={(event) => {
+                                setEnteredAddress(event.target.value);
+                            }}
+                            label="Adresse"
+                            placeholder="Adresse"
+                            name="address"
+                            value={enteredAddress}
+                            required
+                            validators={['required']}
+                            errorMessages={['Adresse må oppgis']}
+                        />
 
-                    <TextValidator
-                        onChange={event => {
-                            setEnteredAddress(event.target.value);
-                        }}
-                        label="Adresse"
-                        placeholder="Adresse"
-                        name="address"
-                        value={enteredAddress}
-                        required
-                        validators={['required']}
-                        errorMessages={['Adresse må oppgis']}
-                    />
+                        <TextValidator
+                            onChange={(event) => {
+                                setEnteredPostalCode(event.target.value);
+                            }}
+                            label="Postnr"
+                            placeholder="Postnr"
+                            name="postalCode"
+                            value={enteredPostalCode}
+                            required
+                            validators={['required', 'matchRegexp:^[0-9]{4}$']}
+                            errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
+                        />
 
-                    <TextValidator
-                        onChange={event => {
-                            setEnteredPostalCode(event.target.value);
-                        }}
-                        label="Postnr"
-                        placeholder="Postnr"
-                        name="postalCode"
-                        value={enteredPostalCode}
-                        required
-                        validators={['required', 'matchRegexp:^[0-9]{4}$']}
-                        errorMessages={['Postnummer må oppgis', 'Postnummer må inneholde 4 sifre']}
-                    />
+                        <TextValidator
+                            onChange={(event) => {
+                                setEnteredContactName(event.target.value);
+                            }}
+                            label="Kontaktperson"
+                            name="contactperson"
+                            value={enteredContactName}
+                            required
+                            validators={['required']}
+                            errorMessages={['Kontaktperson må oppgis']}
+                        />
 
-                    <TextValidator
-                        onChange={event => {
-                            setEnteredContactName(event.target.value);
-                        }}
-                        label="Kontaktperson"
-                        name="contactperson"
-                        value={enteredContactName}
-                        required
-                        validators={['required']}
-                        errorMessages={['Kontaktperson må oppgis']}
-                    />
+                        <TextValidator
+                            onChange={(event) => {
+                                setEnteredContactEMail(event.target.value);
+                            }}
+                            label="Kontakt epost"
+                            name="contactemail"
+                            value={enteredContactEMail}
+                            required
+                            validators={['required']}
+                            errorMessages={['Epost må oppgis']}
+                        />
 
-                    <TextValidator
-                        onChange={event => {
-                            setEnteredContactEMail(event.target.value);
-                        }}
-                        label="Kontakt epost"
-                        name="contactemail"
-                        value={enteredContactEMail}
-                        required
-                        validators={['required']}
-                        errorMessages={['Epost må oppgis']}
-                    />
+                        <TextValidator
+                            onChange={(event) => {
+                                setEnteredContactPhone(event.target.value);
+                            }}
+                            label="Kontakt tlf."
+                            placeholder="Kontakt tlf."
+                            name="contactphone"
+                            value={enteredContactPhone}
+                            required
+                            validators={['required']}
+                            errorMessages={['Telefonnummer må oppgis']}
+                        />
 
-                    <TextValidator
-                        onChange={event => {
-                            setEnteredContactPhone(event.target.value);
-                        }}
-                        label="Kontakt tlf."
-                        placeholder="Kontakt tlf."
-                        name="contactphone"
-                        value={enteredContactPhone}
-                        required
-                        validators={['required']}
-                        errorMessages={['Telefonnummer må oppgis']}
-                    />
+                        {organizers.length > 1 && (
+                            <TextField
+                                select
+                                variant="outlined"
+                                id="organizerId"
+                                label="Organisasjon"
+                                fullWidth
+                                value={organizerId}
+                                onChange={(e) => setOrganizerId(e.target.value)}
+                            >
+                                {organizers.map((organizer) => (
+                                    <MenuItem key={organizer.id} value={organizer.id}>
+                                        {organizer.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        )}
 
-                    {organizers.length > 1 && (
-                        <TextField
-                            select
-                            variant="outlined"
-                            id="organizerId"
-                            label="Organisasjon"
-                            fullWidth
-                            value={organizerId}
-                            onChange={(e) => setOrganizerId(e.target.value)}
-                        >
-                            {organizers.map((organizer) => (
-                                <MenuItem key={organizer.id} value={organizer.id}>
-                                    {organizer.name}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    )}
-
-                    <FormControl style={{ padding: '8px' }} >
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            className={classes.button}
-                            startIcon={<SaveIcon />}
-                            disabled={isSending}
-                        >
-                            Lagre
-                        </Button>
-                    </FormControl>
-                </ValidatorForm>
-            </Container>
-        </Dialog>
-    </>);
+                        <FormControl style={{ padding: '8px' }}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                className={classes.button}
+                                startIcon={<SaveIcon />}
+                                disabled={isSending}
+                            >
+                                Lagre
+                            </Button>
+                        </FormControl>
+                    </ValidatorForm>
+                </Container>
+            </Dialog>
+        </>
+    );
 }

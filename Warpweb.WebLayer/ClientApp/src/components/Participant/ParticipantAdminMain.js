@@ -6,7 +6,6 @@ import PopupWindow from '../PopupWindow/PopupWindow';
 import ParticipantAdminRowDetails from './ParticipantAdminRowDetails';
 
 export default function ParticipantAdminMain() {
-
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
@@ -20,39 +19,37 @@ export default function ParticipantAdminMain() {
     const { isAuthenticated, token } = useAuth();
 
     const triggerUpdate = () => {
-        setUpdateList(oldValue => !oldValue);
-    }
+        setUpdateList((oldValue) => !oldValue);
+    };
 
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
     useEffect(() => {
         const getParticipants = async () => {
             if (isAuthenticated) {
-
                 const responseParticipants = await fetch(`/api/users/participantslist`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 if (responseParticipants.ok) {
                     const resultParticipants = await responseParticipants.json();
                     setParticipantList(resultParticipants);
                     setIsLoading(false);
-                }
-                else {
+                } else {
                     const errorResult = await responseParticipants.json();
                     setError(errorResult.message);
                     setParticipantList([]);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getParticipants();
-    }, [isAuthenticated, updateList])
+    }, [isAuthenticated, updateList]);
 
     const columns = [
         {
@@ -60,25 +57,25 @@ export default function ParticipantAdminMain() {
             label: 'Id',
             options: {
                 display: false,
-                filter: false
-            }
+                filter: false,
+            },
         },
         {
             name: 'firstName',
-            label: 'Fornavn '
+            label: 'Fornavn ',
         },
         {
             name: 'lastName',
-            label: 'Etternavn'
+            label: 'Etternavn',
         },
         {
             name: 'userName',
-            label: 'Brukernavn'
+            label: 'Brukernavn',
         },
         {
             name: 'eMail',
-            label: 'Epost'
-        }
+            label: 'Epost',
+        },
     ];
 
     const options = {
@@ -94,42 +91,47 @@ export default function ParticipantAdminMain() {
         expandableRowsHeader: false,
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
-            return (
-                <ParticipantAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />
-            )
+            return <ParticipantAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />;
         },
         onRowClick: (rowData, rowMeta) => {
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
                 setRowsExpanded([]);
+            } else {
+                setRowsExpanded([rowMeta.dataIndex]);
             }
-            else {
-                setRowsExpanded([rowMeta.dataIndex])
-            }
-        }
+        },
     };
 
     if (isLoading) {
-        return (<CircularProgress />);
-    };
+        return <CircularProgress />;
+    }
 
     return (
         <>
-            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
             <MUIDataTable
-                title={<>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <Typography variant="h6" style={{ marginTop: "15px" }, { marginLeft: "15px" }}>
-                                Deltakere
-                        </Typography>
+                title={
+                    <>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" style={({ marginTop: '15px' }, { marginLeft: '15px' })}>
+                                    Deltakere
+                                </Typography>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </>}
+                    </>
+                }
                 data={participantList}
                 columns={columns}
                 options={options}
             />
         </>
-
     );
 }

@@ -7,13 +7,12 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
             padding: theme.spacing(1),
-            width: '100%'
-        }
-    }
-}))
+            width: '100%',
+        },
+    },
+}));
 
 export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEditVenueClose, triggerUpdate }) {
-
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
@@ -22,39 +21,36 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
-    const [venue, setVenue] = useState("");
+    const [venue, setVenue] = useState('');
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
 
     useEffect(() => {
         const getVenue = async () => {
-
             if (isAuthenticated) {
                 const response = await fetch(`/api/venues/getvenue/${venueId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
                 if (response.ok) {
                     const result = await response.json();
                     setVenue(result);
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     const errorResult = await response.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     const errorResult = await response.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getVenue();
     }, [isAuthenticated]);
 
@@ -63,104 +59,97 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
         if (isAuthenticated) {
             const response = await fetch('/api/venues/updatevenue', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
                 },
                 method: 'PUT',
-                body: JSON.stringify(venue)
+                body: JSON.stringify(venue),
             });
             if (response.ok) {
                 triggerUpdate();
-            }
-            else if (response.status === 400) {
+            } else if (response.status === 400) {
                 const errorResult = await response.json();
                 setErrors(errorResult.errors);
                 setErrorDialogOpen(true);
-            }
-            else {
+            } else {
                 const errorResult = await response.json();
                 setError(errorResult.message);
                 setErrorDialogOpen(true);
             }
             handleDialogEditVenueClose();
         }
-    }
+    };
 
     return (
-        <Dialog
-            open={dialogEditVenueOpen}
-            onClose={handleDialogEditVenueClose}
-        >
-            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+        <Dialog open={dialogEditVenueOpen} onClose={handleDialogEditVenueClose}>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
 
             <Paper>
-                <DialogTitle>
-                    Endre lokale
-                </DialogTitle>
-                <form
-                    className={classes.root}
-                    onSubmit={submitForm}
-                >
+                <DialogTitle>Endre lokale</DialogTitle>
+                <form className={classes.root} onSubmit={submitForm}>
                     <TextField
-                        variant='outlined'
-                        id='venueName'
-                        label='Navn'
+                        variant="outlined"
+                        id="venueName"
+                        label="Navn"
                         required
                         value={venue.name}
-                        onChange={(e) => setVenue(oldValues => ({...oldValues, name: e.target.value}))}
+                        onChange={(e) => setVenue((oldValues) => ({ ...oldValues, name: e.target.value }))}
                     />
                     <TextField
-                        variant='outlined'
-                        id='venueAddress'
-                        label='Adresse'
+                        variant="outlined"
+                        id="venueAddress"
+                        label="Adresse"
                         required
                         value={venue.address}
-                        onChange={(e) => setVenue(oldValues => ({...oldValues, address: e.target.value}))}
+                        onChange={(e) => setVenue((oldValues) => ({ ...oldValues, address: e.target.value }))}
                     />
                     <TextField
-                        variant='outlined'
-                        id='venuePostalCode'
-                        label='Postnummer'
+                        variant="outlined"
+                        id="venuePostalCode"
+                        label="Postnummer"
                         required
                         value={venue.postalCode}
-                        onChange={(e) => setVenue(oldValues => ({ ...oldValues, postalCode: e.target.value }))}
+                        onChange={(e) => setVenue((oldValues) => ({ ...oldValues, postalCode: e.target.value }))}
                     />
-                    <Divider style={{ marginBottom: '8px', marginTop: '8px'}}/>
+                    <Divider style={{ marginBottom: '8px', marginTop: '8px' }} />
                     <Typography>Kontakt</Typography>
-                    
+
                     <TextField
-                        variant='outlined'
-                        id='contactName'
-                        label='Navn'
+                        variant="outlined"
+                        id="contactName"
+                        label="Navn"
                         required
                         value={venue.contactName}
-                        onChange={(e) => setVenue(oldValues => ({ ...oldValues, contactName: e.target.value }))}
+                        onChange={(e) => setVenue((oldValues) => ({ ...oldValues, contactName: e.target.value }))}
                     />
                     <TextField
-                        variant='outlined'
-                        id='contactEMail'
-                        label='E-post'
+                        variant="outlined"
+                        id="contactEMail"
+                        label="E-post"
                         required
                         value={venue.contactEMail}
-                        onChange={(e) => setVenue(oldValues => ({ ...oldValues, contactEMail: e.target.value }))}
+                        onChange={(e) => setVenue((oldValues) => ({ ...oldValues, contactEMail: e.target.value }))}
                     />
                     <TextField
-                        variant='outlined'
-                        id='contactPhone'
-                        label='Telefon'
+                        variant="outlined"
+                        id="contactPhone"
+                        label="Telefon"
                         required
                         value={venue.contactPhone}
-                        onChange={(e) => setVenue(oldValues => ({ ...oldValues, contactPhone: e.target.value }))}
+                        onChange={(e) => setVenue((oldValues) => ({ ...oldValues, contactPhone: e.target.value }))}
                     />
-                    <Button
-                        variant='contained'
-                        color='primary'
-                        type='submit'
-                    >
+                    <Button variant="contained" color="primary" type="submit">
                         Lagre
                     </Button>
                 </form>
             </Paper>
         </Dialog>
-    )
+    );
 }

@@ -5,7 +5,6 @@ import useAuth from '../../hooks/useAuth';
 import { FixedSizeList } from 'react-window';
 
 export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, excludedUsers = [] }) {
-
     const [usersList, setUsersList] = useState([]);
     const [usersListIsReady, setUsersListIsReady] = useState(false);
 
@@ -13,65 +12,50 @@ export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, e
 
     const useStyles = makeStyles({
         root: {
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderBottom: "1px rgba(0,0,0,0.4) solid"
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px rgba(0,0,0,0.4) solid',
         },
         button: {
-            marginRight: "10px"
+            marginRight: '10px',
         },
         dialog: {
-            marginBottom: "5px"
-        }
+            marginBottom: '5px',
+        },
     });
 
     const classes = useStyles();
-
 
     useEffect(() => {
         const getUsers = async () => {
             if (isAuthenticated) {
                 const response = await fetch('/api/users/userslist', {
                     headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 const result = await response.json();
                 setUsersList(result);
                 setUsersListIsReady(true);
             }
-        }
+        };
         getUsers();
-    }, [isAuthenticated])
-
+    }, [isAuthenticated]);
 
     if (!usersListIsReady) {
-        return (<CircularProgress />)
+        return <CircularProgress />;
     }
 
     return (
         <>
-            <Dialog
-                open={dialogOpen}
-                onClose={handleDialogClose}
-            >
-                <DialogTitle>
-                    Velg bruker
-                </DialogTitle>
+            <Dialog open={dialogOpen} onClose={handleDialogClose}>
+                <DialogTitle>Velg bruker</DialogTitle>
 
-                <DialogContent
-                    className={classes.dialog}
-                >
-                    <FixedSizeList
-                        className="list"
-                        height={400}
-                        itemCount={usersList.length}
-                        itemSize={60}
-                        width={300}
-                    >
+                <DialogContent className={classes.dialog}>
+                    <FixedSizeList className="list" height={400} itemCount={usersList.length} itemSize={60} width={300}>
                         {({ index, style }) => (
-                            <div key={usersList[index].id} style={style} className={classes.root} >
+                            <div key={usersList[index].id} style={style} className={classes.root}>
                                 <Typography> {`${usersList[index].firstName} ${usersList[index].lastName}`} </Typography>
                                 {excludedUsers.indexOf(usersList[index].id) === -1 && (
                                     <Button
@@ -81,7 +65,10 @@ export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, e
                                         onClick={(e) => {
                                             setUserId(usersList[index].id);
                                             handleDialogClose();
-                                        }} >Velg</Button>
+                                        }}
+                                    >
+                                        Velg
+                                    </Button>
                                 )}
                             </div>
                         )}
@@ -89,5 +76,5 @@ export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, e
                 </DialogContent>
             </Dialog>
         </>
-    )
+    );
 }

@@ -7,13 +7,12 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
             padding: theme.spacing(1),
-            width: '100%'
-        }
-    }
-}))
+            width: '100%',
+        },
+    },
+}));
 
 export default function EditTicketType({ ticketTypeId, dialogEditTicketTypeOpen, handleDialogEditTicketTypeClose, updateListTrigger }) {
-
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
@@ -22,9 +21,9 @@ export default function EditTicketType({ ticketTypeId, dialogEditTicketTypeOpen,
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
-    }
+    };
 
-    const [ticketType, setTicketType] = useState("");
+    const [ticketType, setTicketType] = useState('');
     const { isAuthenticated, token } = useAuth();
 
     const classes = useStyles();
@@ -34,107 +33,97 @@ export default function EditTicketType({ ticketTypeId, dialogEditTicketTypeOpen,
             if (isAuthenticated) {
                 const responseTicketType = await fetch(`/api/tickettypes/type/${ticketTypeId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'content-type': 'application/json'
-                    }
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
                 });
 
                 if (responseTicketType.ok) {
                     const resultTicketType = await responseTicketType.json();
                     setTicketType(resultTicketType);
-                }
-                else if (responseTicketType.status === 400) {
+                } else if (responseTicketType.status === 400) {
                     const errorResult = await responseTicketType.json();
                     setErrors(errorResult.errors);
                     setErrorDialogOpen(true);
-                }
-                else {
+                } else {
                     const errorResult = await responseTicketType.json();
                     setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }
-        }
+        };
         getTicketType();
-
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
 
     const submitForm = async (e) => {
         e.preventDefault();
         if (isAuthenticated) {
             const response = await fetch('api/tickettypes/updatetickettype', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
                 },
                 method: 'PUT',
-                body: JSON.stringify(ticketType)
+                body: JSON.stringify(ticketType),
             });
             if (response.ok) {
                 updateListTrigger();
-            }
-            else if (response.status === 400) {
+            } else if (response.status === 400) {
                 const errorResult = await response.json();
                 setErrors(errorResult.errors);
                 setErrorDialogOpen(true);
-            }
-            else {
+            } else {
                 const errorResult = await response.json();
                 setError(errorResult.message);
                 setErrorDialogOpen(true);
             }
             handleDialogEditTicketTypeClose();
         }
-    }
+    };
 
     return (
-        <Dialog
-            open={dialogEditTicketTypeOpen}
-            onClose={handleDialogEditTicketTypeClose}
-        >
-            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+        <Dialog open={dialogEditTicketTypeOpen} onClose={handleDialogEditTicketTypeClose}>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
 
             <Paper>
-                <DialogTitle>
-                    Endre billettype
-                </DialogTitle>
-                <form
-                    className={classes.root}
-                    onSubmit={submitForm}
-                >
+                <DialogTitle>Endre billettype</DialogTitle>
+                <form className={classes.root} onSubmit={submitForm}>
                     <TextField
-                        variant='outlined'
-                        id='ticketTypeName'
-                        label='Billettype'
+                        variant="outlined"
+                        id="ticketTypeName"
+                        label="Billettype"
                         required
                         value={ticketType.descriptionName}
-                        onChange={(e) => setTicketType(oldValues => ({ ...oldValues, descriptionName: e.target.value }))}
+                        onChange={(e) => setTicketType((oldValues) => ({ ...oldValues, descriptionName: e.target.value }))}
                     />
                     <TextField
-                        variant='outlined'
-                        id='basePrice'
-                        label='Grunnpris'
+                        variant="outlined"
+                        id="basePrice"
+                        label="Grunnpris"
                         required
                         value={ticketType.basePrice}
-                        onChange={(e) => setTicketType(oldValues => ({ ...oldValues, basePrice: e.target.value }))}
+                        onChange={(e) => setTicketType((oldValues) => ({ ...oldValues, basePrice: e.target.value }))}
                     />
                     <TextField
-                        variant='outlined'
-                        id='amountAvailable'
-                        label='Antall'
+                        variant="outlined"
+                        id="amountAvailable"
+                        label="Antall"
                         required
                         value={ticketType.amountAvailable}
-                        onChange={(e) => setTicketType(oldValues => ({ ...oldValues, amountAvailable: e.target.value }))}
+                        onChange={(e) => setTicketType((oldValues) => ({ ...oldValues, amountAvailable: e.target.value }))}
                     />
-                    <Button
-                        variant='contained'
-                        color='primary'
-                        type='submit'
-                    >
+                    <Button variant="contained" color="primary" type="submit">
                         Lagre
                     </Button>
                 </form>
             </Paper>
         </Dialog>
-    )
+    );
 }

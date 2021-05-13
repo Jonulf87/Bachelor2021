@@ -1,42 +1,34 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@material-ui/core';
 
-
 export default function PopupWindow({ open, handleClose, error, clearError, errors, clearErrors }) {
-
     const [internalErrorsArray, setInternalErrorsArray] = useState([]);
 
     const endDialog = () => {
         if (error !== null && error !== undefined) {
-            clearError("");
+            clearError('');
             setInternalErrorsArray([]);
-        }
-        else if (errors !== null && error !== undefined) {
+        } else if (errors !== null && error !== undefined) {
             clearErrors([]);
             setInternalErrorsArray([]);
         }
 
         handleClose(false);
-    }
+    };
 
     useEffect(() => {
-
         if (errors !== null && errors !== undefined) {
             const keys = Object.keys(errors);
             const tempErrorsArray = [];
 
-            keys.map(key => errors[key].map(error => tempErrorsArray.push(error)))
+            keys.map((key) => errors[key].map((error) => tempErrorsArray.push(error)));
             setInternalErrorsArray(tempErrorsArray);
         }
-    }, [errors])
+    }, [errors]);
 
     return (
         <div>
-            <Dialog
-                open={open}
-                onClose={endDialog}
-                aria-describedby="error-dialog"
-            >
+            <Dialog open={open} onClose={endDialog} aria-describedby="error-dialog">
                 <DialogTitle id="error-dialog">Det skjedde en feil!</DialogTitle>
                 {error && (
                     <DialogContent>
@@ -63,11 +55,7 @@ export default function PopupWindow({ open, handleClose, error, clearError, erro
                     </DialogContent>
                 )}
                 <DialogActions>
-                    <Button
-                        onClick={endDialog}
-                        variant="contained"
-                        color="primary"
-                        size="large">
+                    <Button onClick={endDialog} variant="contained" color="primary" size="large">
                         OK
                     </Button>
                 </DialogActions>
