@@ -18,12 +18,12 @@ namespace WarpTest.WebLayer.Controllers
         private UserManager<ApplicationUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
 
-        private const string _orgName1 = "Org 1";
-        private const string _orgNummer1 = "1";
-        private const string _decsr1 = "Org Descr 1";
-        private const string _orgName2 = "Org 2";
-        private const string _orgNummer2 = "2";
-        private const string _decsr2 = "Org Descr 2";
+        private const string _orgName1 = "Org 2";
+        private const string _orgNummer1 = "2316454";
+        private const string _decsr1 = "Org Descr 2";
+        private const string _orgName2 = "Org 3";
+        private const string _orgNummer2 = "3226454";
+        private const string _decsr2 = "Org Descr 3";
 
         EntityEntry<ApplicationUser> _user1;
         EntityEntry<ApplicationUser> _user2;
@@ -92,9 +92,9 @@ namespace WarpTest.WebLayer.Controllers
         {
             CreateOrganizers();
 
-            string orgName = "Org 3";
-            string orgNummer = "3";
-            string decsr = "Org Descr 3";
+            string orgName = "Org 5";
+            string orgNummer = "56322";
+            string decsr = "Org Descr 5";
 
             EntityEntry<ApplicationUser> user = _dbContext.ApplicationUsers.Add(
                 new ApplicationUser
@@ -124,7 +124,22 @@ namespace WarpTest.WebLayer.Controllers
                                                                            organizer.OrgNumber == newOrganizer.OrgNumber
                                                                            ));
         }
-        /*
+
+        [Test]
+        public void ShouldNotCreateOrganizerIfAlreadyExists()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                await organizerController.CreateOrganizerAsync(new OrganizerVm { Id = 2, Name = _orgName1 , OrgNumber = _orgNummer1, Description = _decsr1});
+            });
+            Assert.That(ex.Message == "Arrangøren: Org 2 eksisterer allerede");
+        }
+
+
         [Test]
         public async Task ShouldUpdateOrganizer()
         {
@@ -146,28 +161,70 @@ namespace WarpTest.WebLayer.Controllers
                 }
             );
 
-            OrganizerService organizerService = new OrganizerService(_dbContext);
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
             OrganizerController organizerController = new OrganizerController(organizerService);
 
-            OrganizerVm organizerVm = new OrganizerVm { Id = 1, Name = newName, OrgNumber = newOrgNummer, Description = decsr, ContactName = user4.Entity.Id };
+            OrganizerVm organizerVm = new OrganizerVm { Id = 2, Name = newName, OrgNumber = newOrgNummer, Description = decsr, ContactName = user4.Entity.Id };
 
-            await organizerController.UpdateOrganizer(organizerVm);
+            await organizerController.UpdateOrganizerAsync(organizerVm);
 
             // Check that only one has been changed
-            Organizer organizer1 = _dbContext.Organizers.Find(1);
+            Organizer organizer1 = _dbContext.Organizers.Find(2);
             Assert.AreEqual(newName, organizer1.Name);
             Assert.AreEqual(newOrgNummer, organizer1.OrgNumber);
             Assert.AreEqual(decsr, organizer1.Description);
             Assert.AreEqual(user4.Entity.Id, organizer1.ContactId);
 
 
-            Organizer organizer2 = _dbContext.Organizers.Find(2);
-            Assert.AreEqual(_orgName2, organizer2.Name);
-            Assert.AreEqual(_orgNummer2, organizer2.OrgNumber);
-            Assert.AreEqual(_decsr2, organizer2.Description);
-            Assert.AreEqual(_user2.Entity.Id, organizer2.ContactId);
+            Organizer organizer2 = _dbContext.Organizers.Find(1);
+            Assert.AreEqual("Organizer 1", organizer2.Name);
+            Assert.AreEqual("123456", organizer2.OrgNumber);
+            Assert.AreEqual("Description", organizer2.Description);
         }
-        */
+
+        [Test]
+        public void ShouldNotUpdateOrganizerWithInvalidId()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                await organizerController.UpdateOrganizerAsync(new OrganizerVm { Id = 123, Name = _orgName1, OrgNumber = _orgNummer1, Description = _decsr1 });
+            });
+            Assert.That(ex.Message == "Fant ikke arrangøren");
+        }
+
+        [Test]
+        public async Task ShouldGetOrganizerContact()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+
+            ActionResult<List<OrganizerVm>> result = await organizerController.GetOrganizerContactAsync(2);
+            List<OrganizerVm> returnedContacts = (List<OrganizerVm>)((OkObjectResult)result.Result).Value;
+
+            Assert.AreEqual(1, returnedContacts.Count);
+            Assert.AreEqual("Test Testesen", returnedContacts[0].ContactName);
+            Assert.AreEqual(_orgNummer1, returnedContacts[0].OrgNumber);
+        }
+
+        [Test]
+        public void ShouldNotGetOrganizerContactWithInvalidId()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                ActionResult<List<OrganizerVm>> result = await organizerController.GetOrganizerContactAsync(123);
+            });
+            Assert.That(ex.Message == "Fant ingen kontaktpersoner for organisasjon med id: 123");
+        }
+
         //        [Test]
         //        public async Task ShouldDeleteMainEvent()
         //        {
