@@ -1,6 +1,7 @@
-﻿import { Button, Container, Dialog, DialogTitle, FormControl, makeStyles, Paper, TextField } from '@material-ui/core';
+﻿import { Button, Container, Dialog, DialogTitle, FormControl, makeStyles, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -14,13 +15,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CreateTicketType({ dialogOpen, handleDialogClose, triggerUpdate }) {
 
-    const classes = useStyles();
+    //Statevariabler for error popup vindu
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+    //Metode for error popup vindu
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    }
 
     const [name, setName] = useState('');
     const [basePrice, setBasePrice] = useState('');
     const [amountAvailable, setAmountAvailable] = useState('');
 
     const { isAuthenticated, token } = useAuth();
+
+    const classes = useStyles();
 
     const dataToBeSent = {
         'descriptionName': name,
@@ -31,7 +42,7 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
     const submitForm = async (e) => {
         e.preventDefault();
         if (isAuthenticated) {
-            await fetch('/api/tickettypes/createtickettype', {
+            const  response = await fetch('/api/tickettypes/createtickettype', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'content-type': 'application/json'
@@ -39,11 +50,24 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                 method: 'POST',
                 body: JSON.stringify(dataToBeSent)
             });
-            triggerUpdate();
-            setName('');
-            setBasePrice('');
-            setAmountAvailable('');
-            handleDialogClose();
+
+            if (response.ok) {
+                triggerUpdate();
+                setName('');
+                setBasePrice('');
+                setAmountAvailable('');
+                handleDialogClose();
+            }
+            else if (response.status === 400) {
+                const errorResult = await response.json();
+                setErrors(errorResult.errors);
+                setErrorDialogOpen(true);
+            }
+            else {
+                const errorResult = await response.json();
+                setError(errorResult.message);
+                setErrorDialogOpen(true);
+            }
         }
     }
 
@@ -53,12 +77,16 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
             onClose={handleDialogClose}
             className={classes.root}
         >
+
+            <PopupWindow open={errorDialogOpen} handleClose={handleErrorDialogClose} error={error} clearError={setError} errors={errors} clearErrors={setErrors} />
+
             <Container
                 style={{ padding: '10px' }}
             >
                 <DialogTitle>
                     Ny billettype
                 </DialogTitle>
+
                 <form
                     onSubmit={submitForm}
                     
