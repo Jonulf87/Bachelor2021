@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
@@ -249,6 +250,43 @@ namespace WarpTest.WebLayer.Controllers
 
             Assert.AreEqual(3, returnedOrgs[0].Id);
             Assert.AreEqual(_orgName2, returnedOrgs[0].Name);
+            Assert.AreEqual(_orgNummer2, returnedOrgs[0].OrgNumber);
+        }
+
+        [Test]
+        public async Task ShouldSetOrgAdmin()
+        {
+            UserStore<ApplicationUser> store = new UserStore<ApplicationUser>(_dbContext);
+            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(store, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, null);
+
+            OrganizerService organizerService = new OrganizerService(_dbContext, userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+
+            await organizerController.SetOrgAdminAsync(3, _user1.Entity.Id);
+
+            // Check that Admins contains only _user1 and do not contain _createdUser
+            Organizer org = _dbContext.Organizers.Find(3);
+            Assert.That(org.Admins.Contains(_user1.Entity));
+            Assert.IsFalse(org.Admins.Contains(_createdUser1.Entity));
+        }
+
+        [Test]
+        public async Task ShoulRemoveOrgAdmin()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+
+            await organizerController.RemoveOrgAdminAsync(3, _user2.Entity.Id);
+
+            Organizer org = _dbContext.Organizers.Find(3);
+
+            // Check that Organizer nas no admins
+            Assert.IsFalse(org.Admins.Contains(_user2.Entity));
+            Assert.IsFalse(org.Admins.Contains(_user1.Entity));
+            Assert.IsFalse(org.Admins.Contains(_createdUser1.Entity));
+            Assert.IsFalse(org.Admins.Contains(_createdUser2.Entity));
         }
 
         // Helper methods
