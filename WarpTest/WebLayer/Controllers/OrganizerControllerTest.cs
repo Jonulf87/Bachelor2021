@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
@@ -212,46 +213,83 @@ namespace WarpTest.WebLayer.Controllers
         }
 
         [Test]
-        public void ShouldNotGetOrganizerContactWithInvalidId()
+        public async Task ShoulSetOrganizerContact()
         {
             OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
             OrganizerController organizerController = new OrganizerController(organizerService);
             CreateOrganizers();
 
-            var ex = Assert.ThrowsAsync<HttpException>(async () =>
-            {
-                ActionResult<List<OrganizerVm>> result = await organizerController.GetOrganizerContactAsync(123);
-            });
-            Assert.That(ex.Message == "Fant ingen kontaktpersoner for organisasjon med id: 123");
+            ActionResult<OrganizerVm> contact = await organizerController.SetOrganizerContactAsync(1, _user1.Entity.Id);
+            Organizer org1 = _dbContext.Organizers.Find(1);
+            Assert.AreEqual(_user1.Entity.Id, org1.ContactId);
         }
 
-        //        [Test]
-        //        public async Task ShouldDeleteMainEvent()
-        //        {
-        //            CreateOrganizers();
+        [Test]
+        public async Task ShouldGetAdmins()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
 
-        //            OrganizerService organizerService = new OrganizerService(_dbContext);
-        //            OrganizerController organizerController = new OrganizerController(organizerService);
+            ActionResult<List<OrgAdminVm>> result =  await organizerController.GetOrgAdminsAsync(3);
+            List<OrgAdminVm> returnedAdmins = (List<OrgAdminVm>)((OkObjectResult)result.Result).Value;
 
-        //            OrganizerVm organizertVm = new OrganizerVm
-        //            {
-        //                Id = 1
-        //            };
+            Assert.AreEqual(_user2.Entity.Id, returnedAdmins[0].Id);
+        }
 
-        //            ActionResult<OrganizerVm> result = await organizerController.DeleteOrganizer(organizertVm);
-        //            OrganizerVm deletedOrganizer = (OrganizerVm)((OkObjectResult)result.Result).Value;
+        [Test]
+        public async Task ShouldGetOrgsWhereUserIsAdmin()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+            SetUser(organizerController, _user2.Entity.Id);
 
-        //            Assert.AreEqual(1, deletedOrganizer.Id);
+            ActionResult <List<OrganizerListVm>> org = await organizerController.GetOrgsWhereUserIsAdminAsync();
+            List<OrganizerListVm> returnedOrgs = (List<OrganizerListVm>)((OkObjectResult)org.Result).Value;
 
-        //            // Check that we have deleted only the first, but not the other
-        //            Organizer organizer1 = _dbContext.Organizers.Find(1);
-        //            Assert.IsNull(organizer1);
-        //            Organizer organizer2 = _dbContext.Organizers.Find(2);
-        //            Assert.IsNotNull(organizer2);
-        //        }
+            Assert.AreEqual(3, returnedOrgs[0].Id);
+            Assert.AreEqual(_orgName2, returnedOrgs[0].Name);
+            Assert.AreEqual(_orgNummer2, returnedOrgs[0].OrgNumber);
+        }
 
+        [Test]
+        public async Task ShouldSetOrgAdmin()
+        {
+            UserStore<ApplicationUser> store = new UserStore<ApplicationUser>(_dbContext);
+            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(store, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, null);
 
-        //        // Helper methods
+            OrganizerService organizerService = new OrganizerService(_dbContext, userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+
+            await organizerController.SetOrgAdminAsync(3, _user1.Entity.Id);
+
+            // Check that Admins contains only _user1 and do not contain _createdUser
+            Organizer org = _dbContext.Organizers.Find(3);
+            Assert.That(org.Admins.Contains(_user1.Entity));
+            Assert.IsFalse(org.Admins.Contains(_createdUser1.Entity));
+        }
+
+        [Test]
+        public async Task ShoulRemoveOrgAdmin()
+        {
+            OrganizerService organizerService = new OrganizerService(_dbContext, _userManager);
+            OrganizerController organizerController = new OrganizerController(organizerService);
+            CreateOrganizers();
+
+            await organizerController.RemoveOrgAdminAsync(3, _user2.Entity.Id);
+
+            Organizer org = _dbContext.Organizers.Find(3);
+
+            // Check that Organizer nas no admins
+            Assert.IsFalse(org.Admins.Contains(_user2.Entity));
+            Assert.IsFalse(org.Admins.Contains(_user1.Entity));
+            Assert.IsFalse(org.Admins.Contains(_createdUser1.Entity));
+            Assert.IsFalse(org.Admins.Contains(_createdUser2.Entity));
+        }
+
+        // Helper methods
         private void CreateOrganizers()
             {
                 _user1 = _dbContext.ApplicationUsers.Add(
@@ -293,8 +331,13 @@ namespace WarpTest.WebLayer.Controllers
                     {
                         Name = _orgName2, 
                         OrgNumber = _orgNummer2, 
-                        Description = _decsr2, 
-                        ContactId = _user2.Entity.Id 
+                        Description = _decsr2,
+
+                   Admins = new List<ApplicationUser>()
+                   {
+                       _user2.Entity
+
+                   }
                     });
                 _dbContext.SaveChanges();
             }
