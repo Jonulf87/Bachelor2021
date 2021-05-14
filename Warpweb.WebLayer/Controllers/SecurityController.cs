@@ -64,5 +64,14 @@ namespace Warpweb.WebLayer.Controllers
             await _securityService.SetPoliciesAsync(permissions, crewId);
             return Ok();
         }
+
+        [HttpPost]
+        [Route("edituseremail")]
+        public async Task<ActionResult> SetUserEmailAsync (UserEmailUpdateVm userData)
+        {
+            await _securityService.SetUserEmailAsync(userData);
+            return Ok();
+        }
+        
     }
 }

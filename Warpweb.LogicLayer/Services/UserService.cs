@@ -144,7 +144,6 @@ namespace Warpweb.LogicLayer.Services
                     ParentLastName = a.Guardian.LastName,
                     ParentPhoneNumber = a.Guardian.PhoneNumber,
                     Team = a.Team
-
                 }).SingleOrDefaultAsync();
         }
 

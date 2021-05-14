@@ -69,6 +69,15 @@ namespace Warpweb.LogicLayer.Services
             return listToSend;
         }
 
+        public async Task SetUserEmailAsync(UserEmailUpdateVm userData)
+        {
+            var user = await _userManager.FindByIdAsync(userData.UserId);
+
+            user.Email = userData.NewEMail;
+
+            await _userManager.UpdateAsync(user);
+        }
+
         /// <summary>
         /// Sets List of Policies for crew
         /// </summary>

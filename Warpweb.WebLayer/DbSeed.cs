@@ -82,7 +82,6 @@ namespace Warpweb.WebLayer
                         await userManager.CreateAsync(user, "SuperHemmelig");
                         await userManager.AddToRoleAsync(user, "Admin");
                     }
-                    
                 }
             }
         }

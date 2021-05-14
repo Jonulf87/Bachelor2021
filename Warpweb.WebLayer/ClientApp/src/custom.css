@@ -173,6 +173,13 @@ ticketbody {
 
 }
 
+.expandedRow {
+    background-color: #ccc;
+}
+.expandedRowDetail {
+    background-color: #eee;
+}
+
 
 /*
 
