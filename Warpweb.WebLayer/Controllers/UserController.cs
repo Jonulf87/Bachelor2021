@@ -33,6 +33,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>UserListVM</returns>
         [HttpGet]
         [Route("userslist")]
+        [Authorize(Roles = "Admin")]
         public async Task<List<UserListVm>> GetUsersAsync()
         {
 

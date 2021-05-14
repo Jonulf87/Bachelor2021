@@ -1,28 +1,185 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import UserList from './UserList';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Typography } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+import useAuth from '../../hooks/useAuth';
+import MUIDataTable, { ExpandButton } from 'mui-datatables';
+import PopupWindow from '../PopupWindow/PopupWindow';
+import UserAdminRowDetails from './UserAdminRowDetails';
 
 export default function UserAdminMain() {
-    const useStyles = makeStyles((theme) => ({
-        paper: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            '& > *': {
-                margin: theme.spacing(1),
-                width: theme.spacing(16),
-                height: theme.spacing(16),
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+    const [getUsersIsReady, setGetUsersIsReady] = useState(false);
+    const [userList, setUserList] = useState([]);
+    const [rowsExpanded, setRowsExpanded] = useState([]);
+    const [policies, setPolicies] = useState([]);
+    const { isAuthenticated, token, roles, isOrgAdmin } = useAuth();
+
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
+    };
+
+    useEffect(() => {
+        const getUsers = async () => {
+            if (isAuthenticated) {
+                const responsePolicies = await fetch('/api/security/policies', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
+                });
+                const resultPolicies = await responsePolicies.json();
+                setPolicies(resultPolicies);
+
+                if (roles.some((a) => a === 'Admin')) {
+                    const response = await fetch('/api/users/userslist', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        setUserList(result);
+                        setGetUsersIsReady(true);
+                    } else if (response.status === 400) {
+                        setUserList([]);
+                        const errorsResult = await response.json();
+                        setErrors(errorsResult);
+                        setErrorDialogOpen(true);
+                    } else {
+                        setUserList([]);
+                        const errorResult = await response.json();
+                        setError(errorResult.message);
+                        setErrorDialogOpen(true);
+                    }
+                } else if (isOrgAdmin || policies.some((a) => a === 4)) {
+                    //Her skal kallet gå til kun organisasjonen
+                    const response = await fetch('/api/users/userslist', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        setUserList(result);
+                        setGetUsersIsReady(true);
+                    } else if (response.status === 400) {
+                        setUserList([]);
+                        const errorsResult = await response.json();
+                        setErrors(errorsResult);
+                        setErrorDialogOpen(true);
+                    } else if (response.status === 403) {
+                        setUserList([]);
+                        setError('Du har ikke tilgang!');
+                        setErrorDialogOpen(true);
+                    } else {
+                        setUserList([]);
+                        const errorResult = await response.json();
+                        setError(errorResult.message);
+                        setErrorDialogOpen(true);
+                    }
+                }
+            }
+        };
+        getUsers();
+    }, [isAuthenticated]);
+
+    const columns = [
+        {
+            name: 'id',
+            label: 'Id',
+            options: {
+                display: false,
             },
         },
-    }));
+        {
+            name: 'firstName',
+            label: 'Fornavn',
+        },
+        {
+            name: 'lastName',
+            label: 'Etternavn',
+        },
+        {
+            name: 'userName',
+            label: 'Brukernavn',
+        },
+        {
+            name: 'phoneNumber',
+            label: 'Telefon',
+        },
+        {
+            name: 'eMail',
+            label: 'E-post',
+        },
+    ];
 
-    const classes = useStyles();
+    const options = {
+        rowsExpanded: rowsExpanded,
+        filter: false,
+        filterType: 'dropdown',
+        responsive: 'vertical',
+        selectableRows: 'none',
+        selectableRowsOnClick: false,
+        expandableRows: true,
+        expandableRowsHeader: false,
+        expandableRowsOnClick: false,
+        setRowProps: (row, dataIndex, rowIndex) => {
+            if (rowsExpanded.includes(dataIndex)) {
+                return {
+                    className: 'expandedRow',
+                };
+            }
+            return null;
+        },
+        renderExpandableRow: (rowData, rowMeta) => {
+            return (
+                <UserAdminRowDetails
+                    rowData={rowData}
+                    rowMeta={rowMeta}
+                    setError={setError}
+                    setErrors={setErrors}
+                    setErrorDialogOpen={setErrorDialogOpen}
+                />
+            );
+        },
+        onRowClick: (rowData, rowMeta) => {
+            if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
+                setRowsExpanded([]);
+            } else {
+                setRowsExpanded([rowMeta.dataIndex]);
+            }
+        },
+    };
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs>
-                <UserList />
-            </Grid>
-        </Grid>
+        <>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
+            <MUIDataTable
+                title={
+                    <>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" style={({ marginTop: '15px' }, { marginLeft: '15px' })}>
+                                    Brukere
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </>
+                }
+                data={userList}
+                columns={columns}
+                options={options}
+            />
+        </>
     );
 }
