@@ -17,7 +17,6 @@ namespace WarpTest.WebLayer.Controllers
     class OrganizerControllerTest : BaseTest
     {
         private UserManager<ApplicationUser> _userManager;
-        private RoleManager<IdentityRole> _roleManager;
 
         private const string _orgName1 = "Org 2";
         private const string _orgNummer1 = "2316454";

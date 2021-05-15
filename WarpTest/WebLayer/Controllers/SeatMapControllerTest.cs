@@ -15,8 +15,6 @@ namespace WarpTest.WebLayer.Controllers
 {
     class SeatMapControllerTest : BaseTest
     {
-        private readonly IMainEventProvider _mainEventProvider;
-
         [Test]
         public async Task ShouldStoreAndGetRows()
         {
@@ -46,7 +44,25 @@ namespace WarpTest.WebLayer.Controllers
             List<RowVm> rows = (List<RowVm>)((OkObjectResult)seats.Result).Value;
 
             Assert.AreEqual(2, rows.Count);
+        }
 
+        [Test]
+        public async Task ShouldGetPublicSeatMap()
+        {
+            SeatMapService seatMapService = new SeatMapService(_dbContext, _mainEventProvider);
+            SeatMapController seatMapController = new SeatMapController(seatMapService);
+            CreateRows();
+
+            ActionResult<IEnumerable<PublicRowVm>> publicRows = await seatMapController.GetPublicSeatMapAsync();
+            List<PublicRowVm> rows = (List<PublicRowVm>)((OkObjectResult)publicRows.Result).Value;
+            Assert.AreEqual(2, rows.Count);
+            Assert.AreEqual(1, rows[0].Id);
+            Assert.AreEqual("Test row name", rows[0].RowName);
+            Assert.AreEqual(2, rows[1].Id);
+            Assert.AreEqual("Test row name 2", rows[1].RowName);
+            Assert.AreEqual(4, rows[1].XPos);
+            Assert.AreEqual(2, rows[1].YPos);
+            Assert.IsTrue(rows[1].IsVertical);
         }
 
         // Helper methods
@@ -55,7 +71,10 @@ namespace WarpTest.WebLayer.Controllers
             _dbContext.Rows.Add(
                 new Row
                 {
-                    Name = "Test row name 1",
+                    Name = "Test row name 2",
+                    XCoordinate = 4,
+                    YCoordinate = 2,
+                    isVertical = true,
                     MainEventId = 1
                 }
             );
