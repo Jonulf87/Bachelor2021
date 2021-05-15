@@ -97,17 +97,11 @@ namespace WarpTest.WebLayer.Controllers
             ActionResult<List<TicketListVm>> result = await ticketController.GetAllTicketsUserEventUnpaidAsync(1);
             List<TicketListVm> returnedTickets = (List<TicketListVm>)((OkObjectResult)result.Result).Value;
 
-            Assert.AreEqual(2, returnedTickets.Count);
+            Assert.AreEqual(1, returnedTickets.Count);
             Assert.AreEqual("Event 1", returnedTickets[0].MainEventName);
-            Assert.AreEqual(15, returnedTickets[0].Price);
+            Assert.AreEqual(10, returnedTickets[0].Price);
             Assert.AreEqual("Test ticket type", returnedTickets[0].TicketType);
             Assert.AreEqual(_createdUser1.Entity.Id, returnedTickets[0].UserId);
-            Assert.AreEqual("Test row name", returnedTickets[0].RowName);
-            Assert.AreEqual(1, returnedTickets[0].SeatNumber);
-            Assert.AreEqual("Event 1", returnedTickets[1].MainEventName);
-            Assert.AreEqual(10, returnedTickets[1].Price);
-            Assert.AreEqual("Test ticket type", returnedTickets[1].TicketType);
-            Assert.AreEqual(_createdUser1.Entity.Id, returnedTickets[1].UserId);
         }
 
         [Test]
@@ -194,7 +188,6 @@ namespace WarpTest.WebLayer.Controllers
             Assert.AreEqual(10, ticketsAfter[1].AmountPaid);
         }
 
-        /*
         [Test]
         public async Task ShouldReserveSeat()
         {
@@ -203,14 +196,11 @@ namespace WarpTest.WebLayer.Controllers
             TicketController ticketController = new TicketController(ticketService);
             SetUser(ticketController, _createdUser1.Entity.Id);
 
-            Ticket ticket = _dbContext.Tickets.Find(1);
-
             await ticketController.ReserveSeatAsync(1, 1);
 
-            Ticket purchasedTicket = _dbContext.Tickets.Find(1);
-            Assert.AreEqual(1, purchasedTicket.SeatId);
+            Ticket reservedTicket = _dbContext.Tickets.Find(1);
+            Assert.AreEqual(1, reservedTicket.SeatId);
         }
-        */
 
         [Test]
         public void ShouldNotDeleteTicketIfDoesntExist()

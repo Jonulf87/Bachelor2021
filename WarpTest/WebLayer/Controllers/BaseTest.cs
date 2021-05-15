@@ -236,12 +236,15 @@ namespace WarpTest.WebLayer.Controllers
             );
             _dbContext.SaveChanges();
 
+            // This is workaround because it seemsthat many-to-many doesn't work good for in-memory DB
+            _dbContext.Database.ExecuteSqlRaw("INSERT INTO [TicketTypeRows] VALUES (1, 1)");
+
             _dbContext.Tickets.Add(
                 new Ticket
                 {
                     Price = 15,
                     IsCheckedIn = false,
-                    IsPaid = false,
+                    IsPaid = true,
                     TicketTypeId = 1,
                     MainEventId = 1,
                     ApplicationUserId = _createdUser1.Entity.Id,
