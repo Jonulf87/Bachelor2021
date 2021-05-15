@@ -171,7 +171,7 @@ namespace WarpTest.WebLayer.Controllers
 
              await ticketController.PurchaseTicketsAsync(tickets);
 
-             Ticket purchasedTicket = _dbContext.Tickets.Find(2);
+             Ticket purchasedTicket = _dbContext.Tickets.Find(1);
 
              Assert.AreEqual(true, purchasedTicket.IsPaid);
              Assert.AreEqual(10, purchasedTicket.AmountPaid);

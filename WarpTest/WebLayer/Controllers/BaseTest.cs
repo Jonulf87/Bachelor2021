@@ -126,16 +126,6 @@ namespace WarpTest.WebLayer.Controllers
                     Name = "Organizer 1",
                     OrgNumber = "123456",
                     Description = "Description"
-                    /*
-                    Admins = new List<ApplicationUser>()
-                    {
-                        // _createdUser.Entity
-                        new ApplicationUser
-                        {
-                            Id = _createdUser.Entity.Id
-                        }
-                    }
-                    */
                 }
             );
             _dbContext.SaveChanges();
