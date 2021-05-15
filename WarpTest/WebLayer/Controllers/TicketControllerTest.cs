@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
@@ -157,42 +159,58 @@ namespace WarpTest.WebLayer.Controllers
             Ticket ticket2 = _dbContext.Tickets.Find(2);
             Assert.IsNotNull(ticket2);
         }
+
+        [Test]
+        public async Task ShouldPurchaseTickets()
+        {
+            var ticketCountBefore = await _dbContext.Tickets
+                    .Where(a => a.TicketTypeId == 1)
+                    .CountAsync();
+
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
+            SetUser(ticketController, _createdUser1.Entity.Id);
+
+            List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
+            tickets.Add(new TicketsToBuyVm { Id = 1 });
+            await ticketController.PurchaseTicketsAsync(tickets);
+
+            var ticketCountAfter = await _dbContext.Tickets
+                    .Where(a => a.TicketTypeId == 1)
+                    .CountAsync();
+
+            // Check that amount of purchased tickes is now +1
+            Assert.AreEqual(ticketCountBefore+1, ticketCountAfter);
+
+            // Find tickets of this type
+            var ticketsAfter = await _dbContext.Tickets
+                    .Where(a => a.TicketTypeId == 1)
+                    .ToListAsync();
+
+            // One is created in BaseTest, one is created here
+            Assert.AreEqual(2, ticketsAfter.Count);
+            // Check the second (that is created here)
+            Assert.AreEqual(true, ticketsAfter[1].IsPaid);
+            Assert.AreEqual(10, ticketsAfter[1].AmountPaid);
+        }
+
         /*
-         [Test]
-         public async Task ShouldPurchaseTickets()
-         {
-             List<TicketsToBuyVm> tickets = new List<TicketsToBuyVm>();
-             tickets.Add(new TicketsToBuyVm { Id = 1 });
-             await CreateTickets(tickets);
+        [Test]
+        public async Task ShouldReserveSeat()
+        {
 
-             TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
-             TicketController ticketController = new TicketController(ticketService);
-             SetUser(ticketController, _createdUser1.Entity.Id);
+            TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
+            TicketController ticketController = new TicketController(ticketService);
+            SetUser(ticketController, _createdUser1.Entity.Id);
 
-             await ticketController.PurchaseTicketsAsync(tickets);
+            Ticket ticket = _dbContext.Tickets.Find(1);
 
-             Ticket purchasedTicket = _dbContext.Tickets.Find(1);
+            await ticketController.ReserveSeatAsync(1, 1);
 
-             Assert.AreEqual(true, purchasedTicket.IsPaid);
-             Assert.AreEqual(10, purchasedTicket.AmountPaid);
-         }
-
-         [Test]
-         public async Task ShouldReserveSeat()
-         {
-
-             TicketService ticketService = new TicketService(_dbContext, _mainEventProvider);
-             TicketController ticketController = new TicketController(ticketService);
-             SetUser(ticketController, _createdUser1.Entity.Id);
-
-             Ticket ticket = _dbContext.Tickets.Find(1);
-
-             await ticketController.ReserveSeatAsync(1, 1);
-
-             Ticket purchasedTicket = _dbContext.Tickets.Find(1);
-             Assert.AreEqual(1, purchasedTicket.SeatId);
-         }
-         */
+            Ticket purchasedTicket = _dbContext.Tickets.Find(1);
+            Assert.AreEqual(1, purchasedTicket.SeatId);
+        }
+        */
 
         [Test]
         public void ShouldNotDeleteTicketIfDoesntExist()

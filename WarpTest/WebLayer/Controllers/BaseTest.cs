@@ -211,7 +211,7 @@ namespace WarpTest.WebLayer.Controllers
                 new Row
                 {
                     Name = "Test row name",
-                    MainEventId = 1
+                    MainEventId = 1,
                 }
             );
             _dbContext.SaveChanges();
