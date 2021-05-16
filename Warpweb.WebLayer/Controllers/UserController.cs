@@ -33,11 +33,10 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>UserListVM</returns>
         [HttpGet]
         [Route("userslist")]
-        [Authorize(Roles = "Admin")]
         public async Task<List<UserListVm>> GetUsersAsync()
         {
-
-            return await _userService.GetUsersAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return await _userService.GetUsersAsync(userId);
         }
 
         /// <summary>
@@ -60,9 +59,9 @@ namespace Warpweb.WebLayer.Controllers
         [Route("currentuser")]
         public async Task<UserVm> GetCurrentUserAsync()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return await _userService.GetCurrentUserAsync(userId.Value);
+            return await _userService.GetCurrentUserAsync(userId);
         }
 
         /// <summary>

@@ -21,6 +21,6 @@ namespace Warpweb.DataAccessLayer.Models
         public virtual ApplicationUser Contact { get; set; }
         public virtual ICollection<Venue> Venues { get; set; }
         public virtual ICollection<ApplicationUser> Admins { get; set; }
-        public virtual ICollection<MainEvent> MainEvent { get; set; }
+        public virtual ICollection<MainEvent> MainEvents { get; set; }
     }
 }
