@@ -50,25 +50,27 @@ export default function EditUserPassword({ dialogEditUserPasswordOpen, handleDia
             checkNewPassword: '',
         },
         onSubmit: async (values, e) => {
-            const response = await fetch('/api/users/updatepassword', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'content-type': 'application/json',
-                },
-                method: 'PUT',
-                body: JSON.stringify(values),
-            });
-            if (response.ok) {
-                setAlertOpen(true);
-                handleDialogEditUserPasswordClose();
-            } else if (response.status === 400) {
-                const errorResult = await response.json();
-                setErrors(errorResult.errors);
-                setErrorDialogOpen(true);
-            } else {
-                const errorResult = await response.json();
-                setError(errorResult.Message);
-                setErrorDialogOpen(true);
+            if (isAuthenticated) {
+                const response = await fetch('/api/users/updatepassword', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
+                    method: 'PUT',
+                    body: JSON.stringify(values),
+                });
+                if (response.ok) {
+                    setAlertOpen(true);
+                    handleDialogEditUserPasswordClose();
+                } else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                } else {
+                    const errorResult = await response.json();
+                    setError(errorResult.Message);
+                    setErrorDialogOpen(true);
+                }
             }
         },
         validationSchema: passwordSchema,
