@@ -33,11 +33,10 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>UserListVM</returns>
         [HttpGet]
         [Route("userslist")]
-        [Authorize(Roles = "Admin")]
         public async Task<List<UserListVm>> GetUsersAsync()
         {
-
-            return await _userService.GetUsersAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return await _userService.GetUsersAsync(userId);
         }
 
         /// <summary>
@@ -60,9 +59,9 @@ namespace Warpweb.WebLayer.Controllers
         [Route("currentuser")]
         public async Task<UserVm> GetCurrentUserAsync()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return await _userService.GetCurrentUserAsync(userId.Value);
+            return await _userService.GetCurrentUserAsync(userId);
         }
 
         /// <summary>
@@ -113,7 +112,54 @@ namespace Warpweb.WebLayer.Controllers
         [Route("updateuser")]
         public async Task<ActionResult> UpdateUserAsync(UserUpdateVm user)
         {
-            await _userService.UpdateUserAsync(user);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _userService.UpdateUserAsync(user, userId);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Used for updating username of user
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("updateusername")]
+        public async Task<ActionResult> UpdateUsernameAsync(UsernameUpdateVm data)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _userService.UpdateUsernameAsync(data, userId);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Used for updating E-mail of user
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("updateemail")]
+        public async Task<ActionResult> UpdateEMailAsync(EMailUpdateVm data)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _userService.UpdateEMailAsync(data, userId);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Used for updating password of user
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("updatepassword")]
+        public async Task<ActionResult> UpdatePasswordAsync(PasswordUpdateVm data)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _userService.UpdatePasswordAsync(data, userId);
             return Ok();
         }
 
