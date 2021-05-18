@@ -123,7 +123,6 @@ namespace WarpTest.WebLayer.Controllers
 
             UserUpdateVm userForUpdate = new UserUpdateVm
             {
-                Id = _createdUser2.Entity.Id,
                 LastName = "Svensen"
             };
 
@@ -147,7 +146,6 @@ namespace WarpTest.WebLayer.Controllers
             {
                 ActionResult<CrewVm> result = await userController.UpdateUserAsync(new UserUpdateVm
                 {
-                    Id = "123",
                     LastName = "Svensen"
                 });
             });

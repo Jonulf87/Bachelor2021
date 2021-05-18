@@ -44,8 +44,8 @@ namespace Warpweb.LogicLayer.Services
                 .SingleOrDefaultAsync();
 
             var userOrgs = await _dbContext.Organizers
-                .Where(a => a.Admins.Any(b => b.Id == userId) 
-                    || a.MainEvents.Any(b => b.Crews.Any(c => c.CrewPermissions.Any(d => d.PermissionType == CrewPermissionType.UserAdmin) 
+                .Where(a => a.Admins.Any(b => b.Id == userId)
+                    || a.MainEvents.Any(b => b.Crews.Any(c => c.CrewPermissions.Any(d => d.PermissionType == CrewPermissionType.UserAdmin)
                         && c.Users.Any(d => d.ApplicationUserId == userId))))
                 .Select(a => a.Id)
                 .ToListAsync();
@@ -94,7 +94,7 @@ namespace Warpweb.LogicLayer.Services
             }
             else
             {
-                throw new HttpException(HttpStatusCode.Forbidden, "Du har ikke tilgang til denne listen"); 
+                throw new HttpException(HttpStatusCode.Forbidden, "Du har ikke tilgang til denne listen");
             }
 
         }
@@ -229,29 +229,28 @@ namespace Warpweb.LogicLayer.Services
         /// <summary>
         /// Updates user
         /// </summary>
-        public async Task UpdateUserAsync(UserUpdateVm userVm)
+        public async Task UpdateUserAsync(UserUpdateVm userVm, string userId)
         {
-            var existingUser = _dbContext.ApplicationUsers.Where(a => a.Id == userVm.Id).SingleOrDefault();
+            var existingUser = await _userManager.FindByIdAsync(userId);
 
             if (existingUser == null)
             {
-                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med Id: {userVm.Id}");
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med navn: {userVm.FirstName} {userVm.LastName}");
             }
 
-            existingUser.Id = userVm.Id;
             existingUser.FirstName = userVm.FirstName;
             existingUser.MiddleName = userVm.MiddleName;
             existingUser.LastName = userVm.LastName;
             existingUser.Address = userVm.Address;
             existingUser.ZipCode = userVm.ZipCode;
             existingUser.PhoneNumber = userVm.PhoneNumber;
-            existingUser.UserName = userVm.UserName;
             existingUser.Team = userVm.Team;
             existingUser.IsAllergic = userVm.IsAllergic;
             existingUser.AllergyDescription = userVm.AllergyDescription;
             existingUser.Comments = userVm.Comments;
 
-            var guardianToBeUpdated = existingUser.Guardian;
+            var guardianToBeUpdated = await _dbContext.Guardians
+                .SingleOrDefaultAsync(a => a.ApplicationUserId == userId);
 
             if (guardianToBeUpdated != null)
             {
@@ -261,11 +260,60 @@ namespace Warpweb.LogicLayer.Services
                 guardianToBeUpdated.PhoneNumber = userVm.ParentPhoneNumber;
 
                 _dbContext.Update<Guardian>(guardianToBeUpdated);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
 
-            _dbContext.Update<ApplicationUser>(existingUser);
-            await _dbContext.SaveChangesAsync();
+            await _userManager.UpdateAsync(existingUser);
+
         }
+
+        public async Task UpdateUsernameAsync(UsernameUpdateVm data, string userId)
+        {
+            var existingUser = await _userManager.FindByIdAsync(userId);
+
+            if (existingUser == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med denne ID'en");
+            }
+
+            existingUser.UserName = data.NewUserName;
+
+            await _userManager.UpdateAsync(existingUser);
+        }
+
+        public async Task UpdateEMailAsync(EMailUpdateVm data, string userId)
+        {
+            var existingUser = await _userManager.FindByIdAsync(userId);
+
+            if (existingUser == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med denne ID'en");
+            }
+
+            existingUser.Email = data.NewEMail;
+
+            await _userManager.UpdateAsync(existingUser);
+        }
+
+        public async Task UpdatePasswordAsync(PasswordUpdateVm data, string userId)
+        {
+            var existingUser = await _userManager.FindByIdAsync(userId);
+
+            if (!await _userManager.CheckPasswordAsync(existingUser, data.OldPassword))
+            {
+                throw new HttpException(HttpStatusCode.Forbidden, "Det gamle passordet er ugyldig");
+            }
+
+
+
+            if (existingUser == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med denne ID'en");
+            }
+
+
+            await _userManager.ChangePasswordAsync(existingUser, data.OldPassword, data.NewPassword);
+        }
+
     }
 }

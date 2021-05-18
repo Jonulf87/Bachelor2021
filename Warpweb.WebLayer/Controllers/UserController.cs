@@ -112,7 +112,54 @@ namespace Warpweb.WebLayer.Controllers
         [Route("updateuser")]
         public async Task<ActionResult> UpdateUserAsync(UserUpdateVm user)
         {
-            await _userService.UpdateUserAsync(user);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _userService.UpdateUserAsync(user, userId);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Used for updating username of user
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("updateusername")]
+        public async Task<ActionResult> UpdateUsernameAsync(UsernameUpdateVm data)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _userService.UpdateUsernameAsync(data, userId);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Used for updating E-mail of user
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("updateemail")]
+        public async Task<ActionResult> UpdateEMailAsync(EMailUpdateVm data)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _userService.UpdateEMailAsync(data, userId);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Used for updating password of user
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("updatepassword")]
+        public async Task<ActionResult> UpdatePasswordAsync(PasswordUpdateVm data)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _userService.UpdatePasswordAsync(data, userId);
             return Ok();
         }
 

@@ -47,7 +47,7 @@ namespace Warpweb.LogicLayer.ViewModels
         public string Team { get; set; }
         [Required]
         [DataType(DataType.Password)]
-        [MinLength(10)]
+        [MinLength(12, ErrorMessage = "Passordet må være minst 12 karakterer langt")]
         public string Password { get; set; }
         [Compare(nameof(Password), ErrorMessage = "Passord er ikke like")]
         [Required]

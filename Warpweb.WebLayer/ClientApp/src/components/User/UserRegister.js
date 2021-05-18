@@ -612,6 +612,16 @@ export default function UserRegister() {
                                 />
                             </Grid>
                             <Grid xs={12} item>
+                                <TextField
+                                    id="team"
+                                    name="team"
+                                    label="Lag"
+                                    value={formik.values.team}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                            </Grid>
+                            <Grid xs={12} item>
                                 <Button color="primary" variant="contained" size="large" type="submit">
                                     Registrer meg!
                                 </Button>
