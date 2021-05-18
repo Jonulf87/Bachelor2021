@@ -1,0 +1,1643 @@
+{
+	"info": {
+		"_postman_id": "74a1db05-e3db-41bb-96ea-536e991f4eea",
+		"name": "WarpWeb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"token\", \"Bearer \" + jsonData.token);\r",
+									"// pm.globals.set(\"token\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"postmanwarpweb@gmail.com\",\r\n    \"password\": \"SuperHemmelig\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth/login",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"currentUserId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/users/currentuser",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"currentuser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MainEvent Happy Path Scenarios",
+			"item": [
+				{
+					"name": "Create organizer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"timeStamp\", Date.now());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{organizerName}}{{timeStamp}}\",\r\n  \"orgNumber\": \"{{orgNummer}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tenants/addorganizer",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tenants",
+								"addorganizer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all organizers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var organizer = _.find(pm.response.json(), { \r",
+									"    name: pm.variables.get(\"organizerName\") + pm.variables.get(\"timeStamp\")\r",
+									"});\r",
+									"pm.environment.set(\"organizerId\", organizer.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tenants/gettenants",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tenants",
+								"gettenants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set orgadmin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"{{currentUserId}}\""
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tenants/setadmin/{{organizerId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tenants",
+								"setadmin",
+								"{{organizerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create venue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"organizerId\": {{organizerId}},\r\n  \"name\": \"{{venueName}}{{timeStamp}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/venues/createvenue",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"venues",
+								"createvenue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all venues",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var venue = _.find(pm.response.json(), { \r",
+									"    name: pm.variables.get(\"venueName\") + pm.variables.get(\"timeStamp\")\r",
+									"});\r",
+									"pm.environment.set(\"venueId\", venue.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/venues/venueslist",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"venues",
+								"venueslist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{mainEventName}}{{timeStamp}}\",\r\n  \"startDateTime\": \"2021-05-17T14:55:08.616Z\",\r\n  \"endDateTime\": \"2021-05-17T14:55:08.616Z\",\r\n  \"venueId\": \"{{venueId}}\",\r\n  \"organizerId\": \"{{organizerId}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/events/createmainevent",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"createmainevent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current main event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"New event is now current main event\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.name).to.equal(pm.variables.get(\"mainEventName\") + pm.variables.get(\"timeStamp\"));\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/events/getcurrentmainevent",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"getcurrentmainevent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var event = _.find(pm.response.json(), { \r",
+									"    name: pm.variables.get(\"mainEventName\") + pm.variables.get(\"timeStamp\")\r",
+									"});\r",
+									"pm.environment.set(\"mainEventId\", event.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/events/eventslist",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"eventslist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get upcoming events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Upcoming events should not contain this event\",\r",
+									"    function () {\r",
+									"        var event = _.find(pm.response.json(), { \r",
+									"            id: pm.variables.get(\"mainEventId\")\r",
+									"        });\r",
+									"        pm.expect(event).not.exist;\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/events/upcomingevents",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"upcomingevents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									" pm.environment.set(\"nextYear\", (new Date().getFullYear())+1);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{mainEventId}},\r\n  \"name\": \"{{mainEventNameUpdated}}{{timeStamp}}\",\r\n  \"organizerId\": {{organizerId}}, \r\n  \"startDateTime\": \"{{nextYear}}-05-18T14:55:08.616Z\",\r\n  \"endDateTime\": \"{{nextYear}}-05-18T14:55:08.616Z\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/events",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get upcoming events again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Upcoming events should contain this event\",\r",
+									"    function () {\r",
+									"        var event = _.find(pm.response.json(), { \r",
+									"            id: pm.variables.get(\"mainEventId\")\r",
+									"        });\r",
+									"        pm.expect(event).exist;\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/events/upcomingevents",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"upcomingevents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Name has been updated\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.name).to.equal(pm.variables.get(\"mainEventNameUpdated\") + pm.variables.get(\"timeStamp\"));\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/events/getmainevent/{{mainEventId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"getmainevent",
+								"{{mainEventId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get events where current user is orgadmin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Current user is orgadmin in current main event\",\r",
+									"    function () {\r",
+									"        var event = _.find(pm.response.json(), { \r",
+									"            id: pm.variables.get(\"mainEventId\")\r",
+									"        });\r",
+									"        pm.expect(event).exist;\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/events/orgadminmainevents",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"orgadminmainevents"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Crew Happy Path Scenarios",
+			"item": [
+				{
+					"name": "Set main event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{mainEventId}}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/events/setcurrentevent",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"setcurrentevent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create crew",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/createcrew/{{crewName}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"createcrew",
+								"{{crewName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all crews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var crew = _.find(pm.response.json(), { \r",
+									"    name: pm.variables.get(\"crewName\")\r",
+									"});\r",
+									"pm.environment.set(\"crewId\", crew.id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/allcrews",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"allcrews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update crew",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"crewId\": {{crewId}},\r\n  \"crewName\": \"{{crewNameUpdated}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/crews/updatecrew",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"updatecrew"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get crew",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Name has been updated\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.crewName).to.equal(pm.variables.get(\"crewNameUpdated\"));\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/getcrew/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"getcrew",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get crew members",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Crewmember array is empty\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.length).to.equal(0);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/crewmembers/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"crewmembers",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add crew member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"{{currentUserId}}\""
+						},
+						"url": {
+							"raw": "{{apiUrl}}/crews/addcrewmember/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"addcrewmember",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get crew members again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Crewmember array contains current user\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.length).to.equal(1);\r",
+									"        pm.expect(jsonData[0].id).to.equal(pm.variables.get(\"currentUserId\"));\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/crewmembers/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"crewmembers",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get crews of the current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Crew list contains crewId\",\r",
+									"    function () {\r",
+									"        var crew = _.find(pm.response.json(), { \r",
+									"            id: pm.variables.get(\"crewId\")\r",
+									"        });\r",
+									"        pm.expect(crew).exist;\r",
+									"    }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/mycrews",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"mycrews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check user crew member at event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"User is a member of the event\",\r",
+									"    function () {\r",
+									"        pm.expect(responseBody).to.equal(\"true\");\r",
+									"    }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"eventId\": {{mainEventId}}\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/crews/checkusercrewmemberatevent",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"checkusercrewmemberatevent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove crew member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": \"{{currentUserId}}\",\r\n  \"crewId\": {{crewId}}\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/crews/removecrewmember",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"removecrewmember"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get crew members after removing user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Crewmember array is empty\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.length).to.equal(0);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/crewmembers/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"crewmembers",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get crew leaders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Crewleader array is empty\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.length).to.equal(0);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/crewleaders/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"crewleaders",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add crew leader",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"{{currentUserId}}\""
+						},
+						"url": {
+							"raw": "{{apiUrl}}/crews/addcrewleader/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"addcrewleader",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get crew leaders again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Crewleader array contains current user\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.length).to.equal(1);\r",
+									"        pm.expect(jsonData[0].id).to.equal(pm.variables.get(\"currentUserId\"));\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/crews/crewleaders/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"crewleaders",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete crew",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"CrewId\": {{crewId}}\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/crews/deletecrew",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"crews",
+								"deletecrew"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Crew Error Scenarios",
+			"item": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://localhost:44308"
+		},
+		{
+			"key": "apiUrl",
+			"value": "{{baseUrl}}/api"
+		},
+		{
+			"key": "crewName",
+			"value": "NewCrewFromPostman"
+		},
+		{
+			"key": "crewNameUpdated",
+			"value": "UpdatedCrewFromPostman"
+		},
+		{
+			"key": "mainEventName",
+			"value": "NewMainEventFromPostman"
+		},
+		{
+			"key": "venueName",
+			"value": "NewVenueNameFromPostman"
+		},
+		{
+			"key": "organizerName",
+			"value": "NewOrganizerNameFromPostman"
+		},
+		{
+			"key": "orgNummer",
+			"value": "OrganizerNummer"
+		},
+		{
+			"key": "mainEventNameUpdated",
+			"value": "UpdatedMainEventName"
+		}
+	]
+}
