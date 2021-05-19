@@ -65,13 +65,23 @@ export default function UserRegister() {
     const cacheTestEMail = (asyncValidate) => {
         let _valid = false;
         let _value = '';
+        let _timeoutId = 0;
 
         return async (value) => {
+            if (value === undefined) {
+                clearTimeout(_timeoutId);
+                return true;
+            }
             if (value !== _value) {
-                const response = await asyncValidate(value);
-                _value = value;
-                _valid = response;
-                return response;
+                return new Promise(async (resolve) => {
+                    clearTimeout(_timeoutId);
+                    _timeoutId = setTimeout(async () => {
+                        const response = await asyncValidate(value);
+                        _value = value;
+                        _valid = response;
+                        resolve(response);
+                    }, 400);
+                });
             }
             return _valid;
         };
@@ -80,13 +90,23 @@ export default function UserRegister() {
     const cacheTestUserName = (asyncValidate) => {
         let _valid = false;
         let _value = '';
+        let _timeoutId = 0;
 
         return async (value) => {
+            if (value === undefined) {
+                clearTimeout(_timeoutId);
+                return true;
+            }
             if (value !== _value) {
-                const response = await asyncValidate(value);
-                _value = value;
-                _valid = response;
-                return response;
+                return new Promise(async (resolve) => {
+                    clearTimeout(_timeoutId);
+                    _timeoutId = setTimeout(async () => {
+                        const response = await asyncValidate(value);
+                        _value = value;
+                        _valid = response;
+                        resolve(response);
+                    }, 400);
+                });
             }
             return _valid;
         };

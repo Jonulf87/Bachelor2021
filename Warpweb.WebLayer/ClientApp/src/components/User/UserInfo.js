@@ -6,6 +6,8 @@ import { format, parseISO } from 'date-fns';
 import useAuth from '../../hooks/useAuth';
 import EditUser from './EditUser';
 import EditUserPassword from './EditUserPassword';
+import EditUsername from './EditUsername';
+import EditUserEMail from './EditUserEMail';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -26,6 +28,8 @@ export default function UserInfo() {
     const [userInfo, setUserInfo] = useState([]);
     const [dialogEditUserOpen, setDialogEditUserOpen] = useState(false);
     const [dialogEditUserPasswordOpen, setDialogEditUserPasswordOpen] = useState(false);
+    const [dialogEditUsernameOpen, setDialogEditUsernameOpen] = useState(false);
+    const [dialogEditUserEMailOpen, setDialogEditUserEMailOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
     const [updateUser, setUpdateUser] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
@@ -38,6 +42,22 @@ export default function UserInfo() {
 
     const handleDialogEditUserPasswordClose = () => {
         setDialogEditUserPasswordOpen(false);
+    };
+
+    const handleDialogEditUserEMailOpen = () => {
+        setDialogEditUserEMailOpen(true);
+    };
+
+    const handleDialogEditUserEMailClose = () => {
+        setDialogEditUserEMailOpen(false);
+    };
+
+    const handleDialogEditUsernameOpen = () => {
+        setDialogEditUsernameOpen(true);
+    };
+
+    const handleDialogEditUsernameClose = () => {
+        setDialogEditUsernameOpen(false);
     };
 
     const handleDialogEditUserClose = () => {
@@ -82,7 +102,7 @@ export default function UserInfo() {
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
                 <Alert severity="success" color="success" variant="filled">
-                    Du har oppdatert passordet ditt
+                    Du har oppdatert brukeren din
                 </Alert>
             </Snackbar>
             <Card className={classes.root} variant="outlined">
@@ -178,11 +198,27 @@ export default function UserInfo() {
                                 </Typography>
                             )}
 
-                            <Button variant="contained" color="primary" onClick={handleDialogEditUserOpen}>
-                                Endre
+                            <Button style={{ marginRight: '5px' }} variant="contained" color="primary" onClick={handleDialogEditUserOpen}>
+                                Endre personalia
                             </Button>
-                            <Button variant="contained" color="primary" onClick={handleDialogEditUserPasswordOpen}>
+                            <Button
+                                style={{ marginRight: '5px' }}
+                                variant="contained"
+                                color="primary"
+                                onClick={handleDialogEditUserPasswordOpen}
+                            >
                                 Endre passord
+                            </Button>
+                            <Button
+                                style={{ marginRight: '5px' }}
+                                variant="contained"
+                                color="primary"
+                                onClick={handleDialogEditUsernameOpen}
+                            >
+                                Endre brukernavn
+                            </Button>
+                            <Button variant="contained" color="primary" onClick={handleDialogEditUserEMailOpen}>
+                                Endre e-post
                             </Button>
 
                             <EditUserPassword
@@ -193,6 +229,18 @@ export default function UserInfo() {
                             <EditUser
                                 dialogEditUserOpen={dialogEditUserOpen}
                                 handleDialogEditUserClose={handleDialogEditUserClose}
+                                triggerUpdate={triggerUpdate}
+                            />
+                            <EditUsername
+                                dialogEditUsernameOpen={dialogEditUsernameOpen}
+                                handleDialogEditUsernameClose={handleDialogEditUsernameClose}
+                                setAlertOpen={setAlertOpen}
+                                triggerUpdate={triggerUpdate}
+                            />
+                            <EditUserEMail
+                                dialogEditUserEMailOpen={dialogEditUserEMailOpen}
+                                handleDialogEditUserEMailClose={handleDialogEditUserEMailClose}
+                                setAlertOpen={setAlertOpen}
                                 triggerUpdate={triggerUpdate}
                             />
                         </>
