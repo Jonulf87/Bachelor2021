@@ -9,6 +9,10 @@ const useStyles = makeStyles((theme) => ({
             padding: theme.spacing(1),
             width: '100%',
         },
+        '& .MuiButtonBase-root': {
+            padding: '7px',
+            margin: '12px',
+        },
     },
 }));
 
@@ -118,13 +122,11 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
                         value={venue.postalCode}
                         onChange={(e) => setVenue((oldValues) => ({ ...oldValues, postalCode: e.target.value }))}
                     />
-                    <Divider style={{ marginBottom: '8px', marginTop: '8px' }} />
-                    <Typography>Kontakt</Typography>
 
                     <TextField
                         variant="outlined"
                         id="contactName"
-                        label="Navn"
+                        label="Kontaktperson"
                         required
                         value={venue.contactName}
                         onChange={(e) => setVenue((oldValues) => ({ ...oldValues, contactName: e.target.value }))}
@@ -132,7 +134,7 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
                     <TextField
                         variant="outlined"
                         id="contactEMail"
-                        label="E-post"
+                        label="E-post kontaktperson"
                         required
                         value={venue.contactEMail}
                         onChange={(e) => setVenue((oldValues) => ({ ...oldValues, contactEMail: e.target.value }))}
@@ -140,7 +142,7 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
                     <TextField
                         variant="outlined"
                         id="contactPhone"
-                        label="Telefon"
+                        label="Telefon kontaktperson"
                         required
                         value={venue.contactPhone}
                         onChange={(e) => setVenue((oldValues) => ({ ...oldValues, contactPhone: e.target.value }))}

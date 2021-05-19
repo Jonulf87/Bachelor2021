@@ -1,8 +1,8 @@
-﻿import { Button, Dialog, DialogContent, DialogTitle, Grid, TableCell, TableRow, TextField, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import useAuth from '../../hooks/useAuth';
+﻿import React, { useEffect, useState } from 'react';
+import { Button, Dialog, DialogContent, DialogTitle, Grid, TableCell, TableRow, TextField, Typography} from '@material-ui/core';
 import { format, parseISO } from 'date-fns';
 import { intervalToDuration } from 'date-fns/esm/fp';
+import useAuth from '../../hooks/useAuth';
 
 export default function UserAdminRowDetails({ rowData, rowMeta, setError, setErrorDialogOpen, setErrors }) {
     const [userDetails, setUserDetails] = useState(null);

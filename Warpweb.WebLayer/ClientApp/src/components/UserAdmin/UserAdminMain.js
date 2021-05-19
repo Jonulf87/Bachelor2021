@@ -1,8 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Grid, Typography } from '@material-ui/core';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import MUIDataTable from 'mui-datatables';
 import useAuth from '../../hooks/useAuth';
-import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import PopupWindow from '../PopupWindow/PopupWindow';
 import UserAdminRowDetails from './UserAdminRowDetails';
 

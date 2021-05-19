@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Warpweb.DataAccessLayer.Models;
 
 namespace Warpweb.LogicLayer.ViewModels
 {

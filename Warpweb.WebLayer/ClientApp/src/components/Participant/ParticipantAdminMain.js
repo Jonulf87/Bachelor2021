@@ -1,6 +1,6 @@
-﻿import { Typography, Grid, CircularProgress } from '@material-ui/core';
-import MUIDataTable, { ExpandButton } from 'mui-datatables';
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
+import { Typography, Grid, CircularProgress } from '@material-ui/core';
+import MUIDataTable from 'mui-datatables';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 import ParticipantAdminRowDetails from './ParticipantAdminRowDetails';
@@ -11,16 +11,13 @@ export default function ParticipantAdminMain() {
     const [errors, setErrors] = useState([]);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
-    const [participantList, setParticipantList] = useState([]);
-    const [updateList, setUpdateList] = useState([]);
+    const [getParticipantsIsReady, setGetParticipantsIsReady] = useState(false);
+    const [participantsList, setParticipantsList] = useState([]);
     const [rowsExpanded, setRowsExpanded] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const { isAuthenticated, token } = useAuth();
 
-    const triggerUpdate = () => {
-        setUpdateList((oldValue) => !oldValue);
-    };
 
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
@@ -38,18 +35,24 @@ export default function ParticipantAdminMain() {
                 });
                 if (responseParticipants.ok) {
                     const resultParticipants = await responseParticipants.json();
-                    setParticipantList(resultParticipants);
+                    setParticipantsList(resultParticipants);
                     setIsLoading(false);
+                    setGetParticipantsIsReady(true);
+                } else if (responseParticipants === 400) {
+                    setParticipantsList([]);
+                    const errorsResult = await responseParticipants.json();
+                    setErrors(errorsResult);
+                    setErrorDialogOpen(true);
                 } else {
                     const errorResult = await responseParticipants.json();
                     setError(errorResult.message);
-                    setParticipantList([]);
+                    setParticipantsList([]);
                     setErrorDialogOpen(true);
                 }
             }
         };
         getParticipants();
-    }, [isAuthenticated, updateList]);
+    }, [isAuthenticated]);
 
     const columns = [
         {
@@ -57,12 +60,11 @@ export default function ParticipantAdminMain() {
             label: 'Id',
             options: {
                 display: false,
-                filter: false,
             },
         },
         {
             name: 'firstName',
-            label: 'Fornavn ',
+            label: 'Fornavn',
         },
         {
             name: 'lastName',
@@ -73,15 +75,17 @@ export default function ParticipantAdminMain() {
             label: 'Brukernavn',
         },
         {
+            name: 'phoneNumber',
+            label: 'Telefon',
+        },
+        {
             name: 'eMail',
-            label: 'Epost',
+            label: 'E-post',
         },
     ];
 
     const options = {
         rowsExpanded: rowsExpanded,
-        viewColumns: false,
-        sort: false,
         filter: false,
         filterType: 'dropdown',
         responsive: 'vertical',
@@ -90,8 +94,23 @@ export default function ParticipantAdminMain() {
         expandableRows: true,
         expandableRowsHeader: false,
         expandableRowsOnClick: false,
+        setRowProps: (row, dataIndex, rowIndex) => {
+            if (rowsExpanded.includes(dataIndex)) {
+                return {
+                    className: 'expandedRow',
+                };
+            }
+            return null;
+        },
         renderExpandableRow: (rowData, rowMeta) => {
-            return <ParticipantAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />;
+            return
+            <ParticipantAdminRowDetails
+                rowData={rowData}
+                rowMeta={rowMeta}
+                setError={setError}
+                setErrors={setErrors}
+                setErrorDialogOpen={setErrorDialogOpen}
+            />;
         },
         onRowClick: (rowData, rowMeta) => {
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
@@ -128,7 +147,7 @@ export default function ParticipantAdminMain() {
                         </Grid>
                     </>
                 }
-                data={participantList}
+                data={participantsList}
                 columns={columns}
                 options={options}
             />
