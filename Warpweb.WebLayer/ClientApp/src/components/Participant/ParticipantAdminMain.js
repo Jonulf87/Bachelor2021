@@ -14,10 +14,9 @@ export default function ParticipantAdminMain() {
     const [getParticipantsIsReady, setGetParticipantsIsReady] = useState(false);
     const [participantsList, setParticipantsList] = useState([]);
     const [rowsExpanded, setRowsExpanded] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    //const [isLoading, setIsLoading] = useState(true);
 
     const { isAuthenticated, token } = useAuth();
-
 
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
@@ -27,24 +26,24 @@ export default function ParticipantAdminMain() {
     useEffect(() => {
         const getParticipants = async () => {
             if (isAuthenticated) {
-                const responseParticipants = await fetch(`/api/users/participantslist`, {
+                const response = await fetch(`/api/users/participantslist`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'content-type': 'application/json',
                     },
                 });
-                if (responseParticipants.ok) {
-                    const resultParticipants = await responseParticipants.json();
-                    setParticipantsList(resultParticipants);
-                    setIsLoading(false);
+                if (response.ok) {
+                    const result = await response.json();
+                    setParticipantsList(result);
+                    //setIsLoading(false);
                     setGetParticipantsIsReady(true);
-                } else if (responseParticipants === 400) {
+                } else if (response === 400) {
                     setParticipantsList([]);
-                    const errorsResult = await responseParticipants.json();
+                    const errorsResult = await response.json();
                     setErrors(errorsResult);
                     setErrorDialogOpen(true);
                 } else {
-                    const errorResult = await responseParticipants.json();
+                    const errorResult = await response.json();
                     setError(errorResult.message);
                     setParticipantsList([]);
                     setErrorDialogOpen(true);
@@ -103,14 +102,15 @@ export default function ParticipantAdminMain() {
             return null;
         },
         renderExpandableRow: (rowData, rowMeta) => {
-            return
-            <ParticipantAdminRowDetails
-                rowData={rowData}
-                rowMeta={rowMeta}
-                setError={setError}
-                setErrors={setErrors}
-                setErrorDialogOpen={setErrorDialogOpen}
-            />;
+            return (
+                <ParticipantAdminRowDetails
+                    rowData={rowData}
+                    rowMeta={rowMeta}
+                    setError={setError}
+                    setErrors={setErrors}
+                    setErrorDialogOpen={setErrorDialogOpen}
+                />
+            );
         },
         onRowClick: (rowData, rowMeta) => {
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
@@ -121,9 +121,9 @@ export default function ParticipantAdminMain() {
         },
     };
 
-    if (isLoading) {
-        return <CircularProgress />;
-    }
+    //if (isLoading) {
+    //    return <CircularProgress />;
+    //}
 
     return (
         <>
