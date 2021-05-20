@@ -163,26 +163,27 @@ export default function EditUser({ dialogEditUserOpen, handleDialogEditUserClose
             parentEMail: user?.parentEMail || '',
         },
         onSubmit: async (values, e) => {
-            console.log(values);
-            const response = await fetch('/api/users/updateuser', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'content-type': 'application/json',
-                },
-                method: 'PUT',
-                body: JSON.stringify(values),
-            });
-            //If setninger for error popupvindu
-            if (response.ok) {
-                triggerUpdate();
-            } else if (response.status === 400) {
-                const errorResult = await response.json();
-                setErrors(errorResult.errors);
-                setErrorDialogOpen(true);
-            } else {
-                const errorResult = await response.json();
-                setError(errorResult.message);
-                setErrorDialogOpen(true);
+            if (isAuthenticated) {
+                const response = await fetch('/api/users/updateuser', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
+                    method: 'PUT',
+                    body: JSON.stringify(values),
+                });
+                //If setninger for error popupvindu
+                if (response.ok) {
+                    triggerUpdate();
+                } else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                } else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
             }
             handleDialogEditUserClose();
         },

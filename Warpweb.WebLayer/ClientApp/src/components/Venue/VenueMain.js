@@ -117,6 +117,7 @@ export default function VenueMain() {
                 handleDialogCreateVenueClose={handleDialogCreateVenueClose}
                 dialogCreateVenueOpen={dialogCreateVenueOpen}
                 triggerUpdate={triggerUpdate}
+                venues={venueList}
             />
             <MUIDataTable
                 title={

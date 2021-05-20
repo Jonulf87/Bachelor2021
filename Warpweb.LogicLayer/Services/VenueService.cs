@@ -63,7 +63,9 @@ namespace Warpweb.LogicLayer.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    Address = a.Address
+                    Address = a.Address,
+                    OrganizerId = a.OrganizerId,
+                    PostalCode = a.PostalCode
                 }).ToListAsync();
 
             return organizerVenuesList;
