@@ -3,7 +3,7 @@ import SeatMapFloor from './SeatMapFloor';
 import useAuth from '../../hooks/useAuth';
 import useSeatMap from '../../hooks/useSeatMap';
 import SeatMapTicket from './SeatMapTicket';
-import { Box, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Box, Container, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
@@ -49,10 +49,30 @@ export default function SeatMapMain() {
                 clearErrors={setErrors}
             />
             <Paper className={classes.paper} elevation={3}>
-                <Grid container>
+                <Grid container justify="center" direction="column" alignItems="center" spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="h5">{currentEvent} - Setekart</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
                         <SeatMapFloor />
+                    </Grid>
+                    <Grid item container xs={12} direction="row" justify="flex-start" alignItems="center">
+                        <Grid item xs={3} style={{ display: 'flex' }}>
+                            <div style={{ backgroundColor: 'chartreuse', width: '20px', height: '20px' }}></div>
+                            <span style={{ marginLeft: '5px' }}>Ledig</span>
+                        </Grid>
+                        <Grid item xs={3} style={{ display: 'flex' }}>
+                            <div style={{ backgroundColor: 'crimson', width: '20px', height: '20px' }}></div>
+                            <span style={{ marginLeft: '5px' }}>Opptatt</span>
+                        </Grid>
+                        <Grid item xs={3} style={{ display: 'flex' }}>
+                            <div style={{ backgroundColor: 'dimgray', width: '20px', height: '20px' }}></div>
+                            <span style={{ marginLeft: '5px' }}>Utilgjengelig</span>
+                        </Grid>
+                        <Grid item xs={3} style={{ display: 'flex' }}>
+                            <div style={{ backgroundColor: 'cornflowerblue', width: '20px', height: '20px' }}></div>
+                            <span style={{ marginLeft: '5px' }}>Valgt</span>
+                        </Grid>
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant="h5">Mine billetter </Typography>
