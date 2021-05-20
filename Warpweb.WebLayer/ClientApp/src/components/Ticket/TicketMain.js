@@ -15,6 +15,7 @@ import UserLogin from '../User/UserLogin';
 import TicketPurchaseSummary from './TicketPurchaseSummary';
 import TicketPayment from './TicketPayment';
 import usePurchase from '../../hooks/usePurchase';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,7 +37,7 @@ export default function TicketMain() {
     const { login } = useParams();
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(parseInt(login) || 0);
-    const { shoppingCart, setPaymentOk, checkedEula, selectedMainEventId } = usePurchase();
+    const { shoppingCart, setPaymentOk, checkedEula, selectedMainEventId, paymentOk } = usePurchase();
     const [firstStepHeader, setFirstStepHeader] = useState('');
     const { isAuthenticated } = useAuth();
 
@@ -75,7 +76,7 @@ export default function TicketMain() {
     };
 
     useEffect(() => {
-        if (activeStep === 2) {
+        if (activeStep === 2 && isAuthenticated) {
             setActiveStep(3);
         }
     }, [isAuthenticated]);
@@ -93,9 +94,7 @@ export default function TicketMain() {
             case 4:
                 return <TicketPayment />;
             case 5:
-                return `Klikk her for å betale.`;
-            case 6:
-                return `Få seatmap og velg sete. Eventuelt vis at seatmap enda ikke er publisert`;
+                return <Redirect to="/userseatmap" />;
             default:
                 return 'Unknown step';
         }
@@ -121,7 +120,8 @@ export default function TicketMain() {
                                         disabled={
                                             (activeStep > 1 && !isAuthenticated) ||
                                             (activeStep === 3 && !checkedEula) ||
-                                            (activeStep === 1 && shoppingCart.length === 0)
+                                            (activeStep === 1 && shoppingCart.length === 0) ||
+                                            (activeStep === 4 && !paymentOk)
                                         }
                                     >
                                         {activeStep === steps.length - 1 ? 'Fullfør' : 'Neste'}
