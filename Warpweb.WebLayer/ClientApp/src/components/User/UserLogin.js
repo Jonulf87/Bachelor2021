@@ -49,6 +49,9 @@ export default function UserLogin({ fromTicket }) {
                     <Grid container spacing={2} alignContent="center">
                         {/*Input brukernavn/email*/}
                         <Grid item xs={12}>
+                            <Typography component="span" variant="h5">Logg inn</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 size="small"
