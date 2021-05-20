@@ -36,10 +36,21 @@ export default function TicketMain() {
     const { login } = useParams();
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(parseInt(login) || 0);
-    const steps = ['Velg arrangement', 'Velg billett', 'Innlogging', 'Oppsummering', 'Betaling', 'Velg sitteplass'];
-
+    const { shoppingCart, setPaymentOk, checkedEula, selectedMainEventId } = usePurchase();
+    const [firstStepHeader, setFirstStepHeader] = useState('');
     const { isAuthenticated } = useAuth();
-    const { shoppingCart, setPaymentOk, checkedEula } = usePurchase();
+
+    useEffect(() => {
+        const chooseEventText = () => {
+            if (Boolean(selectedMainEventId)) {
+                setFirstStepHeader('Valgt arrangement');
+            } else {
+                setFirstStepHeader('Velg arrangement');
+            }
+        };
+        chooseEventText();
+    }, [isAuthenticated, selectedMainEventId]);
+    const steps = [firstStepHeader, 'Velg billett', 'Innlogging', 'Oppsummering', 'Betaling', 'Velg sitteplass'];
 
     const handleNext = () => {
         if (isAuthenticated && activeStep === 1) {

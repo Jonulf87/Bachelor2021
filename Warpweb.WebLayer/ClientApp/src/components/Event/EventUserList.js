@@ -1,9 +1,27 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { CircularProgress, Button, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import {
+    CircularProgress,
+    Button,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Divider,
+    Typography,
+    makeStyles,
+} from '@material-ui/core';
 import { format, parseISO } from 'date-fns';
 import EventUserListRow from './EventUserListRow';
 import usePurchase from '../../hooks/usePurchase';
 import PopupWindow from '../PopupWindow/PopupWindow';
+
+const useStyles = makeStyles((theme) => ({
+    spanButton: {
+        cursor: 'pointer',
+        color: 'blue',
+    },
+}));
 
 export default function EventUserList() {
     //Statevariabler for error popup vindu
@@ -14,6 +32,7 @@ export default function EventUserList() {
     const [eventsList, setEventsList] = useState([]);
     const [isReady, setIsReady] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState();
+    const classes = useStyles();
 
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
@@ -98,20 +117,30 @@ export default function EventUserList() {
                     </TableHead>
                     <TableBody>
                         {selectedEvent ? (
-                            <TableRow>
-                                <TableCell>{selectedEvent.name}</TableCell>
-                                <TableCell>{selectedEvent.venueName}</TableCell>
-                                <TableCell>
-                                    {format(parseISO(selectedEvent.startDateTime), 'dd.MMM')} -{' '}
-                                    {format(parseISO(selectedEvent.endDateTime), 'dd.MMM')}
-                                </TableCell>
-                                <TableCell>{selectedEvent.organizerName}</TableCell>
-                                <TableCell>
-                                    <Button variant="contained" color="primary" onClick={otherEvents}>
-                                        Andre arrangementer
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
+                            <>
+                                <TableRow>
+                                    <TableCell>{selectedEvent.name}</TableCell>
+                                    <TableCell>{selectedEvent.venueName}</TableCell>
+                                    <TableCell>
+                                        {format(parseISO(selectedEvent.startDateTime), 'dd.MMM')} -{' '}
+                                        {format(parseISO(selectedEvent.endDateTime), 'dd.MMM')}
+                                    </TableCell>
+                                    <TableCell>{selectedEvent.organizerName}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell colSpan={4}>
+                                        <Typography variant="caption">
+                                            Var det ikke dette arrangementet du tenkte å kjøpe billett til?{' '}
+                                            <span>
+                                                <Button variant="outlined" onClick={otherEvents}>
+                                                    Trykk her
+                                                </Button>
+                                            </span>{' '}
+                                            for å se andre kommende arrangementer
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            </>
                         ) : (
                             <>
                                 {eventsList
