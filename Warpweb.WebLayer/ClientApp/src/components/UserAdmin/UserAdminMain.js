@@ -14,7 +14,12 @@ export default function UserAdminMain() {
     const [userList, setUserList] = useState([]);
     const [rowsExpanded, setRowsExpanded] = useState([]);
     const [policies, setPolicies] = useState([]);
+    const [triggerUpdate, setTriggerUpdate] = useState(false);
     const { isAuthenticated, token, roles, isOrgAdmin } = useAuth();
+
+    const updateList = () => {
+        setTriggerUpdate((oldValue) => !oldValue);
+    };
 
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
@@ -83,7 +88,7 @@ export default function UserAdminMain() {
             }
         };
         getUsers();
-    }, [isAuthenticated]);
+    }, [isAuthenticated, triggerUpdate]);
 
     const columns = [
         {
@@ -141,6 +146,7 @@ export default function UserAdminMain() {
                     setError={setError}
                     setErrors={setErrors}
                     setErrorDialogOpen={setErrorDialogOpen}
+                    updateList={updateList}
                 />
             );
         },
