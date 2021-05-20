@@ -15,7 +15,7 @@ export default function SeatMapRow({ id, rowName, xPos, yPos, isVertical, seats,
             {seats &&
                 seats
                     .sort((a, b) => (a.seatNumber > b.seatNumber ? 1 : a.seatNumber < b.seatNumber ? -1 : 0))
-                    .map((seat) => <SeatMapSeat key={seat.id} {...seat} ticketTypeIds={ticketTypeIds} />)}
+                    .map((seat) => <SeatMapSeat key={seat.id} {...seat} rowName={rowName} ticketTypeIds={ticketTypeIds} />)}
         </div>
     );
 }

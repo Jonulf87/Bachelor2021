@@ -74,14 +74,17 @@ const SeatMapProvider = ({ children }) => {
             if (ticketUpdateResponse.ok) {
                 getUserTicketsForUpcomingEvents();
                 getSeatMap();
+                return true;
             } else if (ticketUpdateResponse.status === 400) {
                 const errorResult = await ticketUpdateResponse.json();
                 setErrors(errorResult.errors);
                 setErrorDialogOpen(true);
+                return false;
             } else {
                 const errorResult = await ticketUpdateResponse.json();
                 setError(errorResult.message);
                 setErrorDialogOpen(true);
+                return false;
             }
         }
     };
