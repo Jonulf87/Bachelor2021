@@ -1,20 +1,15 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogContent, DialogTitle, Grid, TableCell, TableRow, TextField, Typography} from '@material-ui/core';
+import { Button, Dialog, DialogContent, DialogTitle, Grid, TableCell, TableRow, TextField, Typography } from '@material-ui/core';
 import { format, parseISO } from 'date-fns';
 import { intervalToDuration } from 'date-fns/esm/fp';
 import useAuth from '../../hooks/useAuth';
 
-export default function UserAdminRowDetails({ rowData, rowMeta, setError, setErrorDialogOpen, setErrors }) {
+export default function UserAdminRowDetails({ rowData, rowMeta, setError, setErrorDialogOpen, setErrors, updateList }) {
     const [userDetails, setUserDetails] = useState(null);
     const [editEmailDialogOpen, setEditEmailDialogOpen] = useState(false);
     const [newEmail, setNewEmail] = useState('');
-    const [triggerUpdate, setTriggerUpdate] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
-
-    const updateList = () => {
-        setTriggerUpdate((oldValue) => !oldValue);
-    };
 
     const handleDialogClose = () => {
         setEditEmailDialogOpen(false);
@@ -47,7 +42,7 @@ export default function UserAdminRowDetails({ rowData, rowMeta, setError, setErr
             }
         };
         getUserDetails();
-    }, [isAuthenticated, triggerUpdate]);
+    }, [isAuthenticated]);
 
     const checkUserUnderage = () => {
         const diff = intervalToDuration({

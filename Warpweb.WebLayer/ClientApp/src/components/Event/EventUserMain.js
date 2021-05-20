@@ -65,6 +65,7 @@ export default function EventUserMain() {
             />
             <List>
                 {isReady &&
+                    eventsList.length > 0 &&
                     eventsList
                         .sort((a, b) => (a.startDateTime > b.startDateTime ? 1 : a.startDateTime < b.startDateTime ? -1 : 0))
                         .map((event) => (

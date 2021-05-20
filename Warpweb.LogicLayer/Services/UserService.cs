@@ -276,7 +276,7 @@ namespace Warpweb.LogicLayer.Services
                 throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med denne ID'en");
             }
 
-            existingUser.UserName = data.NewUserName;
+            existingUser.UserName = data.Username;
 
             await _userManager.UpdateAsync(existingUser);
         }
@@ -290,7 +290,7 @@ namespace Warpweb.LogicLayer.Services
                 throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med denne ID'en");
             }
 
-            existingUser.Email = data.NewEMail;
+            existingUser.Email = data.EMail;
 
             await _userManager.UpdateAsync(existingUser);
         }

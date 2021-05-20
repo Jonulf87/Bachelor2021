@@ -15,19 +15,20 @@ export default function TicketPayment() {
     }, [shoppingCart]);
 
     return (
-        <Card>
+        <>
             {paymentOk ? (
-                <CardContent>
+                <>
                     <Typography>Takk for kjøpet. Vi gleder oss til å se deg på arrangementet.</Typography>
-                </CardContent>
+                    <Typography>Trykk neste for å reservere sete</Typography>
+                </>
             ) : (
-                <CardContent>
+                <>
                     <Typography>Trykk på knappen for å "betale", (͡° ͜ʖ ͡°)</Typography>
                     <Button disabled={noUnpaidTickets} variant="contained" color="primary" onClick={payForTicket}>
                         Betal
                     </Button>
-                </CardContent>
+                </>
             )}
-        </Card>
+        </>
     );
 }
