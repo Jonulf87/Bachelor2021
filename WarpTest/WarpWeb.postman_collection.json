@@ -466,6 +466,49 @@
 					"response": []
 				},
 				{
+					"name": "Refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"token\", \"Bearer \" + jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/auth/refreshtoken",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"auth",
+								"refreshtoken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get current main event",
 					"event": [
 						{
@@ -2316,6 +2359,10 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "SeatMap Happy Path Scenarios",
+			"item": []
 		}
 	],
 	"event": [
