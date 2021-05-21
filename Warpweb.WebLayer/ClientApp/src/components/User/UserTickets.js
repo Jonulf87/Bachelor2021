@@ -70,7 +70,7 @@ export default function TicketList() {
     }, [isAuthenticated]);
 
     return (
-        <Card className={classes.root} variant="outlined">
+        <Card className={classes.root}>
             <CardContent>
                 {isReady && (
                     <>
