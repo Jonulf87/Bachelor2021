@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Warpweb.LogicLayer.Exceptions;
+using Serilog;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -59,6 +58,7 @@ namespace Warpweb.WebLayer.Controllers
         {
 
             await _crewService.CreateCrewAsync(crewName);
+            Log.Information("Crew {crewName} saved to db", crewName);
             return Ok();
 
         }
@@ -74,6 +74,7 @@ namespace Warpweb.WebLayer.Controllers
         {
 
             await _crewService.UpdateCrewAsync(crewVm);
+            Log.Information("Crew {@crewVm} updated", crewVm);
             return Ok();
         }
 
@@ -87,6 +88,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> DeleteCrewAsync(CrewVm crewVm)
         {
             await _crewService.DeleteCrewAsync(crewVm);
+            Log.Information("Crew {@crewVm} deleted", crewVm);
             return Ok();
         }
 
@@ -114,6 +116,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> AddCrewMemberAsync(int crewId, [FromBody] string userId)
         {
             await _crewService.AddCrewMemberAsync(crewId, userId);
+            Log.Information("User {userId} added to crew {crewId}", userId, crewId);
             return Ok();
         }
 
@@ -141,6 +144,7 @@ namespace Warpweb.WebLayer.Controllers
         {
 
             await _crewService.AddCrewLeaderAsync(crewId, userId);
+            Log.Information("User {userId} added as crewleader for crew {crewId}", userId, crewId);
             return Ok();
         }
 
@@ -165,9 +169,13 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> RemoveCrewMemberAsync(RemoveCrewMemberVm crewMember)
         {
             await _crewService.RemoveCrewMemberAsync(crewMember);
+            Log.Information("Crewmember {@crewMember} deleted from db", crewMember);
             return Ok();
         }
 
+        /// <summary>
+        /// Check if user is crewmember in acive event
+        /// </summary>
         [HttpPost]
         [Route("checkusercrewmemberatevent")]
         public async Task<ActionResult<bool>> CheckUserIsCrewMemberAtEventAsync(EventIdVm eventVm)

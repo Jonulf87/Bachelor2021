@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Warpweb.LogicLayer.Exceptions;
+using Serilog;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -80,6 +79,7 @@ namespace Warpweb.WebLayer.Controllers
             }
 
             await _mainEventService.CreateMainEventAsync(mainEventVm, userId);
+            Log.Information("MainEvent {@mainEventVm} created by User {userId} saved to db", mainEventVm, userId);
             return Ok();
         }
 
@@ -98,6 +98,7 @@ namespace Warpweb.WebLayer.Controllers
             }
 
             await _mainEventService.UpdateMainEventAsync(mainEventVm);
+            Log.Information("MainEvent {@mainEventVm} updated", mainEventVm);
             return Ok();
 
         }

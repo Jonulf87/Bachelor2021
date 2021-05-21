@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Exceptions;
-using Microsoft.Extensions.Logging;
 
 namespace Warpweb.WebLayer.Controllers
 {

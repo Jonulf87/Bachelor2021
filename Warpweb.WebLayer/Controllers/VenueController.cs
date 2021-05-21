@@ -4,6 +4,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -30,7 +32,7 @@ namespace Warpweb.WebLayer.Controllers
         [HttpGet]
         [Route("venueslist")]
         [Authorize(Policy = "VenueAdmin")]
-        public async Task<List<VenueListVm>> GetVenuesAsync()
+        public async Task<ActionResult<List<VenueListVm>>> GetVenuesAsync()
         {
             return await _venueService.GetVenuesAsync();
         }
@@ -41,10 +43,17 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>VenueListVm</returns>
         [HttpGet]
         [Route("organizervenueslist")]
-        [Authorize(Policy = "VenueAdmin")] // Sjekk manuelt i metoden og sjekk for policy eller orgadmin
-        public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
+        public async Task<ActionResult<List<VenueListVm>>> GetOrganizerVenuesAsync()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!await _securityService.IsOrgAdmin(userId) && !await _securityService.HasCrewPermissionAsync(userId, CrewPermissionType.VenueAdmin))
+            {
+                return Forbid();
+            }
+
             return await _venueService.GetOrganizerVenuesAsync();
+
         }
 
         /// <summary>
@@ -68,7 +77,6 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>VenueVm</returns>
         [HttpPost]
         [Route("createvenue")]
-        [Authorize(Policy = "VenueAdmin")]
         public async Task<ActionResult> CreateVenueAsync(VenueVm venueVm)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -80,6 +88,7 @@ namespace Warpweb.WebLayer.Controllers
             }
 
             await _venueService.CreateVenueAsync(venueVm);
+            Log.Information("Venue {@venueVm} saved to db", venueVm);
             return Ok();
         }
 
@@ -93,6 +102,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> UpdateVenueAsync(VenueVm venueVm)
         {
             await _venueService.UpdateVenueAsync(venueVm);
+            Log.Information("Venue {@venueVm} updated", venueVm);
             return Ok();
         }
 

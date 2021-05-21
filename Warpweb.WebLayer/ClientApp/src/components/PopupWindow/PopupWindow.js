@@ -1,14 +1,14 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@material-ui/core';
 
-export default function PopupWindow({ open, handleClose, error, clearError, errors, clearErrors }) {
+export default function PopupWindow({ open, handleClose, error, clearError, errors, clearErrors, loginErrors }) {
     const [internalErrorsArray, setInternalErrorsArray] = useState([]);
 
     const endDialog = () => {
         if (error !== null && error !== undefined) {
             clearError('');
             setInternalErrorsArray([]);
-        } else if (errors !== null && error !== undefined) {
+        } else if (errors !== null && errors !== undefined) {
             clearErrors([]);
             setInternalErrorsArray([]);
         }
@@ -17,14 +17,16 @@ export default function PopupWindow({ open, handleClose, error, clearError, erro
     };
 
     useEffect(() => {
-        if (errors !== null && errors !== undefined) {
+        if (errors?.length > 0) {
             const keys = Object.keys(errors);
             const tempErrorsArray = [];
 
             keys.map((key) => errors[key].map((error) => tempErrorsArray.push(error)));
             setInternalErrorsArray(tempErrorsArray);
+        } else if (loginErrors?.length > 0) {
+            setInternalErrorsArray(loginErrors);
         }
-    }, [errors]);
+    }, [errors, loginErrors]);
 
     return (
         <div>

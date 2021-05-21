@@ -32,7 +32,7 @@ export default function AdminMainMenu({ policies, roles, orgAdmins }) {
                 </ListSubheader>
             }
         >
-            {policies.some((a) => a === 6) && (
+            {(policies.some((a) => a === 6) || orgAdmins.length > 0) && (
                 <ListItem button component={NavLink} activeClassName={classes.root} to="/venue">
                     <ListItemIcon>
                         <HomeWorkIcon color="primary" />
@@ -93,13 +93,14 @@ export default function AdminMainMenu({ policies, roles, orgAdmins }) {
                     <ListItemText primary="Rapporter" />
                 </ListItem>
             )}
-
-            <ListItem button component={NavLink} activeClassName={classes.root} to="/event">
-                <ListItemIcon>
-                    <EventIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Arrangementer" />
-            </ListItem>
+            {orgAdmins.length > 0 && (
+                <ListItem button component={NavLink} activeClassName={classes.root} to="/event">
+                    <ListItemIcon>
+                        <EventIcon color="primary" />
+                    </ListItemIcon>
+                    <ListItemText primary="Arrangementer" />
+                </ListItem>
+            )}
 
             {(roles.some((a) => a === 'Admin') || orgAdmins.length > 0) && (
                 <ListItem button component={NavLink} activeClassName={classes.root} to="/organizer">
