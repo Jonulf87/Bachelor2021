@@ -2361,8 +2361,649 @@
 			]
 		},
 		{
-			"name": "SeatMap Happy Path Scenarios",
-			"item": []
+			"name": "Seat Map Happy Path Scenarios",
+			"item": [
+				{
+					"name": "Create ticket type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"descriptionName\": \"{{ticketTypeName}}{{timeStamp}}\",\r\n  \"basePrice\": {{ticketTypePrice}},\r\n  \"amountAvailable\": {{ticketTypeAmmountAvailable}}\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tickettypes/createtickettype",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickettypes",
+								"createtickettype"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all ticket types",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var ticketType = _.find(pm.response.json(), { \r",
+									"    descriptionName: pm.variables.get(\"ticketTypeName\") + pm.variables.get(\"timeStamp\")\r",
+									"});\r",
+									"pm.environment.set(\"ticketTypeId\", ticketType.id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickettypes/tickettypes",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickettypes",
+								"tickettypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add seat map",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"rowName\": \"{{rowName}}{{timeStamp}}\",\r\n    \"numberOfSeats\": {{numberOfSeats}},\r\n    \"xPos\": 10,\r\n    \"yPos\": 20,\r\n    \"isVertical\": true,\r\n    \"seats\": [\r\n      {\r\n        \"seatNumber\": 5\r\n      }\r\n    ],\r\n    \"ticketTypeIds\": [\r\n      {{ticketTypeId}}\r\n    ]\r\n  }\r\n]"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/seatmap/storeseatmap",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"seatmap",
+								"storeseatmap"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get seatmap",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Get seat maps\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.length).to.equal(1);\r",
+									"        pm.expect(jsonData[0].rowName).to.equal(pm.variables.get(\"rowName\") + pm.variables.get(\"timeStamp\"));\r",
+									"        pm.environment.set(\"seatId\", jsonData[0].seats[0].id);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/seatmap/getseatmap",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"seatmap",
+								"getseatmap"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tickets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Array of tickets is empty\",\r",
+									"    function () {\r",
+									"        var ticket = _.find(pm.response.json(), { \r",
+									"            ticketType: pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
+									"        });\r",
+									"        pm.expect(ticket).not.exist;\r",
+									"    }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Purchase ticket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": {{ticketTypeId}},\r\n    \"descriptionName\": \"{{ticketTypeName}}\"\r\n  }\r\n]"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tickets/purchaseticket",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets",
+								"purchaseticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tickets again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"There is one ticket in the array\",\r",
+									"    function () {\r",
+									"        var ticket = _.find(pm.response.json(), {\r",
+									"            ticketType: pm.variables.get(\"ticketTypeName\") + pm.variables.get(\"timeStamp\")\r",
+									"        });\r",
+									"        pm.expect(ticket).exist;\r",
+									"        pm.environment.set(\"ticketId\", ticket.id);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reserve seat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets/reserveseat/{{ticketId}}/{{seatId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets",
+								"reserveseat",
+								"{{ticketId}}",
+								"{{seatId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get seatmap for the public",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Get seat map for the public\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.length).to.equal(1);\r",
+									"        pm.expect(jsonData[0].rowName).to.equal(pm.variables.get(\"rowName\") + pm.variables.get(\"timeStamp\"));\r",
+									"    }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/seatmap/publicseatmap",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"seatmap",
+								"publicseatmap"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ticket Type Happy Path Scenarios",
+			"item": [
+				{
+					"name": "Update ticket type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"id\": {{ticketTypeId}},\r\n \"descriptionName\": \"{{ticketTypeNameUpdated}}{{timeStamp}}\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tickettypes/updatetickettype",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickettypes",
+								"updatetickettype"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ticket type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Name has been updated\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.descriptionName).to.equal(pm.variables.get(\"ticketTypeNameUpdated\") + pm.variables.get(\"timeStamp\"));\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickettypes/type/{{ticketTypeId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickettypes",
+								"type",
+								"{{ticketTypeId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ticket type for active event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"There is one ticket type in an array\",\r",
+									"    function () {\r",
+									"        var ticketType = _.find(pm.response.json(), {\r",
+									"            descriptionName: pm.variables.get(\"ticketTypeNameUpdated\") + pm.variables.get(\"timeStamp\")\r",
+									"        });\r",
+									"        pm.expect(ticketType).exist;\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickettypes/eventtickettypes/{{mainEventId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickettypes",
+								"eventtickettypes",
+								"{{mainEventId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -2425,6 +3066,34 @@
 		{
 			"key": "venueNameUpdated",
 			"value": "UpdatedVenueName"
+		},
+		{
+			"key": "ticketTypeName",
+			"value": "NewTicketTypeFromPostman"
+		},
+		{
+			"key": "ticketTypeNameUpdated",
+			"value": "UpdatedTicketTypeName"
+		},
+		{
+			"key": "ticketTypePrice",
+			"value": "50"
+		},
+		{
+			"key": "ticketTypeAmmountAvailable",
+			"value": "150"
+		},
+		{
+			"key": "rowName",
+			"value": "NewRowFromPostman"
+		},
+		{
+			"key": "numberOfSeats",
+			"value": "20"
+		},
+		{
+			"key": "ticketName",
+			"value": "NewTicketFromPostman"
 		}
 	]
 }
