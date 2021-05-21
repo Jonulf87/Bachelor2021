@@ -15,6 +15,7 @@ export default function VenueMain() {
     const [rowsExpanded, setRowsExpanded] = useState([]);
     const [updateList, setUpdateList] = useState(false);
     const [dialogCreateVenueOpen, setDialogCreateVenueOpen] = useState(false);
+    const [orgAdmins, setOrgAdmins] = useState([]);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -37,6 +38,15 @@ export default function VenueMain() {
     useEffect(() => {
         const getVenues = async () => {
             if (isAuthenticated) {
+                const responseOrgAdmins = await fetch('/api/tenants/getaorgsadmin', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
+                });
+                const resultOrgAdmins = await responseOrgAdmins.json();
+                setOrgAdmins(resultOrgAdmins);
+
                 const responseVenues = await fetch('/api/venues/organizervenueslist', {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -128,17 +138,19 @@ export default function VenueMain() {
                                     Lokaler
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="medium"
-                                    style={{ margin: '15px' }}
-                                    onClick={handleDialogCreateVenueOpen}
-                                >
-                                    Nytt lokale
-                                </Button>
-                            </Grid>
+                            {orgAdmins.length > 0 && (
+                                <Grid item xs={12}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        size="medium"
+                                        style={{ margin: '15px' }}
+                                        onClick={handleDialogCreateVenueOpen}
+                                    >
+                                        Nytt lokale
+                                    </Button>
+                                </Grid>
+                            )}
                         </Grid>
                     </>
                 }

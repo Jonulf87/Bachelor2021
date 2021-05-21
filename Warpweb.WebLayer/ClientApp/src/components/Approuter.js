@@ -58,7 +58,7 @@ export default function AppRouter() {
             <Route path="/login" component={UserLogin} />
             <Route path="/logout" component={LogOut} />
             <Route path="/event">{!isAuthenticated ? <NotAuthenticated /> : <EventAdminMain />}</Route>
-            <Route path="/user">{!isAuthenticated ? <NotAuthenticated /> : <UserMain />}</Route>
+            <Route path="/user/:loggedin?">{!isAuthenticated ? <NotAuthenticated /> : <UserMain />}</Route>
             <Route exact path="/crew/:id">
                 {!isAuthenticated ? <NotAuthenticated /> : <CrewMain />}
             </Route>

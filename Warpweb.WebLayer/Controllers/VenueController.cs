@@ -69,7 +69,6 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>VenueVm</returns>
         [HttpPost]
         [Route("createvenue")]
-        [Authorize(Policy = "VenueAdmin")]
         public async Task<ActionResult> CreateVenueAsync(VenueVm venueVm)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
