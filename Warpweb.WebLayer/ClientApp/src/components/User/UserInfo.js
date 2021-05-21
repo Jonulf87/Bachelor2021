@@ -12,8 +12,10 @@ import EditUserEMail from './EditUserEMail';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
+            display: 'flex',
+            flexWrap: 'wrap',
             margin: 20,
-        },
+            maxWidth: 650,   },
         p: {
             fontsize: 14,
             marginBottom: 10,
