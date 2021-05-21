@@ -151,6 +151,9 @@ const PurchaseProvider = ({ children }) => {
                 setSelectedMainEventId,
                 userTickets,
                 setUserTickets,
+                setTotalPrice,
+                setUnpaidUserEventsTickets,
+                setTicketTypesList,
             }}
         >
             {children}

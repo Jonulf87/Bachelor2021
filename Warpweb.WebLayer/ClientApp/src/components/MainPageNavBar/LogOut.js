@@ -10,7 +10,16 @@ export default function LogOut() {
 
     const { logout } = useAuth();
     const { setCurrentEvent } = useCurrentEvent();
-    const { setUserTickets } = usePurchase();
+    const {
+        setUserTickets,
+        setSelectedMainEventId,
+        setUnpaidUserEventsTickets,
+        setTicketTypesList,
+        setTotalPrice,
+        setShoppingCart,
+        setPaymentOk,
+        setCheckedEula,
+    } = usePurchase();
     const { setActiveTicket, setRows, setUserUpcomingTickets } = useSeatMap();
 
     useEffect(() => {
@@ -22,6 +31,13 @@ export default function LogOut() {
             setActiveTicket(null);
             setRows([]);
             setUserUpcomingTickets([]);
+            setSelectedMainEventId(null);
+            setUnpaidUserEventsTickets([]);
+            setTicketTypesList([]);
+            setTotalPrice(0);
+            setShoppingCart([]);
+            setCheckedEula(false);
+            setPaymentOk(false);
         };
         logOutFunction();
     }, []);
