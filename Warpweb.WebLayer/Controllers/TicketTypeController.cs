@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
@@ -69,6 +70,7 @@ namespace Warpweb.WebLayer.Controllers
         {
 
             await _ticketTypeService.CreateTicketTypeAsync(ticketTypeVm);
+            Log.Information("Ticket type {@ticketTypeVm} added to db", ticketTypeVm);
             return Ok();
         }
 
@@ -82,6 +84,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> UpdateTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             await _ticketTypeService.UpdateTicketTypeAsync(ticketTypeVm);
+            Log.Information("Ticket type {@ticketTypeVm} updated", ticketTypeVm);
             return Ok();
         }
 
@@ -95,6 +98,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> DeleteTicketTypeAsync(TicketTypeVm ticketTypeVm)
         {
             await _ticketTypeService.DeleteTicketTypeAsync(ticketTypeVm);
+            Log.Information("Ticket type {@ticketTypeVm} deleted", ticketTypeVm);
             return Ok();
         }
     }
