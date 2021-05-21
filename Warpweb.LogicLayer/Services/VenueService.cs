@@ -56,6 +56,9 @@ namespace Warpweb.LogicLayer.Services
                 .Where(a => a.Id == _mainEventProvider.MainEventId)
                 .Select(a => a.OrganizerId)
                 .SingleAsync();
+            System.Diagnostics.Debug.WriteLine("###########################");
+            System.Diagnostics.Debug.WriteLine(_mainEventProvider.MainEventId);
+            System.Diagnostics.Debug.WriteLine("###########################");
 
             var organizerVenuesList = await _dbContext.Venues
                 .Where(a => a.OrganizerId == orgId)
@@ -135,6 +138,7 @@ namespace Warpweb.LogicLayer.Services
 
             _dbContext.Venues.Add(venue);
             await _dbContext.SaveChangesAsync();
+
         }
 
         /// <summary>

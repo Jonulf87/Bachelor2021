@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -80,6 +81,7 @@ namespace Warpweb.WebLayer.Controllers
             }
 
             await _venueService.CreateVenueAsync(venueVm);
+            Log.Information("Venue {@venueVm} saved to db", venueVm);
             return Ok();
         }
 
@@ -93,6 +95,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> UpdateVenueAsync(VenueVm venueVm)
         {
             await _venueService.UpdateVenueAsync(venueVm);
+            Log.Information("Venue {@venueVm} updated", venueVm);
             return Ok();
         }
 
