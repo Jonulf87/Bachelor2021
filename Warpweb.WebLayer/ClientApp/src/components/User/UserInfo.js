@@ -1,6 +1,19 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Button, Card, CardContent, Typography, CircularProgress, Snackbar, Paper, Container, Toolbar, CardHeader, CardActionArea, CardActions } from '@material-ui/core';
+import {
+    Button,
+    Card,
+    CardContent,
+    Typography,
+    CircularProgress,
+    Snackbar,
+    Paper,
+    Container,
+    Toolbar,
+    CardHeader,
+    CardActionArea,
+    CardActions,
+} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { format, parseISO } from 'date-fns';
 import useAuth from '../../hooks/useAuth';
@@ -14,15 +27,15 @@ const useStyles = makeStyles((theme) =>
         root: {
             display: 'flex',
             flexWrap: 'wrap',
-            margin: 20,
-            maxWidth: 650,   },
+            //maxWidth: '650px',
+        },
         p: {
-            fontsize: 14,
-            marginBottom: 10,
+            fontsize: '14px',
+            marginBottom: '10px',
         },
         table: {
-            width: "100%"
-        }
+            width: '100%',
+        },
     }),
 );
 
@@ -111,9 +124,9 @@ export default function UserInfo() {
                 <CardContent>
                     {isReady && (
                         <>
-                            <Typography gutterBottom variant="h6" component="h2" >
+                            <Typography gutterBottom variant="h6" component="h2">
                                 Hei {userInfo.firstName}
-                            </Typography>                         
+                            </Typography>
                             <table className={classes.table}>
                                 <tbody>
                                     <tr>
@@ -149,7 +162,7 @@ export default function UserInfo() {
                                         <td>
                                             <Typography className={classes.p} variant="body1" component="p" aria-labelledby="epost">
                                                 {userInfo.eMail}
-                                            </Typography>                                        
+                                            </Typography>
                                         </td>
                                     </tr>
                                     <tr>
@@ -161,7 +174,7 @@ export default function UserInfo() {
                                         <td>
                                             <Typography className={classes.p} variant="body1" component="p" aria-labelledby="tlf">
                                                 {userInfo.phoneNumber}
-                                            </Typography>                                        
+                                            </Typography>
                                         </td>
                                     </tr>
                                     <tr>
@@ -173,7 +186,7 @@ export default function UserInfo() {
                                         <td>
                                             <Typography className={classes.p} variant="body1" component="p" aria-labelledby="adr">
                                                 {userInfo.address}
-                                            </Typography>                                        
+                                            </Typography>
                                         </td>
                                     </tr>
                                     <tr>
@@ -185,7 +198,7 @@ export default function UserInfo() {
                                         <td>
                                             <Typography className={classes.p} variant="body1" component="p" aria-labelledby="postnr">
                                                 {userInfo.zipCode}
-                                            </Typography>                                        
+                                            </Typography>
                                         </td>
                                     </tr>
                                     <tr>
@@ -197,7 +210,7 @@ export default function UserInfo() {
                                         <td>
                                             <Typography className={classes.p} variant="body1" component="p" aria-labelledby="kjnn">
                                                 {userInfo.gender}
-                                            </Typography>                                        
+                                            </Typography>
                                         </td>
                                     </tr>
                                     <tr>
@@ -209,7 +222,7 @@ export default function UserInfo() {
                                         <td>
                                             <Typography className={classes.p} variant="body1" component="p" aria-labelledby="fdag">
                                                 {format(parseISO(userInfo.dateOfBirth), 'dd.MM.yyyy')}
-                                            </Typography>                                        
+                                            </Typography>
                                         </td>
                                     </tr>
                                     <tr>
@@ -232,12 +245,11 @@ export default function UserInfo() {
                                                 </Typography>
                                             </td>
                                             <td>
-                                                <Typography className={classes.p} variant="body1" component="p"  aria-labelledby="allergier">
+                                                <Typography className={classes.p} variant="body1" component="p" aria-labelledby="allergier">
                                                     {userInfo.allergyDescription}
                                                 </Typography>
                                             </td>
                                         </tr>
-
                                     )}
                                     {userInfo.team && (
                                         <tr>
@@ -252,72 +264,88 @@ export default function UserInfo() {
                                                 </Typography>
                                             </td>
                                         </tr>
-
                                     )}
                                     {userInfo.parentPhoneNumber && (
                                         <>
                                             <tr>
-                                                <td>                                                
+                                                <td>
                                                     <Typography className={classes.p} variant="body1" component="p" id="parent">
                                                         <strong>Foresatt:&nbsp;</strong>
-                                                    </Typography>                                            
+                                                    </Typography>
                                                 </td>
                                                 <td>
-                                                    <Typography className={classes.p} variant="body1" component="p" aria-labelledby="parent">
+                                                    <Typography
+                                                        className={classes.p}
+                                                        variant="body1"
+                                                        component="p"
+                                                        aria-labelledby="parent"
+                                                    >
                                                         {userInfo.parentFirstName}&nbsp;{userInfo.parentLastName}
-                                                    </Typography>                                                       
-                                                </td>                                               
+                                                    </Typography>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <Typography className={classes.p} variant="body1" component="p" id="parentname">
                                                         <strong>Foresatt telefon:&nbsp;</strong>
-                                                    </Typography>                                                    
+                                                    </Typography>
                                                 </td>
                                                 <td>
-                                                    <Typography className={classes.p} variant="body1" component="p" aria-labelledby="parentname">
+                                                    <Typography
+                                                        className={classes.p}
+                                                        variant="body1"
+                                                        component="p"
+                                                        aria-labelledby="parentname"
+                                                    >
                                                         {userInfo.parentPhoneNumber}
-                                                    </Typography>                                                    
+                                                    </Typography>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <Typography className={classes.p} variant="body1" component="p" id="parentemail">
                                                         <strong>Foresatt epost:&nbsp;</strong>
-                                                    </Typography>                                                    
+                                                    </Typography>
                                                 </td>
                                                 <td>
-                                                    <Typography className={classes.p} variant="body1" component="p" aria-labelledby="parentemail">
+                                                    <Typography
+                                                        className={classes.p}
+                                                        variant="body1"
+                                                        component="p"
+                                                        aria-labelledby="parentemail"
+                                                    >
                                                         {userInfo.parentEMail}
-                                                    </Typography>                                                    
+                                                    </Typography>
                                                 </td>
                                             </tr>
-
                                         </>
-                                    )}     
+                                    )}
                                     {userInfo.comments && (
                                         <tr>
                                             <td>
                                                 <Typography className={classes.p} variant="body1" component="p" id="userinfo">
                                                     <strong>Tilleggsinformasjon:&nbsp;</strong>
-                                                </Typography>                                               
+                                                </Typography>
                                             </td>
                                             <td>
                                                 <Typography className={classes.p} variant="body1" component="p" aria-labelledby="userinfo">
                                                     {userInfo.comments}
-                                                </Typography>                                               
+                                                </Typography>
                                             </td>
-                                            
                                         </tr>
-
-                                    )}                                                                                               
+                                    )}
                                 </tbody>
                             </table>
-                            <Button style={{ marginRight: '5px' }} variant="contained" color="primary" onClick={handleDialogEditUserOpen}>
+                            <Button
+                                style={{ marginRight: '5px', marginBottom: '5px' }}
+                                variant="contained"
+                                color="primary"
+                                onClick={handleDialogEditUserOpen}
+                            >
                                 Endre personalia
                             </Button>
                             <Button
-                                style={{ marginRight: '5px' }}
+                                style={{ marginRight: '5px', marginBottom: '5px' }}
                                 variant="contained"
                                 color="primary"
                                 onClick={handleDialogEditUserPasswordOpen}
@@ -325,14 +353,19 @@ export default function UserInfo() {
                                 Endre passord
                             </Button>
                             <Button
-                                style={{ marginRight: '5px' }}
+                                style={{ marginRight: '5px', marginBottom: '5px' }}
                                 variant="contained"
                                 color="primary"
                                 onClick={handleDialogEditUsernameOpen}
                             >
                                 Endre brukernavn
                             </Button>
-                            <Button variant="contained" color="primary" onClick={handleDialogEditUserEMailOpen}>
+                            <Button
+                                style={{ marginRight: '5px', marginBottom: '5px' }}
+                                variant="contained"
+                                color="primary"
+                                onClick={handleDialogEditUserEMailOpen}
+                            >
                                 Endre e-post
                             </Button>
                             <EditUserPassword

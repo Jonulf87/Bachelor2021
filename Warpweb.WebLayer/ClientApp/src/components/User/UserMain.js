@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Grid, Snackbar } from '@material-ui/core';
+import { Container, Grid, Snackbar } from '@material-ui/core';
 import UserInfo from './UserInfo';
 import UserTickets from './UserTickets';
 import { useParams } from 'react-router-dom';
@@ -29,9 +29,14 @@ export default function PaperSheet() {
                     Du har logget inn
                 </Alert>
             </Snackbar>
-            <Grid container spacing={2}>
-                <Grid item>
+
+            <Grid container spacing={2} justify="center">
+                <Grid item xs={12} lg={6}>
                     <UserInfo />
+                </Grid>
+            </Grid>
+            <Grid container spacing={2} justify="center">
+                <Grid item xs={12} lg={6}>
                     <UserTickets />
                 </Grid>
             </Grid>

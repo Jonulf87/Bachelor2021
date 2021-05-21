@@ -1,13 +1,13 @@
 ﻿import { Card, CardActions, CardContent, Divider, Typography, Button, CardHeader, Link, Grid } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { format, parseISO } from 'date-fns';
 import useAuth from '../../hooks/useAuth';
 import { Redirect, useHistory } from 'react-router-dom';
 import usePurchase from '../../hooks/usePurchase';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
+import { format, parseISO } from 'date-fns';
 import 'date-fns';
 import { nb } from 'date-fns/locale';
 import PopupWindow from '../PopupWindow/PopupWindow';

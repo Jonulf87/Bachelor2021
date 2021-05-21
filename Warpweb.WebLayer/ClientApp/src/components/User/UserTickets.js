@@ -16,6 +16,8 @@ import {
 import useAuth from '../../hooks/useAuth';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import { Redirect, useHistory } from 'react-router-dom';
+import { format, parseISO } from 'date-fns';
+import 'date-fns';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -23,8 +25,11 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexWrap: 'wrap',
             padding: theme.spacing(1),
-            margin: 20,
-            maxWidth: 650,
+            //maxWidth: '650px',
+            width: '100%',
+        },
+        table: {
+            width: '100%',
         },
     }),
 );
@@ -73,7 +78,7 @@ export default function TicketList() {
                             <Typography gutterBottom variant="h6" component="h2" gutterBottom>
                                 Dine billetter:
                             </Typography>
-                            <Table aria-label="Billett tabell">
+                            <Table aria-label="Billett tabell" className={classes.table}>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="left">Navn</TableCell>
@@ -85,22 +90,24 @@ export default function TicketList() {
                                 </TableHead>
                                 <TableBody>
                                     {events.map((event) => (
-                                        <TableRow key={event.name}>
-                                            <TableCell align="left">{event.name}</TableCell>
-                                            <TableCell align="left">{event.start}</TableCell>
-                                            <TableCell align="left">{event.end}</TableCell>
-                                            <TableCell align="left">{event.venue}</TableCell>
-                                            <TableCell align="left">
-                                                <Button
-                                                    color="primary"
-                                                    variant="contained"
-                                                    size="small"
-                                                    onClick={() => handleClick(event.id)}
-                                                >
-                                                    Se billetter
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
+                                        <>
+                                            <TableRow key={event.name}>
+                                                <TableCell align="left">{event.name}</TableCell>
+                                                <TableCell align="left">{format(parseISO(event.start), 'dd.MM.yyyy HH:mm')}</TableCell>
+                                                <TableCell align="left">{format(parseISO(event.end), 'dd.MM.yyyy HH:mm')}</TableCell>
+                                                <TableCell align="left">{event.venue}</TableCell>
+                                                <TableCell align="left">
+                                                    <Button
+                                                        color="primary"
+                                                        variant="contained"
+                                                        size="small"
+                                                        onClick={() => handleClick(event.id)}
+                                                    >
+                                                        Se billetter
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        </>
                                     ))}
                                 </TableBody>
                             </Table>
