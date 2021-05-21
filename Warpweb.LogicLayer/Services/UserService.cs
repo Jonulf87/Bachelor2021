@@ -229,6 +229,8 @@ namespace Warpweb.LogicLayer.Services
         /// <summary>
         /// Updates user
         /// </summary>
+        /// <param name="userVm"></param>
+        /// <param name="userId"></param>
         public async Task UpdateUserAsync(UserUpdateVm userVm, string userId)
         {
             var existingUser = await _userManager.FindByIdAsync(userId);
@@ -267,6 +269,11 @@ namespace Warpweb.LogicLayer.Services
 
         }
 
+        /// <summary>
+        /// Update user username
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="userId"></param>
         public async Task UpdateUsernameAsync(UsernameUpdateVm data, string userId)
         {
             var existingUser = await _userManager.FindByIdAsync(userId);
@@ -281,6 +288,12 @@ namespace Warpweb.LogicLayer.Services
             await _userManager.UpdateAsync(existingUser);
         }
 
+        /// <summary>
+        /// Update user email
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task UpdateEMailAsync(EMailUpdateVm data, string userId)
         {
             var existingUser = await _userManager.FindByIdAsync(userId);
@@ -295,6 +308,12 @@ namespace Warpweb.LogicLayer.Services
             await _userManager.UpdateAsync(existingUser);
         }
 
+        /// <summary>
+        /// Update user password
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task UpdatePasswordAsync(PasswordUpdateVm data, string userId)
         {
             var existingUser = await _userManager.FindByIdAsync(userId);
@@ -304,13 +323,10 @@ namespace Warpweb.LogicLayer.Services
                 throw new HttpException(HttpStatusCode.Forbidden, "Det gamle passordet er ugyldig");
             }
 
-
-
             if (existingUser == null)
             {
                 throw new HttpException(HttpStatusCode.NotFound, $"Fant ingen bruker med denne ID'en");
             }
-
 
             await _userManager.ChangePasswordAsync(existingUser, data.OldPassword, data.NewPassword);
         }
