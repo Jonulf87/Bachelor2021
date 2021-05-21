@@ -154,7 +154,6 @@ export default function MainMenu({ window }) {
         );
     };
 
-    //
     const userMenuItem = (destination, itemText, itemIcon) => ({ destination, itemText, itemIcon });
 
     const loggedInMenu = [userMenuItem('/user', 'Min side', <PersonIcon />), userMenuItem('/logout', 'Logg ut', <ExitToAppIcon />)];

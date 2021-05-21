@@ -2,8 +2,6 @@
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, ButtonGroup } from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
@@ -21,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoginMenu({ menuItems }) {
-    const { isAuthenticated } = useAuth();
     const classes = useStyles();
 
     return (

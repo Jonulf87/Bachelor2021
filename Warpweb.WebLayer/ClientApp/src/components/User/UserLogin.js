@@ -10,8 +10,10 @@ export default function UserLogin({ fromTicket }) {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [loginSuccess, setLoginSuccess] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
+    const [loginErrors, setLoginErrors] = useState([]);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const { login } = useAuth();
 
@@ -22,34 +24,40 @@ export default function UserLogin({ fromTicket }) {
         if (response.token) {
             setLoginSuccess(true);
         } else {
-            setErrors(response.errors);
-            setOpen(true);
+            setLoginErrors(response.errors);
+            setErrorDialogOpen(true);
         }
     };
 
     if (loginSuccess) {
         if (!fromTicket) {
-            return <Redirect to={'/user'} />;
+            return <Redirect to={'/user/4'} />;
         }
     }
 
-    const showErrors = (errors) => {
-        if (Array.isArray(errors)) {
-            return errors.map((error) => <p key="">{error}</p>);
-        } else {
-            return 'Ugyldig brukernavn eller passord';
-        }
+    const handleErrorDialogClose = () => {
+        setErrorDialogOpen(false);
     };
 
     return (
         <>
-            {/*<PopupWindow open={open} onClose={() => setOpen(false)} text={showErrors(errors)} />*/}
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+                loginErrors={loginErrors}
+            />
             <Container maxWidth="xs">
                 <form onSubmit={logInSubmit}>
                     <Grid container spacing={2} alignContent="center">
                         {/*Input brukernavn/email*/}
                         <Grid item xs={12}>
-                            <Typography component="span" variant="h5">Logg inn</Typography>
+                            <Typography component="span" variant="h5">
+                                Logg inn
+                            </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
