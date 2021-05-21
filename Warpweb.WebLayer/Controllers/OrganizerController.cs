@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -56,6 +56,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> CreateOrganizerAsync(OrganizerVm organizerVm)
         {
             await _organizerService.CreateOrganizerAsync(organizerVm);
+            Log.Information("Organizer {@organizerVm} saved to db", organizerVm);
             return Ok();
         }
 
@@ -69,6 +70,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> UpdateOrganizerAsync(OrganizerVm organizerVm)
         {
             await _organizerService.UpdateOrganizerAsync(organizerVm);
+            Log.Information("Organizer {@organizerVm} updated", organizerVm);
             return Ok();
         }
 
@@ -95,6 +97,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult<OrganizerVm>> SetOrganizerContactAsync(int orgId, [FromBody] string userId)
         {
             var contact = await _organizerService.SetOrganizerContactAsync(orgId, userId);
+            Log.Information("User {userId} set as contact for Organizer {orgId}", userId, orgId);
             return Ok(contact);
         }
 
@@ -134,6 +137,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> SetOrgAdminAsync(int orgId, [FromBody] string userId)
         {
             await _organizerService.SetOrgAdminAsync(orgId, userId);
+            Log.Information("User {userId} set as Admin for Organizer {orgId}", userId, orgId);
             return Ok();
         }
 
@@ -148,6 +152,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> RemoveOrgAdminAsync(int orgId, [FromBody] string userId)
         {
             await _organizerService.RemoveOrgAdminAsync(orgId, userId);
+            Log.Information("User {userId} removed as Admin for Organizer {orgId}", userId, orgId);
             return Ok();
         }
 
