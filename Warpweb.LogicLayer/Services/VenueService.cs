@@ -138,6 +138,7 @@ namespace Warpweb.LogicLayer.Services
 
             _dbContext.Venues.Add(venue);
             await _dbContext.SaveChangesAsync();
+
         }
 
         /// <summary>

@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Authorization;
 using Warpweb.WebLayer.AuthorizationHandlers;
 using Microsoft.Extensions.Logging;
 using Warpweb.WebLayer.Controllers;
+using Serilog;
 
 namespace Warpweb.WebLayer
 {
@@ -44,7 +45,6 @@ namespace Warpweb.WebLayer
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
 
             services.AddDbContext<ApplicationDbContext>(options => options
-                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
                 .UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"), sqlOptions => sqlOptions.MaxBatchSize(100)));
 
@@ -194,7 +194,7 @@ namespace Warpweb.WebLayer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -208,13 +208,13 @@ namespace Warpweb.WebLayer
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
-            //loggerFactory.AddFile("Logs/Errorlog.txt");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            // Log all HTTP requests to Serilog
+            //app.UseSerilogRequestLogging();
             app.UseRouting();
 
             app.UseAuthentication();
