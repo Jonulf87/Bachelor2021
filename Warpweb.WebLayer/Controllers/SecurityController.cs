@@ -63,7 +63,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> SetPoliciesAsync([FromBody] List<CrewPermissionsVm> permissions, int crewId)
         {
             await _securityService.SetPoliciesAsync(permissions, crewId);
-            Log.Information("Policiews {@permissions} for crew {crewId} saved to db", permissions, crewId);
+            Log.Information("Policies {@permissions} for crew {crewId} saved to db", permissions, crewId);
             return Ok();
         }
 

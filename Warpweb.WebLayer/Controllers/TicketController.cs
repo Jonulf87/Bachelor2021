@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Warpweb.LogicLayer.Exceptions;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
@@ -110,6 +111,7 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 await _ticketService.CreateTicketsAsync(tickets, userId);
+                Log.Information("Tickets {@tickets} created for user {userId}", tickets, userId);
                 return Ok();
             }
             catch (NoGuardianSetForMinorException)
@@ -129,6 +131,7 @@ namespace Warpweb.WebLayer.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             await _ticketService.PurchaseTicketsAsync(tickets, userId);
+            Log.Information("Tickets {@tickets} purchased by user {userId}", tickets, userId);
             return Ok();
         }
 
@@ -143,6 +146,7 @@ namespace Warpweb.WebLayer.Controllers
         {
 
             await _ticketService.ReserveSeatAsync(ticketId, seatId);
+            Log.Information("Seat {seatId} reserved for ticket {ticketId}", seatId, ticketId);
             return Ok();
         }
 
@@ -156,6 +160,7 @@ namespace Warpweb.WebLayer.Controllers
         {
 
             await _ticketService.UpdateTicketAsync(ticketVm);
+            Log.Information("Ticket {@ticketVm} updated", ticketVm);
             return Ok(ticketVm);
         }
 
@@ -168,6 +173,7 @@ namespace Warpweb.WebLayer.Controllers
         {
 
             await _ticketService.DeleteTicketAsync(ticketVm);
+            Log.Information("Ticket {@ticketVm} deleted", ticketVm);
             return Ok(ticketVm);
         }
     }
