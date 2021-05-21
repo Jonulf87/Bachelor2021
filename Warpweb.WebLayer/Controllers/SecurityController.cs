@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,14 +63,20 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> SetPoliciesAsync([FromBody] List<CrewPermissionsVm> permissions, int crewId)
         {
             await _securityService.SetPoliciesAsync(permissions, crewId);
+            Log.Information("Policies {@permissions} for crew {crewId} saved to db", permissions, crewId);
             return Ok();
         }
 
+        /// <summary>
+        /// Updates user email
+        /// </summary>
+        /// <param name="userData"></param>
         [HttpPost]
         [Route("edituseremail")]
         public async Task<ActionResult> SetUserEmailAsync (UserEmailUpdateVm userData)
         {
             await _securityService.SetUserEmailAsync(userData);
+            Log.Information("User {@userData} updated", userData);
             return Ok();
         }
         

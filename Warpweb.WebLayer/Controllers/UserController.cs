@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Warpweb.DataAccessLayer.Models;
-using Warpweb.LogicLayer.Exceptions;
+using Serilog;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -47,7 +44,6 @@ namespace Warpweb.WebLayer.Controllers
         [Route("participantslist")]
         public async Task<List<ParticipantListVm>> GetParticipantsAsync()
         {
-
             return await _userService.GetParticipantsAsync();
         }
 
@@ -88,7 +84,6 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<List<UserRolesListVm>> GetUserRolesAsync(string userId)
         {
             return await _securityService.GetUserRolesAsync(userId);
-
         }
 
         /// <summary>
@@ -100,8 +95,9 @@ namespace Warpweb.WebLayer.Controllers
         [Route("register")]
         public async Task<ActionResult> RegisterUserAsync(UserVm user)
         {
-                await _securityService.RegisterUserAsync(user);
-                return Ok();
+            await _securityService.RegisterUserAsync(user);
+            Log.Information("User {@user} added to db", user);
+            return Ok();
         }
 
         /// <summary>
@@ -115,6 +111,7 @@ namespace Warpweb.WebLayer.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             await _userService.UpdateUserAsync(user, userId);
+            Log.Information("User {userId} updated user {@user}", userId, user);
             return Ok();
         }
 
@@ -130,6 +127,7 @@ namespace Warpweb.WebLayer.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             await _userService.UpdateUsernameAsync(data, userId);
+            Log.Information("User {userId} updated username {@data}", userId, data);
             return Ok();
         }
 
@@ -145,6 +143,7 @@ namespace Warpweb.WebLayer.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             await _userService.UpdateEMailAsync(data, userId);
+            Log.Information("User {userId} updated user email {@data}", userId, data);
             return Ok();
         }
 
@@ -160,6 +159,7 @@ namespace Warpweb.WebLayer.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             await _userService.UpdatePasswordAsync(data, userId);
+            Log.Information("User {userId} updated user password {@data}", userId, data);
             return Ok();
         }
 
