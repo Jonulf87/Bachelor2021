@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Warpweb.DataAccessLayer.Models;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
 
@@ -31,7 +32,7 @@ namespace Warpweb.WebLayer.Controllers
         [HttpGet]
         [Route("venueslist")]
         [Authorize(Policy = "VenueAdmin")]
-        public async Task<List<VenueListVm>> GetVenuesAsync()
+        public async Task<ActionResult<List<VenueListVm>>> GetVenuesAsync()
         {
             return await _venueService.GetVenuesAsync();
         }
@@ -42,10 +43,17 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>VenueListVm</returns>
         [HttpGet]
         [Route("organizervenueslist")]
-        [Authorize(Policy = "VenueAdmin")] // Sjekk manuelt i metoden og sjekk for policy eller orgadmin
-        public async Task<List<VenueListVm>> GetOrganizerVenuesAsync()
+        public async Task<ActionResult<List<VenueListVm>>> GetOrganizerVenuesAsync()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!await _securityService.IsOrgAdmin(userId) || !await _securityService.HasCrewPermissionAsync(userId, CrewPermissionType.VenueAdmin))
+            {
+                return Forbid();
+            }
+
             return await _venueService.GetOrganizerVenuesAsync();
+
         }
 
         /// <summary>

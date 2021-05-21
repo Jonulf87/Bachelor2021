@@ -237,5 +237,12 @@ namespace Warpweb.LogicLayer.Services
                     && a.Users.Any(c => c.ApplicationUserId == userId))
                 .AnyAsync();
         }
+
+        public async Task<bool> IsOrgAdmin(string userId)
+        {
+            return await _dbContext.Organizers
+                .Where(a => a.Admins.Any(a => a.Id == userId))
+                .AnyAsync();
+        }
     }
 }
