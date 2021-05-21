@@ -89,9 +89,9 @@ export default function TicketList() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {events.map((event) => (
+                                    {events.map((event, i) => (
                                         <>
-                                            <TableRow key={event.name}>
+                                            <TableRow key={i}>
                                                 <TableCell align="left">{event.name}</TableCell>
                                                 <TableCell align="left">{format(parseISO(event.start), 'dd.MM.yyyy HH:mm')}</TableCell>
                                                 <TableCell align="left">{format(parseISO(event.end), 'dd.MM.yyyy HH:mm')}</TableCell>

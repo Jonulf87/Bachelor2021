@@ -47,7 +47,7 @@ namespace Warpweb.WebLayer.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (!await _securityService.IsOrgAdmin(userId) || !await _securityService.HasCrewPermissionAsync(userId, CrewPermissionType.VenueAdmin))
+            if (!await _securityService.IsOrgAdmin(userId) && !await _securityService.HasCrewPermissionAsync(userId, CrewPermissionType.VenueAdmin))
             {
                 return Forbid();
             }
