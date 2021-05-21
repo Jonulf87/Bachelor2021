@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Serilog;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Warpweb.LogicLayer.Services;
 using Warpweb.LogicLayer.ViewModels;
@@ -33,6 +30,7 @@ namespace Warpweb.WebLayer.Controllers
         public async Task<ActionResult> StoreRowsAsync(List<RowVm> seatMap)
         {
             await _seatMapService.SetRowsAsync(seatMap);
+            Log.Information("Seatmap {@seatMap} saved to db", seatMap);
             return Ok();
         }
 
