@@ -1622,6 +1622,113 @@
 					"response": []
 				},
 				{
+					"name": "Set admin rights",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\"name\": \"CheckInAdmin\", \"value\": 0, \"crewHasPermission\": true},\r\n    {\"name\": \"CrewAdmin\", \"value\": 1, \"crewHasPermission\": true},\r\n    {\"name\": \"ParticipantAdmin\", \"value\": 7, \"crewHasPermission\": true},\r\n    {\"name\": \"ReportAdmin\", \"value\": 5, \"crewHasPermission\": true},\r\n    {\"name\": \"SeatMapAdmin\", \"value\": 3, \"crewHasPermission\": true},\r\n    {\"name\": \"UserAdmin\", \"value\": 4, \"crewHasPermission\": true},\r\n    {\"name\": \"VenueAdmin\", \"value\": 6, \"crewHasPermission\": true},\r\n    {\"name\": \"TicketAdmin\", \"value\": 2, \"crewHasPermission\": true}\r\n]"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/security/setpolicies/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"security",
+								"setpolicies",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get crew permissions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Crew has all rights\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData[0].crewHasPermission).to.equal(true);\r",
+									"        pm.expect(jsonData[1].crewHasPermission).to.equal(true);\r",
+									"        pm.expect(jsonData[2].crewHasPermission).to.equal(true);\r",
+									"        pm.expect(jsonData[3].crewHasPermission).to.equal(true);\r",
+									"        pm.expect(jsonData[4].crewHasPermission).to.equal(true);\r",
+									"        pm.expect(jsonData[5].crewHasPermission).to.equal(true);\r",
+									"        pm.expect(jsonData[6].crewHasPermission).to.equal(true);\r",
+									"        pm.expect(jsonData[7].crewHasPermission).to.equal(true);\r",
+									"        }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/security/allpolicies/{{crewId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"security",
+								"allpolicies",
+								"{{crewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete crew",
 					"event": [
 						{
@@ -2998,6 +3105,584 @@
 								"tickettypes",
 								"eventtickettypes",
 								"{{mainEventId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ticket Happy Path Scenarios",
+			"item": [
+				{
+					"name": "Create ticket type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"descriptionName\": \"{{ticketTypeName}}{{timeStamp}}\",\r\n  \"basePrice\": {{ticketTypePrice}},\r\n  \"amountAvailable\": {{ticketTypeAmmountAvailable}}\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tickettypes/createtickettype",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickettypes",
+								"createtickettype"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all ticket types",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var ticketType = _.find(pm.response.json(), { \r",
+									"    descriptionName: pm.variables.get(\"ticketTypeName\") + pm.variables.get(\"timeStamp\")\r",
+									"});\r",
+									"pm.environment.set(\"ticketTypeId\", ticketType.id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickettypes/tickettypes",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickettypes",
+								"tickettypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create ticket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": {{ticketTypeId}},\r\n    \"descriptionName\": \"{{ticketName}}{{timeStamp}}\"\r\n  }\r\n]"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tickets/createticket",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets",
+								"createticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tickets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Array of tickets contains new ticket\",\r",
+									"    function () {\r",
+									"        var ticket = _.find(pm.response.json(), { \r",
+									"            ticketType: pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
+									"        });\r",
+									"            pm.expect(ticket).exist;\r",
+									"            pm.environment.set(\"ticketId\", ticket.id);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update ticket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{ticketId}},\r\n  \"price\": 500,\r\n  \"ticketTypeId\": {{ticketTypeId}}\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tickets",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ticket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Name has been updated\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.price).to.equal(500);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets/{{ticketId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets",
+								"{{ticketId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tickets for the specific event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Array of tickets contains new ticket\",\r",
+									"    function () {\r",
+									"         var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData[0].mainEventName).to.equal((pm.variables.get(\"mainEventNameUpdated\") + pm.variables.get(\"timeStamp\")));\r",
+									"        pm.expect(jsonData[0].ticketType).to.equal((pm.variables.get(\"ticketTypeNameUpdated\") + pm.variables.get(\"timeStamp\")));\r",
+									"\r",
+									"        }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets/alltickets/{{mainEventId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets",
+								"alltickets",
+								"{{mainEventId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tickets of the user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Array of tickets of current user\",\r",
+									"    function () {\r",
+									"         var ticket = _.find(pm.response.json(), { \r",
+									"            ticketType: pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
+									"        });\r",
+									"            pm.expect(ticket).exist;\r",
+									"\r",
+									"        }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets/usertickets",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets",
+								"usertickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tickets of the user for the upcoming events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Array of tickets of current user for upcoming events\",\r",
+									"    function () {\r",
+									"         var ticket = _.find(pm.response.json(), { \r",
+									"            ticketType: pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
+									"        });\r",
+									"            pm.expect(ticket).exist;\r",
+									"\r",
+									"        }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets/userticketsupcoming",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets",
+								"userticketsupcoming"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all unpaid tickets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Array of unpaid tickets\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData[0].mainEventName).to.equal((pm.variables.get(\"mainEventNameUpdated\") + pm.variables.get(\"timeStamp\")));\r",
+									"        pm.expect(jsonData[0].ticketType).to.equal((pm.variables.get(\"ticketTypeNameUpdated\") + pm.variables.get(\"timeStamp\")));\r",
+									"\r",
+									"        }\r",
+									");\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/tickets/userticketsupcoming",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets",
+								"userticketsupcoming"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ticket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {{ticketId}}\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tickets",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickets"
 							]
 						}
 					},

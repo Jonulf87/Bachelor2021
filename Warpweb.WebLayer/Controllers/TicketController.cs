@@ -155,7 +155,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="ticketVm"></param> 
         [HttpPut]
-        [Authorize(Roles = "Admins")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateTicketAsync(TicketVm ticketVm)
         {
 
