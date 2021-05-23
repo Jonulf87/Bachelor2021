@@ -84,7 +84,14 @@ export default function TicketTypeAdminMain() {
         expandableRowsHeader: false,
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
-            return <TicketTypeAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />;
+            return (
+                <TicketTypeAdminRowDetails
+                    rowData={rowData}
+                    rowMeta={rowMeta}
+                    updateListTrigger={triggerUpdate}
+                    ticketTypes={ticketTypesList}
+                />
+            );
         },
         onRowClick: (rowData, rowMeta) => {
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
@@ -105,6 +112,7 @@ export default function TicketTypeAdminMain() {
                 dialogOpen={dialogCreateTicketTypeOpen}
                 handleDialogClose={handleDialogCreateTicketTypeClose}
                 triggerUpdate={triggerUpdate}
+                ticketTypes={ticketTypesList}
             />
             <MUIDataTable
                 title={

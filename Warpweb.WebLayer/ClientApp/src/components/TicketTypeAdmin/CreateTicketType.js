@@ -1,75 +1,93 @@
-﻿import { Button, Container, Dialog, DialogTitle, FormControl, makeStyles, TextField } from '@material-ui/core';
+﻿import { Button, Container, Dialog, DialogTitle, FormControl, Grid, makeStyles, Paper, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
-            margin: theme.spacing(1),
             width: '100%',
-            marginLeft: 0,
         },
+        '& .MuiFormControl-root': {
+            width: '100%',
+        },
+        '& .MuiFormControlLabel-root': {
+            width: '100%',
+        },
+    },
+    paper: {
+        padding: '10px',
     },
 }));
 
-export default function CreateTicketType({ dialogOpen, handleDialogClose, triggerUpdate }) {
+export default function CreateTicketType({ dialogOpen, handleDialogClose, triggerUpdate, ticketTypes }) {
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const { isAuthenticated, token } = useAuth();
+    const classes = useStyles();
 
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
     };
 
-    const [name, setName] = useState('');
-    const [basePrice, setBasePrice] = useState('');
-    const [amountAvailable, setAmountAvailable] = useState('');
-
-    const { isAuthenticated, token } = useAuth();
-
-    const classes = useStyles();
-
-    const dataToBeSent = {
-        descriptionName: name,
-        basePrice: basePrice,
-        amountAvailable: amountAvailable,
-    };
-
-    const submitForm = async (e) => {
-        e.preventDefault();
-        if (isAuthenticated) {
-            const response = await fetch('/api/tickettypes/createtickettype', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'content-type': 'application/json',
-                },
-                method: 'POST',
-                body: JSON.stringify(dataToBeSent),
-            });
-
-            if (response.ok) {
-                triggerUpdate();
-                setName('');
-                setBasePrice('');
-                setAmountAvailable('');
-                handleDialogClose();
-            } else if (response.status === 400) {
-                const errorResult = await response.json();
-                setErrors(errorResult.errors);
-                setErrorDialogOpen(true);
-            } else {
-                const errorResult = await response.json();
-                setError(errorResult.message);
-                setErrorDialogOpen(true);
-            }
+    const checkTicketTypeName = (value) => {
+        if (ticketTypes.some((a) => a.descriptionName === value)) {
+            return false;
+        } else {
+            return true;
         }
     };
 
+    const createTicketSchema = yup.object().shape({
+        descriptionName: yup
+            .string()
+            .required('Fyll inn navn på bilettype')
+            .test('checkName', 'Billettype allerede registrert', checkTicketTypeName),
+        basePrice: yup.number().required('Oppgi grunnpris'),
+        amountAvailable: yup.number().required('Oppgi antall tilgjengelig billetter av typen'),
+    });
+
+    const formik = useFormik({
+        initialValues: {
+            descriptionName: '',
+            basePrice: '',
+            amountAvailable: '',
+        },
+        onSubmit: async (values, e) => {
+            if (isAuthenticated) {
+                const response = await fetch('/api/tickettypes/createtickettype', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(values),
+                });
+
+                if (response.ok) {
+                    triggerUpdate();
+                    handleDialogClose();
+                } else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                } else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
+            }
+        },
+        validationSchema: createTicketSchema,
+    });
+
     return (
-        <Dialog open={dialogOpen} onClose={handleDialogClose} className={classes.root}>
+        <>
             <PopupWindow
                 open={errorDialogOpen}
                 handleClose={handleErrorDialogClose}
@@ -78,40 +96,62 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                 errors={errors}
                 clearErrors={setErrors}
             />
+            <Dialog open={dialogOpen} onClose={handleDialogClose} className={classes.root}>
+                <Paper className={classes.paper}>
+                    <DialogTitle>Ny billettype</DialogTitle>
 
-            <Container style={{ padding: '10px' }}>
-                <DialogTitle>Ny billettype</DialogTitle>
-
-                <form onSubmit={submitForm}>
-                    <TextField id="name" label="Billettype" required fullWidth value={name} onChange={(e) => setName(e.target.value)} />
-
-                    <TextField
-                        id="basePrice"
-                        label="Grunnpris"
-                        required
-                        fullWidth
-                        type="number"
-                        value={basePrice}
-                        onChange={(e) => setBasePrice(e.target.value)}
-                    />
-
-                    <TextField
-                        id="amountAvailable"
-                        label="Antall"
-                        required
-                        fullWidth
-                        type="number"
-                        value={amountAvailable}
-                        onChange={(e) => setAmountAvailable(e.target.value)}
-                    />
-
-                    <FormControl style={{ padding: '8px' }}>
-                        <Button variant="contained" color="primary" size="large" type="submit">
-                            Lagre
-                        </Button>
-                    </FormControl>
-                </form>
-            </Container>
-        </Dialog>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Grid container spacing={2} alignItems="flexStart" className={classes.root}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    id="descriptionName"
+                                    name="descriptionName"
+                                    label="Navn billettype"
+                                    value={formik.values.descriptionName}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.descriptionName && Boolean(formik.errors.descriptionName)}
+                                    helperText={formik.touched.descriptionName && formik.errors.descriptionName}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    id="basePrice"
+                                    name="basePrice"
+                                    label="Grunnpris"
+                                    type="number"
+                                    value={formik.values.basePrice}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.basePrice && Boolean(formik.errors.basePrice)}
+                                    helperText={formik.touched.basePrice && formik.errors.basePrice}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    id="amountAvailable"
+                                    name="amountAvailable"
+                                    label="Antall"
+                                    type="number"
+                                    value={formik.values.amountAvailable}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.amountAvailable && Boolean(formik.errors.amountAvailable)}
+                                    helperText={formik.touched.amountAvailable && formik.errors.amountAvailable}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button variant="contained" color="primary" type="submit">
+                                    Lagre
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Paper>
+            </Dialog>
+        </>
     );
 }
