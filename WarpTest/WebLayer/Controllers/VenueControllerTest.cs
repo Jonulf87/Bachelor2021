@@ -34,7 +34,8 @@ namespace WarpTest.WebLayer.Controllers
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);           
             VenueController venueController = new VenueController(venueService, securityService);
 
-            List<VenueListVm> result = await venueController.GetVenuesAsync();
+            ActionResult<List<VenueListVm>> resultAR = await venueController.GetVenuesAsync();
+            List<VenueListVm> result = resultAR.Value;
 
             Assert.AreEqual(2, result.Count);
             Assert.AreEqual(1, result[0].Id);
@@ -53,7 +54,8 @@ namespace WarpTest.WebLayer.Controllers
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             VenueController venueController = new VenueController(venueService, securityService);
 
-            List<VenueListVm> result = await venueController.GetOrganizerVenuesAsync();
+            ActionResult<List<VenueListVm>> resultAr = await venueController.GetOrganizerVenuesAsync();
+            List<VenueListVm> result = resultAr.Value;
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(1, result[0].Id);
@@ -127,7 +129,8 @@ namespace WarpTest.WebLayer.Controllers
 
             await venueController.CreateVenueAsync(venueVm);
 
-            List<VenueListVm> venues = await venueController.GetVenuesAsync();
+            ActionResult<List<VenueListVm>> result = await venueController.GetVenuesAsync();
+            List<VenueListVm> venues = result.Value;
             Venue createdVenue = _dbContext.Venues.Find(3);
 
             Assert.AreEqual(3, venues.Count);

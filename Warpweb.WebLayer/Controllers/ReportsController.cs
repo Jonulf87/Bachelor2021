@@ -39,7 +39,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("allergiesreport")]
-        public async Task<List<AllergyReportListVm>> GetAllergiesReportAsync()
+        public async Task<ActionResult<List<AllergyReportListVm>>> GetAllergiesReportAsync()
         {
             return await _reportsService.GetAllergiesReportAsync();
         }
@@ -49,7 +49,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("tickettypesreport")]
-        public async Task<List<TicketTypesReportListVm>> GetTicketTypesReportAsync()
+        public async Task<ActionResult<List<TicketTypesReportListVm>>> GetTicketTypesReportAsync()
         {
             return await _reportsService.GetTicketTypesReportAsync();
         }

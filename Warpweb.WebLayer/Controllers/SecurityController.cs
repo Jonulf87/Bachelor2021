@@ -45,7 +45,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <param name="crewId"></param>
         [HttpGet]
         [Route("allpolicies/{crewId}")]
-        public async Task<List<CrewPermissionsVm>> GetAllPoliciesAsync(int crewId)
+        public async Task<ActionResult<List<CrewPermissionsVm>>> GetAllPoliciesAsync(int crewId)
         {
             var policies = await _securityService.GetAllPoliciesAsync(crewId);
 

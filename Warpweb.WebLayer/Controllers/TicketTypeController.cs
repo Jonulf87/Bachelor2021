@@ -41,7 +41,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         [HttpGet]
         [Route("tickettypes")]
-        public async Task<List<TicketTypeListVm>> GetTicketTypesAsync()
+        public async Task<ActionResult<List<TicketTypeListVm>>> GetTicketTypesAsync()
         {
             return await _ticketTypeService.GetTicketTypesAsync();
         }

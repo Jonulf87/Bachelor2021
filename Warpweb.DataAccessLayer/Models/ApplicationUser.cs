@@ -35,7 +35,8 @@ namespace Warpweb.DataAccessLayer.Models
         public string Gender { get; set; }
 
         [PersonalData]
-        public string Comments { get; set; } //print 
+        public string Comments { get; set; }
+        public bool IsCookiesAccepted { get; set; }
 
         [Display(Name = "Verge")]
         [PersonalData]

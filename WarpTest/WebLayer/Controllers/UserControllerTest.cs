@@ -42,7 +42,8 @@ namespace WarpTest.WebLayer.Controllers
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             UserController userController = new UserController(userService, securityService);
 
-            List<UserListVm> result = await userController.GetUsersAsync();
+            ActionResult<List<UserListVm>> resultAr = await userController.GetUsersAsync();
+            List<UserListVm> result = resultAr.Value;
 
             Assert.AreEqual(3, result.Count);
             Assert.That(result, Has.Exactly(1).Matches<UserListVm>(user => user.Id == _createdUser2.Entity.Id &&
@@ -182,7 +183,8 @@ namespace WarpTest.WebLayer.Controllers
 
             await userController.RegisterUserAsync(newUser);
 
-            List<UserListVm> newResult = await userController.GetUsersAsync();
+            ActionResult<List<UserListVm>> newResultAr = await userController.GetUsersAsync();
+            List<UserListVm> newResult = newResultAr.Value;
 
             Assert.AreEqual(3, newResult.Count);
             Assert.That(
