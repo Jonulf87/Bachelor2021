@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import EditVenue from './EditVenue';
 
-export default function VenueAdminRowDetails({ rowData, rowMeta }) {
+export default function VenueAdminRowDetails({ rowData, rowMeta, venues }) {
     const [venue, setVenue] = useState(null);
     const [dialogEditVenueOpen, setDialogEditVenueOpen] = useState(false);
     const openVenueId = rowData[0];
@@ -141,6 +141,7 @@ export default function VenueAdminRowDetails({ rowData, rowMeta }) {
                 dialogEditVenueOpen={dialogEditVenueOpen}
                 handleDialogEditVenueClose={handleDialogEditVenueClose}
                 triggerUpdate={triggerUpdate}
+                venues={venues}
             />
         </>
     );
