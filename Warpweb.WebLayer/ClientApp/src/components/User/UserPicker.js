@@ -30,7 +30,7 @@ export default function UserPicker({ dialogOpen, handleDialogClose, setUserId, e
     useEffect(() => {
         const getUsers = async () => {
             if (isAuthenticated) {
-                const response = await fetch('/api/users/userslist', {
+                const response = await fetch('/api/users/allusers', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

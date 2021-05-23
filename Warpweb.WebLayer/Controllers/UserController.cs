@@ -24,6 +24,14 @@ namespace Warpweb.WebLayer.Controllers
             _securityService = securityService;
         }
 
+        [HttpGet]
+        [Route("allusers")]
+        public async Task<ActionResult<List<UserPickerVm>>> GetAllUsersAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return await _userService.GetAllUsersAsync(userId);
+        }
+
         /// <summary>
         /// Returns all users
         /// </summary>
