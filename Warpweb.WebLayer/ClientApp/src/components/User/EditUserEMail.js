@@ -103,7 +103,7 @@ export default function EditUserEMail({ dialogEditUserEMailOpen, handleDialogEdi
                     setErrorDialogOpen(true);
                 } else {
                     const errorResult = await response.json();
-                    setError(errorResult.Message);
+                    setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }

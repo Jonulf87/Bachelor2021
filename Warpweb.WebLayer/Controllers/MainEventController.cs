@@ -152,5 +152,17 @@ namespace Warpweb.WebLayer.Controllers
             List<UserMainEventsVm> events = await _mainEventService.GetMainEventsOfUserParticipationAsync(userId);
             return Ok(events);
         }
+
+        /// <summary>
+        /// Checks if user inputed eventname already exists
+        /// </summary>
+        /// <param name="eventname"></param>
+        /// <returns>True if name is already in use</returns>
+        [HttpGet]
+        [Route("checkeventname/{eventname}")]
+        public async Task<ActionResult<EventNameCheckVm>> CheckEventNameAsync(string eventname)
+        {
+            return await _mainEventService.CheckEventNameAsync(eventname);
+        }
     }
 }
