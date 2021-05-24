@@ -102,7 +102,7 @@ export default function VenueMain() {
         expandableRowsHeder: false,
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
-            return <VenueAdminRowDetails rowData={rowData} rowMeta={rowMeta} />;
+            return <VenueAdminRowDetails rowData={rowData} rowMeta={rowMeta} venues={venueList} />;
         },
         onRowClick: (rowData, rowMeta) => {
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {

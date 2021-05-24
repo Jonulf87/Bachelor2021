@@ -40,7 +40,8 @@ namespace WarpTest.WebLayer.Controllers
             TicketTypeService ticketTypeService = new TicketTypeService(_dbContext, _mainEventProvider);
             TicketTypeController ticketTypeController = new TicketTypeController(ticketTypeService);
 
-            List<TicketTypeListVm> result = await ticketTypeController.GetTicketTypesAsync();
+            ActionResult<List<TicketTypeListVm>> resultAr = await ticketTypeController.GetTicketTypesAsync();
+            List<TicketTypeListVm> result = resultAr.Value;
 
 
             Assert.AreEqual(_descrName1, result[1].DescriptionName);
@@ -82,7 +83,8 @@ namespace WarpTest.WebLayer.Controllers
             TicketTypeController ticketTypeController = new TicketTypeController(ticketTypeService);
             CreateTicketTypes();
 
-            List<TicketTypeListVm> result = await ticketTypeController.GetTicketTypesAsync();
+            ActionResult<List<TicketTypeListVm>> resultAr = await ticketTypeController.GetTicketTypesAsync();
+            List<TicketTypeListVm> result = resultAr.Value;
 
             Assert.AreEqual(2, result.Count);
 
@@ -95,7 +97,8 @@ namespace WarpTest.WebLayer.Controllers
 
             await ticketTypeController.CreateTicketTypeAsync(ticketTypeVm);
 
-            List<TicketTypeListVm> newResult = await ticketTypeController.GetTicketTypesAsync();
+            ActionResult<List<TicketTypeListVm>> newResultAr = await ticketTypeController.GetTicketTypesAsync();
+            List<TicketTypeListVm> newResult = newResultAr.Value;
 
             Assert.AreEqual(3, newResult.Count);
             Assert.That(newResult, Has.Exactly(1).Matches<TicketTypeListVm>(ticketType => ticketType.Id == 3 &&

@@ -68,48 +68,58 @@ export default function CreateOrganizer({ handleDialogCreateOrganizerClose, dial
     };
 
     return (
-        <Dialog open={dialogCreateOrganizerOpen} onClose={handleDialogCreateOrganizerClose}>
-            <Paper variant="outlined" elevation={0} style={{ padding: '10px' }}>
-                <DialogTitle>Ny organisasjon</DialogTitle>
-                <form className={classes.root}>
-                    <TextField
-                        variant="outlined"
-                        id="organizerName"
-                        label="Navn"
-                        required
-                        value={organizerName}
-                        onChange={(e) => setOrganizerName(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        id="organizerNumber"
-                        label="Organisasjonsnummer"
-                        required
-                        value={organizerNumber}
-                        onChange={(e) => setOrganizerNumber(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        id="organizerDescription"
-                        label="Beskrivelse"
-                        required
-                        value={organizerDescription}
-                        onChange={(e) => setOrganizerDescription(e.target.value)}
-                    />
-                    <FormControl style={{ padding: '8px' }}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            className={classes.button}
-                            startIcon={<SaveIcon />}
-                            onClick={submitForm}
-                        >
-                            Lagre
-                        </Button>
-                    </FormControl>
-                </form>
-            </Paper>
-        </Dialog>
+        <>
+            <PopupWindow
+                open={errorDialogOpen}
+                handleClose={handleErrorDialogClose}
+                error={error}
+                clearError={setError}
+                errors={errors}
+                clearErrors={setErrors}
+            />
+            <Dialog open={dialogCreateOrganizerOpen} onClose={handleDialogCreateOrganizerClose}>
+                <Paper variant="outlined" elevation={0} style={{ padding: '10px' }}>
+                    <DialogTitle>Ny organisasjon</DialogTitle>
+                    <form className={classes.root}>
+                        <TextField
+                            variant="outlined"
+                            id="organizerName"
+                            label="Navn"
+                            required
+                            value={organizerName}
+                            onChange={(e) => setOrganizerName(e.target.value)}
+                        />
+                        <TextField
+                            variant="outlined"
+                            id="organizerNumber"
+                            label="Organisasjonsnummer"
+                            required
+                            value={organizerNumber}
+                            onChange={(e) => setOrganizerNumber(e.target.value)}
+                        />
+                        <TextField
+                            variant="outlined"
+                            id="organizerDescription"
+                            label="Beskrivelse"
+                            required
+                            value={organizerDescription}
+                            onChange={(e) => setOrganizerDescription(e.target.value)}
+                        />
+                        <FormControl style={{ padding: '8px' }}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                className={classes.button}
+                                startIcon={<SaveIcon />}
+                                onClick={submitForm}
+                            >
+                                Lagre
+                            </Button>
+                        </FormControl>
+                    </form>
+                </Paper>
+            </Dialog>
+        </>
     );
 }

@@ -27,6 +27,7 @@ using Warpweb.WebLayer.AuthorizationHandlers;
 using Microsoft.Extensions.Logging;
 using Warpweb.WebLayer.Controllers;
 using Serilog;
+using Warpweb.WebLayer.HostedServices;
 
 namespace Warpweb.WebLayer
 {
@@ -187,6 +188,7 @@ namespace Warpweb.WebLayer
             });
 
             services.AddHostedService<DbSeed>();
+            services.AddHostedService<RefreshTokenFlushService>();
 
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore

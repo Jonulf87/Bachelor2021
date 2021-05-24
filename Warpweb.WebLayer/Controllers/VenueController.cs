@@ -34,7 +34,8 @@ namespace Warpweb.WebLayer.Controllers
         [Authorize(Policy = "VenueAdmin")]
         public async Task<ActionResult<List<VenueListVm>>> GetVenuesAsync()
         {
-            return await _venueService.GetVenuesAsync();
+            var venues = await _venueService.GetVenuesAsync();
+            return Ok(venues);
         }
 
         /// <summary>

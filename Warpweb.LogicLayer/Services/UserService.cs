@@ -32,6 +32,27 @@ namespace Warpweb.LogicLayer.Services
             _securityService = securityService;
         }
 
+        public async Task<ActionResult<List<UserPickerVm>>> GetAllUsersAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            if (!userRoles.Contains("Admin") && !await _securityService.HasCrewPermissionAsync(userId, CrewPermissionType.UserAdmin) && !user.AdminRoleAtOrganizers.Any())
+            {
+                throw new HttpException(HttpStatusCode.Forbidden, "Du har ikke rettigheter til å se denne listen.");
+            }
+            else
+            {
+                return await _dbContext.ApplicationUsers
+                    .Select(a => new UserPickerVm
+                    {
+                        Id = a.Id,
+                        FirstName = a.FirstName,
+                        LastName = a.LastName
+                    }).ToListAsync();
+            }
+        }
+
         /// <summary>
         /// Returns all users
         /// </summary>

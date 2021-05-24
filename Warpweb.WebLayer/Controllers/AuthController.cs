@@ -161,11 +161,7 @@ namespace Warpweb.WebLayer.Controllers
             //return user.CurrentMainEventId?.ToString() ?? "0"; //Denne gjør det samme som over. Hvis null, returner verdi etter ??, hvis ikke null returner før ??
         }
 
-        /// <summary>
-        /// Generate JWT Token
-        /// </summary>
-        /// <param name="user"></param> 
-        [HttpPost]
+
         private async Task<AuthResultVm> GenerateJwtToken(ApplicationUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -221,11 +217,6 @@ namespace Warpweb.WebLayer.Controllers
             };
         }
 
-        /// <summary>
-        /// Verify and generate JWT Token
-        /// </summary>
-        /// <param name="refreshToken"></param>
-        [HttpPost]
         private async Task<AuthResultVm> VerifyAndGenerateToken(string refreshToken)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -233,7 +224,7 @@ namespace Warpweb.WebLayer.Controllers
             try
             {
                 
-                // validation 4 - validate existence of the token
+                // validate existence of the token
                 var storedToken = await _applicationDbContext.RefreshTokens.FirstOrDefaultAsync(a => a.Token == refreshToken);
 
                 if (storedToken == null)
@@ -246,7 +237,7 @@ namespace Warpweb.WebLayer.Controllers
                     };
                 }
 
-                // Validation 5 - validate if used
+                // validate if used
                 if (storedToken.IsUsed)
                 {
                     return new AuthResultVm()
@@ -257,7 +248,7 @@ namespace Warpweb.WebLayer.Controllers
                     };
                 }
 
-                // Validation 6 - validate if revoked
+                // validate if revoked
                 if (storedToken.IsRevoked)
                 {
                     return new AuthResultVm()
@@ -269,7 +260,6 @@ namespace Warpweb.WebLayer.Controllers
                 }
                                 
                 // update current token 
-
                 storedToken.IsUsed = true;
                 await _applicationDbContext.SaveChangesAsync(); // EF har autotracker for endringer
 
@@ -298,13 +288,6 @@ namespace Warpweb.WebLayer.Controllers
                     };
                 }
             }
-        }
-
-        private DateTime UnixTimeStampToDateTime(long unixTimeStamp)
-        {
-            var dateTimeVal = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp).ToUniversalTime();
-            return dateTimeVal;
         }
 
         private string RandomString()

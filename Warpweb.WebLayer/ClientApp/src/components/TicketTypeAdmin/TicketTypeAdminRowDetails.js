@@ -4,7 +4,7 @@ import useAuth from '../../hooks/useAuth';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditTicketType from './EditTicketType';
 
-export default function TicketTypeAdminRowDetails({ rowData, rowMeta, updateListTrigger }) {
+export default function TicketTypeAdminRowDetails({ rowData, rowMeta, updateListTrigger, ticketTypes }) {
     const [ticketType, setTicketType] = useState(null);
     const ticketTypeId = rowData[0];
     const [triggerUpdate, setTriggerUpdate] = useState(false);
@@ -89,6 +89,7 @@ export default function TicketTypeAdminRowDetails({ rowData, rowMeta, updateList
                 dialogEditTicketTypeOpen={dialogEditTicketTypeOpen}
                 handleDialogEditTicketTypeClose={handleDialogEditTicketTypeClose}
                 updateListTrigger={updateListTrigger}
+                ticketTypes={ticketTypes}
             />
         </>
     );

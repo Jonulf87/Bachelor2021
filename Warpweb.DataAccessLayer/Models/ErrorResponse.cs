@@ -14,7 +14,7 @@ namespace Warpweb.DataAccessLayer.Models
 
         public string ToJsonString()
         {
-            return JsonSerializer.Serialize(this);
+            return JsonSerializer.Serialize(this, new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
         }
     }
 }

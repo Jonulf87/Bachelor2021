@@ -24,13 +24,21 @@ namespace Warpweb.WebLayer.Controllers
             _securityService = securityService;
         }
 
+        [HttpGet]
+        [Route("allusers")]
+        public async Task<ActionResult<List<UserPickerVm>>> GetAllUsersAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return await _userService.GetAllUsersAsync(userId);
+        }
+
         /// <summary>
         /// Returns all users
         /// </summary>
         /// <returns>UserListVM</returns>
         [HttpGet]
         [Route("userslist")]
-        public async Task<List<UserListVm>> GetUsersAsync()
+        public async Task<ActionResult<List<UserListVm>>> GetUsersAsync()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return await _userService.GetUsersAsync(userId);
@@ -42,7 +50,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>ParticipantListVM</returns>
         [HttpGet]
         [Route("participantslist")]
-        public async Task<List<ParticipantListVm>> GetParticipantsAsync()
+        public async Task<ActionResult<List<ParticipantListVm>>> GetParticipantsAsync()
         {
             return await _userService.GetParticipantsAsync();
         }
@@ -53,7 +61,7 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>UserVM</returns>
         [HttpGet]
         [Route("currentuser")]
-        public async Task<UserVm> GetCurrentUserAsync()
+        public async Task<ActionResult<UserVm>> GetCurrentUserAsync()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -68,7 +76,7 @@ namespace Warpweb.WebLayer.Controllers
         [HttpGet]
         [Route("user/{userId}")]
         [Authorize(Policy = "UserAdmin")]
-        public async Task<UserVm> GetUserAsync(string userId)
+        public async Task<ActionResult<UserVm>> GetUserAsync(string userId)
         {
             return await _userService.GetUserAsync(userId);
         }
@@ -81,7 +89,7 @@ namespace Warpweb.WebLayer.Controllers
         [HttpGet]
         [Route("userroles/{userId}")]
         [Authorize(Policy = "UserAdmin")]
-        public async Task<List<UserRolesListVm>> GetUserRolesAsync(string userId)
+        public async Task<ActionResult<List<UserRolesListVm>>> GetUserRolesAsync(string userId)
         {
             return await _securityService.GetUserRolesAsync(userId);
         }
