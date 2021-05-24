@@ -156,5 +156,12 @@ namespace Warpweb.WebLayer.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("checkorgnumber/{orgNumber}")]
+        public async Task<ActionResult<OrgNumberCheckVm>> CheckOrgNumberAsync(string orgNumber)
+        {
+            return await _organizerService.CheckOrgNumberAsync(orgNumber);
+        }
+
     }
 }
