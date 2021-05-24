@@ -156,6 +156,11 @@ namespace Warpweb.WebLayer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Checks if org number is already registered
+        /// </summary>
+        /// <param name="orgNumber"></param>
+        /// <returns>return true if org number is already registered</returns>
         [HttpGet]
         [Route("checkorgnumber/{orgNumber}")]
         public async Task<ActionResult<OrgNumberCheckVm>> CheckOrgNumberAsync(string orgNumber)
