@@ -1,9 +1,8 @@
 ﻿import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import SaveIcon from '@material-ui/icons/Save';
-import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, FormControl, Grid, Select, InputLabel } from '@material-ui/core';
-import { KeyboardDateTimePicker, MuiPickersUtilsProvider, DatePicker, DateTimePicker } from '@material-ui/pickers';
+import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, Grid } from '@material-ui/core';
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
@@ -28,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px',
     },
 }));
+
 export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpdate }) {
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
@@ -358,7 +358,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                             </Grid>
                             <Grid item xs={12}>
                                 <Button color="primary" variant="contained" size="large" type="submit">
-                                    Registrer meg!
+                                    Lagre
                                 </Button>
                             </Grid>
                         </Grid>

@@ -210,7 +210,7 @@ namespace Warpweb.LogicLayer.Services
         {
 
             var existingMainEvent = await _dbContext.MainEvents
-               .Where(a => a.Id != maineventVm.Id && a.Name == maineventVm.Name)
+               .Where(a => a.Id == maineventVm.Id && a.Name == maineventVm.Name)
                .SingleOrDefaultAsync();
 
 
@@ -219,7 +219,7 @@ namespace Warpweb.LogicLayer.Services
                 throw new HttpException(HttpStatusCode.Conflict, $"Arrangementet: {existingMainEvent.Name} eksisterer allerede");
             }
 
-            existingMainEvent = _dbContext.MainEvents.Find(maineventVm.Id);
+            existingMainEvent = await _dbContext.MainEvents.FindAsync(maineventVm.Id);
 
             if (existingMainEvent == null)
             {
