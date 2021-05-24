@@ -3109,6 +3109,56 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete ticket Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {{ticketTypeId}}\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tickettypes/deletetickettype",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"tickettypes",
+								"deletetickettype"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -3159,7 +3209,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"descriptionName\": \"{{ticketTypeName}}{{timeStamp}}\",\r\n  \"basePrice\": {{ticketTypePrice}},\r\n  \"amountAvailable\": {{ticketTypeAmmountAvailable}}\r\n}"
+							"raw": "{\r\n  \"descriptionName\": \"new{{ticketTypeName}}{{timeStamp}}\",\r\n  \"basePrice\": {{ticketTypePrice}},\r\n  \"amountAvailable\": {{ticketTypeAmmountAvailable}}\r\n}"
 						},
 						"url": {
 							"raw": "{{apiUrl}}/tickettypes/createtickettype",
@@ -3190,7 +3240,7 @@
 									"\r",
 									"var jsonData = JSON.parse(responseBody);\r",
 									"var ticketType = _.find(pm.response.json(), { \r",
-									"    descriptionName: pm.variables.get(\"ticketTypeName\") + pm.variables.get(\"timeStamp\")\r",
+									"    descriptionName: \"new\" + pm.variables.get(\"ticketTypeName\") + pm.variables.get(\"timeStamp\")\r",
 									"});\r",
 									"pm.environment.set(\"ticketTypeId\", ticketType.id);\r",
 									""
@@ -3298,7 +3348,7 @@
 									"    \"Array of tickets contains new ticket\",\r",
 									"    function () {\r",
 									"        var ticket = _.find(pm.response.json(), { \r",
-									"            ticketType: pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
+									"            ticketType: \"new\" + pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
 									"        });\r",
 									"            pm.expect(ticket).exist;\r",
 									"            pm.environment.set(\"ticketId\", ticket.id);\r",
@@ -3447,7 +3497,7 @@
 									"    function () {\r",
 									"         var jsonData = JSON.parse(responseBody);\r",
 									"        pm.expect(jsonData[0].mainEventName).to.equal((pm.variables.get(\"mainEventNameUpdated\") + pm.variables.get(\"timeStamp\")));\r",
-									"        pm.expect(jsonData[0].ticketType).to.equal((pm.variables.get(\"ticketTypeNameUpdated\") + pm.variables.get(\"timeStamp\")));\r",
+									"        pm.expect(jsonData[0].ticketType).to.equal(\"new\" + (pm.variables.get(\"ticketTypeName\") + pm.variables.get(\"timeStamp\")));\r",
 									"\r",
 									"        }\r",
 									");\r",
@@ -3499,7 +3549,7 @@
 									"    \"Array of tickets of current user\",\r",
 									"    function () {\r",
 									"         var ticket = _.find(pm.response.json(), { \r",
-									"            ticketType: pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
+									"            ticketType: \"new\" + pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
 									"        });\r",
 									"            pm.expect(ticket).exist;\r",
 									"\r",
@@ -3552,7 +3602,7 @@
 									"    \"Array of tickets of current user for upcoming events\",\r",
 									"    function () {\r",
 									"         var ticket = _.find(pm.response.json(), { \r",
-									"            ticketType: pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
+									"            ticketType: \"new\" + pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
 									"        });\r",
 									"            pm.expect(ticket).exist;\r",
 									"\r",
@@ -3606,7 +3656,7 @@
 									"    function () {\r",
 									"        var jsonData = JSON.parse(responseBody);\r",
 									"        pm.expect(jsonData[0].mainEventName).to.equal((pm.variables.get(\"mainEventNameUpdated\") + pm.variables.get(\"timeStamp\")));\r",
-									"        pm.expect(jsonData[0].ticketType).to.equal((pm.variables.get(\"ticketTypeNameUpdated\") + pm.variables.get(\"timeStamp\")));\r",
+									"        pm.expect(jsonData[0].ticketType).to.equal((\"new\" + pm.variables.get(\"ticketTypeName\") + pm.variables.get(\"timeStamp\")));\r",
 									"\r",
 									"        }\r",
 									");\r",
@@ -3689,6 +3739,1208 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "User Happy Path Scenarios",
+			"item": [
+				{
+					"name": "Get all users of the specific event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var ticketType = _.find(pm.response.json(), { \r",
+									"    id: pm.variables.get(\"currentUserId\"),\r",
+									"    firstName: pm.variables.get(\"Post\"),\r",
+									"    lastName: pm.variables.get(\"Man\")\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/users/participantslist",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"participantslist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrer new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"{{newUserFirstName}}\",\r\n  \"middleName\": \"{{newUserMiddleName}}\",\r\n  \"lastName\": \"{{newUserLastName}}\",\r\n  \"phoneNumber\": \"{{newUserPhoneNumber}}\",\r\n  \"address\": \"{{newUserAddresse}}\",\r\n  \"zipCode\": \"{{newUserZipCode}}\",\r\n  \"eMail\": \"{{newUserEmail}}{{timeStamp}}\",\r\n  \"userName\": \"{{newUserName}}{{timeStamp}}\",\r\n  \"dateOfBirth\": \"2021-05-23T13:09:37.422Z\",\r\n  \"gender\": \"Jente\",\r\n  \"isAllergic\": true,\r\n  \"allergyDescription\": \"Sitrusfrukt\",\r\n  \"password\": \"{{newUserPassword}}{{timeStamp}}\",\r\n  \"passwordCheck\": \"{{newUserPassword}}{{timeStamp}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users/register",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var user = _.find(pm.response.json(), { \r",
+									"    userName: pm.variables.get(\"newUserName\") + pm.variables.get(\"timeStamp\")\r",
+									"});\r",
+									"pm.environment.set(\"newUserId\", user.id);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/users/userslist",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"userslist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Post\",\r\n  \"lastName\": \"Mansen\",\r\n  \"phoneNumber\": \"95258963\",\r\n  \"address\": \"Oslogaten 13\",\r\n  \"zipCode\": \"0258\",\r\n  \"gender\": \"Gutt\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users/updateuser",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"updateuser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Last name has been updated\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.lastName).to.equal(\"Mansen\");\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/users/user/{{currentUserId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"user",
+								"{{currentUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"postmanwarpweb1@gmail.com\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users/updateusername",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"updateusername"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Last name has been updated\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.userName).to.equal(\"postmanwarpweb1@gmail.com\");\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/users/user/{{currentUserId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"user",
+								"{{currentUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update username again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"postmanwarpweb@gmail.com\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users/updateusername",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"updateusername"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check if username exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"User name exists\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.isUnavailable).to.equal(true);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/users/checkusername/{{newUserName}}{{timeStamp}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"checkusername",
+								"{{newUserName}}{{timeStamp}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check if email exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Email name exists\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.isUnavailable).to.equal(true);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/users/checkemail/{{newUserEmail}}{{timeStamp}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"checkemail",
+								"{{newUserEmail}}{{timeStamp}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"eMail\": \"user@example.com\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users/updateemail",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"updateemail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"oldPassword\": \"SuperHemmelig\",\r\n  \"newPassword\": \"SuperHemmeligSuperHemmelig\",\r\n  \"checkNewPassword\": \"SuperHemmeligSuperHemmelig\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users/updatepassword",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"updatepassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth with new password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"token\", \"Bearer \" + jsonData.token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"postmanwarpweb@gmail.com\",\r\n    \"password\": \"SuperHemmeligSuperHemmelig\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth/login",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update password again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"oldPassword\": \"SuperHemmeligSuperHemmelig\",\r\n  \"newPassword\": \"SuperHemmelig\",\r\n  \"checkNewPassword\": \"SuperHemmelig\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users/updatepassword",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"users",
+								"updatepassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth with new password again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"token\", \"Bearer \" + jsonData.token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"postmanwarpweb@gmail.com\",\r\n    \"password\": \"SuperHemmelig\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth/login",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Security Happy Path Scenarios",
+			"item": [
+				{
+					"name": "Get list of permissions for current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"User has all rights\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData[0]).to.equal(0);\r",
+									"        pm.expect(jsonData[1]).to.equal(1);\r",
+									"        pm.expect(jsonData[2]).to.equal(2);\r",
+									"        pm.expect(jsonData[3]).to.equal(3);\r",
+									"        pm.expect(jsonData[4]).to.equal(4);\r",
+									"        pm.expect(jsonData[5]).to.equal(5);\r",
+									"        pm.expect(jsonData[6]).to.equal(6);\r",
+									"        pm.expect(jsonData[7]).to.equal(7);\r",
+									"        }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/security/policies",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"security",
+								"policies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update users email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": \"{{newUserId}}\",\r\n  \"newEMail\": \"email@test.no\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/security/edituseremail",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"security",
+								"edituseremail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reports Happy Path Scenarios",
+			"item": [
+				{
+					"name": "Get count of ticket types",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"Array of ticket types for the current event\",\r",
+									"    function () {\r",
+									"         var ticket = _.find(pm.response.json(), { \r",
+									"            descriptionName: \"new\" + pm.variables.get(\"ticketTypeName\")+ pm.variables.get(\"timeStamp\")\r",
+									"        });\r",
+									"            pm.expect(ticket).exist;\r",
+									"\r",
+									"        }\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/reports/tickettypesreport",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"reports",
+								"tickettypesreport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth with the second user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"token\", \"Bearer \" + jsonData.token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"{{newUserName}}{{timeStamp}}\",\r\n    \"password\": \"{{newUserPassword}}{{timeStamp}}\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth/login",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set current main event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{mainEventId}}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/events/setcurrentevent",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"events",
+								"setcurrentevent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"token\", \"Bearer \" + jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/auth/refreshtoken",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"auth",
+								"refreshtoken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get count of users with allergies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"There is a user with allergies\",\r",
+									"    function () {\r",
+									"        var user = _.find(pm.response.json(), { \r",
+									"            id: pm.variables.get(\"newUserId\")\r",
+									"        });\r",
+									"        pm.expect(user).exist;\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/reports/allergiesreport",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"reports",
+								"allergiesreport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get count of different genders across participants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"pm.test(\r",
+									"    \"THere are one male and one female participants\",\r",
+									"    function () {\r",
+									"        var jsonData = JSON.parse(responseBody);\r",
+									"        pm.expect(jsonData.maleAmount).to.equal(1);\r",
+									"        pm.expect(jsonData.femaleAmount).to.equal(1);\r",
+									"        pm.expect(jsonData.otherAmount).to.equal(0);\r",
+									"        pm.expect(jsonData.notDisclosedAmount).to.equal(0);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/reports/participantsgenderreport",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"reports",
+								"participantsgenderreport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth with Postman",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\r",
+									"    \"Status code is 200\",\r",
+									"    function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }\r",
+									");\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"token\", \"Bearer \" + jsonData.token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"postmanwarpweb@gmail.com\",\r\n    \"password\": \"SuperHemmelig\"\r\n}\r\n\r\n"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth/login",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -3719,6 +4971,10 @@
 		{
 			"key": "apiUrl",
 			"value": "{{baseUrl}}/api"
+		},
+		{
+			"key": "timeStamp",
+			"value": ""
 		},
 		{
 			"key": "mainEventName",
@@ -3779,6 +5035,42 @@
 		{
 			"key": "ticketName",
 			"value": "NewTicketFromPostman"
+		},
+		{
+			"key": "newUserFirstName",
+			"value": "Line"
+		},
+		{
+			"key": "newUserMiddleName",
+			"value": "Anna"
+		},
+		{
+			"key": "newUserLastName",
+			"value": "Evensen"
+		},
+		{
+			"key": "newUserPhoneNumber",
+			"value": "98525693"
+		},
+		{
+			"key": "newUserAddresse",
+			"value": "Postmanveien 31"
+		},
+		{
+			"key": "newUserZipCode",
+			"value": "0525"
+		},
+		{
+			"key": "newUserEmail",
+			"value": "user@test.no"
+		},
+		{
+			"key": "newUserName",
+			"value": "UserNameFromPostman"
+		},
+		{
+			"key": "newUserPassword",
+			"value": "PasswordPassword"
 		}
 	]
 }
