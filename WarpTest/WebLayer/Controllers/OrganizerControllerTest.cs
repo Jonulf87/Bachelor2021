@@ -332,12 +332,13 @@ namespace WarpTest.WebLayer.Controllers
                         OrgNumber = _orgNummer2, 
                         Description = _decsr2,
 
-                   Admins = new List<ApplicationUser>()
-                   {
-                       _user2.Entity
+                        Admins = new List<ApplicationUser>()
+                        {
+                            _user2.Entity
 
-                   }
-                    });
+                        }
+                    }
+                );
                 _dbContext.SaveChanges();
             }
     }

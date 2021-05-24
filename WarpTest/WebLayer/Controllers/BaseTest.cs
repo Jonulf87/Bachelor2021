@@ -236,7 +236,7 @@ namespace WarpTest.WebLayer.Controllers
             );
             _dbContext.SaveChanges();
 
-            // This is workaround because it seemsthat many-to-many doesn't work good for in-memory DB
+            // This is workaround because it seems that many-to-many doesn't work good for in-memory DB
             _dbContext.Database.ExecuteSqlRaw("INSERT INTO [TicketTypeRows] VALUES (1, 1)");
 
             _dbContext.Tickets.Add(
@@ -262,7 +262,7 @@ namespace WarpTest.WebLayer.Controllers
             );
             _dbContext.SaveChanges();
 
-            _dbContext.Roles.Add(
+            var roleAdmin = _dbContext.Roles.Add(
                new IdentityRole
                {
                    Name = "Admin",
@@ -270,6 +270,10 @@ namespace WarpTest.WebLayer.Controllers
                }
            );
             _dbContext.SaveChanges();
+
+            // This is workaround because it seems that many-to-many doesn't work good for in-memory DB
+            // Setting role Admin for _createdUser2
+            _dbContext.Database.ExecuteSqlRaw("INSERT INTO [AspNetUserRoles] VALUES ({0}, {1})", _createdUser2.Entity.Id, roleAdmin.Entity.Id);
         }
     }
 }

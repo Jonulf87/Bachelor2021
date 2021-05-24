@@ -34,25 +34,27 @@ namespace WarpTest.WebLayer.Controllers
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);           
             VenueController venueController = new VenueController(venueService, securityService);
 
-            ActionResult<List<VenueListVm>> resultAR = await venueController.GetVenuesAsync();
-            List<VenueListVm> result = resultAR.Value;
+            ActionResult<List<VenueListVm>> result = await venueController.GetVenuesAsync();
+            List<VenueListVm> venues = (List<VenueListVm>)((OkObjectResult)result.Result).Value;
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(1, result[0].Id);
-            Assert.AreEqual("Venue 1", result[0].Name);
-            Assert.AreEqual("Venue gate 123", result[0].Address);
-            Assert.AreEqual(2, result[1].Id);
-            Assert.AreEqual(_venueName2, result[1].Name);
-            Assert.AreEqual(_venueAddress2, result[1].Address);
+            Assert.AreEqual(2, venues.Count);
+            Assert.AreEqual(1, venues[0].Id);
+            Assert.AreEqual("Venue 1", venues[0].Name);
+            Assert.AreEqual("Venue gate 123", venues[0].Address);
+            Assert.AreEqual(2, venues[1].Id);
+            Assert.AreEqual(_venueName2, venues[1].Name);
+            Assert.AreEqual(_venueAddress2, venues[1].Address);
         }
 
         [Test]
         public async Task ShouldGetOrganizerVenues()
         {
             CreateVenues();
+
             VenueService venueService = new VenueService(_dbContext, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             VenueController venueController = new VenueController(venueService, securityService);
+            SetUser(venueController, _createdUser2.Entity.Id);
 
             ActionResult<List<VenueListVm>> resultAr = await venueController.GetOrganizerVenuesAsync();
             List<VenueListVm> result = resultAr.Value;
@@ -130,7 +132,7 @@ namespace WarpTest.WebLayer.Controllers
             await venueController.CreateVenueAsync(venueVm);
 
             ActionResult<List<VenueListVm>> result = await venueController.GetVenuesAsync();
-            List<VenueListVm> venues = result.Value;
+            List<VenueListVm> venues = (List<VenueListVm>)((OkObjectResult)result.Result).Value;
             Venue createdVenue = _dbContext.Venues.Find(3);
 
             Assert.AreEqual(3, venues.Count);

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Warpweb.DataAccessLayer.Interfaces;
 using Warpweb.DataAccessLayer.Models;
@@ -26,12 +28,24 @@ namespace WarpTest.WebLayer.Controllers
         private const string _userName3 = "OlavNordman";
         private readonly DateTime _dateOfBirth3 = DateTime.Now.AddYears(-20);
         // These are not really used (and can be null), but we need these objects as params for UserService and SecurityService
-        private readonly UserManager<ApplicationUser> _userManager;
+        private UserManager<ApplicationUser> _userManager;
+        private SecurityService _securityService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMainEventProvider _mainEventProvider;
-        private readonly SecurityService _securityService;
 
         EntityEntry<ApplicationUser> _createdUser3;
+
+        [SetUp]
+        public void LocalSetup()
+        {
+            var serviceProvider = new ServiceCollection().AddLogging().BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<UserManager<ApplicationUser>>();
+
+            UserStore<ApplicationUser> store = new UserStore<ApplicationUser>(_dbContext);
+            _userManager = new UserManager<ApplicationUser>(store, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, logger);
+
+            _securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+        }
 
         [Test]
         public async Task ShouldGetUsers()
@@ -39,8 +53,8 @@ namespace WarpTest.WebLayer.Controllers
             CreateUsers();
 
             UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
-            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
-            UserController userController = new UserController(userService, securityService);
+            UserController userController = new UserController(userService, _securityService);
+            SetUser(userController, _createdUser2.Entity.Id);
 
             ActionResult<List<UserListVm>> resultAr = await userController.GetUsersAsync();
             List<UserListVm> result = resultAr.Value;
@@ -64,11 +78,26 @@ namespace WarpTest.WebLayer.Controllers
         }
 
         [Test]
+        public void ShouldNotGetUsersIfNotAdmin()
+        {
+            CreateUsers();
+
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+            SetUser(userController, _createdUser3.Entity.Id);
+
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                ActionResult<List<UserListVm>> resultAr = await userController.GetUsersAsync();
+            });
+            Assert.AreEqual("Du har ikke tilgang til denne listen", ex.Message);
+        }
+
+        [Test]
         public async Task ShouldGetCurrentUser()
         {
             UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
-            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
-            UserController userController = new UserController(userService, securityService);
+            UserController userController = new UserController(userService, _securityService);
 
             SetUser(userController, _createdUser2.Entity.Id);
 
@@ -88,8 +117,7 @@ namespace WarpTest.WebLayer.Controllers
             CreateUsers();
 
             UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
-            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
-            UserController userController = new UserController(userService, securityService);
+            UserController userController = new UserController(userService, _securityService);
 
             SetUser(userController, _createdUser2.Entity.Id);
             ActionResult<UserVm> result = await userController.GetUserAsync(_createdUser2.Entity.Id);
@@ -117,9 +145,7 @@ namespace WarpTest.WebLayer.Controllers
         public async Task ShouldUpdateUser()
         {
             UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
-            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
-            UserController userController = new UserController(userService, securityService);
-
+            UserController userController = new UserController(userService, _securityService);
             SetUser(userController, _createdUser2.Entity.Id);
 
             UserUpdateVm userForUpdate = new UserUpdateVm
@@ -140,29 +166,26 @@ namespace WarpTest.WebLayer.Controllers
         public void ShouldNotUpdateUserWithInvalidId()
         {
             UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
-            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
-            UserController userController = new UserController(userService, securityService);
+            UserController userController = new UserController(userService, _securityService);
+            SetUser(userController, "1234567890");
 
             var ex = Assert.ThrowsAsync<HttpException>(async () =>
             {
                 ActionResult<CrewVm> result = await userController.UpdateUserAsync(new UserUpdateVm
                 {
+                    FirstName = "Oda",
                     LastName = "Svensen"
                 });
             });
-            Assert.AreEqual("Fant ingen bruker med Id: 123", ex.Message);
+            Assert.AreEqual("Fant ingen bruker med navn: Oda Svensen", ex.Message);
         }
 
         [Test]
         public async Task ShouldRegisterUser()
         {
-            // Create test instance of UserStore and UserManager
-            UserStore<ApplicationUser> store = new UserStore<ApplicationUser>(_dbContext);
-            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(store, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, null);
-
-            UserService userService = new UserService(_dbContext, userManager, _mainEventProvider, _securityService);
-            SecurityService securityService = new SecurityService(_dbContext, userManager, _roleManager);
-            UserController userController = new UserController(userService, securityService);
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+            SetUser(userController, _createdUser2.Entity.Id);
 
             UserVm newUser = new UserVm
             {
@@ -204,12 +227,8 @@ namespace WarpTest.WebLayer.Controllers
         [Test]
         public void ShouldNorRegisterUserIfAlreadyRegistered()
         {
-            UserStore<ApplicationUser> store = new UserStore<ApplicationUser>(_dbContext);
-            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(store, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, null);
-
-            UserService userService = new UserService(_dbContext, userManager, _mainEventProvider, _securityService);
-            SecurityService securityService = new SecurityService(_dbContext, userManager, _roleManager);
-            UserController userController = new UserController(userService, securityService);
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
 
             UserVm newUser = new UserVm
             {
