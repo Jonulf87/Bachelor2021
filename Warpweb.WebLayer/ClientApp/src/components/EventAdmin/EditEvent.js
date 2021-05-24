@@ -1,23 +1,28 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
-import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, Grid, Hidden } from '@material-ui/core';
+import { KeyboardDateTimePicker, MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
-            padding: theme.spacing(1),
             width: '100%',
         },
-        '& .MuiButtonBase-root': {
-            padding: '7px',
-            margin: '12px',
+        '& .MuiFormControl-root': {
+            width: '100%',
         },
+        '& .MuiFormControlLabel-root': {
+            width: '100%',
+        },
+    },
+    paper: {
+        padding: '10px',
     },
 }));
 
@@ -25,8 +30,6 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
     const [event, setEvent] = useState('');
     const [organizers, setOrganizers] = useState([]);
     const [venues, setVenues] = useState([]);
-    const [organizerId, setOrganizerId] = useState('');
-    const [open, setOpen] = useState(false);
 
     //Statevariabler for error popup vindu
     const [error, setError] = useState();
@@ -68,35 +71,6 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
     }, [isAuthenticated]);
 
     useEffect(() => {
-        const getOrganizers = async () => {
-            if (isAuthenticated) {
-                const response = await fetch('/api/tenants/getaorgsadmin', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-                if (response.ok) {
-                    const result = await response.json();
-                    setOrganizers(result);
-                    if (result.length === 1) {
-                        setOrganizerId(result[0].id);
-                    }
-                } else if (response.status === 400) {
-                    const errorResult = await response.json();
-                    setErrors(errorResult.errors);
-                    setErrorDialogOpen(true);
-                } else {
-                    const errorResult = await response.json();
-                    setError(errorResult.message);
-                    setErrorDialogOpen(true);
-                }
-            }
-        };
-        getOrganizers();
-    }, [isAuthenticated]);
-
-    useEffect(() => {
         const getVenues = async () => {
             if (isAuthenticated) {
                 const response = await fetch(`/api/venues/organizervenueslist`, {
@@ -122,34 +96,114 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
         getVenues();
     }, [isAuthenticated]);
 
-    const submitForm = async (e) => {
-        e.preventDefault();
+    const cacheTestEventName = (asyncValidate) => {
+        let _valid = false;
+        let _value = '';
+        let _timeoutId = 0;
+
+        return async (value) => {
+            if (value === undefined) {
+                clearTimeout(_timeoutId);
+                return true;
+            }
+            if (value !== _value) {
+                return new Promise(async (resolve) => {
+                    clearTimeout(_timeoutId);
+                    _timeoutId = setTimeout(async () => {
+                        const response = await asyncValidate(value);
+                        _value = value;
+                        _valid = response;
+                        resolve(response);
+                    }, 400);
+                });
+            }
+            return _valid;
+        };
+    };
+
+    const checkEventNameAsync = async (value) => {
         if (isAuthenticated) {
-            const response = await fetch('/api/events', {
+            const responseCheck = await fetch(`/api/events/checkeventname/${value}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'content-type': 'application/json',
                 },
-                method: 'PUT',
-                body: JSON.stringify(event),
             });
-            if (response.ok) {
-                handleDialogEditEventClose();
-                updateListTrigger();
-            } else if (response.status === 400) {
-                const errorResult = await response.json();
-                setErrors(errorResult.errors);
-                setErrorDialogOpen(true);
-            } else {
-                const errorResult = await response.json();
-                setError(errorResult.message);
-                setErrorDialogOpen(true);
-            }
+            const result = await responseCheck.json();
+            return !result.isUnavailable;
         }
     };
 
+    const eventNameUnique = useRef(cacheTestEventName(checkEventNameAsync));
+
+    const checkDates = () => {
+        if (formik.values.startDateTime < formik.values.endDateTime) {
+            return true;
+        }
+        return false;
+    };
+
+    const today = new Date();
+    today.setMinutes(today.getMinutes() - 20);
+
+    const createEventSchema = yup.object().shape({
+        id: yup.number().required(),
+        name: yup
+            .string()
+            .required('Oppgi navn på arrangementet')
+            .test('checkEventName', 'Eventnavn er allerede i bruk', eventNameUnique.current),
+        startDateTime: yup.date().min(today, 'Du kan ikke opprette et arrangement i fortiden').required('Oppgi starttidspunkt'),
+        endDateTime: yup
+            .date()
+            .test('checkDates', 'Arrangementet kan ikke slutte før det begynner', checkDates)
+            .required('Oppgi slutttidspunkt'),
+        organizerId: yup.number().required('Du må oppgi organisasjon'),
+        venueId: yup.string(),
+        infoComments: yup.string(),
+        organizerWebPage: yup.string().url('Du må ha med https:// eller lignende'),
+    });
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            id: event.id || '',
+            name: event.name || '',
+            startDateTime: event.startDateTime || new Date(),
+            endDateTime: event.endDateTime || new Date(),
+            organizerId: event.organizerId || '',
+            venueId: event.venueId || '',
+            infoComments: event.infoComments || '',
+            organizerWebPage: event.organizerWebPage || '',
+        },
+        onSubmit: async (value, e) => {
+            if (isAuthenticated) {
+                const response = await fetch('/api/events/updateevent', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json',
+                    },
+                    method: 'PUT',
+                    body: JSON.stringify(value),
+                });
+                if (response.ok) {
+                    handleDialogEditEventClose();
+                    updateListTrigger();
+                } else if (response.status === 400) {
+                    const errorResult = await response.json();
+                    setErrors(errorResult.errors);
+                    setErrorDialogOpen(true);
+                } else {
+                    const errorResult = await response.json();
+                    setError(errorResult.message);
+                    setErrorDialogOpen(true);
+                }
+            }
+        },
+        validationSchema: createEventSchema,
+    });
+
     return (
-        <Dialog open={dialogEditEventOpen} onClose={handleDialogEditEventClose}>
+        <>
             <PopupWindow
                 open={errorDialogOpen}
                 handleClose={handleErrorDialogClose}
@@ -159,116 +213,164 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                 clearErrors={setErrors}
             />
 
-            <Paper>
-                <DialogTitle>Endre arrangement</DialogTitle>
-                <form className={classes.root} onSubmit={submitForm}>
-                    <TextField
-                        className={classes.textField}
-                        id="eventName"
-                        label="Navn på arrangement"
-                        required
-                        fullWidth
-                        variant="outlined"
-                        value={event.name}
-                        onChange={(e) => setEvent((oldValues) => ({ ...oldValues, name: e.target.value }))}
-                    />
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDateTimePicker
-                            className={classes.keyboardTimePicker}
-                            id="startTimePicker"
-                            label="Start dato og klokkeslett"
-                            variant="dialog"
-                            margin="normal"
-                            ampm={false}
-                            format="dd.MM.yyyy HH:mm"
-                            value={event.startDateTime}
-                            onChange={(e) => setEvent((oldValues) => ({ ...oldValues, startDateTime: e }))}
-                            KeyboardButtonProps={{
-                                'aria-label': 'Endre start dato og tid',
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDateTimePicker
-                            className={classes.keyboardTimePicker}
-                            id="endTimePicker"
-                            label="Slutt dato og klokkeslett"
-                            variant="dialog"
-                            margin="normal"
-                            ampm={false}
-                            format="dd.MM.yyyy HH:mm"
-                            value={event.endDateTime}
-                            onChange={(e) => setEvent((oldValues) => ({ ...oldValues, endDateTime: e }))}
-                            KeyboardButtonProps={{
-                                'aria-label': 'Endre slutt dato og tid',
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
-                    <TextField
-                        select
-                        variant="outlined"
-                        className={classes.textField}
-                        id="venue"
-                        label="Lokale"
-                        fullWidth
-                        value={event.venueId || ''}
-                        onChange={(e) => setEvent((oldValues) => ({ ...oldValues, venueId: e.target.value }))}
-                    >
-                        {venues.map((venue) => (
-                            <MenuItem key={venue.id} value={venue.id}>
-                                {venue.name}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    {organizers.length > 1 && (
-                        <TextField
-                            select
-                            variant="outlined"
-                            className={classes.textField}
-                            id="organizer"
-                            label="Organisator"
-                            fullWidth
-                            value={event.organizerId}
-                            onChange={(e) => setEvent((oldValues) => ({ ...oldValues, descriptionName: e.target.value }))}
-                        >
-                            {organizers.map((organizer) => (
-                                <MenuItem key={organizer.id} value={organizer.id}>
-                                    {organizer.name}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    )}
-                    <TextField
-                        className={classes.textField}
-                        id="eventComment"
-                        label="Kommentarer"
-                        fullWidth
-                        variant="outlined"
-                        value={event.infoComments}
-                        onChange={(e) => setEvent((oldValues) => ({ ...oldValues, infoComments: e.target.value }))}
-                    />
-                    <TextField
-                        className={classes.textField}
-                        id="organizerWebsite"
-                        label="Arrangementets nettside"
-                        required
-                        fullWidth
-                        variant="outlined"
-                        value={event.organizerWebPage}
-                        onChange={(e) => setEvent((oldValues) => ({ ...oldValues, organizerWebPage: e.target.value }))}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        size="large"
-                        className={classes.button}
-                        startIcon={<SaveIcon />}
-                    >
-                        Lagre
-                    </Button>
-                </form>
-            </Paper>
-        </Dialog>
+            <Dialog open={dialogEditEventOpen} onClose={handleDialogEditEventClose}>
+                <Paper className={classes.paper}>
+                    <DialogTitle>Nytt arrangement</DialogTitle>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Grid container spacing={2} alignItems="flex-start" className={classes.root}>
+                            <Hidden xsUp xlDown>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        id="id"
+                                        name="id"
+                                        label="Id"
+                                        value={formik.values.id}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.id && Boolean(formik.errors.id)}
+                                        helperText={formik.touched.id && formik.errors.id}
+                                    />
+                                </Grid>
+                            </Hidden>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    id="name"
+                                    name="name"
+                                    label="Navn"
+                                    value={formik.values.name}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.name && Boolean(formik.errors.name)}
+                                    helperText={formik.touched.name && formik.errors.name}
+                                />
+                            </Grid>
+                            <Grid xs={12} item>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <DateTimePicker
+                                        autoOk
+                                        ampm={false}
+                                        required
+                                        id="startDateTime"
+                                        label="Starttidspunkt"
+                                        openTo="year"
+                                        views={['year', 'month', 'date', 'hours', 'minutes']}
+                                        disablePast
+                                        format="dd.MM.yyyy HH.mm"
+                                        placeholder="DD/MM/ÅÅÅÅ"
+                                        value={formik.values.startDateTime}
+                                        onChange={(date) => {
+                                            formik.setFieldValue('startDateTime', date);
+                                        }}
+                                    />
+                                </MuiPickersUtilsProvider>
+                                {Boolean(formik.errors.startDateTime) && (
+                                    <p className="MuiFormHelperText-root MuiFormHelperText-contained Mui-error Mui-required">
+                                        {formik.errors.startDateTime}
+                                    </p>
+                                )}
+                            </Grid>
+                            <Grid xs={12} item>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <DateTimePicker
+                                        autoOk
+                                        ampm={false}
+                                        required
+                                        id="endDateTime"
+                                        label="Sluttidspunkt"
+                                        openTo="year"
+                                        views={['year', 'month', 'date', 'hours', 'minutes']}
+                                        minDate={new Date()}
+                                        format="dd.MM.yyyy HH.mm"
+                                        placeholder="DD/MM/ÅÅÅÅ"
+                                        value={formik.values.endDateTime}
+                                        onChange={(date) => {
+                                            formik.setFieldValue('endDateTime', date);
+                                        }}
+                                    />
+                                </MuiPickersUtilsProvider>
+                                {Boolean(formik.errors.endDateTime) && (
+                                    <p className="MuiFormHelperText-root MuiFormHelperText-contained Mui-error Mui-required">
+                                        {formik.errors.endDateTime}
+                                    </p>
+                                )}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="infoComments"
+                                    name="infoComments"
+                                    label="Info"
+                                    value={formik.values.infoComments}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.infoComments && Boolean(formik.errors.infoComments)}
+                                    helperText={formik.touched.infoComments && formik.errors.infoComments}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="organizerWebPage"
+                                    name="organizerWebPage"
+                                    label="Nettside"
+                                    value={formik.values.organizerWebPage}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.organizerWebPage && Boolean(formik.errors.organizerWebPage)}
+                                    helperText={formik.touched.organizerWebPage && formik.errors.organizerWebPage}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    select
+                                    id="venueId"
+                                    name="venueId"
+                                    label="Lokale"
+                                    value={formik.values.venueId}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.venueId && Boolean(formik.errors.venueId)}
+                                    helperText={formik.touched.venueId && formik.errors.venueId}
+                                >
+                                    {venues.map((venue) => (
+                                        <MenuItem key={venue.id} value={venue.id}>
+                                            {venue.name}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Hidden xlUp xlDown>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        select
+                                        name="organizerId"
+                                        id="organizerId"
+                                        label="Organisator"
+                                        fullWidth
+                                        value={formik.values.organizerId}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.organizerId && Boolean(formik.errors.organizerId)}
+                                        helperText={formik.touched.organizerId && formik.errors.organizerId}
+                                    >
+                                        {organizers.map((organizer) => (
+                                            <MenuItem key={organizer.id} value={organizer.id}>
+                                                {organizer.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                            </Hidden>
+                            <Grid item xs={12}>
+                                <Button color="primary" variant="contained" size="large" type="submit">
+                                    Lagre
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Paper>
+            </Dialog>
+        </>
     );
 }

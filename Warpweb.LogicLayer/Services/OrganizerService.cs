@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
 using Warpweb.DataAccessLayer.Models;
@@ -188,6 +189,18 @@ namespace Warpweb.LogicLayer.Services
 
 
             return organizerToBeSent;
+        }
+
+        public async Task<ActionResult<OrgNumberCheckVm>> CheckOrgNumberAsync(string orgNumber)
+        {
+            var orgNumberUnavailable = await _dbContext.Organizers
+                .Where(a => a.OrgNumber == orgNumber)
+                .AnyAsync();
+
+            return new OrgNumberCheckVm
+            {
+                IsUnavailable = orgNumberUnavailable
+            };
         }
 
         /// <summary>

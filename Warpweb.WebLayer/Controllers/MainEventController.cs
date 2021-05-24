@@ -88,6 +88,7 @@ namespace Warpweb.WebLayer.Controllers
         /// </summary>
         /// <param name="mainEventVm"></param>  
         [HttpPut]
+        [Route("updateevent")]
         public async Task<ActionResult> UpdateMainEventAsync(MainEventVm mainEventVm)
         {
             var organizers = await _securityService.GetOrganizersUserIsAdminAtAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
