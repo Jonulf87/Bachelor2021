@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
@@ -37,24 +37,15 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     const classes = useStyles();
     const history = useHistory();
     const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
+    const [organizerId, setOrganizerId] = useState('');
+    //Her følger noen variabler som trengs for å vise rette ting og greier og saker
+    const [organizers, setOrganizers] = useState([]);
+    const [venues, setVenues] = useState([]);
 
     //Metode for error popup vindu
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
     };
-
-    //Her følger variablene til VM for mainEvent til posting
-    const [name, setName] = useState('');
-    const [startDateTime, setStartDateTime] = useState(new Date());
-    const [endDateTime, setEndDateTime] = useState(new Date());
-    const [organizerId, setOrganizerId] = useState('');
-    const [venueId, setVenueId] = useState('');
-    const [infoComments, setInfoComments] = useState('');
-    const [organizerWebPage, setOrganizerWebPage] = useState('');
-
-    //Her følger noen variabler som trengs for å vise rette ting og greier og saker
-    const [organizers, setOrganizers] = useState([]);
-    const [venues, setVenues] = useState([]);
 
     //Henter organizere brukeren er knyttet til
     useEffect(() => {
@@ -113,6 +104,46 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
         getVenues();
     }, [isAuthenticated]);
 
+    const cacheTestEventName = (asyncValidate) => {
+        let _valid = false;
+        let _value = '';
+        let _timeoutId = 0;
+
+        return async (value) => {
+            if (value === undefined) {
+                clearTimeout(_timeoutId);
+                return true;
+            }
+            if (value !== _value) {
+                return new Promise(async (resolve) => {
+                    clearTimeout(_timeoutId);
+                    _timeoutId = setTimeout(async () => {
+                        const response = await asyncValidate(value);
+                        _value = value;
+                        _valid = response;
+                        resolve(response);
+                    }, 400);
+                });
+            }
+            return _valid;
+        };
+    };
+
+    const checkEventNameAsync = async (value) => {
+        if (isAuthenticated) {
+            const responseCheck = await fetch(`/api/events/checkeventname/${value}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
+                },
+            });
+            const result = await responseCheck.json();
+            return !result.isUnavailable;
+        }
+    };
+
+    const eventNameUnique = useRef(cacheTestEventName(checkEventNameAsync));
+
     const checkDates = () => {
         if (formik.values.startDateTime < formik.values.endDateTime) {
             return true;
@@ -124,7 +155,10 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     today.setMinutes(today.getMinutes() - 20);
 
     const createEventSchema = yup.object().shape({
-        name: yup.string().required('Oppgi navn på arrangementet'),
+        name: yup
+            .string()
+            .required('Oppgi navn på arrangementet')
+            .test('checkEventName', 'Eventnavn er allerede i bruk', eventNameUnique.current),
         startDateTime: yup.date().min(today, 'Du kan ikke opprette et arrangement i fortiden').required('Oppgi starttidspunkt'),
         endDateTime: yup
             .date()
@@ -159,7 +193,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
                 if (response.ok) {
                     triggerUpdate();
                     refreshToken(0, () => {
-                        setCurrentEvent(name);
+                        setCurrentEvent(formik.values.name);
                         setCurrentEventChangeCompleteTrigger((oldValue) => !oldValue);
                         history.push('/crewadmin');
                     });

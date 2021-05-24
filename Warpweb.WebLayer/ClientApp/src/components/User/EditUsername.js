@@ -99,7 +99,7 @@ export default function EditUsername({ dialogEditUsernameOpen, handleDialogEditU
                     setErrorDialogOpen(true);
                 } else {
                     const errorResult = await response.json();
-                    setError(errorResult.Message);
+                    setError(errorResult.message);
                     setErrorDialogOpen(true);
                 }
             }

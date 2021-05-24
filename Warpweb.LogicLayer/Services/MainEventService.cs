@@ -190,6 +190,18 @@ namespace Warpweb.LogicLayer.Services
             
         }
 
+        public async Task<ActionResult<EventNameCheckVm>> CheckEventNameAsync(string eventname)
+        {
+            var eventNameUnavailable = await _dbContext.MainEvents
+                .Where(a => a.Name == eventname)
+                .AnyAsync();
+
+            return new EventNameCheckVm
+            {
+                IsUnavailable = eventNameUnavailable
+            };
+        }
+
         /// <summary>
         /// Updates a specific Event.
         /// </summary>
