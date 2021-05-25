@@ -40,7 +40,7 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
 
     useEffect(() => {
         const getVenue = async () => {
-            if (isAuthenticated) {
+            if (isAuthenticated && venueId !== null) {
                 const response = await fetch(`/api/venues/getvenue/${venueId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
             }
         };
         getVenue();
-    }, [isAuthenticated]);
+    }, [isAuthenticated, venueId]);
 
     const checkVenueName = (value) => {
         if (venues.some((a) => a.name === value && a.organizerId === formik.values.organizerId)) {
@@ -91,6 +91,7 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
+            id: venue?.id || '',
             organizerId: venue?.organizerId || '',
             name: venue?.name || '',
             address: venue?.address || '',
@@ -107,7 +108,7 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
                         'content-type': 'application/json',
                     },
                     method: 'PUT',
-                    body: JSON.stringify(venue),
+                    body: JSON.stringify(values),
                 });
                 if (response.ok) {
                     triggerUpdate();
@@ -154,6 +155,20 @@ export default function EditVenue({ venueId, dialogEditVenueOpen, handleDialogEd
                                         onBlur={formik.handleBlur}
                                         error={formik.touched.organizerId && Boolean(formik.errors.organizerId)}
                                         helperText={formik.touched.organizerId && formik.errors.organizerId}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        hidden
+                                        required
+                                        id="id"
+                                        name="id"
+                                        label="Id"
+                                        value={formik.values.id}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.id && Boolean(formik.errors.id)}
+                                        helperText={formik.touched.id && formik.errors.id}
                                     />
                                 </Grid>
                             </Hidden>

@@ -63,7 +63,13 @@ export default function AppRouter() {
                 {!isAuthenticated ? <NotAuthenticated /> : <CrewMain />}
             </Route>
             <Route path="/venue">
-                {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 6) ? <Unauthorized /> : <VenueMain />}
+                {!isAuthenticated ? (
+                    <NotAuthenticated />
+                ) : !policies.some((a) => a === 6) && orgsIsAdminAt.length === 0 ? (
+                    <Unauthorized />
+                ) : (
+                    <VenueMain />
+                )}
             </Route>
 
             <Route path="/crewadmin">

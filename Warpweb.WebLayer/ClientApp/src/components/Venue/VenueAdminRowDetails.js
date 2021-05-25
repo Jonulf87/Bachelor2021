@@ -13,25 +13,15 @@ import {
 } from '@material-ui/core';
 import EditVenue from './EditVenue';
 
-export default function VenueAdminRowDetails({ rowData, rowMeta, venues }) {
+export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEditVenueOpen, setVenueId, updateList }) {
     const [venue, setVenue] = useState(null);
-    const [dialogEditVenueOpen, setDialogEditVenueOpen] = useState(false);
     const openVenueId = rowData[0];
-    const [updateList, setUpdateList] = useState(false);
 
     const { isAuthenticated, token } = useAuth();
 
-    const handleDialogEditVenueClose = () => {
-        setDialogEditVenueOpen(false);
-    };
-
-    const handleDialogEditVenueOpen = () => {
-        setDialogEditVenueOpen(true);
-    };
-
-    const triggerUpdate = () => {
-        setUpdateList((oldValue) => !oldValue);
-    };
+    useEffect(() => {
+        setVenueId(rowData[0]);
+    }, [rowData]);
 
     useEffect(() => {
         const getVenue = async () => {
@@ -135,14 +125,6 @@ export default function VenueAdminRowDetails({ rowData, rowMeta, venues }) {
                     </Button>
                 </TableCell>
             </TableRow>
-
-            <EditVenue
-                venueId={openVenueId}
-                dialogEditVenueOpen={dialogEditVenueOpen}
-                handleDialogEditVenueClose={handleDialogEditVenueClose}
-                triggerUpdate={triggerUpdate}
-                venues={venues}
-            />
         </>
     );
 }

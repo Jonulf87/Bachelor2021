@@ -5,6 +5,7 @@ import useAuth from '../../hooks/useAuth';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import CreateVenue from './CreateVenue';
 import PopupWindow from '../PopupWindow/PopupWindow';
+import EditVenue from './EditVenue';
 
 export default function VenueMain() {
     const [error, setError] = useState();
@@ -15,7 +16,9 @@ export default function VenueMain() {
     const [rowsExpanded, setRowsExpanded] = useState([]);
     const [updateList, setUpdateList] = useState(false);
     const [dialogCreateVenueOpen, setDialogCreateVenueOpen] = useState(false);
+    const [dialogEditVenueOpen, setDialogEditVenueOpen] = useState(false);
     const [orgAdmins, setOrgAdmins] = useState([]);
+    const [editVenueId, setEditVenueId] = useState(null);
 
     const { isAuthenticated, token } = useAuth();
 
@@ -33,6 +36,14 @@ export default function VenueMain() {
 
     const handleErrorDialogClose = () => {
         setErrorDialogOpen(false);
+    };
+
+    const handleDialogEditVenueClose = () => {
+        setDialogEditVenueOpen(false);
+    };
+
+    const handleDialogEditVenueOpen = () => {
+        setDialogEditVenueOpen(true);
     };
 
     useEffect(() => {
@@ -102,7 +113,15 @@ export default function VenueMain() {
         expandableRowsHeder: false,
         expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
-            return <VenueAdminRowDetails rowData={rowData} rowMeta={rowMeta} venues={venueList} />;
+            return (
+                <VenueAdminRowDetails
+                    rowData={rowData}
+                    rowMeta={rowMeta}
+                    handleDialogEditVenueOpen={handleDialogEditVenueOpen}
+                    setVenueId={setEditVenueId}
+                    updateList={updateList}
+                />
+            );
         },
         onRowClick: (rowData, rowMeta) => {
             if (rowsExpanded.indexOf(rowMeta.dataIndex) !== -1) {
@@ -126,6 +145,13 @@ export default function VenueMain() {
             <CreateVenue
                 handleDialogCreateVenueClose={handleDialogCreateVenueClose}
                 dialogCreateVenueOpen={dialogCreateVenueOpen}
+                triggerUpdate={triggerUpdate}
+                venues={venueList}
+            />
+            <EditVenue
+                venueId={editVenueId}
+                dialogEditVenueOpen={dialogEditVenueOpen}
+                handleDialogEditVenueClose={handleDialogEditVenueClose}
                 triggerUpdate={triggerUpdate}
                 venues={venueList}
             />

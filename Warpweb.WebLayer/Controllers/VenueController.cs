@@ -64,9 +64,15 @@ namespace Warpweb.WebLayer.Controllers
         /// <returns>VenueVm</returns>
         [HttpGet()]
         [Route("getvenue/{venueId}")]
-        [Authorize(Policy = "VenueAdmin")]
         public async Task<ActionResult<VenueVm>> GetVenueAsync(int venueId)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!await _securityService.IsOrgAdmin(userId) && !await _securityService.HasCrewPermissionAsync(userId, CrewPermissionType.VenueAdmin))
+            {
+                return Forbid();
+            }
+
             var venue = await _venueService.GetVenueAsync(venueId);
             return venue;
         }
