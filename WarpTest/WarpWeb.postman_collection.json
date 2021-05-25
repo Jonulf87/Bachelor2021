@@ -150,7 +150,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{organizerName}}{{timeStamp}}\",\r\n  \"orgNumber\": \"9{{timeStamp}}\"\r\n}"
+							"raw": "{\r\n  \"name\": \"{{organizerName}}{{timeStamp}}\",\r\n  \"orgNumber\": \"9{{timeStamp}}\",\r\n  \"description\": \"Test organizer from Postman\"\r\n}"
 						},
 						"url": {
 							"raw": "{{apiUrl}}/tenants/addorganizer",
@@ -708,12 +708,13 @@
 							"raw": "{\r\n  \"id\": {{mainEventId}},\r\n  \"name\": \"{{mainEventNameUpdated}}{{timeStamp}}\",\r\n  \"organizerId\": {{organizerId}}, \r\n  \"startDateTime\": \"{{nextYear}}-05-18T14:55:08.616Z\",\r\n  \"endDateTime\": \"{{nextYear}}-05-18T14:55:08.616Z\"\r\n}"
 						},
 						"url": {
-							"raw": "{{apiUrl}}/events",
+							"raw": "{{apiUrl}}/events/updateevent",
 							"host": [
 								"{{apiUrl}}"
 							],
 							"path": [
-								"events"
+								"events",
+								"updateevent"
 							]
 						}
 					},
@@ -1817,7 +1818,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": {{organizerId}},\r\n  \"name\": \"{{organizerNameUpdated}}\",\r\n  \"orgNumber\": \"9{{timeStamp}}\"\r\n}"
+							"raw": "{\r\n  \"id\": {{organizerId}},\r\n  \"name\": \"{{organizerNameUpdated}}\",\r\n  \"orgNumber\": \"9{{timeStamp}}\", \r\n  \"description\": \"Test description after update\"\r\n}"
 						},
 						"url": {
 							"raw": "{{apiUrl}}/tenants/updateorganizer",
@@ -1851,6 +1852,7 @@
 									"    function () {\r",
 									"        var jsonData = JSON.parse(responseBody);\r",
 									"        pm.expect(jsonData.name).to.equal(pm.variables.get(\"organizerNameUpdated\"));\r",
+									"        pm.expect(jsonData.description).to.equal(\"Test description after update\");\r",
 									"    }\r",
 									");"
 								],
@@ -2128,7 +2130,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{organizerName}}{{timeStamp}}\",\r\n  \"orgNumber\": \"8{{timeStamp}}\"\r\n}"
+							"raw": "{\r\n  \"name\": \"{{organizerName}}{{timeStamp}}\",\r\n  \"orgNumber\": \"8{{timeStamp}}\",\r\n  \"description\": \"Organizer without admin\"\r\n}"
 						},
 						"url": {
 							"raw": "{{apiUrl}}/tenants/addorganizer",
