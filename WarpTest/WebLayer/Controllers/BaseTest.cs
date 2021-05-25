@@ -44,18 +44,31 @@ namespace WarpTest.WebLayer.Controllers
             _connection.Dispose();
         }
 
-        protected void SetUser(ControllerBase controller, string userId)
+        protected void SetUser(ControllerBase controller, string userId, int mainEventId)
         {
             _identity1 = new ClaimsIdentity();
             _identity1.AddClaims(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userId),
-                new Claim(ClaimTypes.Authentication, userId)
+                new Claim(ClaimTypes.Authentication, userId),
+                new Claim("CurrentMainEventId", mainEventId.ToString())
             });
             _currentUser = new ClaimsPrincipal(_identity1);
             _controllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = _currentUser } };
 
+            var user = _dbContext.ApplicationUsers.Find(userId);
+            if (user != null)
+            {
+                user.CurrentMainEventId = mainEventId;
+                _dbContext.SaveChanges();
+            }
+
             controller.ControllerContext = _controllerContext;
+        }
+
+        protected void SetUser(ControllerBase controller, string userId)
+        {
+            SetUser(controller, userId, 1); // TODO: mainEventId is always 1 for test purposes
         }
 
         private void CreateInMemoryDatabase()
@@ -85,7 +98,7 @@ namespace WarpTest.WebLayer.Controllers
                     Team = "Team 1",
                     DateOfBirth = DateTime.Now.AddYears(-20),
                     IsAllergic = false,
-                    Gender = "Male",
+                    Gender = "Gutt",
                     Email = "ola@test.no",
                     NormalizedEmail = "ola@test.no", // Actually used by UserManager.FindByEmailAsync()
                     PhoneNumber = "12345678"
@@ -187,8 +200,9 @@ namespace WarpTest.WebLayer.Controllers
                     ZipCode = "1234",
                     Team = "Team 1",
                     DateOfBirth = DateTime.Now.AddYears(-20),
-                    IsAllergic = false,
-                    Gender = "Female",
+                    IsAllergic = true,
+                    AllergyDescription = "Sitroner",
+                    Gender = "Jente",
                     Email = "Line@test.no",
                     NormalizedEmail = "Line@test.no", // Actually used by UserManager.FindByEmailAsync()
                     PhoneNumber = "98765432"
