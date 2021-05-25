@@ -168,7 +168,7 @@ export default function MainMenu({ window }) {
                 <Toolbar>
                     <IconButton
                         color="inherit"
-                        aria-label="open drawer"
+                        aria-label="Åpne navigasjonsmeny"
                         edge="start"
                         onClick={handleDrawerToggle}
                         className={classes.menuButton}

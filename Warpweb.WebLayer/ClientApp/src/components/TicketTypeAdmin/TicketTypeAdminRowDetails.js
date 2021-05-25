@@ -68,7 +68,7 @@ export default function TicketTypeAdminRowDetails({ rowData, rowMeta, updateList
         <>
             <TableRow>
                 <TableCell colSpan={1}>
-                    <IconButton aria-label="delete" onClick={(e) => deleteTicketType(ticketType)}>
+                    <IconButton aria-label="Slett billettype" onClick={(e) => deleteTicketType(ticketType)}>
                         <DeleteIcon
                             style={{
                                 cursor: 'pointer',

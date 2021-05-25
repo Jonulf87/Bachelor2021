@@ -207,7 +207,7 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
                 {crewLeaders.map((leader) => (
                     <TableRow key={leader.id}>
                         <TableCell colSpan={1}>
-                            <IconButton aria-label="delete" size="medium" onClick={(e) => removeMember(leader.id)}>
+                            <IconButton aria-label="Slett leder" size="medium" onClick={(e) => removeMember(leader.id)}>
                                 <DeleteIcon
                                     style={{
                                         cursor: 'pointer',
@@ -266,7 +266,7 @@ export default function CrewAdminRowDetails({ rowData, rowMeta }) {
                 {membersList.map((member) => (
                     <TableRow key={member.id}>
                         <TableCell colSpan={1}>
-                            <IconButton aria-label="delete" size="medium" onClick={(e) => removeMember(member.id)}>
+                            <IconButton aria-label="Slett medlem" size="medium" onClick={(e) => removeMember(member.id)}>
                                 <DeleteIcon
                                     style={{
                                         cursor: 'pointer',

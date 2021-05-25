@@ -172,7 +172,7 @@ export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
             {orgAdmins.map((admin) => (
                 <TableRow key={admin.name}>
                     <TableCell colSpan={1}>
-                        <IconButton aria-label="delete" size="medium" onClick={(e) => removeAdmin(admin.id)}>
+                        <IconButton aria-label="Slette admin" size="medium" onClick={(e) => removeAdmin(admin.id)}>
                             <DeleteIcon
                                 style={{
                                     cursor: 'pointer',

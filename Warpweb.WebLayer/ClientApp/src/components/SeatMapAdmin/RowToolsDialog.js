@@ -61,6 +61,7 @@ export default function RowToolsDialog({ open, handleClose, row }) {
                                 key={ticketType.id}
                                 control={
                                     <Checkbox
+                                        inputProps={{ 'aria-label': ticketType.descriptionName }}
                                         checked={ticketTypesSelected.some((a) => a === ticketType.id)}
                                         onChange={() => updateRowTicketTypes(ticketType.id)}
                                         name={ticketType.descriptionName}

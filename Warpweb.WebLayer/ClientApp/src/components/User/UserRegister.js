@@ -596,6 +596,7 @@ export default function UserRegister() {
                                 <FormControlLabel
                                     control={
                                         <Checkbox
+                                            inputProps={{ 'aria-label': 'Har du allergier?' }}
                                             checked={formik.values.isAllergic}
                                             onChange={formik.handleChange}
                                             name="isAllergic"
