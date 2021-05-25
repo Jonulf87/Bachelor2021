@@ -27,8 +27,8 @@ export default function TicketTypesReport({ data }) {
                 </View>
 
                 <View style={styles.section}>
-                    {data.map((ticket) => (
-                        <Text key={ticket.id} style={styles.text}>
+                    {data.map((ticket, i) => (
+                        <Text key={i} style={styles.text}>
                             Type: {ticket.descriptionName} - Antall solgte: {ticket.amountSold} - Antall tilgjengelige:{' '}
                             {ticket.amountAvailable}
                         </Text>

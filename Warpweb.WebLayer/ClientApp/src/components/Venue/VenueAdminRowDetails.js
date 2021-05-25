@@ -50,7 +50,7 @@ export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEdi
 
     return (
         <>
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography>Navn</Typography>
@@ -60,7 +60,7 @@ export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEdi
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography>Adresse</Typography>
@@ -70,7 +70,7 @@ export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEdi
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography>Postnummer</Typography>
@@ -80,14 +80,14 @@ export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEdi
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={2}>
                     <Typography>Kontakt</Typography>
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography>Navn</Typography>
@@ -97,7 +97,7 @@ export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEdi
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography>Telefon</Typography>
@@ -107,7 +107,7 @@ export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEdi
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography>E-post</Typography>
@@ -117,7 +117,7 @@ export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEdi
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRow">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={2}>
                     <Button variant="contained" color="primary" size="large" onClick={handleDialogEditVenueOpen}>

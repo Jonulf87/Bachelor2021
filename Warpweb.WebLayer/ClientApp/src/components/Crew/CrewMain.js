@@ -17,8 +17,8 @@ const useStyles = makeStyles({
 });
 
 export default function CrewMain() {
-    const [isReady, SetIsReady] = useState(false);
-    const [isCrewMember, SetisCrewMember] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+    const [isCrewMember, setIsCrewMember] = useState(false);
     const [crew, setCrew] = useState([]);
     const [crewMembers, setCrewMembers] = useState([]);
     const [crewLeaders, setCrewLeaders] = useState([]);
@@ -69,15 +69,15 @@ export default function CrewMain() {
                     const resultLeader = await responseLeader.json();
                     setCrewLeaders(resultLeader);
 
-                    SetIsReady(true);
-                    SetisCrewMember(true);
+                    setIsReady(true);
+                    setIsCrewMember(true);
                 } else {
-                    SetIsReady(false);
+                    setIsReady(false);
                     setCrewMembers([]);
                     setCrewLeaders([]);
                 }
             } else {
-                SetIsReady(false);
+                setIsReady(false);
                 setCrewMembers([]);
                 setCrewLeaders([]);
                 setCrew([]);

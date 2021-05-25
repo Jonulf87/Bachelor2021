@@ -101,6 +101,14 @@ export default function EventAdminList() {
         expandableRows: true,
         expandableRowsHeader: false,
         expandableRowsOnClick: false,
+        setRowProps: (row, dataIndex, rowIndex) => {
+            if (rowsExpanded.includes(dataIndex)) {
+                return {
+                    className: 'expandedRow',
+                };
+            }
+            return null;
+        },
         renderExpandableRow: (rowData, rowMeta) => {
             return <EventAdminRowDetails rowData={rowData} rowMeta={rowMeta} updateListTrigger={triggerUpdate} />;
         },

@@ -112,6 +112,14 @@ export default function VenueMain() {
         expandableRows: true,
         expandableRowsHeder: false,
         expandableRowsOnClick: false,
+        setRowProps: (row, dataIndex, rowIndex) => {
+            if (rowsExpanded.includes(dataIndex)) {
+                return {
+                    className: 'expandedRow',
+                };
+            }
+            return null;
+        },
         renderExpandableRow: (rowData, rowMeta) => {
             return (
                 <VenueAdminRowDetails

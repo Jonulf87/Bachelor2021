@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, Grid, Hidden } from '@material-ui/core';
-import { KeyboardDateTimePicker, MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import useAuth from '../../hooks/useAuth';
@@ -43,6 +43,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
 
     const classes = useStyles();
     const { isAuthenticated, token } = useAuth();
+    const eventName = useRef();
 
     useEffect(() => {
         const getEvent = async () => {
@@ -56,6 +57,7 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                 if (responseEvent.ok) {
                     const resultEvent = await responseEvent.json();
                     setEvent(resultEvent);
+                    eventName.current = resultEvent.name;
                 } else if (responseEvent.status === 400) {
                     const errorResult = await responseEvent.json();
                     setErrors(errorResult.errors);
@@ -102,10 +104,11 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
         let _timeoutId = 0;
 
         return async (value) => {
-            if (value === undefined) {
+            if (value === undefined || value === eventName.current) {
                 clearTimeout(_timeoutId);
                 return true;
             }
+
             if (value !== _value) {
                 return new Promise(async (resolve) => {
                     clearTimeout(_timeoutId);

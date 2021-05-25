@@ -54,7 +54,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
 
     return (
         <>
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography
@@ -78,7 +78,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography
@@ -95,7 +95,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                 </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Typography
@@ -111,7 +111,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                     <Typography variant="subtitle1">{format(parseISO(event.endDateTime), 'dd.MM.yyyy HH:mm')}</Typography>
                 </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell
                     colSpan={1}
@@ -132,7 +132,7 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                     <Typography variant="subtitle1">{event.venueName}</Typography>
                 </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="expandedRowDetail">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell
                     colSpan={1}
@@ -153,7 +153,28 @@ export default function EventAdminRowDetails({ rowData, rowMeta, updateListTrigg
                     <Typography variant="subtitle1">{event.organizerName}</Typography>
                 </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="expandedRowDetail">
+                <TableCell colSpan={1}></TableCell>
+                <TableCell
+                    colSpan={1}
+                    style={{
+                        maxWidth: 'fit-content',
+                    }}
+                >
+                    <Typography
+                        variant="subtitle1"
+                        style={{
+                            maxWidth: 'fit-content',
+                        }}
+                    >
+                        Nettside
+                    </Typography>
+                </TableCell>
+                <TableCell colSpan={2}>
+                    <Typography variant="subtitle1">{event.organizerWebPage}</Typography>
+                </TableCell>
+            </TableRow>
+            <TableRow className="expandedRow">
                 <TableCell colSpan={1}></TableCell>
                 <TableCell colSpan={1}>
                     <Button variant="contained" color="primary" size="large" onClick={handleDialogEditEventOpen}>

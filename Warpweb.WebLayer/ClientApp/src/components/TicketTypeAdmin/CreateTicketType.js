@@ -101,7 +101,7 @@ export default function CreateTicketType({ dialogOpen, handleDialogClose, trigge
                     <DialogTitle>Ny billettype</DialogTitle>
 
                     <form onSubmit={formik.handleSubmit}>
-                        <Grid container spacing={2} alignItems="flexStart" className={classes.root}>
+                        <Grid container spacing={2} alignItems="flex-start" className={classes.root}>
                             <Grid item xs={12}>
                                 <TextField
                                     required

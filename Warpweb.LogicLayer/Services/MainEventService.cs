@@ -210,7 +210,7 @@ namespace Warpweb.LogicLayer.Services
         {
 
             var existingMainEvent = await _dbContext.MainEvents
-               .Where(a => a.Id == maineventVm.Id && a.Name == maineventVm.Name)
+               .Where(a => a.Id != maineventVm.Id && a.Name == maineventVm.Name)
                .SingleOrDefaultAsync();
 
 
