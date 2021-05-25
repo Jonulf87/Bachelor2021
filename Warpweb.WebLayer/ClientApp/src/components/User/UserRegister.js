@@ -379,6 +379,7 @@ export default function UserRegister() {
                             <Grid xs={12} item>
                                 <TextField
                                     required
+                                    type="password"
                                     id="password"
                                     name="password"
                                     label="Passord"
@@ -392,6 +393,7 @@ export default function UserRegister() {
                             <Grid xs={12} item>
                                 <TextField
                                     required
+                                    type="password"
                                     id="passwordCheck"
                                     name="passwordCheck"
                                     label="Gjenta passord"
