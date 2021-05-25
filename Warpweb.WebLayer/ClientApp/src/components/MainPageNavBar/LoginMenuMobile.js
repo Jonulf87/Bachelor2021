@@ -41,7 +41,7 @@ export default function LoginMenuMobile({ menuItems }) {
             <IconButton
                 className={classes.buttonRight}
                 aria-haspopup="true"
-                aria-label="åpne-bruker-meny"
+                aria-label="Åpne bruker meny"
                 aria-controls="bruker-meny"
                 onClick={handleClick}
             >

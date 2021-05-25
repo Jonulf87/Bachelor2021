@@ -161,7 +161,11 @@ namespace Warpweb.WebLayer.Controllers
             //return user.CurrentMainEventId?.ToString() ?? "0"; //Denne gjør det samme som over. Hvis null, returner verdi etter ??, hvis ikke null returner før ??
         }
 
-
+        /// <summary>
+        /// Helper method for generating JWT Token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>AuthResultVm</returns>
         private async Task<AuthResultVm> GenerateJwtToken(ApplicationUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -217,6 +221,11 @@ namespace Warpweb.WebLayer.Controllers
             };
         }
 
+        /// <summary>
+        /// Helper method to verify and generate Token
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        /// <returns>AuthResultVm</returns>
         private async Task<AuthResultVm> VerifyAndGenerateToken(string refreshToken)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -290,6 +299,10 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Helper method to generate random string with RNGCryptoServiceProvider
+        /// </summary>
+        /// <returns></returns>
         private string RandomString()
         {
             using(var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
@@ -301,6 +314,11 @@ namespace Warpweb.WebLayer.Controllers
             }
         }
 
+        /// <summary>
+        /// Helper method to set cookie
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="expirationDate"></param>
         private void SetTokenCookie(string token, DateTime expirationDate)
         {
             var cookieOptions = new CookieOptions

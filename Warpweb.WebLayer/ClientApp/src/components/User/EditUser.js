@@ -361,6 +361,7 @@ export default function EditUser({ dialogEditUserOpen, handleDialogEditUserClose
                                 <FormControlLabel
                                     control={
                                         <Checkbox
+                                            inputProps={{ 'aria-label': 'Har du allergier?' }}
                                             checked={formik.values.isAllergic}
                                             onChange={formik.handleChange}
                                             name="isAllergic"

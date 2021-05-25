@@ -24,6 +24,10 @@ namespace Warpweb.WebLayer.Controllers
             _securityService = securityService;
         }
 
+        /// <summary>
+        /// Returns all users for UserPicker
+        /// </summary>
+        /// <returns>List of UserPickerVM</returns>
         [HttpGet]
         [Route("allusers")]
         public async Task<ActionResult<List<UserPickerVm>>> GetAllUsersAsync()

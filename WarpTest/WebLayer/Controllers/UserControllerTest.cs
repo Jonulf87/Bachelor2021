@@ -1,7 +1,7 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -75,6 +75,202 @@ namespace WarpTest.WebLayer.Controllers
                                                                            user.EMail == _createdUser3.Entity.Email &&
                                                                            user.UserName == _createdUser3.Entity.UserName &&
                                                                            user.PhoneNumber == _createdUser3.Entity.PhoneNumber));
+        }
+
+        [Test]
+        public async Task ShouldGetAllUsers()
+        {
+            CreateUsers();
+
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+            SetUser(userController, _createdUser2.Entity.Id);
+
+            ActionResult<List<UserPickerVm>> result = await userController.GetAllUsersAsync();
+            var users = result.Value;
+
+            Assert.AreEqual(3, users.Count);
+            Assert.AreEqual(_createdUser1.Entity.Id, users[0].Id);
+            Assert.AreEqual(_createdUser1.Entity.FirstName, users[0].FirstName);
+            Assert.AreEqual(_createdUser1.Entity.LastName, users[0].LastName);
+            Assert.AreEqual(_createdUser2.Entity.Id, users[1].Id);
+            Assert.AreEqual(_createdUser2.Entity.FirstName, users[1].FirstName);
+            Assert.AreEqual(_createdUser2.Entity.LastName, users[1].LastName);
+            Assert.AreEqual(_createdUser3.Entity.Id, users[2].Id);
+            Assert.AreEqual(_createdUser3.Entity.FirstName, users[2].FirstName);
+            Assert.AreEqual(_createdUser3.Entity.LastName, users[2].LastName);
+        }
+
+       
+        [Test]
+        public async Task ShouldUpdateUserName()
+        {
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+
+            SetUser(userController, _createdUser2.Entity.Id);
+
+            UsernameUpdateVm userForUpdate = new UsernameUpdateVm
+            {
+                Username = "New user name"
+            };
+
+            await userController.UpdateUsernameAsync(userForUpdate);
+
+            ApplicationUser updatedUser = _dbContext.Users.Find(_createdUser2.Entity.Id);
+            Assert.AreEqual(userForUpdate.Username, updatedUser.UserName);
+        }
+
+        [Test]
+        public void ShouldNotUpdateUserNameIfNotFound()
+        {
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+
+            SetUser(userController, "123456");
+
+            UsernameUpdateVm userForUpdate = new UsernameUpdateVm
+            {
+                Username = "New user name"
+            };
+
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                await userController.UpdateUsernameAsync(userForUpdate);
+            });
+            Assert.AreEqual("Fant ingen bruker med denne ID'en", ex.Message);
+        }
+
+        [Test]
+        public async Task ShouldUpdateEmail()
+        {
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+
+            SetUser(userController, _createdUser2.Entity.Id);
+
+            EMailUpdateVm dataForUpdate = new EMailUpdateVm
+            {
+                EMail = "newEmail@test.no"
+            };
+
+            await userController.UpdateEMailAsync(dataForUpdate);
+
+            ApplicationUser updatedUser = _dbContext.Users.Find(_createdUser2.Entity.Id);
+            Assert.AreEqual(dataForUpdate.EMail, updatedUser.Email);
+        }
+
+        [Test]
+        public void ShouldNotUpdateEmaleIfNotFound()
+        {
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+
+            SetUser(userController, "123456");
+
+            EMailUpdateVm dataForUpdate = new EMailUpdateVm
+            {
+                EMail = "newEmail@test.no"
+            };
+
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                await userController.UpdateEMailAsync(dataForUpdate);
+            });
+            Assert.AreEqual("Fant ingen bruker med denne ID'en", ex.Message);
+        }
+
+        [Test]
+        public async Task ShouldUpdatePassword()
+        {
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+
+            var oldPassword = "OldPassword123456788";
+            var newPassword = "NewPassword123456788";
+
+            // Now we have to create password for this user
+            // HashPassword-method needs already existing user, so we create password only AFTER we have created the user
+            // The user is already created in BaseTest
+            var hasher = new PasswordHasher<ApplicationUser>();
+            var hash = hasher.HashPassword(_createdUser2.Entity, oldPassword);
+            _createdUser2.Entity.PasswordHash = hash;
+            _dbContext.SaveChanges();
+
+            SetUser(userController, _createdUser2.Entity.Id);
+
+            PasswordUpdateVm dataForUpdate = new PasswordUpdateVm
+            {
+               OldPassword = oldPassword,
+               NewPassword = newPassword,
+               CheckNewPassword = newPassword
+            };
+
+            await userController.UpdatePasswordAsync(dataForUpdate);
+
+            ApplicationUser updatedUser = _dbContext.Users.Find(_createdUser2.Entity.Id);
+           
+            Assert.AreNotEqual(hash, updatedUser.PasswordHash);
+        }
+
+        [Test]
+        public void ShouldNotUpdatePasswordIfIncorrect()
+        {
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+
+            SetUser(userController, _createdUser2.Entity.Id);
+
+            PasswordUpdateVm dataForUpdate = new PasswordUpdateVm
+            {
+                OldPassword = "WrongPassword",
+                NewPassword = "NewPassword3747466",
+                CheckNewPassword = "NewPassword3747466"
+            };
+
+            var ex = Assert.ThrowsAsync<HttpException>(async () =>
+            {
+                await userController.UpdatePasswordAsync(dataForUpdate);
+            });
+            Assert.AreEqual("Det gamle passordet er ugyldig", ex.Message);
+        }
+
+        [Test]
+        public async Task ShouldCheckUserName()
+        {
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+
+            SetUser(userController, _createdUser2.Entity.Id);
+
+            var result = await userController.CheckUserNameAsync("UserName");
+            var available = result.Value;
+
+            Assert.IsFalse(available.IsUnavailable);
+
+            result = await userController.CheckUserNameAsync(_createdUser2.Entity.UserName);
+            available = result.Value;
+
+            Assert.IsTrue(available.IsUnavailable);
+        }
+
+        [Test]
+        public async Task ShouldCheckEmail()
+        {
+            UserService userService = new UserService(_dbContext, _userManager, _mainEventProvider, _securityService);
+            UserController userController = new UserController(userService, _securityService);
+
+            SetUser(userController, _createdUser2.Entity.Id);
+
+            var result = await userController.CheckEMailAsync("UserName@test.no");
+            var available = result.Value;
+
+            Assert.IsFalse(available.IsUnavailable);
+
+            result = await userController.CheckEMailAsync(_createdUser2.Entity.Email);
+            available = result.Value;
+
+            Assert.IsTrue(available.IsUnavailable);
         }
 
         [Test]

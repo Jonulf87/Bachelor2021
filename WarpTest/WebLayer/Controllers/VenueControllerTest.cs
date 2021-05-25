@@ -72,6 +72,7 @@ namespace WarpTest.WebLayer.Controllers
             VenueService venueService = new VenueService(_dbContext, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             VenueController venueController = new VenueController(venueService, securityService);
+            SetUser(venueController, _createdUser2.Entity.Id);
 
             ActionResult<VenueVm> result1 = await venueController.GetVenueAsync(1);
 
@@ -100,12 +101,26 @@ namespace WarpTest.WebLayer.Controllers
             VenueService venueService = new VenueService(_dbContext, _mainEventProvider);
             SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
             VenueController venueController = new VenueController(venueService, securityService);
+            SetUser(venueController, _createdUser2.Entity.Id);
+            CreateVenues();
 
             var ex = Assert.ThrowsAsync<HttpException>(async () =>
             {
                 ActionResult<VenueVm> result = await venueController.GetVenueAsync(-1);
             });
             Assert.AreEqual("Ugyldig Id", ex.Message);
+        }
+
+        [Test]
+        public async Task ShouldNotGetVenueWithoutPermissions()
+        {
+            VenueService venueService = new VenueService(_dbContext, _mainEventProvider);
+            SecurityService securityService = new SecurityService(_dbContext, _userManager, _roleManager);
+            VenueController venueController = new VenueController(venueService, securityService);
+            SetUser(venueController, _createdUser2.Entity.Id);
+
+            ActionResult<VenueVm> result = await venueController.GetVenueAsync(1);
+            Assert.IsTrue(result.Result is ForbidResult);
         }
 
 
