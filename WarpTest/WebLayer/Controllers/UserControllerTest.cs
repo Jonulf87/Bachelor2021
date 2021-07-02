@@ -31,7 +31,6 @@ namespace WarpTest.WebLayer.Controllers
         private UserManager<ApplicationUser> _userManager;
         private SecurityService _securityService;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IMainEventProvider _mainEventProvider;
 
         EntityEntry<ApplicationUser> _createdUser3;
 
