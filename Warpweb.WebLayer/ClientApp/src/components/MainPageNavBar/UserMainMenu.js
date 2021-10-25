@@ -1,9 +1,9 @@
 ﻿import React from 'react';
-import { List, ListItem, ListItemText, ListItemIcon, ListSubheader } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import StarIcon from '@material-ui/icons/Star';
-import EventSeatIcon from '@material-ui/icons/EventSeat';
-import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
+import { List, ListItem, ListItemText, ListItemIcon, ListSubheader } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import StarIcon from '@mui/icons-material/Star';
+import EventSeatIcon from '@mui/icons-material/EventSeat';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({

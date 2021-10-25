@@ -1,4 +1,4 @@
-﻿import { Button } from '@material-ui/core';
+﻿import { Button } from '@mui/material';
 import React from 'react';
 import { format, parseISO } from 'date-fns';
 import useSeatMap from '../../hooks/useSeatMap';

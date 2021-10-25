@@ -1,7 +1,7 @@
-﻿import { CircularProgress, TableCell, TableRow, Button, IconButton } from '@material-ui/core';
+﻿import { CircularProgress, TableCell, TableRow, Button, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditTicketType from './EditTicketType';
 
 export default function TicketTypeAdminRowDetails({ rowData, rowMeta, updateListTrigger, ticketTypes }) {
@@ -64,33 +64,34 @@ export default function TicketTypeAdminRowDetails({ rowData, rowMeta, updateList
             </TableRow>
         );
 
-    return (
-        <>
-            <TableRow>
-                <TableCell colSpan={1}>
-                    <IconButton aria-label="Slett billettype" onClick={(e) => deleteTicketType(ticketType)}>
-                        <DeleteIcon
-                            style={{
-                                cursor: 'pointer',
-                                color: '#DD0000',
-                                fontSize: '28px',
-                            }}
-                        />
-                    </IconButton>
-                </TableCell>
-                <TableCell colSpan={2}>
-                    <Button variant="contained" color="primary" size="large" onClick={handleDialogEditTicketTypeOpen}>
-                        Endre billettype
-                    </Button>
-                </TableCell>
-            </TableRow>
-            <EditTicketType
-                ticketTypeId={ticketTypeId}
-                dialogEditTicketTypeOpen={dialogEditTicketTypeOpen}
-                handleDialogEditTicketTypeClose={handleDialogEditTicketTypeClose}
-                updateListTrigger={updateListTrigger}
-                ticketTypes={ticketTypes}
-            />
-        </>
-    );
+    return <>
+        <TableRow>
+            <TableCell colSpan={1}>
+                <IconButton
+                    aria-label="Slett billettype"
+                    onClick={(e) => deleteTicketType(ticketType)}
+                    size="large">
+                    <DeleteIcon
+                        style={{
+                            cursor: 'pointer',
+                            color: '#DD0000',
+                            fontSize: '28px',
+                        }}
+                    />
+                </IconButton>
+            </TableCell>
+            <TableCell colSpan={2}>
+                <Button variant="contained" color="primary" size="large" onClick={handleDialogEditTicketTypeOpen}>
+                    Endre billettype
+                </Button>
+            </TableCell>
+        </TableRow>
+        <EditTicketType
+            ticketTypeId={ticketTypeId}
+            dialogEditTicketTypeOpen={dialogEditTicketTypeOpen}
+            handleDialogEditTicketTypeClose={handleDialogEditTicketTypeClose}
+            updateListTrigger={updateListTrigger}
+            ticketTypes={ticketTypes}
+        />
+    </>;
 }

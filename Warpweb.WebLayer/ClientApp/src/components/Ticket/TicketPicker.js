@@ -1,9 +1,9 @@
-﻿import { Button, CircularProgress, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@material-ui/core';
+﻿import { Button, CircularProgress, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import usePurchase from '../../hooks/usePurchase';
 import TicketTypeListRow from './TicketTypeListRow';
-import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
-import RemoveCircleRoundedIcon from '@material-ui/icons/RemoveCircleRounded';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 
 export default function TicketPicker() {
     const { ticketTypesList, totalPrice, shoppingCart, removeTicketType, addTicketType } = usePurchase();

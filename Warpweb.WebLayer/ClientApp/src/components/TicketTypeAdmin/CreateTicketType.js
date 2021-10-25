@@ -1,4 +1,14 @@
-﻿import { Button, Container, Dialog, DialogTitle, FormControl, Grid, makeStyles, Paper, TextField } from '@material-ui/core';
+import {
+    Button,
+    Container,
+    Dialog,
+    DialogTitle,
+    FormControl,
+    Grid,
+    Paper,
+    TextField,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';

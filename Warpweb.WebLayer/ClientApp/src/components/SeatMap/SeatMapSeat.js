@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
 import useSeatMap from '../../hooks/useSeatMap';
-import { Alert } from '@material-ui/lab';
-import { Snackbar } from '@material-ui/core';
+import { Alert } from '@mui/material';
+import { Snackbar } from '@mui/material';
 
 export default function SeatMapSeat({ id, seatNumber, isReserved, rowId, ticketTypeIds, rowName }) {
     const { reserveSeat, getActiveTicket } = useSeatMap();

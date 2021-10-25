@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Container, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { Container, Typography, List, ListItem, ListItemText } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 
 export default function CrewPermissionList({ id }) {

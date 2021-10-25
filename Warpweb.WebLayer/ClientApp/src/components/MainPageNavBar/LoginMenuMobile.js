@@ -1,14 +1,14 @@
 ﻿import React, { useEffect, useState } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, ButtonGroup, IconButton, ListItemIcon, Menu, MenuItem, Typography } from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import PersonIcon from '@material-ui/icons/Person';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import makeStyles from '@mui/styles/makeStyles';
+import { Button, ButtonGroup, IconButton, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import PersonIcon from '@mui/icons-material/Person';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-import { AccountCircle } from '@material-ui/icons';
+import { AccountCircle } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,27 +36,25 @@ export default function LoginMenuMobile({ menuItems }) {
         setAnchorEl(null);
     };
 
-    return (
-        <>
-            <IconButton
-                className={classes.buttonRight}
-                aria-haspopup="true"
-                aria-label="Åpne bruker meny"
-                aria-controls="bruker-meny"
-                onClick={handleClick}
-            >
-                <AccountCircle />
-            </IconButton>
-            <Menu className={classes.buttonRight} keepMounted id="bruker-meny" anchorEl={anchorEl} open={open} onClose={handleClose}>
-                {menuItems.map((item) => (
-                    <MenuItem component={Link} to={item.destination} onClick={handleClose} key={item.itemText}>
-                        <ListItemIcon>{item.itemIcon}</ListItemIcon>
-                        <Typography variant="inherit" noWrap>
-                            {item.itemText}
-                        </Typography>
-                    </MenuItem>
-                ))}
-            </Menu>
-        </>
-    );
+    return <>
+        <IconButton
+            className={classes.buttonRight}
+            aria-haspopup="true"
+            aria-label="Åpne bruker meny"
+            aria-controls="bruker-meny"
+            onClick={handleClick}
+            size="large">
+            <AccountCircle />
+        </IconButton>
+        <Menu className={classes.buttonRight} keepMounted id="bruker-meny" anchorEl={anchorEl} open={open} onClose={handleClose}>
+            {menuItems.map((item) => (
+                <MenuItem component={Link} to={item.destination} onClick={handleClose} key={item.itemText}>
+                    <ListItemIcon>{item.itemIcon}</ListItemIcon>
+                    <Typography variant="inherit" noWrap>
+                        {item.itemText}
+                    </Typography>
+                </MenuItem>
+            ))}
+        </Menu>
+    </>;
 }

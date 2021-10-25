@@ -1,13 +1,11 @@
 ﻿import React, { useEffect, useState, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, Grid, Hidden } from '@material-ui/core';
-import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
+import makeStyles from '@mui/styles/makeStyles';
+import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, Grid, Hidden } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { DateTimePicker } from '@mui/lab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -250,24 +248,22 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                                 />
                             </Grid>
                             <Grid xs={12} item>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DateTimePicker
-                                        autoOk
-                                        ampm={false}
-                                        required
-                                        id="startDateTime"
-                                        label="Starttidspunkt"
-                                        openTo="year"
-                                        views={['year', 'month', 'date', 'hours', 'minutes']}
-                                        disablePast
-                                        format="dd.MM.yyyy HH.mm"
-                                        placeholder="DD/MM/ÅÅÅÅ"
-                                        value={formik.values.startDateTime}
-                                        onChange={(date) => {
-                                            formik.setFieldValue('startDateTime', date);
-                                        }}
-                                    />
-                                </MuiPickersUtilsProvider>
+                                <DateTimePicker
+                                    autoOk
+                                    ampm={false}
+                                    required
+                                    id="startDateTime"
+                                    label="Starttidspunkt"
+                                    openTo="year"
+                                    views={['year', 'month', 'date', 'hours', 'minutes']}
+                                    disablePast
+                                    format="dd.MM.yyyy HH.mm"
+                                    placeholder="DD/MM/ÅÅÅÅ"
+                                    value={formik.values.startDateTime}
+                                    onChange={(date) => {
+                                        formik.setFieldValue('startDateTime', date);
+                                    }}
+                                />
                                 {Boolean(formik.errors.startDateTime) && (
                                     <p className="MuiFormHelperText-root MuiFormHelperText-contained Mui-error Mui-required">
                                         {formik.errors.startDateTime}
@@ -275,24 +271,22 @@ export default function EditEvent({ eventId, dialogEditEventOpen, handleDialogEd
                                 )}
                             </Grid>
                             <Grid xs={12} item>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DateTimePicker
-                                        autoOk
-                                        ampm={false}
-                                        required
-                                        id="endDateTime"
-                                        label="Sluttidspunkt"
-                                        openTo="year"
-                                        views={['year', 'month', 'date', 'hours', 'minutes']}
-                                        minDate={new Date()}
-                                        format="dd.MM.yyyy HH.mm"
-                                        placeholder="DD/MM/ÅÅÅÅ"
-                                        value={formik.values.endDateTime}
-                                        onChange={(date) => {
-                                            formik.setFieldValue('endDateTime', date);
-                                        }}
-                                    />
-                                </MuiPickersUtilsProvider>
+                                <DateTimePicker
+                                    autoOk
+                                    ampm={false}
+                                    required
+                                    id="endDateTime"
+                                    label="Sluttidspunkt"
+                                    openTo="year"
+                                    views={['year', 'month', 'date', 'hours', 'minutes']}
+                                    minDate={new Date()}
+                                    format="dd.MM.yyyy HH.mm"
+                                    placeholder="DD/MM/ÅÅÅÅ"
+                                    value={formik.values.endDateTime}
+                                    onChange={(date) => {
+                                        formik.setFieldValue('endDateTime', date);
+                                    }}
+                                />
                                 {Boolean(formik.errors.endDateTime) && (
                                     <p className="MuiFormHelperText-root MuiFormHelperText-contained Mui-error Mui-required">
                                         {formik.errors.endDateTime}

@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';

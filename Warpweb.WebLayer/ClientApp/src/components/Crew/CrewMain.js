@@ -1,7 +1,8 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Divider, Grid, Paper, Toolbar, Typography } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Divider, Grid, Paper, Toolbar, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
@@ -88,7 +89,7 @@ export default function CrewMain() {
 
     return (
         <Paper>
-            <Grid container spacing={2} justify="flex-start">
+            <Grid container spacing={2} justifyContent="flex-start">
                 {isCrewMember ? (
                     <>
                         <Grid item xs={12}>

@@ -1,16 +1,16 @@
 ﻿import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { NavLink } from 'react-router-dom';
-import { ListItem, List, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core';
-import HomeWorkIcon from '@material-ui/icons/HomeWork';
-import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
-import GroupIcon from '@material-ui/icons/Group';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import EventSeatIcon from '@material-ui/icons/EventSeat';
-import SettingsIcon from '@material-ui/icons/Settings';
-import BusinessIcon from '@material-ui/icons/Business';
-import EventIcon from '@material-ui/icons/Event';
+import { ListItem, List, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import GroupIcon from '@mui/icons-material/Group';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import EventSeatIcon from '@mui/icons-material/EventSeat';
+import SettingsIcon from '@mui/icons-material/Settings';
+import BusinessIcon from '@mui/icons-material/Business';
+import EventIcon from '@mui/icons-material/Event';
 
 const useStyles = makeStyles((theme) => ({
     root: {

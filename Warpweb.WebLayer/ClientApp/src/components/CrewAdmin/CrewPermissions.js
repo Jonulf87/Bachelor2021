@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import useAuth from '../../hooks/useAuth';
 
 export default function CrewPermissions({ crewId }) {

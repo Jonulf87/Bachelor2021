@@ -1,8 +1,8 @@
 ﻿import React, { useEffect, useState, Fragment } from 'react';
-import { Button, IconButton, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Button, IconButton, TableCell, TableRow, Typography } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 import UserPicker from '../User/UserPicker';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function OrganizerAdminRowDetails({ rowData, rowMeta }) {
     const [orgAdmins, setOrgAdmins] = useState([]);

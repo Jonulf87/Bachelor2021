@@ -1,4 +1,4 @@
-﻿import { Grid, Typography, Button, Toolbar, CircularProgress } from '@material-ui/core';
+﻿import { Grid, Typography, Button, Toolbar, CircularProgress } from '@mui/material';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';

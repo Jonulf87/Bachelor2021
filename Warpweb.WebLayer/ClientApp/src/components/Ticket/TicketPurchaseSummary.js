@@ -10,9 +10,10 @@
     Grid,
     Paper,
     Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
 import useAuth from '../../hooks/useAuth';
 import usePurchase from '../../hooks/usePurchase';
 import { format, parseISO } from 'date-fns';

@@ -1,4 +1,4 @@
-﻿import { Shop } from '@material-ui/icons';
+﻿import { Shop } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import useCurrentEvent from '../hooks/useCurrentEvent';

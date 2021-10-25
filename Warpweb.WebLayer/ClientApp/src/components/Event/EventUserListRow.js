@@ -1,4 +1,4 @@
-﻿import { Button, TableCell, TableRow } from '@material-ui/core';
+﻿import { Button, TableCell, TableRow } from '@mui/material';
 import React, { useRef } from 'react';
 import { format, parseISO } from 'date-fns';
 import usePurchase from '../../hooks/usePurchase';

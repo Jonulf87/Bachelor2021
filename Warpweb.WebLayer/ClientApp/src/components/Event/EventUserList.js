@@ -9,8 +9,8 @@ import {
     TableBody,
     Divider,
     Typography,
-    makeStyles,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { format, parseISO } from 'date-fns';
 import EventUserListRow from './EventUserListRow';
 import usePurchase from '../../hooks/usePurchase';

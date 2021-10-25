@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Grid, Paper, Typography } from '@material-ui/core';
+import { Container, Grid, Paper, Typography } from '@mui/material';
 
 export default function PageNotFound() {
     return (
-        <Grid container justify="center" alignItems="center">
+        <Grid container justifyContent="center" alignItems="center">
             <Grid item>
                 <Typography align="center" variant="h4">
                     Denne siden finnes ikke

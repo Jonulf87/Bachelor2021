@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
 
 export default function PopupWindow({ open, handleClose, error, clearError, errors, clearErrors, loginErrors }) {
     const [internalErrorsArray, setInternalErrorsArray] = useState([]);

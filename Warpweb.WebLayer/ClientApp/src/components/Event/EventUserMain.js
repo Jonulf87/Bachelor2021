@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { List, ListItem, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { List, ListItem, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import EventCard from './EventCard';
 import PopupWindow from '../PopupWindow/PopupWindow';
 

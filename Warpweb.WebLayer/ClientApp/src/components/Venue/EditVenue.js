@@ -1,5 +1,16 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogTitle, Divider, Grid, Hidden, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    Divider,
+    Grid,
+    Hidden,
+    Paper,
+    TextField,
+    Typography,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 import { useFormik } from 'formik';

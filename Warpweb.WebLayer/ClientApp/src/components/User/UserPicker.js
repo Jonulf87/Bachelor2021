@@ -1,5 +1,5 @@
-﻿import { Dialog, Button, DialogContent, DialogTitle, Typography, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+﻿import { Dialog, Button, DialogContent, DialogTitle, Typography, CircularProgress } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { FixedSizeList } from 'react-window';

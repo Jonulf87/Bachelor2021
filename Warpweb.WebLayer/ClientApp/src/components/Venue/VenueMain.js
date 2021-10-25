@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Grid, GridItem, CircularProgress, Toolbar, Typography, Button } from '@material-ui/core';
+import { Grid, GridItem, CircularProgress, Toolbar, Typography, Button } from '@mui/material';
 import VenueAdminRowDetails from './VenueAdminRowDetails';
 import useAuth from '../../hooks/useAuth';
 import MUIDataTable, { ExpandButton } from 'mui-datatables';

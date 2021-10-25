@@ -1,10 +1,7 @@
-﻿import React, { useEffect, useState, useRef } from 'react';
-import { Button, Dialog, DialogTitle, Grid, makeStyles, Paper, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
+﻿import React, { useEffect, useState } from 'react';
+import { Button, Dialog, DialogTitle, Grid, Paper, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import useAuth from '../../hooks/useAuth';
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
 import { intervalToDuration } from 'date-fns/esm/fp';
 import PopupWindow from '../PopupWindow/PopupWindow';
 import { useFormik } from 'formik';

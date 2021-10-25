@@ -1,7 +1,7 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core';
-import GroupIcon from '@material-ui/icons/Group';
+import makeStyles from '@mui/styles/makeStyles';
+import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
+import GroupIcon from '@mui/icons-material/Group';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({

@@ -7,7 +7,6 @@ import CrewAdminList from './CrewAdmin/CrewAdminList';
 import EventAdminMain from './EventAdmin/EventAdminMain';
 import EventUserMain from './Event/EventUserMain';
 import ParticipantAdminMain from './Participant/ParticipantAdminMain';
-import ReportMain from './Report/ReportMain';
 import TicketTypeAdminMain from './TicketTypeAdmin/TicketTypeAdminMain';
 import UserMain from './User/UserMain';
 import VenueMain from './Venue/VenueMain';
@@ -77,9 +76,6 @@ export default function AppRouter() {
             </Route>
             <Route path="/useradmin">
                 {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 4) ? <Unauthorized /> : <UserAdminMain />}
-            </Route>
-            <Route path="/report">
-                {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 5) ? <Unauthorized /> : <ReportMain />}
             </Route>
             <Route path="/participant">
                 {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 7) ? <Unauthorized /> : <ParticipantAdminMain />}

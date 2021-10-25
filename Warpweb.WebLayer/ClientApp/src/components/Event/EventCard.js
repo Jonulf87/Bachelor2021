@@ -1,6 +1,6 @@
-﻿import { Card, CardActions, CardContent, Divider, Typography, Button, CardHeader, Link, Grid } from '@material-ui/core';
+﻿import { Card, CardActions, CardContent, Divider, Typography, Button, CardHeader, Link, Grid } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import useAuth from '../../hooks/useAuth';
 import { Redirect, useHistory } from 'react-router-dom';
 import usePurchase from '../../hooks/usePurchase';
@@ -14,7 +14,7 @@ import PopupWindow from '../PopupWindow/PopupWindow';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
         [theme.breakpoints.up('sm')]: {

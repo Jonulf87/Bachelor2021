@@ -1,9 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { TableCell, TableRow, Typography, Button, IconButton } from '@material-ui/core';
+import { TableCell, TableRow, Typography, Button, IconButton } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 import UserPicker from '../User/UserPicker';
 import CrewPermissions from './CrewPermissions';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
 export default function CrewAdminRowDetails({ rowData, rowMeta }) {

@@ -1,4 +1,4 @@
-﻿import { Button, TableCell, TableRow, TextField, Typography } from '@material-ui/core';
+﻿import { Button, TableCell, TableRow, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import usePurchase from '../../hooks/usePurchase';
 

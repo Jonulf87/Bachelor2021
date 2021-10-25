@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
 import {
     Button,
     Card,
@@ -13,8 +14,8 @@ import {
     CardHeader,
     CardActionArea,
     CardActions,
-} from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+} from '@mui/material';
+import { Alert } from '@mui/material';
 import { format, parseISO } from 'date-fns';
 import useAuth from '../../hooks/useAuth';
 import EditUser from './EditUser';

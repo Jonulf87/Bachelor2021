@@ -10,7 +10,7 @@ import {
     Typography,
     ButtonGroup,
     CircularProgress,
-} from '@material-ui/core';
+} from '@mui/material';
 import EditVenue from './EditVenue';
 
 export default function VenueAdminRowDetails({ rowData, rowMeta, handleDialogEditVenueOpen, setVenueId, updateList }) {

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import useAuth from '../../hooks/useAuth';
 
-import MenuIcon from '@material-ui/icons/Menu';
-import PersonIcon from '@material-ui/icons/Person';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { AppBar, Drawer, Hidden, Divider, Toolbar, IconButton } from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import MenuIcon from '@mui/icons-material/Menu';
+import PersonIcon from '@mui/icons-material/Person';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { AppBar, Drawer, Hidden, Divider, Toolbar, IconButton } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import AdminMainMenu from './AdminMainMenu';
 import UserMainMenu from './UserMainMenu';
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             height: '80px',
         },
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             height: '0px',
         },
     },
@@ -79,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MainMenu({ window }) {
+export default function MainMenu() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [policies, setPolicies] = useState([]);
     const [crews, setCrews] = useState([]);
@@ -162,54 +163,52 @@ export default function MainMenu({ window }) {
 
     const userMenuItems = isAuthenticated ? loggedInMenu : loggedOutMenu;
 
-    return (
-        <>
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="Åpne navigasjonsmeny"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        className={classes.menuButton}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <NavBarHeader />
-                    {ButtonsOrMenu ? <LoginMenu menuItems={userMenuItems} /> : <LoginMenuMobile menuItems={userMenuItems} />}
-                </Toolbar>
-            </AppBar>
+    return <>
+        <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+                <IconButton
+                    color="inherit"
+                    aria-label="Åpne navigasjonsmeny"
+                    edge="start"
+                    onClick={handleDrawerToggle}
+                    className={classes.menuButton}
+                    size="large">
+                    <MenuIcon />
+                </IconButton>
+                <NavBarHeader />
+                {ButtonsOrMenu ? <LoginMenu menuItems={userMenuItems} /> : <LoginMenuMobile menuItems={userMenuItems} />}
+            </Toolbar>
+        </AppBar>
 
-            <nav className={classes.drawer} aria-label="Meny">
-                <Hidden mdUp>
-                    <Drawer
-                        container={container}
-                        variant="temporary"
-                        anchor="left"
-                        open={mobileOpen}
-                        onClose={handleDrawerToggle}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
-                        }}
-                    >
-                        <NavContents />
-                    </Drawer>
-                </Hidden>
-                <Hidden smDown>
-                    <Drawer
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        variant="permanent"
-                        open
-                    >
-                        <NavContents />
-                    </Drawer>
-                </Hidden>
-            </nav>
-        </>
-    );
+        <nav className={classes.drawer} aria-label="Meny">
+            <Hidden mdUp>
+                <Drawer
+                    container={container}
+                    variant="temporary"
+                    anchor="left"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                >
+                    <NavContents />
+                </Drawer>
+            </Hidden>
+            <Hidden mdDown>
+                <Drawer
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    variant="permanent"
+                    open
+                >
+                    <NavContents />
+                </Drawer>
+            </Hidden>
+        </nav>
+    </>;
 }

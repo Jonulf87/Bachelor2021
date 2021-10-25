@@ -1,4 +1,4 @@
-﻿import { Button, CardContent, Typography, Card } from '@material-ui/core';
+﻿import { Button, CardContent, Typography, Card } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import usePurchase from '../../hooks/usePurchase';
 

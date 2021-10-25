@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Dialog, DialogTitle, FormControl, TextField, MenuItem, Container, Paper, Grid } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
+import makeStyles from '@mui/styles/makeStyles';
+import { Button, Dialog, DialogTitle, FormControl, TextField, MenuItem, Container, Paper, Grid } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
 import useAuth from '../../hooks/useAuth';
 
 import PopupWindow from '../PopupWindow/PopupWindow';

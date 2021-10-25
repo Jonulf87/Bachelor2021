@@ -1,5 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
 import {
     Button,
     Card,
@@ -12,7 +13,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
-} from '@material-ui/core';
+} from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import { Redirect, useHistory } from 'react-router-dom';

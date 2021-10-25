@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Typography, ListItem, ListItemText, ListSubheader, Toolbar } from '@material-ui/core';
+import { Typography, ListItem, ListItemText, ListSubheader, Toolbar } from '@mui/material';
 
 import { VariableSizeList as List } from 'react-window';
 

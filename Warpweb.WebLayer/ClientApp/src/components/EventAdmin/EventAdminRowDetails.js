@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { TableCell, TableRow, Typography, Button } from '@material-ui/core';
+import { TableCell, TableRow, Typography, Button } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 import { format, parseISO } from 'date-fns';
 import EditEvent from './EditEvent';

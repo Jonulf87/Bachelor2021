@@ -1,5 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogTitle, makeStyles, Paper, TextField, Grid, Hidden } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, Paper, TextField, Grid, Hidden } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 

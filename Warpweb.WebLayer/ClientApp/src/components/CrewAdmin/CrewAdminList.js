@@ -1,9 +1,9 @@
 ﻿import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import CrewAdminRowDetails from './CrewAdminRowDetails';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
 import MUIDataTable from 'mui-datatables';
-import { Check } from '@material-ui/icons';
+import { Check } from '@mui/icons-material';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
 export default function CrewAdminList() {

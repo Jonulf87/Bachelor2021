@@ -1,7 +1,7 @@
 ﻿import React, { useEffect } from 'react';
 import SeatMapAdminMenu from './SeatMapAdminMenu';
 import SeatMapAdminFloor from './SeatMapAdminFloor';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 

@@ -1,4 +1,4 @@
-﻿import { Button, Grid, TextField } from '@material-ui/core';
+﻿import { Button, Grid, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 
@@ -8,7 +8,7 @@ export default function SeatMapAdminMenu() {
     return (
         <div className="addingMenu">
             <form>
-                <Grid container spacing={2} direction="row" justify="flex-start">
+                <Grid container spacing={2} direction="row" justifyContent="flex-start">
                     <Grid item xs={3}>
                         <TextField
                             type="number"

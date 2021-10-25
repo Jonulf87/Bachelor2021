@@ -16,17 +16,15 @@ import {
     Container,
     Collapse,
     Toolbar,
-} from '@material-ui/core';
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useParams } from 'react-router-dom';
 
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
 import { intervalToDuration } from 'date-fns/esm/fp';
 import PopupWindow from '../PopupWindow/PopupWindow';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { DatePicker } from '@mui/lab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -317,7 +315,7 @@ export default function UserRegister() {
     }, [formik.values.dateOfBirth]);
 
     if (isRegistered) {
-        if (ticket == 1) {
+        if (ticket === 1) {
             return <Redirect to={'/userticket/2'} />;
         } else {
             return <Redirect to={'/login'} />;
@@ -468,25 +466,23 @@ export default function UserRegister() {
                                 </FormControl>
                             </Grid>
                             <Grid xs={12} item>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DatePicker
-                                        autoOk
-                                        required
-                                        id="dateOfBirth"
-                                        label="Fødselsdato"
-                                        openTo="year"
-                                        views={['year', 'month', 'date']}
-                                        disableFuture
-                                        format="dd/MM/yyyy"
-                                        placeholder="DD/MM/ÅÅÅÅ"
-                                        margin="normal"
-                                        value={formik.values.dateOfBirth}
-                                        onChange={(dob) => {
-                                            formik.setFieldValue('dateOfBirth', dob);
-                                        }}
-                                        helperText={showParents && 'Deltagere under 16 år må oppgi foresatt'}
-                                    />
-                                </MuiPickersUtilsProvider>
+                                <DatePicker
+                                    autoOk
+                                    required
+                                    id="dateOfBirth"
+                                    label="Fødselsdato"
+                                    openTo="year"
+                                    views={['year', 'month', 'date']}
+                                    disableFuture
+                                    format="dd/MM/yyyy"
+                                    placeholder="DD/MM/ÅÅÅÅ"
+                                    margin="normal"
+                                    value={formik.values.dateOfBirth}
+                                    onChange={(dob) => {
+                                        formik.setFieldValue('dateOfBirth', dob);
+                                    }}
+                                    helperText={showParents && 'Deltagere under 16 år må oppgi foresatt'}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography variant="h6" component="h2">

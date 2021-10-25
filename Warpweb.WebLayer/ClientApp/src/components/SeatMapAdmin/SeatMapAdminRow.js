@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography } from '@mui/material';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
 import SeatMapAdminSeat from './SeatMapAdminSeat';
 

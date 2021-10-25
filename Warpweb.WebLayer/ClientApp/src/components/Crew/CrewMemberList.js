@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Divider, List, ListItem, ListItemText, Typography, Container } from '@material-ui/core';
+import { Divider, List, ListItem, ListItemText, Typography, Container } from '@mui/material';
 
 export default function CrewMemberList({ crewMembers, crewLeaders }) {
     const CrewList = ({ list }) => {
