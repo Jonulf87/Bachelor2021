@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using System.Security.Claims;
-using IdentityServer4.EntityFramework.Options;
+using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -80,7 +80,7 @@ namespace WarpTest.WebLayer.Controllers
                 .UseSqlite(_connection)
                 .Options;
 
-            _dbContext = new ApplicationDbContext(_options, Options.Create<OperationalStoreOptions>(new OperationalStoreOptions()), _mainEventProvider);
+            _dbContext = new ApplicationDbContext(_options, Options.Create(new OperationalStoreOptions()), _mainEventProvider);
             _dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
 
