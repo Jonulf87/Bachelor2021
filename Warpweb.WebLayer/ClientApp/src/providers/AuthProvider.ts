@@ -1,14 +1,39 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 
-export const AuthContext = React.createContext();
+type AuthContextState = {
+    isAuthenticated: boolean;
+    token: string?;
+    roles: string[];
+    login: (userName: string, password: string) => Promise<AuthResultVm>;
+    logout: () => Promise<null>;
+    refreshToken: (delay: number, callback: () => void) => void;
+    isOrgAdmin: boolean;
+    orgsIsAdminAt: OrganizerVm[];
+}
+
+export const AuthContext = React.createContext<AuthContextState?>(null);
+
+
+type OrganizerVm = {
+    id: number;
+    name: string;
+    orgNumber: string;
+    description: string;
+}
+
+type AuthResultVm = {
+    errors: string[];
+    token: string;
+}
 
 const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [token, setToken] = useState(null);
-    const [roles, setRoles] = useState([]);
-    const [orgsIsAdminAt, setOrgsIsAdminAt] = useState([]);
-    const [isOrgAdmin, setOrgAdmin] = useState(false);
-    const refreshTokenTimeoutId = useRef(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [token, setToken] = useState<string?>(null);
+    const [roles, setRoles] = useState<string[]>([]);
+    const [orgsIsAdminAt, setOrgsIsAdminAt] = useState<OrganizerVm[]>([]);
+    const [isOrgAdmin, setOrgAdmin] = useState<boolean>(false);
+    const refreshTokenTimeoutId = useRef<number?>(null);
+
 
     const refreshToken = (delay, callback) => {
         if (refreshTokenTimeoutId.current) {
@@ -54,7 +79,7 @@ const AuthProvider = ({ children }) => {
         }, delay);
     };
 
-    const login = async (userName, password) => {
+    const login = async (userName, password): AuthResultVm => {
         const response = await fetch('/api/auth/login', {
             headers: {
                 'content-type': 'application/json',

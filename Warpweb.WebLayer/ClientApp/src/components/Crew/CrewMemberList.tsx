@@ -1,9 +1,16 @@
 import React from 'react';
 
 import { Divider, List, ListItem, ListItemText, Typography, Container } from '@mui/material';
+import { CrewMemberVm } from './CrewTypes';
 
-export default function CrewMemberList({ crewMembers, crewLeaders }) {
-    const CrewList = ({ list }) => {
+type Props = {
+    crewMembers: CrewMemberVm[];
+    crewLeaders: CrewMemberVm[];
+}
+
+const CrewMemberList: React.FC<Props> = ({ crewMembers, crewLeaders }) => {
+    
+    const renderCrewList = (list: CrewMemberVm[]) => {
         return list.map((member) => (
             <ListItem alignItems="flex-start" key={member.id}>
                 <ListItemText
@@ -23,19 +30,21 @@ export default function CrewMemberList({ crewMembers, crewLeaders }) {
     return (
         <>
             <Container>
-                <Typography gutterBottom variant="h6" component="h2" gutterBottom>
+                <Typography gutterBottom variant="h6" component="h2">
                     Arbeidslagsleder(e):
                 </Typography>
                 <List>
-                    <CrewList list={crewLeaders} />
+                    {renderCrewList(crewLeaders)}
                 </List>
-                <Typography gutterBottom variant="h6" component="h2" gutterBottom>
+                <Typography gutterBottom variant="h6" component="h2">
                     &#216;vrige medlemmer:
                 </Typography>
                 <List>
-                    <CrewList list={crewMembers} />
+                    {renderCrewList(crewMembers)}
                 </List>
             </Container>
         </>
     );
 }
+
+export default CrewMemberList;

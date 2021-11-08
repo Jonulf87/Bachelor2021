@@ -23,23 +23,30 @@ import NotAuthenticated from './ErrorPages/NotAuthenticated';
 import useCurrentEvent from '../hooks/useCurrentEvent';
 import useAuth from '../hooks/useAuth';
 import SeatMapMain from './SeatMap/SeatMapMain';
+import useAxios from '../hooks/useAxios';
 
-export default function AppRouter() {
-    const [policies, setPolicies] = useState([]);
+enum Policy {
+    CheckInAdmin = 0,
+    CrewAdmin = 1,
+    TicketAdmin = 2,
+    SeatMapAdmin = 3,
+    UserAdmin = 4,
+    ReportAdmin = 5,
+    VenueAdmin = 6,
+    ParticipantAdmin = 7
+}
+
+const AppRouter: React.FC = () => {
+    const [policies, setPolicies] = useState<Policy[]>([]);
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
     const { isAuthenticated, token, roles, orgsIsAdminAt } = useAuth();
+    const axios = useAxios();
 
     useEffect(() => {
         if (isAuthenticated) {
             const getPolicies = async () => {
-                const responsePolicies = await fetch('/api/security/policies', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'content-type': 'application/json',
-                    },
-                });
-                const resultPolicies = await responsePolicies.json();
-                setPolicies(resultPolicies);
+                const resultPolicies = await axios.get<Policy[]>('/api/security/policies');
+                setPolicies(resultPolicies.data);
             };
             getPolicies();
         } else {
@@ -94,3 +101,5 @@ export default function AppRouter() {
         </Switch>
     );
 }
+
+export default AppRouter;

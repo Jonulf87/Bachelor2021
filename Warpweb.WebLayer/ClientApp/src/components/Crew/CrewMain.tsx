@@ -5,11 +5,12 @@ import makeStyles from '@mui/styles/makeStyles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-
 import useAuth from '../../hooks/useAuth';
 
 import CrewMemberList from './CrewMemberList';
 import CrewPermissionList from './CrewPermissionList';
+import useAxios from '../../hooks/useAxios';
+import { CrewVm, CrewMemberVm, CrewMainParams, CrewListVm } from './CrewTypes'
 
 const useStyles = makeStyles({
     verticalDivider: {
@@ -17,13 +18,18 @@ const useStyles = makeStyles({
     },
 });
 
-export default function CrewMain() {
-    const [isReady, setIsReady] = useState(false);
-    const [isCrewMember, setIsCrewMember] = useState(false);
-    const [crew, setCrew] = useState([]);
-    const [crewMembers, setCrewMembers] = useState([]);
-    const [crewLeaders, setCrewLeaders] = useState([]);
-    const { id } = useParams();
+
+
+const CrewMain: React.FC = () => {
+    const [isReady, setIsReady] = useState<boolean>(false);
+    const [isCrewMember, setIsCrewMember] = useState<boolean>(false);
+    const [crew, setCrew] = useState<CrewVm | null>(null);
+    const [crewMembers, setCrewMembers] = useState<CrewMemberVm[]>([]);
+    const [crewLeaders, setCrewLeaders] = useState<CrewMemberVm[]>([]);
+    const { id } = useParams<CrewMainParams>();
+    const axios = useAxios();
+    
+
 
     //styling variabler
     const classes = useStyles();
@@ -36,39 +42,18 @@ export default function CrewMain() {
         const getCrews = async () => {
             if (isAuthenticated) {
                 //fetch for if-sjekk nedenfor
-                const responseMyCrews = await fetch('/api/crews/mycrews', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'content-type': 'application/json',
-                    },
-                });
-                const resultMyCrews = await responseMyCrews.json();
+                const resultMyCrews = await axios.get<CrewListVm[]>('/api/crews/mycrews');
 
-                if (resultMyCrews.some((a) => a.id == id)) {
+                if (resultMyCrews.data.some((a) => a.id === parseInt(id))) {
                     //sjekk om brukeren er med i arbeidslag
-                    const responseCrew = await fetch(`/api/crews/getcrew/${id}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    const resultCrew = await responseCrew.json();
-                    setCrew(resultCrew);
+                    const resultCrew = await axios.get<CrewVm>(`/api/crews/getcrew/${id}`);
+                    setCrew(resultCrew.data);
 
-                    const responseCrewMembers = await fetch(`/api/crews/crewmembers/${id}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    const resultCrewMembers = await responseCrewMembers.json();
-                    setCrewMembers(resultCrewMembers);
+                    const resultCrewMembers = await axios.get<CrewMemberVm[]>(`/api/crews/crewmembers/${id}`);
+                    setCrewMembers(resultCrewMembers.data);
 
-                    const responseLeader = await fetch(`/api/crews/crewleaders/${id}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    const resultLeader = await responseLeader.json();
-                    setCrewLeaders(resultLeader);
+                    const resultLeader = await axios.get<CrewMemberVm[]>(`/api/crews/crewleaders/${id}`);
+                    setCrewLeaders(resultLeader.data);
 
                     setIsReady(true);
                     setIsCrewMember(true);
@@ -81,7 +66,7 @@ export default function CrewMain() {
                 setIsReady(false);
                 setCrewMembers([]);
                 setCrewLeaders([]);
-                setCrew([]);
+                setCrew(null);
             }
         };
         getCrews();
@@ -95,7 +80,7 @@ export default function CrewMain() {
                         <Grid item xs={12}>
                             <Toolbar>
                                 <Typography variant="h4" component="h2">
-                                    {crew.crewName}
+                                    {crew?.crewName}
                                 </Typography>
                             </Toolbar>
                         </Grid>
@@ -111,7 +96,7 @@ export default function CrewMain() {
                             )}
                         </Grid>
                         <Grid item xs={12} sm={5} lg={4}>
-                            {isReady && <CrewPermissionList id={crew.crewId} />}
+                            {isReady && <CrewPermissionList id={crew?.crewId} />}
                         </Grid>
                     </>
                 ) : (
@@ -128,3 +113,5 @@ export default function CrewMain() {
         </Paper>
     );
 }
+
+export default CrewMain;
