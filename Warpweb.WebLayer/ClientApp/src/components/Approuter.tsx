@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import UserAdminMain from './UserAdmin/UserAdminMain';
 import CrewMain from './Crew/CrewMain';
@@ -23,7 +23,7 @@ import NotAuthenticated from './ErrorPages/NotAuthenticated';
 import useCurrentEvent from '../hooks/useCurrentEvent';
 import useAuth from '../hooks/useAuth';
 import SeatMapMain from './SeatMap/SeatMapMain';
-import useAxios from '../hooks/useAxios';
+import axios from 'axios';
 
 enum Policy {
     CheckInAdmin = 0,
@@ -33,14 +33,13 @@ enum Policy {
     UserAdmin = 4,
     ReportAdmin = 5,
     VenueAdmin = 6,
-    ParticipantAdmin = 7
+    ParticipantAdmin = 7,
 }
 
 const AppRouter: React.FC = () => {
     const [policies, setPolicies] = useState<Policy[]>([]);
     const { currentEventChangeCompleteTrigger } = useCurrentEvent();
-    const { isAuthenticated, token, roles, orgsIsAdminAt } = useAuth();
-    const axios = useAxios();
+    const { isAuthenticated, roles, orgsIsAdminAt } = useAuth();
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -55,51 +54,61 @@ const AppRouter: React.FC = () => {
     }, [currentEventChangeCompleteTrigger, isAuthenticated]);
 
     return (
-        <Switch>
-            <Route exact path="/" component={EventUserMain} />
-            <Route path="/userevent" component={EventUserMain} />
-            <Route path="/userticket/:login?" component={TicketMain} />
-            <Route path="/userseatmap" component={SeatMapMain} />
-            <Route path="/register/:ticket?" component={UserRegister} />
-            <Route path="/login" component={UserLogin} />
-            <Route path="/logout" component={LogOut} />
-            <Route path="/event">{!isAuthenticated ? <NotAuthenticated /> : <EventAdminMain />}</Route>
-            <Route path="/user/:loggedin?">{!isAuthenticated ? <NotAuthenticated /> : <UserMain />}</Route>
-            <Route exact path="/crew/:id">
-                {!isAuthenticated ? <NotAuthenticated /> : <CrewMain />}
-            </Route>
-            <Route path="/venue">
-                {!isAuthenticated ? (
-                    <NotAuthenticated />
-                ) : !policies.some((a) => a === 6) && orgsIsAdminAt.length === 0 ? (
-                    <Unauthorized />
-                ) : (
-                    <VenueMain />
-                )}
-            </Route>
+        <Routes>
+            <Route path="/" element={<EventUserMain />} />
+            <Route path="/userevent" element={<EventUserMain />} />
+            <Route path="/userticket/:login?" element={<TicketMain />} />
+            <Route path="/userseatmap" element={<SeatMapMain />} />
+            <Route path="/register/:ticket?" element={<UserRegister />} />
+            <Route path="/login" element={<UserLogin />} />
+            <Route path="/logout" element={<LogOut />} />
+            <Route path="/event" element={!isAuthenticated ? <NotAuthenticated /> : <EventAdminMain />} />
+            <Route path="/user/:loggedin?" element={!isAuthenticated ? <NotAuthenticated /> : <UserMain />} />
+            <Route path="/crew/:id" element={!isAuthenticated ? <NotAuthenticated /> : <CrewMain />} />
+            <Route
+                path="/venue"
+                element={
+                    !isAuthenticated ? (
+                        <NotAuthenticated />
+                    ) : !policies.some((a) => a === 6) && orgsIsAdminAt.length === 0 ? (
+                        <Unauthorized />
+                    ) : (
+                        <VenueMain />
+                    )
+                }
+            />
 
-            <Route path="/crewadmin">
-                {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 1) ? <Unauthorized /> : <CrewAdminList />}
-            </Route>
-            <Route path="/useradmin">
-                {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 4) ? <Unauthorized /> : <UserAdminMain />}
-            </Route>
-            <Route path="/participant">
-                {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 7) ? <Unauthorized /> : <ParticipantAdminMain />}
-            </Route>
-            <Route path="/ticketadmin">
-                {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 2) ? <Unauthorized /> : <TicketTypeAdminMain />}
-            </Route>
-            <Route path="/seatmap">
-                {!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 3) ? <Unauthorized /> : <SeatMapAdminMain />}
-            </Route>
-            <Route path="/organizer" component={OrganizerAdminMain}>
-                {roles.some((a) => a === 'Admin') || orgsIsAdminAt.length > 0 ? <OrganizerAdminMain /> : <Unauthorized />}
-            </Route>
-
-            <Route component={PageNotFound} />
-        </Switch>
+            <Route
+                path="/crewadmin"
+                element={!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 1) ? <Unauthorized /> : <CrewAdminList />}
+            />
+            <Route
+                path="/useradmin"
+                element={!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 4) ? <Unauthorized /> : <UserAdminMain />}
+            />
+            <Route
+                path="/participant"
+                element={
+                    !isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 7) ? <Unauthorized /> : <ParticipantAdminMain />
+                }
+            />
+            <Route
+                path="/ticketadmin"
+                element={
+                    !isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 2) ? <Unauthorized /> : <TicketTypeAdminMain />
+                }
+            />
+            <Route
+                path="/seatmap"
+                element={!isAuthenticated ? <NotAuthenticated /> : !policies.some((a) => a === 3) ? <Unauthorized /> : <SeatMapAdminMain />}
+            />
+            <Route
+                path="/organizer"
+                element={roles.some((a) => a === 'Admin') || orgsIsAdminAt.length > 0 ? <OrganizerAdminMain /> : <Unauthorized />}
+            />
+            <Route element={<PageNotFound />} />
+        </Routes>
     );
-}
+};
 
 export default AppRouter;

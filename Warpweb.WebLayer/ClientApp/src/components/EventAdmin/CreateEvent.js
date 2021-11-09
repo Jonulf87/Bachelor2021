@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import makeStyles from '@mui/styles/makeStyles';
 import { Dialog, DialogTitle, Button, Paper, TextField, MenuItem, Grid } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
@@ -33,7 +33,7 @@ export default function CreateEvent({ dialogOpen, handleDialogClose, triggerUpda
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     const { isAuthenticated, token, refreshToken } = useAuth();
     const classes = useStyles();
-    const history = useHistory();
+    const history = useNavigate();
     const { setCurrentEvent, setCurrentEventChangeCompleteTrigger } = useCurrentEvent();
     const [organizerId, setOrganizerId] = useState('');
     //Her følger noen variabler som trengs for å vise rette ting og greier og saker

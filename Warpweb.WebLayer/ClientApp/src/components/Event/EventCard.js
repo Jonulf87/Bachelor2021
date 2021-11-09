@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import useAuth from '../../hooks/useAuth';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import usePurchase from '../../hooks/usePurchase';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import useSeatMapAdmin from '../../hooks/useSeatMapAdmin';
@@ -32,7 +32,7 @@ export default function EventCard({ id, name, startDateTime, endDateTime, infoCo
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const classes = useStyles();
-    const history = useHistory();
+    const history = useNavigate();
     const [orgsUserIsAdminAt, setOrgsUserIsAdimAt] = useState([]);
     const [userIsInCrew, setUserIsInCrew] = useState(false);
     const { setSelectedMainEventId, userTickets, setShoppingCart } = usePurchase();

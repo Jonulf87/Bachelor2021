@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
 import usePurchase from '../../hooks/usePurchase';
@@ -43,7 +43,7 @@ export default function LogOut() {
     }, []);
 
     if (isLoggedOut) {
-        return <Redirect to={'/'} />;
+        return <Navigate to={'/'} />;
     }
     return null;
 }

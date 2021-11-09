@@ -1,23 +1,27 @@
 ﻿import React, { useState } from 'react';
 import { TextField, Button, Grid, Container, Typography } from '@mui/material';
 
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import useAuth from '../../hooks/useAuth';
 import PopupWindow from '../PopupWindow/PopupWindow';
 
-export default function UserLogin({ fromTicket }) {
+type Props = {
+    fromTicket?: string;
+};
+
+const UserLogin: React.FC<Props> = ({ fromTicket }) => {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [error, setError] = useState();
     const [errors, setErrors] = useState([]);
-    const [loginErrors, setLoginErrors] = useState([]);
+    const [loginErrors, setLoginErrors] = useState<string[]>([]);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const { login } = useAuth();
 
-    const logInSubmit = async (e) => {
+    const logInSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const response = await login(userName, password);
 
@@ -31,7 +35,7 @@ export default function UserLogin({ fromTicket }) {
 
     if (loginSuccess) {
         if (!fromTicket) {
-            return <Redirect to={'/user/4'} />;
+            return <Navigate to={'/user/4'} />;
         }
     }
 
@@ -107,4 +111,6 @@ export default function UserLogin({ fromTicket }) {
             </Container>
         </>
     );
-}
+};
+
+export default UserLogin;

@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import 'date-fns';
 
@@ -40,7 +40,7 @@ export default function TicketList() {
     const { isAuthenticated, token } = useAuth();
     const [isReady, setIsReady] = useState(false);
     const { setSelectedEvent } = useCurrentEvent();
-    const history = useHistory();
+    const history = useNavigate();
 
     const classes = useStyles();
 

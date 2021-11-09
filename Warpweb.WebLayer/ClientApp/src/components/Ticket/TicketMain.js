@@ -15,7 +15,7 @@ import UserLogin from '../User/UserLogin';
 import TicketPurchaseSummary from './TicketPurchaseSummary';
 import TicketPayment from './TicketPayment';
 import usePurchase from '../../hooks/usePurchase';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -94,7 +94,7 @@ export default function TicketMain() {
             case 4:
                 return <TicketPayment />;
             case 5:
-                return <Redirect to="/userseatmap" />;
+                return <Navigate to="/userseatmap" />;
             default:
                 return 'Unknown step';
         }

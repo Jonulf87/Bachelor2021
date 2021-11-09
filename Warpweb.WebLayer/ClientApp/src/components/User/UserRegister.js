@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import {
     Select,
@@ -14,7 +14,6 @@ import {
     Typography,
     Paper,
     Container,
-    Collapse,
     Toolbar,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
@@ -316,9 +315,9 @@ export default function UserRegister() {
 
     if (isRegistered) {
         if (ticket === 1) {
-            return <Redirect to={'/userticket/2'} />;
+            return <Navigate to={'/userticket/2'} />;
         } else {
-            return <Redirect to={'/login'} />;
+            return <Navigate to={'/login'} />;
         }
     }
     //I topp ligger error popupvinduet.

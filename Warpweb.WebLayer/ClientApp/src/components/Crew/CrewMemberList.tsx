@@ -1,15 +1,14 @@
 import React from 'react';
 
-import { Divider, List, ListItem, ListItemText, Typography, Container } from '@mui/material';
+import { List, ListItem, ListItemText, Typography, Container } from '@mui/material';
 import { CrewMemberVm } from './CrewTypes';
 
 type Props = {
     crewMembers: CrewMemberVm[];
     crewLeaders: CrewMemberVm[];
-}
+};
 
 const CrewMemberList: React.FC<Props> = ({ crewMembers, crewLeaders }) => {
-    
     const renderCrewList = (list: CrewMemberVm[]) => {
         return list.map((member) => (
             <ListItem alignItems="flex-start" key={member.id}>
@@ -33,18 +32,14 @@ const CrewMemberList: React.FC<Props> = ({ crewMembers, crewLeaders }) => {
                 <Typography gutterBottom variant="h6" component="h2">
                     Arbeidslagsleder(e):
                 </Typography>
-                <List>
-                    {renderCrewList(crewLeaders)}
-                </List>
+                <List>{renderCrewList(crewLeaders)}</List>
                 <Typography gutterBottom variant="h6" component="h2">
                     &#216;vrige medlemmer:
                 </Typography>
-                <List>
-                    {renderCrewList(crewMembers)}
-                </List>
+                <List>{renderCrewList(crewMembers)}</List>
             </Container>
         </>
     );
-}
+};
 
 export default CrewMemberList;

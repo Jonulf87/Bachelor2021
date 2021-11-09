@@ -9,8 +9,8 @@ import useAuth from '../../hooks/useAuth';
 
 import CrewMemberList from './CrewMemberList';
 import CrewPermissionList from './CrewPermissionList';
-import useAxios from '../../hooks/useAxios';
-import { CrewVm, CrewMemberVm, CrewMainParams, CrewListVm } from './CrewTypes'
+import { CrewVm, CrewMemberVm, CrewListVm } from './CrewTypes';
+import axios from 'axios';
 
 const useStyles = makeStyles({
     verticalDivider: {
@@ -18,25 +18,20 @@ const useStyles = makeStyles({
     },
 });
 
-
-
 const CrewMain: React.FC = () => {
     const [isReady, setIsReady] = useState<boolean>(false);
     const [isCrewMember, setIsCrewMember] = useState<boolean>(false);
     const [crew, setCrew] = useState<CrewVm | null>(null);
     const [crewMembers, setCrewMembers] = useState<CrewMemberVm[]>([]);
     const [crewLeaders, setCrewLeaders] = useState<CrewMemberVm[]>([]);
-    const { id } = useParams<CrewMainParams>();
-    const axios = useAxios();
-    
-
+    const { id } = useParams();
 
     //styling variabler
     const classes = useStyles();
     const theme = useTheme();
     const DisplayVerticalDivider = useMediaQuery(theme.breakpoints.up('sm'));
 
-    const { isAuthenticated, token } = useAuth();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         const getCrews = async () => {
@@ -44,7 +39,7 @@ const CrewMain: React.FC = () => {
                 //fetch for if-sjekk nedenfor
                 const resultMyCrews = await axios.get<CrewListVm[]>('/api/crews/mycrews');
 
-                if (resultMyCrews.data.some((a) => a.id === parseInt(id))) {
+                if (id && resultMyCrews.data.some((a) => a.id === parseInt(id))) {
                     //sjekk om brukeren er med i arbeidslag
                     const resultCrew = await axios.get<CrewVm>(`/api/crews/getcrew/${id}`);
                     setCrew(resultCrew.data);
@@ -112,6 +107,6 @@ const CrewMain: React.FC = () => {
             </Grid>
         </Paper>
     );
-}
+};
 
 export default CrewMain;
