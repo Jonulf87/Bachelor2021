@@ -16,12 +16,6 @@ declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
 }
 
-Date.prototype.toJSON = function () {
-    const hoursDiff = this.getHours() - this.getTimezoneOffset() / 60;
-    this.setHours(hoursDiff);
-    return this.toISOString();
-};
-
 export default function App() {
     return (
         <AuthProvider>

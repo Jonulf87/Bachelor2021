@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Warpweb.DataAccessLayer;
@@ -209,7 +208,7 @@ namespace Warpweb.LogicLayer.Services
                 throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(a => a.Description)));
             }
 
-            if (!user.ParentPhoneNumber.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(user.ParentPhoneNumber))
             {
                 var parentToBeStored = new Guardian
                 {
